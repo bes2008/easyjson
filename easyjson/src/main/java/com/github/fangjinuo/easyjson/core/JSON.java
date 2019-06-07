@@ -1,4 +1,6 @@
-package com.github.fangjinuo.easyjson.api;
+package com.github.fangjinuo.easyjson.core;
+
+import com.github.fangjinuo.easyjson.core.type.Primitives;
 
 import java.lang.reflect.Type;
 
@@ -79,4 +81,7 @@ public class JSON {
         return jsonHandler.deserialize(json, typeOfT);
     }
 
+    public void setJsonHandler(JsonHandler jsonHandler) {
+        this.jsonHandler = jsonHandler;
+    }
 }

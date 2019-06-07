@@ -1,4 +1,4 @@
-package com.github.fangjinuo.easyjson.api;
+package com.github.fangjinuo.easyjson.core.type;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;

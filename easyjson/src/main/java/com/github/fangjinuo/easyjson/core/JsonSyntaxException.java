@@ -1,4 +1,4 @@
-package com.github.fangjinuo.easyjson.api;
+package com.github.fangjinuo.easyjson.core;
 
 public class JsonSyntaxException extends RuntimeException {
     private static final long serialVersionUID = 1L;
