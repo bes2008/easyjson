@@ -1,13 +1,13 @@
 package com.github.fangjinuo.easyjson.tests.struct;
 
 import java.util.Date;
-import java.util.Objects;
 
 public class Person {
     private int id;
     private String name;
     private Date birthday;
     private Contact contact;
+    private Gender gender;
 
     public int getId() {
         return id;
@@ -41,6 +41,14 @@ public class Person {
         this.contact = contact;
     }
 
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -51,6 +59,7 @@ public class Person {
         if (id != person.id) return false;
         if (!name.equals(person.name)) return false;
         if (!birthday.equals(person.birthday)) return false;
+        if (!gender.equals(person.gender)) return false;
         return contact.equals(person.contact);
     }
 

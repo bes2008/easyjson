@@ -9,6 +9,7 @@ import com.github.fangjinuo.easyjson.core.JSONBuilder;
 import com.github.fangjinuo.easyjson.core.JSONBuilderProvider;
 import com.github.fangjinuo.easyjson.core.type.Types;
 import com.github.fangjinuo.easyjson.tests.struct.Contact;
+import com.github.fangjinuo.easyjson.tests.struct.Gender;
 import com.github.fangjinuo.easyjson.tests.struct.Person;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -25,21 +26,23 @@ public class SimpleModelTests {
     private static final Map<Integer, Person> idToPersonMap = new HashMap<Integer, Person>();
 
     static {
-        for(int i=1; i<= 10; i++){
+        for (int i = 1; i <= 10; i++) {
             Person p = new Person();
             p.setId(i);
-            p.setName("name_"+i);
+            p.setName("name_" + i);
             p.setBirthday(new Date());
+            p.setGender(i % 2 == 0 ? Gender.man : Gender.woman);
 
             Contact c = new Contact();
             p.setContact(c);
-            c.setEmail(p.getName()+"@gmail.com");
-            c.setMobilePhone("mphone"+ i);
-            c.setPhone("phone"+ i);
-            c.setQq("qq"+i);
-            c.setWebchat("webchat"+i);
+            c.setEmail(p.getName() + "@gmail.com");
+            c.setMobilePhone("mphone" + i);
+            c.setPhone("phone" + i);
+            c.setQq("qq" + i);
+            c.setWebchat("webchat" + i);
 
-            if(i==1){
+
+            if (i == 1) {
                 person = p;
             }
 
@@ -50,7 +53,7 @@ public class SimpleModelTests {
     }
 
     @Test
-    public void testGson(){
+    public void testGson() {
         System.out.println("=====================Gson test start =============================");
         Gson gson = new GsonBuilder().serializeNulls().setDateFormat(DateFormat.LONG).create();
 
@@ -76,7 +79,7 @@ public class SimpleModelTests {
 
 
     @Test
-    public void testJackson() throws Exception{
+    public void testJackson() throws Exception {
         System.out.println("=====================Jackson test start =============================");
         ObjectMapper objectMapper = new ObjectMapper();
 
@@ -101,7 +104,7 @@ public class SimpleModelTests {
     }
 
     @Test
-    public void testFastJson() throws Exception{
+    public void testFastJson() throws Exception {
         System.out.println("=====================FastJson test start =============================");
 
         // test simple object
@@ -125,11 +128,11 @@ public class SimpleModelTests {
     }
 
     @Test
-    public void testEasyJson(){
+    public void testEasyJson() {
 
         System.out.println("=====================EasyJson test start =============================");
         JSONBuilder jsonBuilder = JSONBuilderProvider.create();
-        com.github.fangjinuo.easyjson.core.JSON gson = jsonBuilder.serializeNulls().build();
+        com.github.fangjinuo.easyjson.core.JSON gson = jsonBuilder.serializeNulls().serializeEnumUsingValue().build();
 
         // test simple object
         String str1 = gson.toJson(person, person.getClass());
@@ -147,7 +150,7 @@ public class SimpleModelTests {
         String str3 = gson.toJson(idToPersonMap);
         System.out.println(str3);
         Map<Integer, Person> personMap = gson.fromJson(str3, Types.getMapParameterizedType(Integer.class, Person.class));
-        System.out.println(gson.toJson(personMap, Types.getMapParameterizedType( Integer.class, Person.class)));
+        System.out.println(gson.toJson(personMap, Types.getMapParameterizedType(Integer.class, Person.class)));
         System.out.println("=====================EasyJson test end =============================");
     }
 }
