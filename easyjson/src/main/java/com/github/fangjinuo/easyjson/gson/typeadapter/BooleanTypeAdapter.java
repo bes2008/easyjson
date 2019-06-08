@@ -11,16 +11,8 @@ public class BooleanTypeAdapter implements JsonSerializer<Boolean>, JsonDeserial
     private boolean using1_0 = false;
     private boolean usingOnOff = false;
 
-    public boolean isUsing1_0() {
-        return using1_0;
-    }
-
     public void setUsing1_0(boolean using1_0) {
         this.using1_0 = using1_0;
-    }
-
-    public boolean isUsingOnOff() {
-        return usingOnOff;
     }
 
     public void setUsingOnOff(boolean usingOnOff) {
@@ -37,8 +29,8 @@ public class BooleanTypeAdapter implements JsonSerializer<Boolean>, JsonDeserial
             String vstring = jsonPrimitive.getAsString().toLowerCase();
             return evalTrues.contains(vstring);
         }
-        if(jsonPrimitive.isNumber()){
-            return jsonPrimitive.getAsInt()==1;
+        if (jsonPrimitive.isNumber()) {
+            return jsonPrimitive.getAsInt() == 1;
         }
         if (jsonPrimitive.isBoolean()) {
             return jsonPrimitive.getAsBoolean();
@@ -48,6 +40,12 @@ public class BooleanTypeAdapter implements JsonSerializer<Boolean>, JsonDeserial
 
     @Override
     public JsonElement serialize(Boolean src, Type typeOfSrc, JsonSerializationContext context) {
-        return null;
+        if (usingOnOff) {
+            return new JsonPrimitive(src ? "on" : "off");
+        }
+        if (using1_0) {
+            return new JsonPrimitive(src ? 1 : 0);
+        }
+        return new JsonPrimitive(src);
     }
 }
