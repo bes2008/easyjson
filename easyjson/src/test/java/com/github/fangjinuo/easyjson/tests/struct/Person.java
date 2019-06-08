@@ -8,6 +8,15 @@ public class Person {
     private Date birthday;
     private Contact contact;
     private Gender gender;
+    private long authCode;
+
+    public long getAuthCode() {
+        return authCode;
+    }
+
+    public void setAuthCode(long authCode) {
+        this.authCode = authCode;
+    }
 
     public int getId() {
         return id;
@@ -60,6 +69,9 @@ public class Person {
         if (!name.equals(person.name)) return false;
         if (!birthday.equals(person.birthday)) return false;
         if (!gender.equals(person.gender)) return false;
+        if (authCode != person.authCode) {
+            return false;
+        }
         return contact.equals(person.contact);
     }
 

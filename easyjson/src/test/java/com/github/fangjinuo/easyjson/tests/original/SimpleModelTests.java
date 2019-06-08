@@ -32,6 +32,7 @@ public class SimpleModelTests {
             p.setName("name_" + i);
             p.setBirthday(new Date());
             p.setGender(i % 2 == 0 ? Gender.man : Gender.woman);
+            p.setAuthCode(12312425353464564L+i);
 
             Contact c = new Contact();
             p.setContact(c);
@@ -132,7 +133,7 @@ public class SimpleModelTests {
 
         System.out.println("=====================EasyJson test start =============================");
         JSONBuilder jsonBuilder = JSONBuilderProvider.create();
-        com.github.fangjinuo.easyjson.core.JSON gson = jsonBuilder.serializeNulls().serializeEnumUsingValue().build();
+        com.github.fangjinuo.easyjson.core.JSON gson = jsonBuilder.serializeNulls().serializeLongAsString().serializeEnumUsingValue().build();
 
         // test simple object
         String str1 = gson.toJson(person, person.getClass());
