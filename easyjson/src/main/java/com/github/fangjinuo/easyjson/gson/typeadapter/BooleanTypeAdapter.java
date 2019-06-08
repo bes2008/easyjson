@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class BooleanTypeAdapter implements JsonSerializer<Boolean>, JsonDeserializer<Boolean> {
-    private static final List<String> evalFalses = Arrays.asList(new String[]{"false", "off", "0"});
+    private static final List<String> evalTrues = Arrays.asList(new String[]{"true", "on", "1"});
     private boolean using1_0 = false;
     private boolean usingOnOff = false;
 
@@ -29,27 +29,21 @@ public class BooleanTypeAdapter implements JsonSerializer<Boolean>, JsonDeserial
 
     @Override
     public Boolean deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-        if (json.isJsonNull()) {
+        if (json.isJsonNull() || json.isJsonArray() || json.isJsonObject()) {
             return false;
-        }
-        if (json.isJsonArray() || json.isJsonObject()) {
-            return true;
         }
         JsonPrimitive jsonPrimitive = json.getAsJsonPrimitive();
         if (jsonPrimitive.isString()) {
             String vstring = jsonPrimitive.getAsString().toLowerCase();
-            if (evalFalses.contains(vstring)) {
-                return false;
-            }
-            return true;
+            return evalTrues.contains(vstring);
         }
         if(jsonPrimitive.isNumber()){
-            return jsonPrimitive.getAsInt()!=0;
+            return jsonPrimitive.getAsInt()==1;
         }
         if (jsonPrimitive.isBoolean()) {
             return jsonPrimitive.getAsBoolean();
         }
-        return true;
+        return false;
     }
 
     @Override
