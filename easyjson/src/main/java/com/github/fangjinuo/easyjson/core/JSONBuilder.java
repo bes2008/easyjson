@@ -17,6 +17,10 @@ public abstract class JSONBuilder {
     protected boolean serializeLongAsString = false;
     protected boolean serializeNumberAsString = false;
 
+    // boolean priority: on_off > 1_0 > true_false
+    protected boolean serializeBooleanUsingOnOff = false;
+    protected boolean serializeBooleanUsing1_0 = false;
+
     // print format
     protected boolean prettyFormat = false;
 
@@ -68,6 +72,17 @@ public abstract class JSONBuilder {
         this.serializeDateUsingToString = true;
         return this;
     }
+
+    public JSONBuilder serializeBooleanUsingOnOff(){
+        this.serializeBooleanUsingOnOff = true;
+        return this;
+    }
+
+    public JSONBuilder serializeBooleanUsing1_0(){
+        this.serializeBooleanUsing1_0 = true;
+        return this;
+    }
+
 
     public abstract JSON build();
 }

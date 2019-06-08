@@ -2,6 +2,7 @@ package com.github.fangjinuo.easyjson.gson;
 
 import com.github.fangjinuo.easyjson.core.JSON;
 import com.github.fangjinuo.easyjson.core.JSONBuilder;
+import com.github.fangjinuo.easyjson.gson.typeadapter.BooleanTypeAdapter;
 import com.github.fangjinuo.easyjson.gson.typeadapter.DateTypeAdapter;
 import com.github.fangjinuo.easyjson.gson.typeadapter.EnumTypeAdapter;
 import com.github.fangjinuo.easyjson.gson.typeadapter.NumberTypeAdapter;
@@ -16,6 +17,12 @@ public class GsonJSONBuilder extends JSONBuilder {
         if(serializeNulls){
             gsonBuilder.serializeNulls();
         }
+
+        // Boolean
+        BooleanTypeAdapter booleanTypeAdapter = new BooleanTypeAdapter();
+        booleanTypeAdapter.setUsing1_0(serializeBooleanUsing1_0);
+        booleanTypeAdapter.setUsingOnOff(serializeBooleanUsingOnOff);
+        gsonBuilder.registerTypeHierarchyAdapter(Boolean.class, booleanTypeAdapter);
 
         // Number
         NumberTypeAdapter numberTypeAdapter = new NumberTypeAdapter();
