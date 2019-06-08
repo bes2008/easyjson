@@ -1,5 +1,6 @@
 package com.github.fangjinuo.easyjson.gson;
 
+import com.github.fangjinuo.easyjson.core.JsonException;
 import com.github.fangjinuo.easyjson.core.JsonHandler;
 import com.google.gson.Gson;
 
@@ -9,11 +10,11 @@ public class GsonAdapter implements JsonHandler {
 
     private Gson gson;
 
-    public String serialize(Object src, Type typeOfT) {
+    public String serialize(Object src, Type typeOfT) throws JsonException {
         return gson.toJson(src, typeOfT);
     }
 
-    public <T> T deserialize(String json, Type typeOfT) {
+    public <T> T deserialize(String json, Type typeOfT) throws JsonException {
         return gson.fromJson(json, typeOfT);
     }
 

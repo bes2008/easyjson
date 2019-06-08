@@ -50,9 +50,9 @@ public class JSON {
      * @param classOfT the class of T
      * @return an object of type T from the string. Returns {@code null} if {@code json} is {@code null}
      * or if {@code json} is empty.
-     * classOfT
+     * classOfT d4
      */
-    public <T> T fromJson(String json, Class<T> classOfT) throws JsonSyntaxException {
+    public <T> T fromJson(String json, Class<T> classOfT) throws JsonException {
         Object object = fromJson(json, (Type) classOfT);
         return Primitives.wrap(classOfT).cast(object);
     }
@@ -71,10 +71,10 @@ public class JSON {
      * Type typeOfT = new TypeToken&lt;Collection&lt;Foo&gt;&gt;(){}.getType();
      * </pre>
      * @return an object of type T from the string. Returns {@code null} if {@code json} is {@code null}.
-     * @throws JsonSyntaxException if json is not a valid representation for an object of type
+     * @throws JsonException if json is not a valid representation for an object of type
      */
     @SuppressWarnings("unchecked")
-    public <T> T fromJson(String json, Type typeOfT) throws JsonSyntaxException {
+    public <T> T fromJson(String json, Type typeOfT) throws JsonException {
         if (json == null) {
             return null;
         }

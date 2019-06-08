@@ -1,24 +1,24 @@
 package com.github.fangjinuo.easyjson.core;
 
-public class JsonSyntaxException extends RuntimeException {
+public class JsonException extends RuntimeException {
     private static final long serialVersionUID = 1L;
 
-    public JsonSyntaxException(String msg) {
+    public JsonException(String msg) {
         super(msg);
     }
 
-    public JsonSyntaxException(String msg, Throwable cause) {
+    public JsonException(String msg, Throwable cause) {
         super(msg, cause);
     }
 
     /**
      * Creates exception with the specified cause. Consider using
-     * {@link #JsonSyntaxException(String, Throwable)} instead if you can
+     * {@link #JsonException(String, Throwable)} instead if you can
      * describe what actually happened.
      *
      * @param cause root exception that caused this exception to be thrown.
      */
-    public JsonSyntaxException(Throwable cause) {
+    public JsonException(Throwable cause) {
         super(cause);
     }
 }

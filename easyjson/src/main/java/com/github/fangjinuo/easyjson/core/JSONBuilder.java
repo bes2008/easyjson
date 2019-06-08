@@ -48,7 +48,7 @@ public abstract class JSONBuilder {
     }
     public JSONBuilder serializeEnumUsingField(String field){
         if(field!=null && !field.trim().isEmpty()) {
-            this.serializeEnumUsingField = field;
+            this.serializeEnumUsingField = field.trim();
         }
         return this;
     }

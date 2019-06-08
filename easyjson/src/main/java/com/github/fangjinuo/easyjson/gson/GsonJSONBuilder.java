@@ -14,6 +14,7 @@ import java.util.Date;
 public class GsonJSONBuilder extends JSONBuilder {
     public JSON build() {
         GsonBuilder gsonBuilder = new GsonBuilder();
+        // Null
         if(serializeNulls){
             gsonBuilder.serializeNulls();
         }

@@ -80,6 +80,13 @@ public class Primitives {
         return (wrapped == null) ? type : wrapped;
     }
 
+    public static Class wrap(Type type){
+        if(isPrimitive(type)){
+            return PRIMITIVE_TO_WRAPPER_TYPE.get(checkNotNull(type));
+        }
+        return (Class)type;
+    }
+
     /**
      * Returns the corresponding primitive type of {@code type} if it is a
      * wrapper type; otherwise returns {@code type} itself. Idempotent.

@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fangjinuo.easyjson.core.JSONBuilder;
 import com.github.fangjinuo.easyjson.core.JSONBuilderProvider;
 import com.github.fangjinuo.easyjson.core.type.Types;
+import com.github.fangjinuo.easyjson.jackson.JacksonJSONBuilder;
 import com.github.fangjinuo.easyjson.tests.struct.Contact;
 import com.github.fangjinuo.easyjson.tests.struct.Gender;
 import com.github.fangjinuo.easyjson.tests.struct.Person;
@@ -99,7 +100,7 @@ public class SimpleModelTests {
         // test map
         String str3 = objectMapper.writeValueAsString(idToPersonMap);
         System.out.println(str3);
-        Map<Integer, Person> personMap = objectMapper.readValue(str3, objectMapper.getTypeFactory().constructParametricType(Map.class, Integer.class, Person.class));
+        Map<Integer, Person> personMap = objectMapper.readValue(str3, objectMapper.getTypeFactory().constructMapLikeType(Map.class, Integer.class, Person.class));
         System.out.println(objectMapper.writeValueAsString(personMap));
         System.out.println("=====================Jackson test end =============================");
     }
@@ -129,9 +130,9 @@ public class SimpleModelTests {
     }
 
     @Test
-    public void testEasyJson() {
+    public void testEasyJson_gson() {
 
-        System.out.println("=====================EasyJson test start =============================");
+        System.out.println("=====================EasyJson [Gson] test start =============================");
         JSONBuilder jsonBuilder = JSONBuilderProvider.create();
         com.github.fangjinuo.easyjson.core.JSON gson = jsonBuilder.serializeNulls().serializeLongAsString().serializeEnumUsingValue().build();
 
@@ -152,6 +153,33 @@ public class SimpleModelTests {
         System.out.println(str3);
         Map<Integer, Person> personMap = gson.fromJson(str3, Types.getMapParameterizedType(Integer.class, Person.class));
         System.out.println(gson.toJson(personMap, Types.getMapParameterizedType(Integer.class, Person.class)));
-        System.out.println("=====================EasyJson test end =============================");
+        System.out.println("=====================EasyJson [Gson] test end =============================");
+    }
+
+    @Test
+    public void testEasyJson_jackson() {
+
+        System.out.println("=====================EasyJson [Jackson] test start =============================");
+        JSONBuilder jsonBuilder = new JacksonJSONBuilder();
+        com.github.fangjinuo.easyjson.core.JSON gson = jsonBuilder.serializeNulls().serializeLongAsString().serializeEnumUsingValue().build();
+
+        // test simple object
+        String str1 = gson.toJson(person, person.getClass());
+        System.out.println(str1);
+        Person p1 = gson.fromJson(str1, Person.class);
+        System.out.println(p1.equals(person));
+        System.out.println(gson.toJson(person));
+
+        // test list
+        String str2 = gson.toJson(persons);
+        System.out.println(str2);
+        List<Person> persons2 = gson.fromJson(str2, Types.getListParameterizedType(Person.class));
+        System.out.println(gson.toJson(persons2));
+        // test map
+        String str3 = gson.toJson(idToPersonMap);
+        System.out.println(str3);
+        Map<Integer, Person> personMap = gson.fromJson(str3, Types.getMapParameterizedType(Integer.class, Person.class));
+        System.out.println(gson.toJson(personMap, Types.getMapParameterizedType(Integer.class, Person.class)));
+        System.out.println("=====================EasyJson [Jackson] test end =============================");
     }
 }
