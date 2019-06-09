@@ -1,119 +1,155 @@
 package com.github.fangjinuo.easyjson.jackson.deserializer;
 
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.JsonToken;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.MapperFeature;
-import com.fasterxml.jackson.databind.util.CompactStringObjectMap;
-import com.fasterxml.jackson.databind.util.EnumResolver;
+import com.fasterxml.jackson.databind.*;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.util.EnumSet;
 
-public class EnumDeserializer extends com.fasterxml.jackson.databind.deser.std.EnumDeserializer{
+public class EnumDeserializer<T extends Enum> extends JsonDeserializer<T> implements ContextualDeserializer{
 
-    public static final String READ_ENUM_USING_INDEX_ATTR_KEY="READ_ENUM_USING_INDEX";
+    public static final String READ_ENUM_USING_INDEX_ATTR_KEY = "READ_ENUM_USING_INDEX";
+    public static final String READ_ENUM_USING_FIELD_ATTR_KEY = "READ_ENUM_USING_FIELD";
+    private Class<T> clazz;
 
-    private Enum<?> _enumDefaultValue;
-
-    public EnumDeserializer(EnumResolver byNameResolver, Boolean caseInsensitive) {
-        super(byNameResolver, caseInsensitive);
-        _enumDefaultValue = byNameResolver.getDefaultValue();
+    @Override
+    public Class<T> handledType() {
+        return clazz;
     }
 
-    public EnumDeserializer(com.fasterxml.jackson.databind.deser.std.EnumDeserializer base, Boolean caseInsensitive) {
-        super(base, caseInsensitive);
-        _enumDefaultValue = ((EnumDeserializer)base)._enumDefaultValue;
+    public EnumDeserializer() {
     }
 
-    public EnumDeserializer(EnumResolver byNameResolver) {
-        super(byNameResolver);
+    private static boolean isUsingIndex(DeserializationContext ctx) {
+        Object obj = ctx.getAttribute(READ_ENUM_USING_INDEX_ATTR_KEY);
+        if (obj == null) {
+            return false;
+        }
+        return "true".equals(obj.toString().toLowerCase());
     }
 
     @Override
-    public Object deserialize(JsonParser p, DeserializationContext ctxt, Object intoValue) throws IOException {
-        JsonToken curr = p.getCurrentToken();
+    public T deserialize(JsonParser p, DeserializationContext ctx) throws IOException, JsonProcessingException {
+        boolean usingIndex = isUsingIndex(ctx);
+        boolean usingToString = ctx.isEnabled(DeserializationFeature.READ_ENUMS_USING_TO_STRING);
+        String usingField = (String) ctx.getAttribute(READ_ENUM_USING_FIELD_ATTR_KEY);
 
-        // Usually should just get string value:
-        if (curr == JsonToken.VALUE_STRING || curr == JsonToken.FIELD_NAME) {
-            CompactStringObjectMap lookup = ctxt.isEnabled(DeserializationFeature.READ_ENUMS_USING_TO_STRING)
-                    ? _getToStringLookup(ctxt) : _lookupByName;
-            final String name = p.getText();
-            Object result = lookup.find(name);
-            if (result == null) {
-                return _deserializeAltString(p, ctxt, lookup, name);
-            }
-            return result;
-        }
-        // But let's consider int acceptable as well (if within ordinal range)
-        if (curr == JsonToken.VALUE_NUMBER_INT) {
-            // ... unless told not to do that
-            int index = p.getIntValue();
-            if (ctxt.isEnabled(DeserializationFeature.FAIL_ON_NUMBERS_FOR_ENUMS)) {
-                return ctxt.handleWeirdNumberValue(_enumClass(), index,
-                        "not allowed to deserialize Enum value out of number: disable DeserializationConfig.DeserializationFeature.FAIL_ON_NUMBERS_FOR_ENUMS to allow"
-                );
-            }
-            if (index >= 0 && index < _enumsByIndex.length) {
-                return _enumsByIndex[index];
-            }
-            if ((_enumDefaultValue != null)
-                    && ctxt.isEnabled(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_USING_DEFAULT_VALUE)) {
-                return _enumDefaultValue;
-            }
-            if (!ctxt.isEnabled(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_AS_NULL)) {
-                return ctxt.handleWeirdNumberValue(_enumClass(), index,
-                        "index value outside legal index range [0..%s]",
-                        _enumsByIndex.length-1);
-            }
-            return null;
-        }
-        return _deserializeOther(p, ctxt);
-    }
+        DeserializationConfig config = ctx.getConfig();
 
-    protected Object _deserializeAltString(JsonParser p, DeserializationContext ctxt,
-                                               CompactStringObjectMap lookup, String name) throws IOException
-    {
-        name = name.trim();
-        if (name.length() == 0) {
-            if (ctxt.isEnabled(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT)) {
-                return getEmptyValue(ctxt);
-            }
-        } else {
-            // [databind#1313]: Case insensitive enum deserialization
-            if (Boolean.TRUE.equals(_caseInsensitive)) {
-                Object match = lookup.findCaseInsensitive(name);
-                if (match != null) {
-                    return match;
+        Class<T> enumClass = clazz;
+        if(enumClass==null) {
+            Object currentOwner = p.getCurrentValue();
+            String currentName = p.currentName();
+
+            // enum is bean's field
+            if (currentName != null && currentOwner != null) {
+                try {
+                    Field field = currentOwner.getClass().getDeclaredField(currentName);
+                    enumClass = (Class<T>) field.getType();
+                } catch (NoSuchFieldException e) {
+                    e.printStackTrace();
                 }
-            } else if (!ctxt.isEnabled(DeserializationFeature.FAIL_ON_NUMBERS_FOR_ENUMS)) {
-                // [databind#149]: Allow use of 'String' indexes as well -- unless prohibited (as per above)
-                char c = name.charAt(0);
-                if (c >= '0' && c <= '9') {
-                    try {
-                        int index = Integer.parseInt(name);
-                        if (!ctxt.isEnabled(MapperFeature.ALLOW_COERCION_OF_SCALARS)) {
-                            return ctxt.handleWeirdStringValue(_enumClass(), name,
-                                    "value looks like quoted Enum index, but `MapperFeature.ALLOW_COERCION_OF_SCALARS` prevents use"
-                            );
+            } else {
+
+            }
+        }
+
+        EnumSet es = EnumSet.allOf(enumClass);
+
+        JsonToken jtoken = p.getCurrentToken();
+
+        if (usingIndex && jtoken == JsonToken.VALUE_NUMBER_INT) {
+            int index = p.getIntValue();
+            for (Object obj : es) {
+                T e = (T) obj;
+                if (e.ordinal() == index) {
+                    return e;
+                }
+            }
+        }
+
+        if (usingToString && jtoken == JsonToken.VALUE_STRING) {
+            String string = p.getValueAsString();
+            for (Object obj : es) {
+                T e = (T) obj;
+                if (e.toString().equals(string)) {
+                    return e;
+                }
+            }
+        }
+
+        if (usingField != null) {
+            try {
+                Field field = enumClass.getDeclaredField(usingField);
+                Class fieldType = field.getType();
+                if (String.class == fieldType && jtoken == JsonToken.VALUE_STRING) {
+                    String str = p.getValueAsString();
+                    for (Object obj : es) {
+                        T e = (T) obj;
+                        String v = (String) field.get(e);
+                        if (v.equals(str)) {
+                            return e;
                         }
-                        if (index >= 0 && index < _enumsByIndex.length) {
-                            return _enumsByIndex[index];
-                        }
-                    } catch (NumberFormatException e) {
-                        // fine, ignore, was not an integer
                     }
                 }
+                if (Character.class == fieldType) {
+                    char ch = p.getTextCharacters()[0];
+                    for (Object obj : es) {
+                        T e = (T) obj;
+                        Character v = (Character) field.get(e);
+                        if (v.equals(ch)) {
+                            return e;
+                        }
+                    }
+                }
+                if (Boolean.class == fieldType) {
+                    boolean bool = p.getBooleanValue();
+                    for (Object obj : es) {
+                        T e = (T) obj;
+                        Boolean v = (Boolean) field.get(e);
+                        if (v.equals(bool)) {
+                            return e;
+                        }
+                    }
+                }
+                if (Number.class == fieldType) {
+                    Number number = p.getNumberValue();
+                    for (Object obj : es) {
+                        T e = (T) obj;
+                        Number v = (Number) field.get(e);
+                        if (v.equals(number)) {
+                            return e;
+                        }
+                    }
+                }
+            } catch (Throwable ex) {
+                ex.printStackTrace();
             }
         }
-        if ((_enumDefaultValue != null)
-                && ctxt.isEnabled(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_USING_DEFAULT_VALUE)) {
-            return _enumDefaultValue;
-        }
-        if (!ctxt.isEnabled(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_AS_NULL)) {
-            return ctxt.handleWeirdStringValue(_enumClass(), name,
-                    "value not one of declared Enum instance names: %s", lookup.keys());
+
+        if (jtoken == JsonToken.VALUE_STRING) {
+            String enumName = p.getValueAsString();
+            for (Object obj : es) {
+                T e = (T) obj;
+                if (e.name().equals(enumName)) {
+                    return e;
+                }
+            }
+
         }
         return null;
+    }
+
+    @Override
+    public JsonDeserializer<?> createContextual(DeserializationContext context, BeanProperty beanProperty, Class<?> type) throws JsonMappingException {
+        if(handledType()==null || (type!=null && handledType()!=type)){
+            EnumDeserializer enumDeserializer = new EnumDeserializer();
+            enumDeserializer.clazz = type;
+            return enumDeserializer;
+        }
+        return this;
     }
 }

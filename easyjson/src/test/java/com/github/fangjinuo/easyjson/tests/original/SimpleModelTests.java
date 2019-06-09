@@ -182,4 +182,20 @@ public class SimpleModelTests {
         System.out.println(gson.toJson(personMap, Types.getMapParameterizedType(Integer.class, Person.class)));
         System.out.println("=====================EasyJson [Jackson] test end =============================");
     }
+
+    @Test
+    public void testEasyJson_jackson_enum_list(){
+        List<Gender> genders = new ArrayList<Gender>();
+        genders.add(Gender.man);
+        genders.add(Gender.woman);
+        genders.add(Gender.woman);
+        genders.add(Gender.man);
+
+        com.github.fangjinuo.easyjson.core.JSON json = new JacksonJSONBuilder().serializeEnumUsingValue().build();
+        String jsonString = json.toJson(genders);
+        System.out.println(jsonString);
+        List<Gender> a = json.fromJson(jsonString, Types.getListParameterizedType(Gender.class));
+        jsonString = json.toJson(a);
+        System.out.println(jsonString);
+    }
 }

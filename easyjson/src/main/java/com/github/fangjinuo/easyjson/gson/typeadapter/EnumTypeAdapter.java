@@ -63,8 +63,6 @@ public class EnumTypeAdapter implements JsonSerializer<Enum>, JsonDeserializer<E
         }
         if (usingField != null) {
             try {
-
-
                 Field field = ((Class<Enum>) typeOfT).getDeclaredField(usingField);
                 Class fieldType = field.getType();
                 if (String.class == fieldType) {
