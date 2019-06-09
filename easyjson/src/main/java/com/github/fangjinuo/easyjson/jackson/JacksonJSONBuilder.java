@@ -73,8 +73,10 @@ public class JacksonJSONBuilder extends JSONBuilder {
             JsonSerializer<?> ser = null;
             if (Types.isPrimitive(rawType) || clsName.startsWith("java.")) {
                 if (Number.class.isAssignableFrom(rawType)) {
-                    ser = new NumberSerializer();
-                    return ser;
+                    ser = new NumberSerializer().createContextual(prov, null, type);
+                    if (ser != null) {
+                        return ser;
+                    }
                 }
             }
             return super._createSerializer2(prov, type, beanDesc, staticTyping);
