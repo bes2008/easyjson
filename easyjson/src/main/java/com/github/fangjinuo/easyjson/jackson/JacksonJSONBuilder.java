@@ -1,26 +1,23 @@
 package com.github.fangjinuo.easyjson.jackson;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.ObjectCodec;
-import com.fasterxml.jackson.core.io.IOContext;
-import com.fasterxml.jackson.core.json.ReaderBasedJsonParser;
-import com.fasterxml.jackson.core.sym.CharsToNameCanonicalizer;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.cfg.DeserializerFactoryConfig;
+import com.fasterxml.jackson.databind.cfg.SerializerFactoryConfig;
+import com.fasterxml.jackson.databind.deser.BeanDeserializerFactory;
+import com.fasterxml.jackson.databind.deser.DefaultDeserializationContext;
 import com.fasterxml.jackson.databind.module.SimpleDeserializers;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.ser.BeanSerializerFactory;
 import com.github.fangjinuo.easyjson.core.JSON;
 import com.github.fangjinuo.easyjson.core.JSONBuilder;
+import com.github.fangjinuo.easyjson.core.type.Types;
 import com.github.fangjinuo.easyjson.jackson.deserializer.BooleanDeserializer;
 import com.github.fangjinuo.easyjson.jackson.deserializer.Deserializers;
 import com.github.fangjinuo.easyjson.jackson.deserializer.EnumDeserializer;
+import com.github.fangjinuo.easyjson.jackson.deserializer.NumberDeserializer;
 import com.github.fangjinuo.easyjson.jackson.serializer.BooleanSerializer;
 import com.github.fangjinuo.easyjson.jackson.serializer.EnumSerializer;
-
-import java.io.DataInput;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Reader;
+import com.github.fangjinuo.easyjson.jackson.serializer.NumberSerializer;
 
 public class JacksonJSONBuilder extends JSONBuilder {
     private static boolean moduleRegistered = false;
@@ -30,12 +27,17 @@ public class JacksonJSONBuilder extends JSONBuilder {
         makesureModuleRegister();
     }
 
-    static class MyObjectMapper extends ObjectMapper{
+    static class MyObjectMapper extends ObjectMapper {
         public MyObjectMapper() {
+            super();
+            setDefaultDeserializationContext(new DefaultDeserializationContext.Impl(MyBeanDeserializerFactory.instance));
+            setSerializerFactory(MyBeanSerializerFactory.instance);
         }
 
         public MyObjectMapper(ObjectMapper src) {
             super(src);
+            setDefaultDeserializationContext(new DefaultDeserializationContext.Impl(MyBeanDeserializerFactory.instance));
+            setSerializerFactory(MyBeanSerializerFactory.instance);
         }
 
         @Override
@@ -43,23 +45,76 @@ public class JacksonJSONBuilder extends JSONBuilder {
             return super.getDeserializationConfig();
         }
 
-        public void setDescrializationConfig (DeserializationConfig config){
+        public void setDescrializationConfig(DeserializationConfig config) {
             this._deserializationConfig = config;
         }
 
-        public void setSerializationConfig(SerializationConfig config){
+        public void setSerializationConfig(SerializationConfig config) {
             this._serializationConfig = config;
         }
 
-
-
+        public void setDefaultDeserializationContext(DefaultDeserializationContext context) {
+            this._deserializationContext = context;
+        }
     }
 
+    static class MyBeanSerializerFactory extends BeanSerializerFactory {
+        public static MyBeanSerializerFactory instance = new MyBeanSerializerFactory(null);
+
+        public MyBeanSerializerFactory(SerializerFactoryConfig config) {
+            super(config);
+        }
+
+        protected JsonSerializer<?> _createSerializer2(SerializerProvider prov,
+                                                       JavaType type, BeanDescription beanDesc, boolean staticTyping)
+                throws JsonMappingException {
+            Class<?> rawType = type.getRawClass();
+            String clsName = rawType.getName();
+            JsonSerializer<?> ser = null;
+            if (Types.isPrimitive(rawType) || clsName.startsWith("java.")) {
+                if (Number.class.isAssignableFrom(rawType)) {
+                    ser = new NumberSerializer();
+                    return ser;
+                }
+            }
+            return super._createSerializer2(prov, type, beanDesc, staticTyping);
+        }
+    }
+
+    static class MyBeanDeserializerFactory extends BeanDeserializerFactory {
+        public static MyBeanDeserializerFactory instance = new MyBeanDeserializerFactory(null);
+
+        public MyBeanDeserializerFactory(DeserializerFactoryConfig config) {
+            super(config);
+        }
+
+        protected JsonDeserializer<?> findStdDeserializer(DeserializationContext ctxt,
+                                                          JavaType type, BeanDescription beanDesc)
+                throws JsonMappingException {
+            // note: we do NOT check for custom deserializers here, caller has already
+            // done that
+            Class<?> rawType = type.getRawClass();
+            String clsName = rawType.getName();
+            if (Types.isPrimitive(rawType) || clsName.startsWith("java.")) {
+                // Primitives/wrappers, other Numbers:
+                JsonDeserializer<?> deser = null;
+                // code block append by easyjson [start]
+                if (Number.class.isAssignableFrom(rawType)) {
+                    deser = new NumberDeserializer().createContextual(ctxt, null, Types.getPrimitiveWrapClass(rawType));
+                    if (deser != null) {
+                        return deser;
+                    }
+                }
+                // code block append by easyjson [end]
+            }
+            return super.findStdDeserializer(ctxt, type, beanDesc);
+        }
+    }
 
     private static void makesureModuleRegister() {
         if (!moduleRegistered) {
             synchronized (JacksonJSONBuilder.class) {
-                if(!moduleRegistered) {
+                if (!moduleRegistered) {
                     SimpleModule module = new SimpleModule();
                     SimpleDeserializers simpleDeserializers = new Deserializers();
                     module.setDeserializers(simpleDeserializers);
@@ -73,7 +128,7 @@ public class JacksonJSONBuilder extends JSONBuilder {
                     module.addSerializer(Enum.class, new EnumSerializer<Enum>());
 
                     objectMapper.registerModule(module);
-                    moduleRegistered=true;
+                    moduleRegistered = true;
 
                 }
             }
@@ -110,7 +165,7 @@ public class JacksonJSONBuilder extends JSONBuilder {
 
     }
 
-    private void configBoolean(MyObjectMapper objectMapper){
+    private void configBoolean(MyObjectMapper objectMapper) {
         SerializationConfig serializationConfig = objectMapper.getSerializationConfig();
         serializationConfig = serializationConfig.withAttribute(BooleanSerializer.WRITE_BOOLEAN_USING_1_0_ATTR_KEY, serializeBooleanUsing1_0);
         serializationConfig = serializationConfig.withAttribute(BooleanSerializer.WRITE_BOOLEAN_USING_ON_OFF_ATTR_KEY, serializeBooleanUsingOnOff);
@@ -123,6 +178,17 @@ public class JacksonJSONBuilder extends JSONBuilder {
         objectMapper.setDescrializationConfig(deserializationConfig);
     }
 
+    private void configNumber(MyObjectMapper objectMapper) {
+        SerializationConfig serializationConfig = objectMapper.getSerializationConfig();
+        serializationConfig = serializationConfig.withAttribute(NumberSerializer.WRITE_LONG_AS_STRING_ATTR_KEY, serializeLongAsString);
+        serializationConfig = serializationConfig.withAttribute(NumberSerializer.WRITE_NUMBER_AS_STRING_ATTR_KEY, serializeNumberAsString);
+        DeserializationConfig deserializationConfig = objectMapper.getDeserializationConfig();
+        deserializationConfig = deserializationConfig.withAttribute(NumberDeserializer.READ_LONG_USING_STRING_ATTR_KEY, serializeLongAsString);
+        deserializationConfig = deserializationConfig.withAttribute(NumberDeserializer.READ_NUMBER_USING_STRING_ATTR_KEY, serializeNumberAsString);
+        objectMapper.setSerializationConfig(serializationConfig);
+        objectMapper.setDescrializationConfig(deserializationConfig);
+    }
+
 
     @Override
     public JSON build() {
@@ -130,10 +196,11 @@ public class JacksonJSONBuilder extends JSONBuilder {
         MyObjectMapper mapper = new MyObjectMapper(objectMapper);
 
         if (serializeNulls) {
-            //        objectMapper.configure(SerializationFeature);
+            //  objectMapper.configure(SerializationFeature);
         }
-        configBoolean(mapper);
 
+        configBoolean(mapper);
+        configNumber(mapper);
         configEnum(mapper);
 
         JacksonAdapter jsonHandler = new JacksonAdapter();
