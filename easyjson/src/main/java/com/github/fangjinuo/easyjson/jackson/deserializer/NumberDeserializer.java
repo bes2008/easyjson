@@ -14,9 +14,10 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
+import static com.github.fangjinuo.easyjson.jackson.JacksonConstants.SERIALIZE_LONG_USING_STRING_ATTR_KEY;
+import static com.github.fangjinuo.easyjson.jackson.JacksonConstants.SERIALIZE_NUMBER_USING_STRING_ATTR_KEY;
+
 public class NumberDeserializer extends JsonDeserializer<Number> implements ContextualDeserializer {
-    public static final String READ_LONG_USING_STRING_ATTR_KEY = "READ_LONG_AS_STRING";
-    public static final String READ_NUMBER_USING_STRING_ATTR_KEY = "READ_NUMBER_AS_STRING";
 
     private Class<? extends Number> clazz;
 
@@ -27,8 +28,8 @@ public class NumberDeserializer extends JsonDeserializer<Number> implements Cont
 
     @Override
     public Number deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
-        boolean longUsingString = Jacksons.getBooleanAttr(ctxt, READ_LONG_USING_STRING_ATTR_KEY);
-        boolean usingString = Jacksons.getBooleanAttr(ctxt, READ_NUMBER_USING_STRING_ATTR_KEY);
+        boolean longUsingString = Jacksons.getBooleanAttr(ctxt, SERIALIZE_LONG_USING_STRING_ATTR_KEY);
+        boolean usingString = Jacksons.getBooleanAttr(ctxt, SERIALIZE_NUMBER_USING_STRING_ATTR_KEY);
         JsonToken curr = p.getCurrentToken();
         if (curr == JsonToken.VALUE_STRING) {
             String v = p.getValueAsString();
@@ -88,7 +89,7 @@ public class NumberDeserializer extends JsonDeserializer<Number> implements Cont
     public JsonDeserializer<?> createContextual(DeserializationContext context, BeanProperty beanProperty, Class<?> type) throws JsonMappingException {
         if (handledType() == null || (type != null && handledType() != type)) {
             if (Number.class.isAssignableFrom(type)) {
-                if(Jacksons.getBooleanAttr(context, READ_LONG_USING_STRING_ATTR_KEY) || Jacksons.getBooleanAttr(context, READ_NUMBER_USING_STRING_ATTR_KEY)){
+                if(Jacksons.getBooleanAttr(context, SERIALIZE_LONG_USING_STRING_ATTR_KEY) || Jacksons.getBooleanAttr(context, SERIALIZE_NUMBER_USING_STRING_ATTR_KEY)){
                     NumberDeserializer d = new NumberDeserializer();
                     d.clazz = (Class<Number>) type;
                     return d;

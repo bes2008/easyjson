@@ -13,15 +13,15 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.github.fangjinuo.easyjson.jackson.JacksonConstants.SERIALIZE_BOOLEAN_USING_1_0_ATTR_KEY;
+
 public class BooleanDeserializer extends JsonDeserializer<Boolean> implements ContextualDeserializer {
 
     private static final List<String> evalTrues = Arrays.asList(new String[]{"true", "on", "1"});
-    public static final String READ_BOOLEAN_USING_1_0_ATTR_KEY = "READ_BOOLEAN_USING_1_0";
-    public static final String READ_BOOLEAN_USING_ON_OFF_ATTR_KEY = "READ_BOOLEAN_USING_ON_OFF";
 
     @Override
     public Boolean deserialize(JsonParser p, DeserializationContext ctx) throws IOException, JsonProcessingException {
-        boolean using1_0 = Jacksons.getBooleanAttr(ctx, READ_BOOLEAN_USING_1_0_ATTR_KEY);
+        boolean using1_0 = Jacksons.getBooleanAttr(ctx, SERIALIZE_BOOLEAN_USING_1_0_ATTR_KEY);
 
         JsonToken curr = p.getCurrentToken();
         if (using1_0 && curr == JsonToken.VALUE_NUMBER_INT) {

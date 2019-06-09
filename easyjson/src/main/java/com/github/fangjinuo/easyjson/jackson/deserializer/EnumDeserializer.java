@@ -10,10 +10,11 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.EnumSet;
 
+import static com.github.fangjinuo.easyjson.jackson.JacksonConstants.SERIALIZE_ENUM_USING_FIELD_ATTR_KEY;
+import static com.github.fangjinuo.easyjson.jackson.JacksonConstants.SERIALIZE_ENUM_USING_INDEX_ATTR_KEY;
+
 public class EnumDeserializer<T extends Enum> extends JsonDeserializer<T> implements ContextualDeserializer {
 
-    public static final String READ_ENUM_USING_INDEX_ATTR_KEY = "READ_ENUM_USING_INDEX";
-    public static final String READ_ENUM_USING_FIELD_ATTR_KEY = "READ_ENUM_USING_FIELD";
     private Class<T> clazz;
 
     @Override
@@ -26,9 +27,9 @@ public class EnumDeserializer<T extends Enum> extends JsonDeserializer<T> implem
 
     @Override
     public T deserialize(JsonParser p, DeserializationContext ctx) throws IOException, JsonProcessingException {
-        boolean usingIndex = Jacksons.getBooleanAttr(ctx, READ_ENUM_USING_INDEX_ATTR_KEY);
+        boolean usingIndex = Jacksons.getBooleanAttr(ctx, SERIALIZE_ENUM_USING_INDEX_ATTR_KEY);
         boolean usingToString = ctx.isEnabled(DeserializationFeature.READ_ENUMS_USING_TO_STRING);
-        String usingField = (String) ctx.getAttribute(READ_ENUM_USING_FIELD_ATTR_KEY);
+        String usingField = (String) ctx.getAttribute(SERIALIZE_ENUM_USING_FIELD_ATTR_KEY);
 
         DeserializationConfig config = ctx.getConfig();
 

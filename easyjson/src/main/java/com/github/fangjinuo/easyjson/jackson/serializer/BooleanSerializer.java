@@ -7,14 +7,15 @@ import com.github.fangjinuo.easyjson.jackson.Jacksons;
 
 import java.io.IOException;
 
+import static com.github.fangjinuo.easyjson.jackson.JacksonConstants.SERIALIZE_BOOLEAN_USING_1_0_ATTR_KEY;
+import static com.github.fangjinuo.easyjson.jackson.JacksonConstants.SERIALIZE_BOOLEAN_USING_ON_OFF_ATTR_KEY;
+
 public class BooleanSerializer extends JsonSerializer<Boolean> {
-    public static final String WRITE_BOOLEAN_USING_1_0_ATTR_KEY = "WRITE_BOOLEAN_USING_1_0";
-    public static final String WRITE_BOOLEAN_USING_ON_OFF_ATTR_KEY = "WRITE_BOOLEAN_USING_ON_OFF";
 
     @Override
     public void serialize(Boolean value, JsonGenerator gen, SerializerProvider sp) throws IOException {
-        boolean using1_0 = Jacksons.getBoolean(sp.getAttribute(WRITE_BOOLEAN_USING_1_0_ATTR_KEY));
-        boolean usingOnOff = Jacksons.getBoolean(sp.getAttribute(WRITE_BOOLEAN_USING_ON_OFF_ATTR_KEY));
+        boolean using1_0 = Jacksons.getBoolean(sp.getAttribute(SERIALIZE_BOOLEAN_USING_1_0_ATTR_KEY));
+        boolean usingOnOff = Jacksons.getBoolean(sp.getAttribute(SERIALIZE_BOOLEAN_USING_ON_OFF_ATTR_KEY));
 
         value = value == null ? false : value;
 

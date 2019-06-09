@@ -8,14 +8,15 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import java.io.IOException;
 import java.lang.reflect.Field;
 
+import static com.github.fangjinuo.easyjson.jackson.JacksonConstants.SERIALIZE_ENUM_USING_FIELD_ATTR_KEY;
+
 public class EnumSerializer<T extends Enum> extends JsonSerializer<T> {
-    public static final String WRITE_ENUM_USING_FIELD_ATTR_KEY = "WRITE_ENUM_USING_FIELD";
 
     @Override
     public void serialize(T e, JsonGenerator gen, SerializerProvider sp) throws IOException {
         boolean usingIndex = sp.isEnabled(SerializationFeature.WRITE_ENUMS_USING_INDEX);
         boolean usingToString = sp.isEnabled(SerializationFeature.WRITE_ENUMS_USING_TO_STRING);
-        String usingField = (String) sp.getAttribute(WRITE_ENUM_USING_FIELD_ATTR_KEY);
+        String usingField = (String) sp.getAttribute(SERIALIZE_ENUM_USING_FIELD_ATTR_KEY);
 
         if (usingIndex) {
             gen.writeNumber(e.ordinal());
