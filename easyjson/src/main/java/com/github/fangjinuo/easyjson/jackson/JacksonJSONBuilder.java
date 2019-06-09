@@ -133,6 +133,8 @@ public class JacksonJSONBuilder extends JSONBuilder {
         configEnum(mapper);
         configDate(mapper);
 
+        mapper.configure(SerializationFeature.INDENT_OUTPUT, prettyFormat);
+
         JacksonAdapter jsonHandler = new JacksonAdapter();
         jsonHandler.setObjectMapper(mapper);
         JSON json = new JSON();
