@@ -4,12 +4,13 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.*;
+import com.github.fangjinuo.easyjson.jackson.Jacksons;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.EnumSet;
 
-public class EnumDeserializer<T extends Enum> extends JsonDeserializer<T> implements ContextualDeserializer{
+public class EnumDeserializer<T extends Enum> extends JsonDeserializer<T> implements ContextualDeserializer {
 
     public static final String READ_ENUM_USING_INDEX_ATTR_KEY = "READ_ENUM_USING_INDEX";
     public static final String READ_ENUM_USING_FIELD_ATTR_KEY = "READ_ENUM_USING_FIELD";
@@ -23,24 +24,16 @@ public class EnumDeserializer<T extends Enum> extends JsonDeserializer<T> implem
     public EnumDeserializer() {
     }
 
-    private static boolean isUsingIndex(DeserializationContext ctx) {
-        Object obj = ctx.getAttribute(READ_ENUM_USING_INDEX_ATTR_KEY);
-        if (obj == null) {
-            return false;
-        }
-        return "true".equals(obj.toString().toLowerCase());
-    }
-
     @Override
     public T deserialize(JsonParser p, DeserializationContext ctx) throws IOException, JsonProcessingException {
-        boolean usingIndex = isUsingIndex(ctx);
+        boolean usingIndex = Jacksons.getBooleanAttr(ctx, READ_ENUM_USING_INDEX_ATTR_KEY);
         boolean usingToString = ctx.isEnabled(DeserializationFeature.READ_ENUMS_USING_TO_STRING);
         String usingField = (String) ctx.getAttribute(READ_ENUM_USING_FIELD_ATTR_KEY);
 
         DeserializationConfig config = ctx.getConfig();
 
         Class<T> enumClass = clazz;
-        if(enumClass==null) {
+        if (enumClass == null) {
             Object currentOwner = p.getCurrentValue();
             String currentName = p.currentName();
 
@@ -145,7 +138,7 @@ public class EnumDeserializer<T extends Enum> extends JsonDeserializer<T> implem
 
     @Override
     public JsonDeserializer<?> createContextual(DeserializationContext context, BeanProperty beanProperty, Class<?> type) throws JsonMappingException {
-        if(handledType()==null || (type!=null && handledType()!=type)){
+        if (handledType() == null || (type != null && handledType() != type)) {
             EnumDeserializer enumDeserializer = new EnumDeserializer();
             enumDeserializer.clazz = type;
             return enumDeserializer;

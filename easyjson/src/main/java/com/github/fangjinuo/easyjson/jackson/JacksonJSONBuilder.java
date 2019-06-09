@@ -11,8 +11,10 @@ import com.fasterxml.jackson.databind.module.SimpleDeserializers;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.github.fangjinuo.easyjson.core.JSON;
 import com.github.fangjinuo.easyjson.core.JSONBuilder;
+import com.github.fangjinuo.easyjson.jackson.deserializer.BooleanDeserializer;
 import com.github.fangjinuo.easyjson.jackson.deserializer.Deserializers;
 import com.github.fangjinuo.easyjson.jackson.deserializer.EnumDeserializer;
+import com.github.fangjinuo.easyjson.jackson.serializer.BooleanSerializer;
 import com.github.fangjinuo.easyjson.jackson.serializer.EnumSerializer;
 
 import java.io.DataInput;
@@ -61,6 +63,11 @@ public class JacksonJSONBuilder extends JSONBuilder {
                     SimpleModule module = new SimpleModule();
                     SimpleDeserializers simpleDeserializers = new Deserializers();
                     module.setDeserializers(simpleDeserializers);
+
+                    // boolean
+                    module.addSerializer(Boolean.class, new BooleanSerializer());
+                    module.addDeserializer(Boolean.class, new BooleanDeserializer());
+
                     // enum
                     module.addDeserializer(Enum.class, new EnumDeserializer<Enum>());
                     module.addSerializer(Enum.class, new EnumSerializer<Enum>());
@@ -103,6 +110,20 @@ public class JacksonJSONBuilder extends JSONBuilder {
 
     }
 
+    private void configBoolean(MyObjectMapper objectMapper){
+        SerializationConfig serializationConfig = objectMapper.getSerializationConfig();
+        serializationConfig = serializationConfig.withAttribute(BooleanSerializer.WRITE_BOOLEAN_USING_1_0_ATTR_KEY, serializeBooleanUsing1_0);
+        serializationConfig = serializationConfig.withAttribute(BooleanSerializer.WRITE_BOOLEAN_USING_ON_OFF_ATTR_KEY, serializeBooleanUsingOnOff);
+
+        DeserializationConfig deserializationConfig = objectMapper.getDeserializationConfig();
+        deserializationConfig = deserializationConfig.withAttribute(BooleanDeserializer.READ_BOOLEAN_USING_1_0_ATTR_KEY, serializeBooleanUsing1_0);
+        deserializationConfig = deserializationConfig.withAttribute(BooleanDeserializer.READ_BOOLEAN_USING_ON_OFF_ATTR_KEY, serializeBooleanUsingOnOff);
+
+        objectMapper.setSerializationConfig(serializationConfig);
+        objectMapper.setDescrializationConfig(deserializationConfig);
+    }
+
+
     @Override
     public JSON build() {
         makesureModuleRegister();
@@ -111,8 +132,10 @@ public class JacksonJSONBuilder extends JSONBuilder {
         if (serializeNulls) {
             //        objectMapper.configure(SerializationFeature);
         }
+        configBoolean(mapper);
 
         configEnum(mapper);
+
         JacksonAdapter jsonHandler = new JacksonAdapter();
         jsonHandler.setObjectMapper(mapper);
         JSON json = new JSON();
