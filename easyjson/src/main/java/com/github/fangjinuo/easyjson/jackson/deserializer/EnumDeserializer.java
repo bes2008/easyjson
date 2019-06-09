@@ -131,7 +131,6 @@ public class EnumDeserializer<T extends Enum> extends JsonDeserializer<T> implem
                     return e;
                 }
             }
-
         }
         return null;
     }

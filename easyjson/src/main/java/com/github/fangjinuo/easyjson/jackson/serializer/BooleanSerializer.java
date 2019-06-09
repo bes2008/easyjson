@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.github.fangjinuo.easyjson.jackson.Jacksons;
-import com.google.gson.JsonPrimitive;
 
 import java.io.IOException;
 
@@ -17,7 +16,7 @@ public class BooleanSerializer extends JsonSerializer<Boolean> {
         boolean using1_0 = Jacksons.getBoolean(sp.getAttribute(WRITE_BOOLEAN_USING_1_0_ATTR_KEY));
         boolean usingOnOff = Jacksons.getBoolean(sp.getAttribute(WRITE_BOOLEAN_USING_ON_OFF_ATTR_KEY));
 
-        value = value ==null ? false : value;
+        value = value == null ? false : value;
 
         if (usingOnOff) {
             gen.writeString(value ? "on" : "off");

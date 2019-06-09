@@ -3,6 +3,8 @@ package com.github.fangjinuo.easyjson.gson.typeadapter;
 import com.google.gson.*;
 
 import java.lang.reflect.Type;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 
 /**
  * priority: longUsingString > usingString > number
@@ -43,6 +45,12 @@ public class NumberTypeAdapter implements JsonSerializer<Number>, JsonDeserializ
             }
             if (typeOfT == byte.class || typeOfT == Byte.class) {
                 return Byte.parseByte(jsonPrimitive.getAsString());
+            }
+            if (typeOfT == BigDecimal.class) {
+                return new BigDecimal(jsonPrimitive.getAsString());
+            }
+            if (typeOfT == BigInteger.class) {
+                return new BigInteger(jsonPrimitive.getAsString());
             }
         }
         if (jsonPrimitive.isNumber()) {

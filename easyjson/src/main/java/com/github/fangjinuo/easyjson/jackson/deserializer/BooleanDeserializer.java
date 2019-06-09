@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.github.fangjinuo.easyjson.jackson.Jacksons;
-import com.google.gson.JsonPrimitive;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -25,13 +24,13 @@ public class BooleanDeserializer extends JsonDeserializer<Boolean> implements Co
         boolean using1_0 = Jacksons.getBooleanAttr(ctx, READ_BOOLEAN_USING_1_0_ATTR_KEY);
 
         JsonToken curr = p.getCurrentToken();
-        if(using1_0 && curr == JsonToken.VALUE_NUMBER_INT){
-            return p.getIntValue()==1;
+        if (using1_0 && curr == JsonToken.VALUE_NUMBER_INT) {
+            return p.getIntValue() == 1;
         }
-        if(curr==JsonToken.VALUE_STRING){
+        if (curr == JsonToken.VALUE_STRING) {
             return evalTrues.contains(p.getValueAsString().toLowerCase());
         }
-        if(curr == JsonToken.VALUE_TRUE || curr==JsonToken.VALUE_FALSE){
+        if (curr == JsonToken.VALUE_TRUE || curr == JsonToken.VALUE_FALSE) {
             return curr == JsonToken.VALUE_TRUE;
         }
         return false;

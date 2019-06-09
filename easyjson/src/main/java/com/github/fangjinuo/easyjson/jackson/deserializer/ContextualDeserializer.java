@@ -6,5 +6,5 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
 public interface ContextualDeserializer {
-    JsonDeserializer<?>  createContextual(DeserializationContext context, BeanProperty beanProperty, Class<?> type) throws JsonMappingException;;
+    JsonDeserializer<?> createContextual(DeserializationContext context, BeanProperty beanProperty, Class<?> type) throws JsonMappingException;
 }

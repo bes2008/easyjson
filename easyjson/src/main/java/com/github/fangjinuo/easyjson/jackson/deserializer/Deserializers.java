@@ -17,9 +17,9 @@ public class Deserializers extends SimpleDeserializers {
         if (deser == null) {
             if (_hasEnumDeserializer && type.isEnum()) {
                 deser = _classMappings.get(new ClassKey(Enum.class));
-                if(deser instanceof ContextualDeserializer){
+                if (deser instanceof ContextualDeserializer) {
                     deser = ((ContextualDeserializer) deser).createContextual(null, null, type);
-                    if(deser!=null){
+                    if (deser != null) {
                         _classMappings.put(new ClassKey(type), deser);
                     }
                 }
