@@ -1,5 +1,9 @@
 package com.github.fangjinuo.easyjson.jackson;
 
+import com.fasterxml.jackson.databind.DeserializationContext;
+
+import java.text.DateFormat;
+
 public class JacksonConstants {
 
     // boolean priority attribute keys:

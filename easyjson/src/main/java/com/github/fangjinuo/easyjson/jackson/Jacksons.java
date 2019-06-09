@@ -2,8 +2,10 @@ package com.github.fangjinuo.easyjson.jackson;
 
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.SerializerProvider;
 
 import java.lang.reflect.Type;
+import java.text.DateFormat;
 
 public class Jacksons {
     public static boolean isJacksonJavaType(Type type) {
@@ -31,5 +33,54 @@ public class Jacksons {
             return false;
         }
         return obj.toString().toLowerCase().equals("true");
+    }
+
+    public static DateFormat getDateFormatAttr(DeserializationContext ctx, String key) {
+        if (ctx == null || key == null) {
+            return null;
+        }
+        return asDateFormat(ctx.getAttribute(key));
+    }
+
+    public static DateFormat getDateFormatAttr(SerializerProvider sp, String key) {
+        if (sp == null || key == null) {
+            return null;
+        }
+        return asDateFormat(sp.getAttribute(key));
+    }
+
+    private static DateFormat asDateFormat(Object object) {
+        if (object == null) {
+            return null;
+        }
+        if (object instanceof DateFormat) {
+            return (DateFormat) object;
+        }
+        return null;
+    }
+
+
+    public static String getStringAttr(DeserializationContext ctx, String key) {
+        if (ctx == null || key == null) {
+            return null;
+        }
+        return asString(ctx.getAttribute(key));
+    }
+
+    public static String getStringAttr(SerializerProvider sp, String key) {
+        if (sp == null || key == null) {
+            return null;
+        }
+        return asString(sp.getAttribute(key));
+    }
+
+    private static String asString(Object object) {
+        if (object == null) {
+            return null;
+        }
+        if (object instanceof String) {
+            return (String) object;
+        }
+        return null;
     }
 }
