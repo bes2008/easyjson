@@ -24,12 +24,12 @@ public class JSONBuilderProvider {
         throw new RuntimeException("Can't find any supported JSON libraries : [gson, jackson, fastjson]");
     }
 
-    public static JSONBuilder createIfExistsGson(){
+    public static JSONBuilder createIfExistsGson() {
         return createIfExists("com.github.fangjinuo.easyjson.gson.GsonJSONBuilder");
     }
 
-    public static JSONBuilder createIfExists(String jsonBuilderImplClazz){
-        if(hasClass(jsonBuilderImplClazz)){
+    public static JSONBuilder createIfExists(String jsonBuilderImplClazz) {
+        if (hasClass(jsonBuilderImplClazz)) {
             Class<JSONBuilder> builderClass = loadClass(jsonBuilderImplClazz);
             try {
                 return builderClass.newInstance();

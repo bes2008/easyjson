@@ -45,8 +45,8 @@ public class JSON {
      * generic type. For the cases when the object is of generic type, invoke
      * {@link #fromJson(String, Type)}.
      *
-     * @param <T> the type of the desired object
-     * @param json the string from which the object is to be deserialized
+     * @param <T>      the type of the desired object
+     * @param json     the string from which the object is to be deserialized
      * @param classOfT the class of T
      * @return an object of type T from the string. Returns {@code null} if {@code json} is {@code null}
      * or if {@code json} is empty.
@@ -62,14 +62,14 @@ public class JSON {
      * is useful if the specified object is a generic type. For non-generic objects, use
      * {@link #fromJson(String, Class)} instead.
      *
-     * @param <T> the type of the desired object
-     * @param json the string from which the object is to be deserialized
+     * @param <T>     the type of the desired object
+     * @param json    the string from which the object is to be deserialized
      * @param typeOfT The specific genericized type of src. You can obtain this type by using the
-     * {@link com.google.gson.reflect.TypeToken} class. For example, to get the type for
-     * {@code Collection<Foo>}, you should use:
-     * <pre>
-     * Type typeOfT = new TypeToken&lt;Collection&lt;Foo&gt;&gt;(){}.getType();
-     * </pre>
+     *                {@link com.google.gson.reflect.TypeToken} class. For example, to get the type for
+     *                {@code Collection<Foo>}, you should use:
+     *                <pre>
+     *                Type typeOfT = new TypeToken&lt;Collection&lt;Foo&gt;&gt;(){}.getType();
+     *                </pre>
      * @return an object of type T from the string. Returns {@code null} if {@code json} is {@code null}.
      * @throws JsonException if json is not a valid representation for an object of type
      */

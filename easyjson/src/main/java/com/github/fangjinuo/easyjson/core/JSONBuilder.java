@@ -11,7 +11,7 @@ public abstract class JSONBuilder {
 
     // date priority: pattern > toString() > timestamp []
     protected String serializeDateUsingPattern = null;// default : using timestamp
-    protected boolean serializeDateUsingToString=false;
+    protected boolean serializeDateUsingToString = false;
 
     // number priority: longAsString > numberAsString > number
     protected boolean serializeLongAsString = false;
@@ -46,8 +46,9 @@ public abstract class JSONBuilder {
         this.serializeEnumUsingValue = true;
         return this;
     }
-    public JSONBuilder serializeEnumUsingField(String field){
-        if(field!=null && !field.trim().isEmpty()) {
+
+    public JSONBuilder serializeEnumUsingField(String field) {
+        if (field != null && !field.trim().isEmpty()) {
             this.serializeEnumUsingField = field.trim();
         }
         return this;
@@ -58,7 +59,7 @@ public abstract class JSONBuilder {
         return this;
     }
 
-    public JSONBuilder serializeNumberAsString(){
+    public JSONBuilder serializeNumberAsString() {
         this.serializeNumberAsString = true;
         return this;
     }
@@ -73,12 +74,12 @@ public abstract class JSONBuilder {
         return this;
     }
 
-    public JSONBuilder serializeBooleanUsingOnOff(){
+    public JSONBuilder serializeBooleanUsingOnOff() {
         this.serializeBooleanUsingOnOff = true;
         return this;
     }
 
-    public JSONBuilder serializeBooleanUsing1_0(){
+    public JSONBuilder serializeBooleanUsing1_0() {
         this.serializeBooleanUsing1_0 = true;
         return this;
     }

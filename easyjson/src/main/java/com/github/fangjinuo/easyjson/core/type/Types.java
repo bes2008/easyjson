@@ -38,10 +38,10 @@ public class Types {
             return Array.newInstance(toClass(((GenericArrayType) o).getGenericComponentType()),
                     0)
                     .getClass();
-        if(isPrimitive(o)){
+        if (isPrimitive(o)) {
             return getPrimitiveWrapClass(o);
         }
-        if(isClass(o)){
+        if (isClass(o)) {
             return (Class<?>) o;
         }
         if (isParameterizedType(o)) {

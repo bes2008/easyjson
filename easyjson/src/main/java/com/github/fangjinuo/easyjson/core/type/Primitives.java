@@ -80,11 +80,11 @@ public class Primitives {
         return (wrapped == null) ? type : wrapped;
     }
 
-    public static Class wrap(Type type){
-        if(isPrimitive(type)){
+    public static Class wrap(Type type) {
+        if (isPrimitive(type)) {
             return PRIMITIVE_TO_WRAPPER_TYPE.get(checkNotNull(type));
         }
-        return (Class)type;
+        return (Class) type;
     }
 
     /**

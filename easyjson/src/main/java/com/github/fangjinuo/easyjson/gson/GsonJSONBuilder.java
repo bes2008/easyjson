@@ -15,7 +15,7 @@ public class GsonJSONBuilder extends JSONBuilder {
     public JSON build() {
         GsonBuilder gsonBuilder = new GsonBuilder();
         // Null
-        if(serializeNulls){
+        if (serializeNulls) {
             gsonBuilder.serializeNulls();
         }
 
@@ -44,7 +44,7 @@ public class GsonJSONBuilder extends JSONBuilder {
         enumTypeAdapter.setUsingToString(serializeEnumUsingToString);
         gsonBuilder.registerTypeHierarchyAdapter(Enum.class, enumTypeAdapter);
 
-        if(prettyFormat){
+        if (prettyFormat) {
             gsonBuilder.setPrettyPrinting();
         }
 

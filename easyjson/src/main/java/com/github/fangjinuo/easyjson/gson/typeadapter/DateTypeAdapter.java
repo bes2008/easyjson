@@ -19,33 +19,33 @@ public class DateTypeAdapter implements JsonSerializer<Date>, JsonDeserializer<D
         }
     }
 
-    public void setUsingToString(boolean using){
+    public void setUsingToString(boolean using) {
         usingToString = using;
     }
 
     public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-        if(json.isJsonObject() || json.isJsonArray() || json.isJsonNull()){
+        if (json.isJsonObject() || json.isJsonArray() || json.isJsonNull()) {
             return null;
         }
         JsonPrimitive jsonPrimitive = json.getAsJsonPrimitive();
-        if (df!=null){
+        if (df != null) {
             try {
                 return df.parse(jsonPrimitive.getAsString());
             } catch (ParseException e) {
                 e.printStackTrace();
             }
         }
-        if(usingToString){
+        if (usingToString) {
             return new Date(json.getAsString());
         }
         return new Date(json.getAsLong());
     }
 
     public JsonElement serialize(Date src, Type typeOfSrc, JsonSerializationContext context) {
-        if(df!=null){
+        if (df != null) {
             return new JsonPrimitive(df.format(src));
         }
-        if(usingToString){
+        if (usingToString) {
             return new JsonPrimitive(src.toString());
         }
         return new JsonPrimitive(src.getTime());
