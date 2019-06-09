@@ -5,9 +5,12 @@ import com.fasterxml.jackson.databind.cfg.DeserializerFactoryConfig;
 import com.fasterxml.jackson.databind.cfg.SerializerFactoryConfig;
 import com.fasterxml.jackson.databind.deser.BeanDeserializerFactory;
 import com.fasterxml.jackson.databind.deser.DefaultDeserializationContext;
+import com.fasterxml.jackson.databind.deser.DeserializerFactory;
 import com.fasterxml.jackson.databind.module.SimpleDeserializers;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.BeanSerializerFactory;
+import com.fasterxml.jackson.databind.ser.SerializerFactory;
+import com.fasterxml.jackson.databind.util.ClassUtil;
 import com.github.fangjinuo.easyjson.core.JSON;
 import com.github.fangjinuo.easyjson.core.JSONBuilder;
 import com.github.fangjinuo.easyjson.core.type.Types;
@@ -65,6 +68,18 @@ public class JacksonJSONBuilder extends JSONBuilder {
             super(config);
         }
 
+        public SerializerFactory withConfig(SerializerFactoryConfig config) {
+            if (_factoryConfig == config) {
+                return this;
+            }
+            if (getClass() != MyBeanSerializerFactory.class) {
+                throw new IllegalStateException("Subtype of BeanSerializerFactory (" + getClass().getName()
+                        + ") has not properly overridden method 'withAdditionalSerializers': cannot instantiate subtype with "
+                        + "additional serializer definitions");
+            }
+            return new MyBeanSerializerFactory(config);
+        }
+
         protected JsonSerializer<?> _createSerializer2(SerializerProvider prov,
                                                        JavaType type, BeanDescription beanDesc, boolean staticTyping)
                 throws JsonMappingException {
@@ -84,10 +99,18 @@ public class JacksonJSONBuilder extends JSONBuilder {
     }
 
     static class MyBeanDeserializerFactory extends BeanDeserializerFactory {
-        public static MyBeanDeserializerFactory instance = new MyBeanDeserializerFactory(null);
+        public static MyBeanDeserializerFactory instance = new MyBeanDeserializerFactory(new DeserializerFactoryConfig());
 
         public MyBeanDeserializerFactory(DeserializerFactoryConfig config) {
             super(config);
+        }
+
+        public DeserializerFactory withConfig(DeserializerFactoryConfig config) {
+            if (_factoryConfig == config) {
+                return this;
+            }
+            ClassUtil.verifyMustOverride(MyBeanDeserializerFactory.class, this, "withConfig");
+            return new MyBeanDeserializerFactory(config);
         }
 
         protected JsonDeserializer<?> findStdDeserializer(DeserializationContext ctxt,
