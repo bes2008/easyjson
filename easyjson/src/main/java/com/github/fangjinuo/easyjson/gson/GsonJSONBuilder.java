@@ -33,6 +33,7 @@ public class GsonJSONBuilder extends JSONBuilder {
 
         // Date
         DateTypeAdapter dateTypeAdapter = new DateTypeAdapter();
+        dateTypeAdapter.setDateFormat(dateFormat);
         dateTypeAdapter.setPattern(serializeDateUsingPattern);
         dateTypeAdapter.setUsingToString(serializeDateUsingToString);
         gsonBuilder.registerTypeHierarchyAdapter(Date.class, dateTypeAdapter);

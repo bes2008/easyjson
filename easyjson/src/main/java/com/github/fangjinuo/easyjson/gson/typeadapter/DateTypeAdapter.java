@@ -11,12 +11,15 @@ import java.util.Date;
 public class DateTypeAdapter implements JsonSerializer<Date>, JsonDeserializer<Date> {
     private DateFormat df = null;
     private boolean usingToString = false;
-    private final boolean usingTimestamp = true;
 
     public void setPattern(String pattern) {
-        if (pattern != null && !pattern.trim().isEmpty()) {
+        if (df != null && pattern != null && !pattern.trim().isEmpty()) {
             df = new SimpleDateFormat(pattern);
         }
+    }
+
+    public void setDateFormat(DateFormat df) {
+        this.df = df;
     }
 
     public void setUsingToString(boolean using) {
