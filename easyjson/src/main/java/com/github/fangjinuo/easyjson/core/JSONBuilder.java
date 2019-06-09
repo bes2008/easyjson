@@ -1,5 +1,7 @@
 package com.github.fangjinuo.easyjson.core;
 
+import java.text.DateFormat;
+
 public abstract class JSONBuilder {
     // null
     protected boolean serializeNulls = false;
@@ -9,7 +11,8 @@ public abstract class JSONBuilder {
     protected boolean serializeEnumUsingValue = false;
     protected String serializeEnumUsingField = null;
 
-    // date priority: pattern > toString() > timestamp []
+    // date priority: dateFormat > pattern > toString() > timestamp []
+    protected DateFormat dateFormat=null;
     protected String serializeDateUsingPattern = null;// default : using timestamp
     protected boolean serializeDateUsingToString = false;
 
@@ -61,6 +64,11 @@ public abstract class JSONBuilder {
 
     public JSONBuilder serializeNumberAsString() {
         this.serializeNumberAsString = true;
+        return this;
+    }
+
+    public JSONBuilder serializeUseDateFormat(DateFormat df){
+        this.dateFormat = df;
         return this;
     }
 
