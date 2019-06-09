@@ -28,8 +28,8 @@ public class Jacksons {
         return getBoolean(ctx.getAttribute(key));
     }
 
-    public static boolean getBooleanAttr(SerializerProvider sp, String key){
-        if(sp==null || key==null){
+    public static boolean getBooleanAttr(SerializerProvider sp, String key) {
+        if (sp == null || key == null) {
             return false;
         }
         return getBoolean(sp.getAttribute(key));

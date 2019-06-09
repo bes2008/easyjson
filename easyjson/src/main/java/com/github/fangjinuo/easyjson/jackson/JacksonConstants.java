@@ -1,9 +1,5 @@
 package com.github.fangjinuo.easyjson.jackson;
 
-import com.fasterxml.jackson.databind.DeserializationContext;
-
-import java.text.DateFormat;
-
 public class JacksonConstants {
 
     // boolean priority attribute keys:
@@ -19,9 +15,9 @@ public class JacksonConstants {
     public static final String SERIALIZE_ENUM_USING_FIELD_ATTR_KEY = "SERIALIZE_ENUM_USING_FIELD";
 
     // date priority attribute keys:
-    public static final String SERIALIZE_DATE_USING_DATE_FORMAT_ATTR_KEY="SERIALIZE_DATE_USING_DATE_FORMAT";
-    public static final String SERIALIZE_DATE_USING_PATTERN_ATTR_KEY="SERIALIZE_DATE_USING_PATTERN";
-    public static final String SERIALIZE_DATE_USING_TO_STRING_ATTR_KEY="SERIALIZE_DATE_USING_TO_STRING";
+    public static final String SERIALIZE_DATE_USING_DATE_FORMAT_ATTR_KEY = "SERIALIZE_DATE_USING_DATE_FORMAT";
+    public static final String SERIALIZE_DATE_USING_PATTERN_ATTR_KEY = "SERIALIZE_DATE_USING_PATTERN";
+    public static final String SERIALIZE_DATE_USING_TO_STRING_ATTR_KEY = "SERIALIZE_DATE_USING_TO_STRING";
 
 
 }
