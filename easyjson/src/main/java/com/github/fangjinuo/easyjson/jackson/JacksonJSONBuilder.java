@@ -1,5 +1,6 @@
 package com.github.fangjinuo.easyjson.jackson;
 
+import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.DeserializationConfig;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.SerializationConfig;
@@ -73,7 +74,6 @@ public class JacksonJSONBuilder extends JSONBuilder {
         }
         objectMapper.setDescrializationConfig(deserializationConfig);
         objectMapper.setSerializationConfig(serializationConfig);
-
     }
 
     private void configBoolean(EasyJsonObjectMapper objectMapper) {
@@ -89,13 +89,31 @@ public class JacksonJSONBuilder extends JSONBuilder {
         objectMapper.setDescrializationConfig(deserializationConfig);
     }
 
+    private void configDate(EasyJsonObjectMapper objectMapper) {
+        SerializationConfig serializationConfig = objectMapper.getSerializationConfig();
+        serializationConfig = serializationConfig.withAttribute(JacksonConstants.SERIALIZE_DATE_USING_DATE_FORMAT_ATTR_KEY, dateFormat);
+        serializationConfig = serializationConfig.withAttribute(JacksonConstants.SERIALIZE_DATE_USING_PATTERN_ATTR_KEY, serializeDateUsingPattern);
+        serializationConfig = serializationConfig.withAttribute(JacksonConstants.SERIALIZE_DATE_USING_TO_STRING_ATTR_KEY, serializeDateUsingToString);
+
+        DeserializationConfig deserializationConfig = objectMapper.getDeserializationConfig();
+        deserializationConfig = deserializationConfig.withAttribute(JacksonConstants.SERIALIZE_DATE_USING_DATE_FORMAT_ATTR_KEY, dateFormat);
+        deserializationConfig = deserializationConfig.withAttribute(JacksonConstants.SERIALIZE_DATE_USING_PATTERN_ATTR_KEY, serializeDateUsingPattern);
+        deserializationConfig = deserializationConfig.withAttribute(JacksonConstants.SERIALIZE_DATE_USING_TO_STRING_ATTR_KEY, serializeDateUsingToString);
+
+
+        objectMapper.setSerializationConfig(serializationConfig);
+        objectMapper.setDescrializationConfig(deserializationConfig);
+    }
+
     private void configNumber(EasyJsonObjectMapper objectMapper) {
         SerializationConfig serializationConfig = objectMapper.getSerializationConfig();
         serializationConfig = serializationConfig.withAttribute(JacksonConstants.SERIALIZE_LONG_USING_STRING_ATTR_KEY, serializeLongAsString);
         serializationConfig = serializationConfig.withAttribute(JacksonConstants.SERIALIZE_NUMBER_USING_STRING_ATTR_KEY, serializeNumberAsString);
+
         DeserializationConfig deserializationConfig = objectMapper.getDeserializationConfig();
         deserializationConfig = deserializationConfig.withAttribute(JacksonConstants.SERIALIZE_LONG_USING_STRING_ATTR_KEY, serializeLongAsString);
         deserializationConfig = deserializationConfig.withAttribute(JacksonConstants.SERIALIZE_NUMBER_USING_STRING_ATTR_KEY, serializeNumberAsString);
+
         objectMapper.setSerializationConfig(serializationConfig);
         objectMapper.setDescrializationConfig(deserializationConfig);
     }
@@ -113,6 +131,7 @@ public class JacksonJSONBuilder extends JSONBuilder {
         configBoolean(mapper);
         configNumber(mapper);
         configEnum(mapper);
+        configDate(mapper);
 
         JacksonAdapter jsonHandler = new JacksonAdapter();
         jsonHandler.setObjectMapper(mapper);
