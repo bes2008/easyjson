@@ -15,9 +15,12 @@
 package com.github.fangjinuo.easyjson.fastjson;
 
 import com.alibaba.fastjson.parser.DefaultJSONParser;
-import com.alibaba.fastjson.serializer.JSONSerializer;
+import com.alibaba.fastjson.serializer.*;
 import com.github.fangjinuo.easyjson.core.JSON;
 import com.github.fangjinuo.easyjson.core.JSONBuilder;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FastJsonJSONBuilder extends JSONBuilder {
     @Override
@@ -31,7 +34,16 @@ public class FastJsonJSONBuilder extends JSONBuilder {
     }
 
     private JSONSerializer buildSerializer() {
-        return null;
+        SerializeConfig config = new SerializeConfig();
+        List<SerializerFeature> features = new ArrayList<SerializerFeature>();
+        List<SerializeFilter> filters = new ArrayList<SerializeFilter>();
+
+        SerializeWriter out = new SerializeWriter(null, com.alibaba.fastjson.JSON.DEFAULT_GENERATE_FEATURE, features.toArray(new SerializerFeature[features.size()]));
+        JSONSerializer serializer = new JSONSerializer(out, config);
+        for (SerializeFilter filter : filters) {
+            serializer.addFilter(filter);
+        }
+        return serializer;
     }
 
     private DefaultJSONParser buildDeserializer() {
