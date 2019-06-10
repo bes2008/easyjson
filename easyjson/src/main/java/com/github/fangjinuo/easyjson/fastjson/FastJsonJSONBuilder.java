@@ -14,12 +14,27 @@
 
 package com.github.fangjinuo.easyjson.fastjson;
 
+import com.alibaba.fastjson.parser.DefaultJSONParser;
+import com.alibaba.fastjson.serializer.JSONSerializer;
 import com.github.fangjinuo.easyjson.core.JSON;
 import com.github.fangjinuo.easyjson.core.JSONBuilder;
 
 public class FastJsonJSONBuilder extends JSONBuilder {
     @Override
     public JSON build() {
+        JSONSerializer serializer = buildSerializer();
+        DefaultJSONParser parser = buildDeserializer();
+        FastJson fastJson = new FastJson(serializer, parser);
+        FastJsonAdapter jsonHandler = new FastJsonAdapter();
+        jsonHandler.setFastJson(fastJson);
+        return new JSON().setJsonHandler(jsonHandler);
+    }
+
+    private JSONSerializer buildSerializer() {
+        return null;
+    }
+
+    private DefaultJSONParser buildDeserializer() {
         return null;
     }
 }

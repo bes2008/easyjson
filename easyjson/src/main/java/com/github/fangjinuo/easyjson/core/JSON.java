@@ -95,7 +95,8 @@ public class JSON {
         return jsonHandler.deserialize(json, typeOfT);
     }
 
-    public void setJsonHandler(JsonHandler jsonHandler) {
+    public JSON setJsonHandler(JsonHandler jsonHandler) {
         this.jsonHandler = jsonHandler;
+        return this;
     }
 }

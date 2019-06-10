@@ -14,12 +14,14 @@
 
 package com.github.fangjinuo.easyjson.fastjson;
 
+import com.alibaba.fastjson.serializer.JSONSerializer;
 import com.github.fangjinuo.easyjson.core.JsonException;
 import com.github.fangjinuo.easyjson.core.JsonHandler;
 
 import java.lang.reflect.Type;
 
 public class FastJsonAdapter implements JsonHandler {
+    private FastJson fastJson;
     @Override
     public <T> T deserialize(String json, Type typeOfT) throws JsonException {
         return null;
@@ -27,6 +29,16 @@ public class FastJsonAdapter implements JsonHandler {
 
     @Override
     public String serialize(Object src, Type typeOfT) throws JsonException {
-        return null;
+        JSONSerializer serializer = fastJson.getSerializer();
+        serializer.write(src);
+        return serializer.toString();
+    }
+
+    public FastJson getFastJson() {
+        return fastJson;
+    }
+
+    public void setFastJson(FastJson fastJson) {
+        this.fastJson = fastJson;
     }
 }
