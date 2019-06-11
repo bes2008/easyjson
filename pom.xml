@@ -16,6 +16,17 @@
     <name>easyjson</name>
     <packaging>pom</packaging>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.github.fangjinuo.easyjson</groupId>
+                <artifactId>easyjson-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+
     <dependencies>
         <dependency>
             <groupId>junit</groupId>

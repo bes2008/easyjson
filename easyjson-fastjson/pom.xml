@@ -11,6 +11,15 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>easyjson-fastjson</artifactId>
-
-
+    <dependencies>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.58</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.fangjinuo.easyjson</groupId>
+            <artifactId>easyjson-api</artifactId>
+        </dependency>
+    </dependencies>
 </project>
