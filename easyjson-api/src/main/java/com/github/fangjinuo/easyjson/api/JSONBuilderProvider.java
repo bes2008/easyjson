@@ -14,72 +14,98 @@
 
 package com.github.fangjinuo.easyjson.api;
 
+import com.github.fangjinuo.easyjson.api.annotation.DependOn;
+import com.github.fangjinuo.easyjson.api.annotation.Name;
+import com.github.fangjinuo.easyjson.api.util.Reflects;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.ServiceLoader;
 
 public class JSONBuilderProvider {
-
+    private static final Logger logger = LoggerFactory.getLogger(JSONBuilderProvider.class);
     private static Class<? extends JSONBuilder> defaultJsonBuilderClass;
-    private static final Map<String, Class<? extends JSONBuilder>> registry=new HashMap<String, Class<? extends JSONBuilder>>();
-
-    private static final String GSON_CLASS = "com.google.gson.Gson";
-    private static final String JACKSON_CLASS = "com.fasterxml.jackson.databind.ObjectMapper";
-    private static final String FASTJSON_CLASS = "com.alibaba.fastjson.JSON";
-
+    private static final Map<String, Class<? extends JSONBuilder>> registry = new HashMap<String, Class<? extends JSONBuilder>>();
 
     static {
         findJSONBuilderImplClasses();
     }
 
+    public static JSONBuilder create(String name) {
+        if (name == null) {
+            return create();
+        }
+        Class<? extends JSONBuilder> clazz = registry.get(name);
+        return create(clazz);
+    }
+
     public static JSONBuilder create() {
+        return create(defaultJsonBuilderClass);
+    }
+
+    private static JSONBuilder create(Class<? extends JSONBuilder> defaultJsonBuilderClass) {
         if (defaultJsonBuilderClass != null) {
             try {
                 return defaultJsonBuilderClass.newInstance();
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
+            } catch (Throwable e) {
+                logger.error("Can't create a default json builder, {}", defaultJsonBuilderClass.getCanonicalName());
             }
         }
         throw new RuntimeException("Can't find any supported JSON libraries : [gson, jackson, fastjson]");
     }
 
     private static void findJSONBuilderImplClasses() {
-        if (defaultJsonBuilderClass == null) {
-            defaultJsonBuilderClass = loadJSONBuilderImplClassIfExist(GSON_CLASS, "com.github.fangjinuo.easyjson.gson.GsonJSONBuilder");
-        }
-        if (defaultJsonBuilderClass == null) {
-            defaultJsonBuilderClass = loadJSONBuilderImplClassIfExist(JACKSON_CLASS, "com.github.fangjinuo.easyjson.jackson.JacksonJSONBuilder");
-        }
-        if (defaultJsonBuilderClass == null) {
-            defaultJsonBuilderClass = loadJSONBuilderImplClassIfExist(FASTJSON_CLASS, "com.github.fangjinuo.easyjson.fastjson.FastJsonJSONBuilder");
-        }
-        if (defaultJsonBuilderClass == null) {
-            ServiceLoader<JSONBuilder> loader = ServiceLoader.load(JSONBuilder.class);
-            Iterator<JSONBuilder> iter = loader.iterator();
-            while (defaultJsonBuilderClass == null && iter.hasNext()) {
-                iter.next();
+        ServiceLoader<JSONBuilder> loader = ServiceLoader.load(JSONBuilder.class);
+        Iterator<JSONBuilder> iter = loader.iterator();
+        while (iter.hasNext()) {
+            try {
+                JSONBuilder jsonBuilder = iter.next();
+                Class<? extends JSONBuilder> jsonBuildClass = jsonBuilder.getClass();
+                String name = parseName(jsonBuildClass);
+                String dependency = parseDependencyClass(jsonBuildClass);
+                if (dependency == null || dependency.trim().isEmpty()) {
+                    logger.warn("Won't registry json builder {}, because of can't find its dependency class {}", jsonBuildClass.getCanonicalName(), "NULL");
+                    continue;
+                }
+                if (hasClass(dependency)) {
+                    logger.info("Registry a json builder {} for {}", jsonBuildClass.getCanonicalName(), name);
+                    registry.put(name, jsonBuildClass);
+                    if (defaultJsonBuilderClass == null) {
+                        defaultJsonBuilderClass = jsonBuildClass;
+                    }
+                } else {
+                    logger.warn("Won't registry json builder {}, because of can't find its dependency class {}", jsonBuildClass.getCanonicalName(), dependency);
+                }
+            } catch (Throwable ex) {
+
             }
         }
     }
 
-    private static Class<? extends JSONBuilder> loadJSONBuilderImplClassIfExist(String dependencyClass, String clazz) {
-        if (hasClass(dependencyClass)) {
-            Class<? extends JSONBuilder> jsonBuilderClass = loadClass(clazz);
-            if (isJSONBuilderImplClass(jsonBuilderClass)) {
-                return jsonBuilderClass;
-            }
+    private static String parseDependencyClass(Class<? extends JSONBuilder> jsonBuilderClass) {
+        DependOn dependOn = (DependOn) Reflects.getDeclaredAnnotation(jsonBuilderClass, DependOn.class);
+        String dependency = null;
+        if (dependOn != null && dependOn.value() != null && !dependOn.value().trim().isEmpty()) {
+            return dependOn.value().trim();
         }
         return null;
     }
 
-    private static boolean isJSONBuilderImplClass(Class jsonBuilderClass) {
-        if (jsonBuilderClass == null) {
-            return false;
+    private static String parseName(Class<? extends JSONBuilder> clazz) {
+        Name nameAnno = (Name) Reflects.getDeclaredAnnotation(clazz, Name.class);
+        String name = null;
+        if (nameAnno != null && nameAnno.value() != null && !nameAnno.value().trim().isEmpty()) {
+            return nameAnno.value().trim();
         }
-        return JSONBuilder.class.isAssignableFrom(jsonBuilderClass) && JSONBuilder.class != jsonBuilderClass;
+        name = clazz.getName();
+        String name2 = name.replaceFirst("jsonbuilder", "");
+        if (!name2.trim().isEmpty()) {
+            return name2;
+        }
+        return name;
     }
 
     private static Class loadClass(String clazz) {
@@ -91,6 +117,9 @@ public class JSONBuilderProvider {
     }
 
     private static boolean hasClass(String clazz) {
+        if (clazz == null) {
+            return false;
+        }
         return loadClass(clazz) != null;
     }
 }

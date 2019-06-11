@@ -19,11 +19,14 @@ import com.alibaba.fastjson.parser.ParserConfig;
 import com.alibaba.fastjson.serializer.*;
 import com.github.fangjinuo.easyjson.api.JSON;
 import com.github.fangjinuo.easyjson.api.JSONBuilder;
+import com.github.fangjinuo.easyjson.api.annotation.DependOn;
+import com.github.fangjinuo.easyjson.api.annotation.Name;
 import com.github.fangjinuo.easyjson.fastjson.deserializer.FastJsonParserBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
-
+@Name("fastjson")
+@DependOn("com.alibaba.fastjson.JSON")
 public class FastJsonJSONBuilder extends JSONBuilder {
     @Override
     public JSON build() {

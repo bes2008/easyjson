@@ -22,13 +22,16 @@ import com.fasterxml.jackson.databind.module.SimpleDeserializers;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.github.fangjinuo.easyjson.api.JSON;
 import com.github.fangjinuo.easyjson.api.JSONBuilder;
+import com.github.fangjinuo.easyjson.api.annotation.DependOn;
+import com.github.fangjinuo.easyjson.api.annotation.Name;
 import com.github.fangjinuo.easyjson.jackson.deserializer.BooleanDeserializer;
 import com.github.fangjinuo.easyjson.jackson.deserializer.Deserializers;
 import com.github.fangjinuo.easyjson.jackson.deserializer.EnumDeserializer;
 import com.github.fangjinuo.easyjson.jackson.ext.EasyJsonObjectMapper;
 import com.github.fangjinuo.easyjson.jackson.serializer.BooleanSerializer;
 import com.github.fangjinuo.easyjson.jackson.serializer.EnumSerializer;
-
+@Name("jackson")
+@DependOn("com.fasterxml.jackson.databind.ObjectMapper")
 public class JacksonJSONBuilder extends JSONBuilder {
     private static boolean moduleRegistered = false;
     private static EasyJsonObjectMapper objectMapper = new EasyJsonObjectMapper();

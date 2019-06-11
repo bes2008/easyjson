@@ -16,6 +16,8 @@ package com.github.fangjinuo.easyjson.gson;
 
 import com.github.fangjinuo.easyjson.api.JSON;
 import com.github.fangjinuo.easyjson.api.JSONBuilder;
+import com.github.fangjinuo.easyjson.api.annotation.DependOn;
+import com.github.fangjinuo.easyjson.api.annotation.Name;
 import com.github.fangjinuo.easyjson.gson.typeadapter.BooleanTypeAdapter;
 import com.github.fangjinuo.easyjson.gson.typeadapter.DateTypeAdapter;
 import com.github.fangjinuo.easyjson.gson.typeadapter.EnumTypeAdapter;
@@ -25,6 +27,8 @@ import com.google.gson.GsonBuilder;
 
 import java.util.Date;
 
+@Name("gson")
+@DependOn("com.google.gson.Gson")
 public class GsonJSONBuilder extends JSONBuilder {
     public JSON build() {
         GsonBuilder gsonBuilder = new GsonBuilder();
