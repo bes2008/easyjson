@@ -35,7 +35,7 @@ public class FastJsonAdapter implements JsonHandler {
 
     @Override
     public String serialize(Object src, Type typeOfT) throws JsonException {
-        JSONSerializer serializer = fastJson.getSerializer();
+        JSONSerializer serializer = fastJson.getSerializerBuilder().build();
         serializer.write(src);
         return serializer.toString();
     }

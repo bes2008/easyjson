@@ -18,6 +18,9 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.parser.Feature;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.util.ParameterizedTypeImpl;
+import com.github.fangjinuo.easyjson.api.JSONBuilder;
+import com.github.fangjinuo.easyjson.api.JSONBuilderProvider;
+import com.github.fangjinuo.easyjson.api.type.Types;
 import com.github.fangjinuo.easyjson.tests.fastjson.struct.Contact;
 import com.github.fangjinuo.easyjson.tests.fastjson.struct.Gender;
 import com.github.fangjinuo.easyjson.tests.fastjson.struct.Person;
@@ -84,5 +87,30 @@ public class SimpleModelTests {
         System.out.println("=====================FastJson test end =============================");
     }
 
+    @Test
+    public void testEasyJson_FastJson() throws Exception {
+        System.out.println("=====================EasyJson [fastjson] test start =============================");
+        JSONBuilder jsonBuilder = JSONBuilderProvider.create();
+        com.github.fangjinuo.easyjson.api.JSON gson = jsonBuilder.serializeNulls().serializeLongAsString().serializeEnumUsingValue().build();
+
+        // test simple object
+        String str1 = gson.toJson(person, person.getClass());
+        System.out.println(str1);
+        Person p1 = gson.fromJson(str1, Person.class);
+        System.out.println(p1.equals(person));
+        System.out.println(gson.toJson(person));
+
+        // test list
+        String str2 = gson.toJson(persons);
+        System.out.println(str2);
+        List<Person> persons2 = gson.fromJson(str2, Types.getListParameterizedType(Person.class));
+        System.out.println(gson.toJson(persons2));
+        // test map
+        String str3 = gson.toJson(idToPersonMap);
+        System.out.println(str3);
+        Map<Integer, Person> personMap = gson.fromJson(str3, Types.getMapParameterizedType(Integer.class, Person.class));
+        System.out.println(gson.toJson(personMap, Types.getMapParameterizedType(Integer.class, Person.class)));
+        System.out.println("=====================EasyJson [fastjson] test end =============================");
+    }
 
 }

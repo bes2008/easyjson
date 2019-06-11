@@ -22,15 +22,17 @@ import com.github.fangjinuo.easyjson.api.JSONBuilder;
 import com.github.fangjinuo.easyjson.api.annotation.DependOn;
 import com.github.fangjinuo.easyjson.api.annotation.Name;
 import com.github.fangjinuo.easyjson.fastjson.deserializer.FastJsonParserBuilder;
+import com.github.fangjinuo.easyjson.fastjson.serializer.FastJsonSerializerBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
+
 @Name("fastjson")
 @DependOn("com.alibaba.fastjson.JSON")
 public class FastJsonJSONBuilder extends JSONBuilder {
     @Override
     public JSON build() {
-        JSONSerializer serializer = buildSerializer();
+        FastJsonSerializerBuilder serializer = buildSerializer();
         FastJsonParserBuilder parser = buildDeserializer();
         FastJson fastJson = new FastJson(serializer, parser);
         FastJsonAdapter jsonHandler = new FastJsonAdapter();
@@ -38,17 +40,11 @@ public class FastJsonJSONBuilder extends JSONBuilder {
         return new JSON().setJsonHandler(jsonHandler);
     }
 
-    private JSONSerializer buildSerializer() {
+    private FastJsonSerializerBuilder buildSerializer() {
         SerializeConfig config = new SerializeConfig();
-        List<SerializerFeature> features = new ArrayList<SerializerFeature>();
-        List<SerializeFilter> filters = new ArrayList<SerializeFilter>();
-
-        SerializeWriter out = new SerializeWriter(null, com.alibaba.fastjson.JSON.DEFAULT_GENERATE_FEATURE, features.toArray(new SerializerFeature[features.size()]));
-        JSONSerializer serializer = new JSONSerializer(out, config);
-        for (SerializeFilter filter : filters) {
-            serializer.addFilter(filter);
-        }
-        return serializer;
+        FastJsonSerializerBuilder builder = new FastJsonSerializerBuilder();
+        builder.config(config);
+        return builder;
     }
 
     private FastJsonParserBuilder buildDeserializer() {
