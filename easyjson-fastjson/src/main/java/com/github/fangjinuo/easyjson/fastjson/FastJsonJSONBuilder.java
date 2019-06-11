@@ -21,8 +21,8 @@ import com.github.fangjinuo.easyjson.api.JSON;
 import com.github.fangjinuo.easyjson.api.JSONBuilder;
 import com.github.fangjinuo.easyjson.api.annotation.DependOn;
 import com.github.fangjinuo.easyjson.api.annotation.Name;
-import com.github.fangjinuo.easyjson.fastjson.deserializer.FastJsonParserBuilder;
-import com.github.fangjinuo.easyjson.fastjson.serializer.FastJsonSerializerBuilder;
+import com.github.fangjinuo.easyjson.fastjson.codec.FastJsonParserBuilder;
+import com.github.fangjinuo.easyjson.fastjson.codec.FastJsonSerializerBuilder;
 
 import java.util.ArrayList;
 import java.util.List;

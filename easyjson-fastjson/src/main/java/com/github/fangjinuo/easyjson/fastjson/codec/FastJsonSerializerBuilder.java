@@ -1,7 +1,6 @@
-package com.github.fangjinuo.easyjson.fastjson.serializer;
+package com.github.fangjinuo.easyjson.fastjson.codec;
 
 import com.alibaba.fastjson.serializer.*;
-import com.github.fangjinuo.easyjson.fastjson.FastJson;
 
 import java.util.ArrayList;
 import java.util.List;

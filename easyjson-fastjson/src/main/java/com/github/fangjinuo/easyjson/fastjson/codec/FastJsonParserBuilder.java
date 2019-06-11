@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.github.fangjinuo.easyjson.fastjson.deserializer;
+package com.github.fangjinuo.easyjson.fastjson.codec;
 
 import com.alibaba.fastjson.parser.DefaultJSONParser;
 import com.alibaba.fastjson.parser.ParserConfig;
