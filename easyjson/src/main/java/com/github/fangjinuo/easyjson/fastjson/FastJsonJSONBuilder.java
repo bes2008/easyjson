@@ -19,6 +19,7 @@ import com.alibaba.fastjson.parser.ParserConfig;
 import com.alibaba.fastjson.serializer.*;
 import com.github.fangjinuo.easyjson.core.JSON;
 import com.github.fangjinuo.easyjson.core.JSONBuilder;
+import com.github.fangjinuo.easyjson.fastjson.deserializer.FastJsonParserBuilder;
 
 import java.util.ArrayList;
 import java.util.List;

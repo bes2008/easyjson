@@ -1,6 +1,7 @@
 package com.github.fangjinuo.easyjson.fastjson;
 
 import com.alibaba.fastjson.serializer.JSONSerializer;
+import com.github.fangjinuo.easyjson.fastjson.deserializer.FastJsonParserBuilder;
 
 public class FastJson {
     private JSONSerializer serializer;
