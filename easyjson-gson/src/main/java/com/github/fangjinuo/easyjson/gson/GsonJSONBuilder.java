@@ -14,8 +14,8 @@
 
 package com.github.fangjinuo.easyjson.gson;
 
-import com.github.fangjinuo.easyjson.core.JSON;
-import com.github.fangjinuo.easyjson.core.JSONBuilder;
+import com.github.fangjinuo.easyjson.api.JSON;
+import com.github.fangjinuo.easyjson.api.JSONBuilder;
 import com.github.fangjinuo.easyjson.gson.typeadapter.BooleanTypeAdapter;
 import com.github.fangjinuo.easyjson.gson.typeadapter.DateTypeAdapter;
 import com.github.fangjinuo.easyjson.gson.typeadapter.EnumTypeAdapter;

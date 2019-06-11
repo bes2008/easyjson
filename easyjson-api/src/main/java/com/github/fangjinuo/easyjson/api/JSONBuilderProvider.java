@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.github.fangjinuo.easyjson.core;
+package com.github.fangjinuo.easyjson.api;
 
 public class JSONBuilderProvider {
     private static Class<JSONBuilder> jsonBuilderClass;

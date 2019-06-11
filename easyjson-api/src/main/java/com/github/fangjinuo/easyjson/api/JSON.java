@@ -12,9 +12,9 @@
  * limitations under the License.
  */
 
-package com.github.fangjinuo.easyjson.core;
+package com.github.fangjinuo.easyjson.api;
 
-import com.github.fangjinuo.easyjson.core.type.Primitives;
+import com.github.fangjinuo.easyjson.api.type.Primitives;
 
 import java.lang.reflect.Type;
 

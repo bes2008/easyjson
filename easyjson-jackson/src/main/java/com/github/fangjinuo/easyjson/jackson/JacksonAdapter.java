@@ -16,9 +16,9 @@ package com.github.fangjinuo.easyjson.jackson;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.fangjinuo.easyjson.core.JsonException;
-import com.github.fangjinuo.easyjson.core.JsonHandler;
-import com.github.fangjinuo.easyjson.core.type.Types;
+import com.github.fangjinuo.easyjson.api.JsonException;
+import com.github.fangjinuo.easyjson.api.JsonHandler;
+import com.github.fangjinuo.easyjson.api.type.Types;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;

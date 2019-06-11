@@ -18,7 +18,7 @@ import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.cfg.SerializerFactoryConfig;
 import com.fasterxml.jackson.databind.ser.BeanSerializerFactory;
 import com.fasterxml.jackson.databind.ser.SerializerFactory;
-import com.github.fangjinuo.easyjson.core.type.Types;
+import com.github.fangjinuo.easyjson.api.type.Types;
 import com.github.fangjinuo.easyjson.jackson.serializer.DateSerializer;
 import com.github.fangjinuo.easyjson.jackson.serializer.NumberSerializer;
 

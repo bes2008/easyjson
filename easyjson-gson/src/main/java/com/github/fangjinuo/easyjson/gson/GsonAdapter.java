@@ -14,8 +14,8 @@
 
 package com.github.fangjinuo.easyjson.gson;
 
-import com.github.fangjinuo.easyjson.core.JsonException;
-import com.github.fangjinuo.easyjson.core.JsonHandler;
+import com.github.fangjinuo.easyjson.api.JsonException;
+import com.github.fangjinuo.easyjson.api.JsonHandler;
 import com.google.gson.Gson;
 
 import java.lang.reflect.Type;

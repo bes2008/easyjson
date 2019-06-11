@@ -16,8 +16,8 @@ package com.github.fangjinuo.easyjson.fastjson;
 
 import com.alibaba.fastjson.parser.DefaultJSONParser;
 import com.alibaba.fastjson.serializer.JSONSerializer;
-import com.github.fangjinuo.easyjson.core.JsonException;
-import com.github.fangjinuo.easyjson.core.JsonHandler;
+import com.github.fangjinuo.easyjson.api.JsonException;
+import com.github.fangjinuo.easyjson.api.JsonHandler;
 
 import java.lang.reflect.Type;
 

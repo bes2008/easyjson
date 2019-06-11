@@ -15,16 +15,15 @@
 package com.github.fangjinuo.easyjson.tests.jackson;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.fangjinuo.easyjson.core.JSONBuilder;
-import com.github.fangjinuo.easyjson.core.JSONBuilderProvider;
-import com.github.fangjinuo.easyjson.core.type.Types;
+import com.github.fangjinuo.easyjson.api.JSONBuilder;
+import com.github.fangjinuo.easyjson.api.JSONBuilderProvider;
+import com.github.fangjinuo.easyjson.api.type.Types;
 import com.github.fangjinuo.easyjson.jackson.JacksonJSONBuilder;
 import com.github.fangjinuo.easyjson.tests.jackson.struct.Contact;
 import com.github.fangjinuo.easyjson.tests.jackson.struct.Gender;
 import com.github.fangjinuo.easyjson.tests.jackson.struct.Person;
 import org.junit.Test;
 
-import java.text.DateFormat;
 import java.util.*;
 
 public class SimpleModelTests {
@@ -94,7 +93,7 @@ public class SimpleModelTests {
 
         System.out.println("=====================EasyJson [Gson] test start =============================");
         JSONBuilder jsonBuilder = JSONBuilderProvider.create();
-        com.github.fangjinuo.easyjson.core.JSON gson = jsonBuilder.serializeNulls().serializeLongAsString().serializeEnumUsingValue().build();
+        com.github.fangjinuo.easyjson.api.JSON gson = jsonBuilder.serializeNulls().serializeLongAsString().serializeEnumUsingValue().build();
 
         // test simple object
         String str1 = gson.toJson(person, person.getClass());
@@ -121,7 +120,7 @@ public class SimpleModelTests {
 
         System.out.println("=====================EasyJson [Jackson] test start =============================");
         JSONBuilder jsonBuilder = new JacksonJSONBuilder();
-        com.github.fangjinuo.easyjson.core.JSON gson = jsonBuilder.serializeNulls().serializeLongAsString().serializeEnumUsingValue().build();
+        com.github.fangjinuo.easyjson.api.JSON gson = jsonBuilder.serializeNulls().serializeLongAsString().serializeEnumUsingValue().build();
 
         // test simple object
         String str1 = gson.toJson(person, person.getClass());
@@ -151,7 +150,7 @@ public class SimpleModelTests {
         genders.add(Gender.woman);
         genders.add(Gender.man);
 
-        com.github.fangjinuo.easyjson.core.JSON json = new JacksonJSONBuilder().serializeEnumUsingValue().build();
+        com.github.fangjinuo.easyjson.api.JSON json = new JacksonJSONBuilder().serializeEnumUsingValue().build();
         String jsonString = json.toJson(genders);
         System.out.println(jsonString);
         List<Gender> a = json.fromJson(jsonString, Types.getListParameterizedType(Gender.class));

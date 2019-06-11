@@ -12,10 +12,13 @@
  * limitations under the License.
  */
 
-package com.github.fangjinuo.easyjson.core.annotation;
+package com.github.fangjinuo.easyjson.api;
 
-public @interface Ignore {
-    boolean write() default true;
+import java.lang.reflect.Type;
 
-    boolean read() default true;
+public interface JsonHandler {
+    <T> T deserialize(String json, Type typeOfT) throws JsonException;
+
+    String serialize(Object src, Type typeOfT) throws JsonException;
+
 }
