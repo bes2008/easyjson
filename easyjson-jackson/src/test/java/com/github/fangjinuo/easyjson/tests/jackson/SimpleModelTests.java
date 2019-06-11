@@ -87,39 +87,10 @@ public class SimpleModelTests {
         System.out.println("=====================Jackson test end =============================");
     }
 
-
-    @Test
-    public void testEasyJson_gson() {
-
-        System.out.println("=====================EasyJson [Gson] test start =============================");
-        JSONBuilder jsonBuilder = JSONBuilderProvider.create();
-        com.github.fangjinuo.easyjson.api.JSON gson = jsonBuilder.serializeNulls().serializeLongAsString().serializeEnumUsingValue().build();
-
-        // test simple object
-        String str1 = gson.toJson(person, person.getClass());
-        System.out.println(str1);
-        Person p1 = gson.fromJson(str1, Person.class);
-        System.out.println(p1.equals(person));
-        System.out.println(gson.toJson(person));
-
-        // test list
-        String str2 = gson.toJson(persons);
-        System.out.println(str2);
-        List<Person> persons2 = gson.fromJson(str2, Types.getListParameterizedType(Person.class));
-        System.out.println(gson.toJson(persons2));
-        // test map
-        String str3 = gson.toJson(idToPersonMap);
-        System.out.println(str3);
-        Map<Integer, Person> personMap = gson.fromJson(str3, Types.getMapParameterizedType(Integer.class, Person.class));
-        System.out.println(gson.toJson(personMap, Types.getMapParameterizedType(Integer.class, Person.class)));
-        System.out.println("=====================EasyJson [Gson] test end =============================");
-    }
-
     @Test
     public void testEasyJson_jackson() {
-
         System.out.println("=====================EasyJson [Jackson] test start =============================");
-        JSONBuilder jsonBuilder = new JacksonJSONBuilder();
+        JSONBuilder jsonBuilder = JSONBuilderProvider.create();
         com.github.fangjinuo.easyjson.api.JSON gson = jsonBuilder.serializeNulls().serializeLongAsString().serializeEnumUsingValue().build();
 
         // test simple object
@@ -144,6 +115,7 @@ public class SimpleModelTests {
 
     @Test
     public void testEasyJson_jackson_enum_list(){
+        System.out.println("===============EasyJson [Jackson] enum test start=================");
         List<Gender> genders = new ArrayList<Gender>();
         genders.add(Gender.man);
         genders.add(Gender.woman);
@@ -156,5 +128,6 @@ public class SimpleModelTests {
         List<Gender> a = json.fromJson(jsonString, Types.getListParameterizedType(Gender.class));
         jsonString = json.toJson(a);
         System.out.println(jsonString);
+        System.out.println("===============EasyJson [Jackson] enum test end=================");
     }
 }

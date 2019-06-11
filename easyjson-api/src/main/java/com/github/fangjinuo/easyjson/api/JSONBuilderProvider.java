@@ -14,21 +14,29 @@
 
 package com.github.fangjinuo.easyjson.api;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.ServiceLoader;
+
 public class JSONBuilderProvider {
-    private static Class<JSONBuilder> jsonBuilderClass;
+
+    private static Class<? extends JSONBuilder> defaultJsonBuilderClass;
+    private static final Map<String, Class<? extends JSONBuilder>> registry=new HashMap<String, Class<? extends JSONBuilder>>();
 
     private static final String GSON_CLASS = "com.google.gson.Gson";
     private static final String JACKSON_CLASS = "com.fasterxml.jackson.databind.ObjectMapper";
     private static final String FASTJSON_CLASS = "com.alibaba.fastjson.JSON";
 
+
     static {
-        findJSONBuilderImplClass();
+        findJSONBuilderImplClasses();
     }
 
     public static JSONBuilder create() {
-        if (jsonBuilderClass != null) {
+        if (defaultJsonBuilderClass != null) {
             try {
-                return jsonBuilderClass.newInstance();
+                return defaultJsonBuilderClass.newInstance();
             } catch (InstantiationException e) {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
@@ -38,36 +46,33 @@ public class JSONBuilderProvider {
         throw new RuntimeException("Can't find any supported JSON libraries : [gson, jackson, fastjson]");
     }
 
-    public static JSONBuilder createIfExistsGson() {
-        return createIfExists("com.github.fangjinuo.easyjson.gson.GsonJSONBuilder");
+    private static void findJSONBuilderImplClasses() {
+        if (defaultJsonBuilderClass == null) {
+            defaultJsonBuilderClass = loadJSONBuilderImplClassIfExist(GSON_CLASS, "com.github.fangjinuo.easyjson.gson.GsonJSONBuilder");
+        }
+        if (defaultJsonBuilderClass == null) {
+            defaultJsonBuilderClass = loadJSONBuilderImplClassIfExist(JACKSON_CLASS, "com.github.fangjinuo.easyjson.jackson.JacksonJSONBuilder");
+        }
+        if (defaultJsonBuilderClass == null) {
+            defaultJsonBuilderClass = loadJSONBuilderImplClassIfExist(FASTJSON_CLASS, "com.github.fangjinuo.easyjson.fastjson.FastJsonJSONBuilder");
+        }
+        if (defaultJsonBuilderClass == null) {
+            ServiceLoader<JSONBuilder> loader = ServiceLoader.load(JSONBuilder.class);
+            Iterator<JSONBuilder> iter = loader.iterator();
+            while (defaultJsonBuilderClass == null && iter.hasNext()) {
+                iter.next();
+            }
+        }
     }
 
-    public static JSONBuilder createIfExists(String jsonBuilderImplClazz) {
-        if (hasClass(jsonBuilderImplClazz)) {
-            Class<JSONBuilder> builderClass = loadClass(jsonBuilderImplClazz);
-            try {
-                return builderClass.newInstance();
-            } catch (Exception e) {
-                return null;
+    private static Class<? extends JSONBuilder> loadJSONBuilderImplClassIfExist(String dependencyClass, String clazz) {
+        if (hasClass(dependencyClass)) {
+            Class<? extends JSONBuilder> jsonBuilderClass = loadClass(clazz);
+            if (isJSONBuilderImplClass(jsonBuilderClass)) {
+                return jsonBuilderClass;
             }
         }
         return null;
-    }
-
-    private static void findJSONBuilderImplClass() {
-        if (hasClass(GSON_CLASS)) {
-            jsonBuilderClass = loadClass("com.github.fangjinuo.easyjson.gson.GsonJSONBuilder");
-            if (isJSONBuilderImplClass(jsonBuilderClass)) {
-                return;
-            }
-            jsonBuilderClass = null;
-        }
-        if (hasClass(JACKSON_CLASS)) {
-            // TODO jackson
-        }
-        if (hasClass(FASTJSON_CLASS)) {
-            // TODO fastjson
-        }
     }
 
     private static boolean isJSONBuilderImplClass(Class jsonBuilderClass) {
