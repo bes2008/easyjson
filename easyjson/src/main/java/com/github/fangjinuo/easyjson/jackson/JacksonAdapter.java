@@ -49,7 +49,7 @@ public class JacksonAdapter implements JsonHandler {
                 }
                 return objectMapper.readValue(json, objectMapper.getTypeFactory().constructParametricType(parametrized, parameterClasses));
             }
-        }catch (Throwable ex){
+        } catch (Throwable ex) {
             throw new JsonException(ex);
         }
         return null;
@@ -63,10 +63,6 @@ public class JacksonAdapter implements JsonHandler {
         } catch (JsonProcessingException e) {
             throw new JsonException(e);
         }
-    }
-
-    public ObjectMapper getObjectMapper() {
-        return objectMapper;
     }
 
     public void setObjectMapper(ObjectMapper objectMapper) {

@@ -32,10 +32,6 @@ public class GsonAdapter implements JsonHandler {
         return gson.fromJson(json, typeOfT);
     }
 
-    public Gson getGson() {
-        return gson;
-    }
-
     public void setGson(Gson gson) {
         this.gson = gson;
     }

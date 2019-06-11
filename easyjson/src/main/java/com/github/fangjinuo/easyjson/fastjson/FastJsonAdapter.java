@@ -40,10 +40,6 @@ public class FastJsonAdapter implements JsonHandler {
         return serializer.toString();
     }
 
-    public FastJson getFastJson() {
-        return fastJson;
-    }
-
     public void setFastJson(FastJson fastJson) {
         this.fastJson = fastJson;
     }
