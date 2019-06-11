@@ -14,6 +14,7 @@
 
 package com.github.fangjinuo.easyjson.fastjson;
 
+import com.alibaba.fastjson.parser.DefaultJSONParser;
 import com.alibaba.fastjson.serializer.JSONSerializer;
 import com.github.fangjinuo.easyjson.core.JsonException;
 import com.github.fangjinuo.easyjson.core.JsonHandler;
@@ -22,9 +23,14 @@ import java.lang.reflect.Type;
 
 public class FastJsonAdapter implements JsonHandler {
     private FastJson fastJson;
+
     @Override
     public <T> T deserialize(String json, Type typeOfT) throws JsonException {
-        return null;
+        DefaultJSONParser parser = fastJson.getDeserializerBuilder().build(json);
+        T value = parser.parseObject(typeOfT);
+        parser.handleResovleTask(value);
+        parser.close();
+        return value;
     }
 
     @Override
