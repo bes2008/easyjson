@@ -5,12 +5,15 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.fangjinuo.easyjson</groupId>
-    <artifactId>easyjson-parent</artifactId>
+    <artifactId>easyjson</artifactId>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>easyjson</module>
+        <module>easyjson-api</module>
+        <module>easyjson-gson</module>
+        <module>easyjson-jackson</module>
+        <module>easyjson-fastjson</module>
     </modules>
-    <name>easyjson-parent</name>
+    <name>easyjson</name>
     <packaging>pom</packaging>
 
     <dependencies>
