@@ -17,6 +17,7 @@ package com.github.fangjinuo.easyjson.fastjson;
 import com.alibaba.fastjson.parser.Feature;
 import com.alibaba.fastjson.parser.ParserConfig;
 import com.alibaba.fastjson.serializer.SerializeConfig;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.github.fangjinuo.easyjson.api.JSON;
 import com.github.fangjinuo.easyjson.api.JSONBuilder;
 import com.github.fangjinuo.easyjson.api.annotation.DependOn;
@@ -52,8 +53,10 @@ public class FastJsonJSONBuilder extends JSONBuilder {
 
     private FastJsonSerializerBuilder buildSerializer() {
         SerializeConfig config = new SerializeConfig();
+        config.setAsmEnable(false);
         FastJsonSerializerBuilder builder = new FastJsonSerializerBuilder();
         builder.config(config);
+        builder.addFeature(SerializerFeature.DisableCircularReferenceDetect);
         return builder;
     }
 
