@@ -93,7 +93,7 @@ public class SimpleModelTests {
 
         System.out.println("=====================EasyJson [Gson] test start =============================");
         JSONBuilder jsonBuilder = JSONBuilderProvider.create();
-        com.github.fangjinuo.easyjson.api.JSON gson = jsonBuilder.serializeNulls().serializeLongAsString().serializeEnumUsingValue().build();
+        com.github.fangjinuo.easyjson.api.JSON gson = jsonBuilder.serializeNulls().serializeNumberAsString().serializeEnumUsingValue().build();
 
         // test simple object
         String str1 = gson.toJson(person, person.getClass());
