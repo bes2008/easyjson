@@ -132,6 +132,9 @@ public class EnumTypeAdapter implements JsonSerializer<Enum>, JsonDeserializer<E
     }
 
     public JsonElement serialize(Enum e, Type typeOfSrc, JsonSerializationContext context) {
+        if(e==null){
+            return JsonNull.INSTANCE;
+        }
         if (usingValue) {
             return new JsonPrimitive(e.ordinal());
         }

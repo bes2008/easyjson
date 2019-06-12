@@ -54,6 +54,9 @@ public class BooleanTypeAdapter implements JsonSerializer<Boolean>, JsonDeserial
 
     @Override
     public JsonElement serialize(Boolean src, Type typeOfSrc, JsonSerializationContext context) {
+        if(src==null){
+            return JsonNull.INSTANCE;
+        }
         if (usingOnOff) {
             return new JsonPrimitive(src ? "on" : "off");
         }

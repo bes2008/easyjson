@@ -38,7 +38,7 @@ public class NumberTypeAdapter implements JsonSerializer<Number>, JsonDeserializ
     @Override
     public Number deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         if (json.isJsonObject() || json.isJsonArray() || json.isJsonNull()) {
-            return 0;
+            return null;
         }
         JsonPrimitive jsonPrimitive = json.getAsJsonPrimitive();
         if (jsonPrimitive.isString()) {
@@ -75,6 +75,9 @@ public class NumberTypeAdapter implements JsonSerializer<Number>, JsonDeserializ
 
     @Override
     public JsonElement serialize(Number src, Type typeOfSrc, JsonSerializationContext context) {
+        if(src==null){
+            return JsonNull.INSTANCE;
+        }
         if (longUsingString) {
             if (Long.class == typeOfSrc || long.class == typeOfSrc) {
                 return new JsonPrimitive(src.toString());

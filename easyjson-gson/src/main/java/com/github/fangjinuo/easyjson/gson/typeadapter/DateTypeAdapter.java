@@ -59,6 +59,9 @@ public class DateTypeAdapter implements JsonSerializer<Date>, JsonDeserializer<D
     }
 
     public JsonElement serialize(Date src, Type typeOfSrc, JsonSerializationContext context) {
+        if(src==null){
+            return JsonNull.INSTANCE;
+        }
         if (df != null) {
             return new JsonPrimitive(df.format(src));
         }
