@@ -2,6 +2,7 @@ package com.github.fangjinuo.easyjson.fastjson.codec;
 
 import com.alibaba.fastjson.serializer.*;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +27,23 @@ public class FastJsonSerializerBuilder {
         if (feature != null) {
             this.features.add(feature);
         }
+        return this;
+    }
+
+    public FastJsonSerializerBuilder apply(ObjectSerializer serializer){
+        if(serializer instanceof Typed){
+            List<Type> applyTo = ((Typed)serializer).applyTo();
+            if(applyTo!=null && !applyTo.isEmpty()){
+                for (Type type : applyTo){
+                    apply(type, serializer);
+                }
+            }
+        }
+        return this;
+    }
+
+    public FastJsonSerializerBuilder apply(Type type, ObjectSerializer serializer){
+        config.put(type, serializer);
         return this;
     }
 

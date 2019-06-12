@@ -16,11 +16,12 @@ package com.github.fangjinuo.easyjson.fastjson;
 
 import com.alibaba.fastjson.parser.Feature;
 import com.alibaba.fastjson.parser.ParserConfig;
-import com.alibaba.fastjson.serializer.*;
+import com.alibaba.fastjson.serializer.SerializeConfig;
 import com.github.fangjinuo.easyjson.api.JSON;
 import com.github.fangjinuo.easyjson.api.JSONBuilder;
 import com.github.fangjinuo.easyjson.api.annotation.DependOn;
 import com.github.fangjinuo.easyjson.api.annotation.Name;
+import com.github.fangjinuo.easyjson.fastjson.codec.BooleanCodec;
 import com.github.fangjinuo.easyjson.fastjson.codec.FastJsonParserBuilder;
 import com.github.fangjinuo.easyjson.fastjson.codec.FastJsonSerializerBuilder;
 
@@ -34,6 +35,15 @@ public class FastJsonJSONBuilder extends JSONBuilder {
     public JSON build() {
         FastJsonSerializerBuilder serializer = buildSerializer();
         FastJsonParserBuilder parser = buildDeserializer();
+
+        // boolean
+        BooleanCodec booleanCodec = new BooleanCodec();
+        booleanCodec.setUsing1_0(serializeBooleanUsing1_0);
+        booleanCodec.setUsingOnOff(serializeBooleanUsingOnOff);
+        serializer.apply(booleanCodec);
+        parser.apply(booleanCodec);
+
+
         FastJson fastJson = new FastJson(serializer, parser);
         FastJsonAdapter jsonHandler = new FastJsonAdapter();
         jsonHandler.setFastJson(fastJson);

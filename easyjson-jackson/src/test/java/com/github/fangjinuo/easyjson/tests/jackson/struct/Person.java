@@ -23,6 +23,15 @@ public class Person {
     private Contact contact;
     private Gender gender;
     private long authCode;
+    private boolean married;
+
+    public boolean isMarried() {
+        return married;
+    }
+
+    public void setMarried(boolean married) {
+        this.married = married;
+    }
 
     public long getAuthCode() {
         return authCode;
