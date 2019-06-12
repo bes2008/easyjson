@@ -28,10 +28,12 @@ public class BooleanSerializer extends JsonSerializer<Boolean> {
 
     @Override
     public void serialize(Boolean value, JsonGenerator gen, SerializerProvider sp) throws IOException {
+        if(value==null){
+            gen.writeNull();
+            return;
+        }
         boolean using1_0 = Jacksons.getBoolean(sp.getAttribute(SERIALIZE_BOOLEAN_USING_1_0_ATTR_KEY));
         boolean usingOnOff = Jacksons.getBoolean(sp.getAttribute(SERIALIZE_BOOLEAN_USING_ON_OFF_ATTR_KEY));
-
-        value = value == null ? false : value;
 
         if (usingOnOff) {
             gen.writeString(value ? "on" : "off");

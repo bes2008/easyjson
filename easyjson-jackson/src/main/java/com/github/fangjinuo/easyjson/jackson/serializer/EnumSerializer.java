@@ -28,6 +28,10 @@ public class EnumSerializer<T extends Enum> extends JsonSerializer<T> {
 
     @Override
     public void serialize(T e, JsonGenerator gen, SerializerProvider sp) throws IOException {
+        if(e==null){
+            gen.writeNull();
+            return;
+        }
         boolean usingIndex = sp.isEnabled(SerializationFeature.WRITE_ENUMS_USING_INDEX);
         boolean usingToString = sp.isEnabled(SerializationFeature.WRITE_ENUMS_USING_TO_STRING);
         String usingField = (String) sp.getAttribute(SERIALIZE_ENUM_USING_FIELD_ATTR_KEY);

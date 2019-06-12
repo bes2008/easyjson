@@ -28,6 +28,10 @@ public class NumberSerializer extends JsonSerializer<Number> implements Contextu
 
     @Override
     public void serialize(Number value, JsonGenerator gen, SerializerProvider sp) throws IOException {
+        if(value==null){
+            gen.writeNull();
+            return;
+        }
         boolean longUsingString = Jacksons.getBoolean(sp.getAttribute(SERIALIZE_LONG_USING_STRING_ATTR_KEY));
         boolean usingString = Jacksons.getBoolean(sp.getAttribute(SERIALIZE_NUMBER_USING_STRING_ATTR_KEY));
         if (longUsingString) {
