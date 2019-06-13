@@ -25,6 +25,7 @@ import com.github.fangjinuo.easyjson.api.annotation.Name;
 import com.github.fangjinuo.easyjson.fastjson.codec.BooleanCodec;
 import com.github.fangjinuo.easyjson.fastjson.codec.FastJsonParserBuilder;
 import com.github.fangjinuo.easyjson.fastjson.codec.FastJsonSerializerBuilder;
+import com.github.fangjinuo.easyjson.fastjson.codec.NumberCodec;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,18 +35,25 @@ import java.util.List;
 public class FastJsonJSONBuilder extends JSONBuilder {
     @Override
     public JSON build() {
-        FastJsonSerializerBuilder serializer = buildSerializer();
-        FastJsonParserBuilder parser = buildDeserializer();
+        FastJsonSerializerBuilder serializerBuilder = buildSerializer();
+        FastJsonParserBuilder deserializerBuilder = buildDeserializer();
 
         // boolean
         BooleanCodec booleanCodec = new BooleanCodec();
         booleanCodec.setUsing1_0(serializeBooleanUsing1_0);
         booleanCodec.setUsingOnOff(serializeBooleanUsingOnOff);
-        serializer.apply(booleanCodec);
-        parser.apply(booleanCodec);
+        serializerBuilder.apply(booleanCodec);
+        deserializerBuilder.apply(booleanCodec);
+
+        // number
+        NumberCodec numberCodec = new NumberCodec();
+        numberCodec.setLongUsingString(serializeLongAsString);
+        numberCodec.setUsingString(serializeNumberAsString);
+        serializerBuilder.apply(numberCodec);
+        deserializerBuilder.apply(numberCodec);
 
 
-        FastJson fastJson = new FastJson(serializer, parser);
+        FastJson fastJson = new FastJson(serializerBuilder, deserializerBuilder);
         FastJsonAdapter jsonHandler = new FastJsonAdapter();
         jsonHandler.setFastJson(fastJson);
         return new JSON().setJsonHandler(jsonHandler);

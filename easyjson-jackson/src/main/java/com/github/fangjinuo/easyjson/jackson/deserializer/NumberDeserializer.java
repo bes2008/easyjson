@@ -42,8 +42,6 @@ public class NumberDeserializer extends JsonDeserializer<Number> implements Cont
 
     @Override
     public Number deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
-        boolean longUsingString = Jacksons.getBooleanAttr(ctxt, SERIALIZE_LONG_USING_STRING_ATTR_KEY);
-        boolean usingString = Jacksons.getBooleanAttr(ctxt, SERIALIZE_NUMBER_USING_STRING_ATTR_KEY);
         JsonToken curr = p.getCurrentToken();
         if (curr == JsonToken.VALUE_STRING) {
             String v = p.getValueAsString();
