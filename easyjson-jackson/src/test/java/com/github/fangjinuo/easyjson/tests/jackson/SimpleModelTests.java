@@ -17,7 +17,7 @@ package com.github.fangjinuo.easyjson.tests.jackson;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fangjinuo.easyjson.api.JSONBuilder;
 import com.github.fangjinuo.easyjson.api.JSONBuilderProvider;
-import com.github.fangjinuo.easyjson.api.type.Types;
+import com.github.fangjinuo.easyjson.api.util.type.Types;
 import com.github.fangjinuo.easyjson.jackson.JacksonJSONBuilder;
 import com.github.fangjinuo.easyjson.tests.jackson.struct.Contact;
 import com.github.fangjinuo.easyjson.tests.jackson.struct.Gender;

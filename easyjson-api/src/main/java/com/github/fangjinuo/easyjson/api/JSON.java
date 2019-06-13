@@ -14,7 +14,7 @@
 
 package com.github.fangjinuo.easyjson.api;
 
-import com.github.fangjinuo.easyjson.api.type.Primitives;
+import com.github.fangjinuo.easyjson.api.util.type.Primitives;
 
 import java.lang.reflect.Type;
 

@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.github.fangjinuo.easyjson.api.type;
+package com.github.fangjinuo.easyjson.api.util.type;
 
 import java.io.Serializable;
 import java.lang.reflect.*;

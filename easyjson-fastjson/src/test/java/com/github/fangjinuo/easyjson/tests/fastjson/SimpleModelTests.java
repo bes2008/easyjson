@@ -20,7 +20,7 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.util.ParameterizedTypeImpl;
 import com.github.fangjinuo.easyjson.api.JSONBuilder;
 import com.github.fangjinuo.easyjson.api.JSONBuilderProvider;
-import com.github.fangjinuo.easyjson.api.type.Types;
+import com.github.fangjinuo.easyjson.api.util.type.Types;
 import com.github.fangjinuo.easyjson.tests.fastjson.struct.Contact;
 import com.github.fangjinuo.easyjson.tests.fastjson.struct.Gender;
 import com.github.fangjinuo.easyjson.tests.fastjson.struct.Person;

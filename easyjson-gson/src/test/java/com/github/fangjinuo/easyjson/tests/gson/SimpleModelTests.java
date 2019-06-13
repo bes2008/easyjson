@@ -16,7 +16,7 @@ package com.github.fangjinuo.easyjson.tests.gson;
 
 import com.github.fangjinuo.easyjson.api.JSONBuilder;
 import com.github.fangjinuo.easyjson.api.JSONBuilderProvider;
-import com.github.fangjinuo.easyjson.api.type.Types;
+import com.github.fangjinuo.easyjson.api.util.type.Types;
 import com.github.fangjinuo.easyjson.tests.gson.struct.Contact;
 import com.github.fangjinuo.easyjson.tests.gson.struct.Gender;
 import com.github.fangjinuo.easyjson.tests.gson.struct.Person;
