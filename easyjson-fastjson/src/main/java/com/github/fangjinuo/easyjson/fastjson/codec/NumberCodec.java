@@ -124,12 +124,12 @@ public class NumberCodec implements ObjectSerializer, ObjectDeserializer, Typed 
         fieldType = fieldType == null ? value.getClass() : fieldType;
         if (longUsingString) {
             if (asLong.contains(fieldType)) {
-                out.write(value.toString());
+                out.write("\"" + value.toString() + "\"");
                 return;
             }
         }
         if (usingString) {
-            out.write(value.toString());
+            out.write("\"" + value.toString() + "\"");
             return;
         }
         Number n = (Number) value;

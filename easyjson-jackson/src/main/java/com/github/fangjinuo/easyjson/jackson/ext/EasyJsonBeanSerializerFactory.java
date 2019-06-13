@@ -50,7 +50,7 @@ public class EasyJsonBeanSerializerFactory extends BeanSerializerFactory {
         String clsName = rawType.getName();
         JsonSerializer<?> ser = null;
         if (Types.isPrimitive(rawType) || clsName.startsWith("java.")) {
-            if (Number.class.isAssignableFrom(rawType)) {
+            if (Number.class.isAssignableFrom(Types.getPrimitiveWrapClass(rawType))) {
                 ser = new NumberSerializer().createContextual(prov, null, type);
                 if (ser != null) {
                     return ser;
