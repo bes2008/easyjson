@@ -15,10 +15,13 @@
 package com.github.fangjinuo.easyjson.jackson;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fangjinuo.easyjson.api.JsonException;
 import com.github.fangjinuo.easyjson.api.JsonHandler;
+import com.github.fangjinuo.easyjson.api.JsonTreeNode;
 import com.github.fangjinuo.easyjson.api.util.type.Types;
+import com.github.fangjinuo.easyjson.jackson.node.JacksonBasedJsonTreeNodeFactory;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -55,6 +58,15 @@ public class JacksonAdapter implements JsonHandler {
         return null;
     }
 
+    @Override
+    public JsonTreeNode deserialize(String json) throws JsonException {
+        try {
+            JsonNode jsonNode = objectMapper.readTree(json);
+            return new JacksonBasedJsonTreeNodeFactory().create(jsonNode);
+        }catch (Throwable ex){
+            throw new RuntimeException(ex);
+        }
+    }
 
     @Override
     public String serialize(Object src, Type typeOfT) throws JsonException {

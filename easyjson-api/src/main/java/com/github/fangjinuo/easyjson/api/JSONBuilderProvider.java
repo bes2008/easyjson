@@ -46,6 +46,10 @@ public class JSONBuilderProvider {
         return create(defaultJsonBuilderClass);
     }
 
+    public static JSON simplest(){
+        return create().serializeNulls().build();
+    }
+
     private static JSONBuilder create(Class<? extends JSONBuilder> defaultJsonBuilderClass) {
         if (defaultJsonBuilderClass != null) {
             try {

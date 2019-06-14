@@ -7,6 +7,8 @@ import com.github.fangjinuo.easyjson.api.node.JsonPrimitiveNode;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Iterator;
+import java.util.Map;
 
 public abstract class JsonTreeNode {
     /**
@@ -292,21 +294,47 @@ public abstract class JsonTreeNode {
     }
 
     /**
-     * Returns a String representation of this element.
+     * Returns a String representation of this node.
      */
     @Override
     public String toString() {
-        /*
-        try {
-            StringWriter stringWriter = new StringWriter();
-            JsonWriter jsonWriter = new JsonWriter(stringWriter);
-            jsonWriter.setLenient(true);
-            Streams.write(this, jsonWriter);
-            return stringWriter.toString();
-        } catch (IOException e) {
-            throw new AssertionError(e);
+        if(isJsonNullNode()){
+            return null;
         }
-        */
-        return null;
+        if(isJsonPrimitiveNode()){
+            return getAsString();
+        }
+        if(isJsonArrayNode()){
+            JsonArrayNode arrayNode  = getAsJsonArrayNode();
+            StringBuilder b = new StringBuilder();
+            b.append("[");
+            Iterator<JsonTreeNode> iter = arrayNode.iterator();
+            while (iter.hasNext()){
+                JsonTreeNode element = iter.next();
+                b.append(element.toString());
+                if(iter.hasNext()){
+                    b.append(", ");
+                }
+            }
+            b.append("]");
+            return b.toString();
+        }
+        if(isJsonObjectNode()){
+            JsonObjectNode jsonObjectNode = getAsJsonObjectNode();
+            StringBuilder b = new StringBuilder();
+            b.append("{");
+            Iterator<Map.Entry<String,JsonTreeNode>> iter = jsonObjectNode.propertySet().iterator();
+            while (iter.hasNext()){
+                Map.Entry<String, JsonTreeNode> property  = iter.next();
+                b.append("\"").append(property.getKey()).append("\": "); // key
+                b.append(property.getValue().toString());
+                if(iter.hasNext()){
+                    b.append(", ");
+                }
+            }
+            b.append("}");
+            return b.toString();
+        }
+        return JSONBuilderProvider.simplest().toJson(this);
     }
 }
