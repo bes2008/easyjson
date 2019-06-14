@@ -14,6 +14,7 @@
 
 package com.github.fangjinuo.easyjson.api;
 
+import com.github.fangjinuo.easyjson.api.node.JsonNullNode;
 import com.github.fangjinuo.easyjson.api.util.type.Primitives;
 
 import java.lang.reflect.Type;
@@ -79,7 +80,7 @@ public class JSON {
      * @param <T>     the type of the desired object
      * @param json    the string from which the object is to be deserialized
      * @param typeOfT The specific genericized type of src. You can obtain this type by using the
-     *                {@link com.google.gson.reflect.TypeToken} class. For example, to get the type for
+     *                {com.google.gson.reflect.TypeToken} class. For example, to get the type for
      *                {@code Collection<Foo>}, you should use:
      *                <pre>
      *                Type typeOfT = new TypeToken&lt;Collection&lt;Foo&gt;&gt;(){}.getType();
@@ -93,6 +94,13 @@ public class JSON {
             return null;
         }
         return jsonHandler.deserialize(json, typeOfT);
+    }
+
+    public JsonTreeNode fromJson(String json) throws JsonException{
+        if(json==null){
+            return JsonNullNode.INSTANCE;
+        }
+        return jsonHandler.deserialize(json);
     }
 
     public JSON setJsonHandler(JsonHandler jsonHandler) {

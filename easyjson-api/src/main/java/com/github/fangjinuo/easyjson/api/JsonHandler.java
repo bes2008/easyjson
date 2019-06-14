@@ -17,6 +17,9 @@ package com.github.fangjinuo.easyjson.api;
 import java.lang.reflect.Type;
 
 public interface JsonHandler {
+
+    JsonTreeNode deserialize(String json) throws JsonException;
+
     <T> T deserialize(String json, Type typeOfT) throws JsonException;
 
     String serialize(Object src, Type typeOfT) throws JsonException;

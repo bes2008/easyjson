@@ -16,7 +16,10 @@ package com.github.fangjinuo.easyjson.gson;
 
 import com.github.fangjinuo.easyjson.api.JsonException;
 import com.github.fangjinuo.easyjson.api.JsonHandler;
+import com.github.fangjinuo.easyjson.api.JsonTreeNode;
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 
 import java.lang.reflect.Type;
 
@@ -30,6 +33,12 @@ public class GsonAdapter implements JsonHandler {
 
     public <T> T deserialize(String json, Type typeOfT) throws JsonException {
         return gson.fromJson(json, typeOfT);
+    }
+
+    @Override
+    public JsonTreeNode deserialize(String json) throws JsonException {
+        JsonElement node =new JsonParser().parse(json);
+        return null;
     }
 
     public void setGson(Gson gson) {
