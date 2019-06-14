@@ -18,7 +18,7 @@ public class JsonObjectNode extends JsonTreeNode {
     public JsonObjectNode deepCopy() {
         JsonObjectNode result = new JsonObjectNode();
         for (Map.Entry<String, JsonTreeNode> entry : members.entrySet()) {
-            result.add(entry.getKey(), entry.getValue().deepCopy());
+            result.addProperty(entry.getKey(), entry.getValue().deepCopy());
         }
         return result;
     }
@@ -31,7 +31,7 @@ public class JsonObjectNode extends JsonTreeNode {
      * @param property name of the member.
      * @param value the member object.
      */
-    public void add(String property, JsonTreeNode value) {
+    public void addProperty(String property, JsonTreeNode value) {
         if (value == null) {
             value = JsonNullNode.INSTANCE;
         }
@@ -50,47 +50,47 @@ public class JsonObjectNode extends JsonTreeNode {
     }
 
     /**
-     * Convenience method to add a primitive member. The specified value is converted to a
+     * Convenience method to addProperty a primitive member. The specified value is converted to a
      * JsonPrimitiveNode of String.
      *
      * @param property name of the member.
      * @param value the string value associated with the member.
      */
     public void addProperty(String property, String value) {
-        add(property, createJsonTreeNode(value));
+        addProperty(property, createJsonTreeNode(value));
     }
 
     /**
-     * Convenience method to add a primitive member. The specified value is converted to a
+     * Convenience method to addProperty a primitive member. The specified value is converted to a
      * JsonPrimitiveNode of Number.
      *
      * @param property name of the member.
      * @param value the number value associated with the member.
      */
     public void addProperty(String property, Number value) {
-        add(property, createJsonTreeNode(value));
+        addProperty(property, createJsonTreeNode(value));
     }
 
     /**
-     * Convenience method to add a boolean member. The specified value is converted to a
+     * Convenience method to addProperty a boolean member. The specified value is converted to a
      * JsonPrimitiveNode of Boolean.
      *
      * @param property name of the member.
      * @param value the number value associated with the member.
      */
     public void addProperty(String property, Boolean value) {
-        add(property, createJsonTreeNode(value));
+        addProperty(property, createJsonTreeNode(value));
     }
 
     /**
-     * Convenience method to add a char member. The specified value is converted to a
+     * Convenience method to addProperty a char member. The specified value is converted to a
      * JsonPrimitiveNode of Character.
      *
      * @param property name of the member.
      * @param value the number value associated with the member.
      */
     public void addProperty(String property, Character value) {
-        add(property, createJsonTreeNode(value));
+        addProperty(property, createJsonTreeNode(value));
     }
 
     /**
@@ -109,7 +109,7 @@ public class JsonObjectNode extends JsonTreeNode {
      *
      * @return a set of members of this object.
      */
-    public Set<Map.Entry<String, JsonTreeNode>> entrySet() {
+    public Set<Map.Entry<String, JsonTreeNode>> propertySet() {
         return members.entrySet();
     }
 
@@ -119,7 +119,7 @@ public class JsonObjectNode extends JsonTreeNode {
      * @return a set of member keys as Strings
      * @since 2.8.1
      */
-    public Set<String> keySet() {
+    public Set<String> propertyNames() {
         return members.keySet();
     }
 
@@ -138,7 +138,7 @@ public class JsonObjectNode extends JsonTreeNode {
      * @param memberName name of the member that is being checked for presence.
      * @return true if there is a member with the specified name, false otherwise.
      */
-    public boolean has(String memberName) {
+    public boolean hasProperty(String memberName) {
         return members.containsKey(memberName);
     }
 
@@ -148,7 +148,7 @@ public class JsonObjectNode extends JsonTreeNode {
      * @param memberName name of the member that is being requested.
      * @return the member matching the name. Null if no such member exists.
      */
-    public JsonTreeNode get(String memberName) {
+    public JsonTreeNode getProperty(String memberName) {
         return members.get(memberName);
     }
 
@@ -158,7 +158,7 @@ public class JsonObjectNode extends JsonTreeNode {
      * @param memberName name of the member being requested.
      * @return the JsonPrimitiveNode corresponding to the specified member.
      */
-    public JsonPrimitiveNode getAsJsonPrimitiveNode(String memberName) {
+    public JsonPrimitiveNode getPropertyAsJsonPrimitiveNode(String memberName) {
         return (JsonPrimitiveNode) members.get(memberName);
     }
 
@@ -168,7 +168,7 @@ public class JsonObjectNode extends JsonTreeNode {
      * @param memberName name of the member being requested.
      * @return the JsonArrayNode corresponding to the specified member.
      */
-    public JsonArrayNode getAsJsonArrayNode(String memberName) {
+    public JsonArrayNode getPropertyAsJsonArrayNode(String memberName) {
         return (JsonArrayNode) members.get(memberName);
     }
 
@@ -178,7 +178,7 @@ public class JsonObjectNode extends JsonTreeNode {
      * @param memberName name of the member being requested.
      * @return the JsonObjectNode corresponding to the specified member.
      */
-    public JsonObjectNode getAsJsonObjectNode(String memberName) {
+    public JsonObjectNode getPropertyAsJsonObjectNode(String memberName) {
         return (JsonObjectNode) members.get(memberName);
     }
 

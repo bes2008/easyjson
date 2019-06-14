@@ -37,7 +37,7 @@ public class GsonAdapter implements JsonHandler {
 
     @Override
     public JsonTreeNode deserialize(String json) throws JsonException {
-        JsonElement node =new JsonParser().parse(json);
+        JsonElement node = new JsonParser().parse(json);
         return null;
     }
 
