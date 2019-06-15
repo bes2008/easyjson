@@ -1,16 +1,18 @@
 package com.github.fangjinuo.easyjson.jackson.node;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.POJONode;
+import com.fasterxml.jackson.databind.node.*;
 import com.github.fangjinuo.easyjson.api.JsonTreeNode;
 import com.github.fangjinuo.easyjson.api.node.*;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-public class JacksonBasedJsonTreeNodeFactory implements JsonTreeNodeFactory<JsonNode> {
+public class JacksonBasedJsonTreeNodeMapper implements JsonTreeNodeFactory<JsonNode> {
 
     private JsonTreeNode createFromPojo(Object object) {
         if (object == null) {
@@ -106,5 +108,72 @@ public class JacksonBasedJsonTreeNodeFactory implements JsonTreeNodeFactory<Json
             return createFromPojo(object);
         }
         return JsonNullNode.INSTANCE;
+    }
+
+    public JsonNode mapping(JsonTreeNode jsonNode) {
+        JsonNodeFactory jsonNodeFactory = new JsonNodeFactory(true);
+        if (jsonNode.isJsonNullNode()) {
+            return NullNode.instance;
+        }
+        // Primitive
+        if (jsonNode.isJsonPrimitiveNode()) {
+            JsonPrimitiveNode jsonPrimitiveNode = jsonNode.getAsJsonPrimitiveNode();
+            if (jsonPrimitiveNode.isNumber()) {
+                Number n = jsonPrimitiveNode.getAsNumber();
+                if (jsonPrimitiveNode.isDouble()) {
+                    return jsonNodeFactory.numberNode(jsonPrimitiveNode.getAsDouble());
+                }
+                if (jsonPrimitiveNode.isLong()) {
+                    return jsonNodeFactory.numberNode(jsonPrimitiveNode.getAsLong());
+                }
+                if (jsonPrimitiveNode.isFloat()) {
+                    return jsonNodeFactory.numberNode(jsonPrimitiveNode.getAsFloat());
+                }
+                if (jsonPrimitiveNode.isInteger()) {
+                    return jsonNodeFactory.numberNode(jsonPrimitiveNode.getAsInt());
+                }
+                if (jsonPrimitiveNode.isShort()) {
+                    return jsonNodeFactory.numberNode(jsonPrimitiveNode.getAsShort());
+                }
+                if (jsonPrimitiveNode.isByte()) {
+                    return jsonNodeFactory.numberNode(jsonPrimitiveNode.getAsByte());
+                }
+                if (jsonPrimitiveNode.isBigInteger()) {
+                    return jsonNodeFactory.numberNode(jsonPrimitiveNode.getAsBigInteger());
+                }
+                if (jsonPrimitiveNode.isBigDecimal()) {
+                    return jsonNodeFactory.numberNode(jsonPrimitiveNode.getAsBigDecimal());
+                }
+            }
+            if (jsonPrimitiveNode.isBoolean()) {
+                return jsonNodeFactory.booleanNode(jsonPrimitiveNode.getAsBoolean());
+            }
+            if(jsonPrimitiveNode.isChar() || jsonPrimitiveNode.isString()) {
+                return jsonNodeFactory.textNode(jsonPrimitiveNode.getAsString());
+            }
+        }
+
+        // array
+        if (jsonNode.isJsonArrayNode()) {
+            JsonArrayNode jsonArrayNode = jsonNode.getAsJsonArrayNode();
+            ArrayNode arrayNode = jsonNodeFactory.arrayNode(jsonArrayNode.size());
+            for (JsonTreeNode element : jsonArrayNode) {
+                arrayNode.add(mapping(element));
+            }
+            return arrayNode;
+        }
+
+        // object
+        if (jsonNode.isJsonObjectNode()) {
+            JsonObjectNode jsonObjectNode = jsonNode.getAsJsonObjectNode();
+            ObjectNode objectNode = jsonNodeFactory.objectNode();
+            Iterator<String> iter = jsonObjectNode.propertyNames().iterator();
+            while (iter.hasNext()) {
+                String fieldName = iter.next();
+                objectNode.set(fieldName, mapping(jsonObjectNode.getProperty(fieldName)));
+            }
+            return objectNode;
+        }
+        return NullNode.instance;
     }
 }

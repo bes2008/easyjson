@@ -156,9 +156,79 @@ public class JsonPrimitiveNode extends JsonTreeNode {
             return getAsNumber().toString();
         } else if (isBoolean()) {
             return getAsBooleanWrapper().toString();
+        }else if (isChar()){
+            return ""+value;
         } else {
             return (String) value;
         }
+    }
+
+    public boolean isDouble(){
+        if(isNumber()){
+            Number n = getAsNumber();
+            return n.getClass() == Double.class || n.getClass()==double.class;
+        }
+        return false;
+    }
+
+    public boolean isLong(){
+        if(isNumber()){
+            Number n = getAsNumber();
+            return n.getClass() == Long.class || n.getClass()==long.class;
+        }
+        return false;
+    }
+
+    public boolean isFloat(){
+        if(isNumber()){
+            Number n = getAsNumber();
+            return n.getClass() == Float.class || n.getClass()==float.class;
+        }
+        return false;
+    }
+
+    public boolean isInteger(){
+        if(isNumber()){
+            Number n = getAsNumber();
+            return n.getClass() == Integer.class || n.getClass()==int.class;
+        }
+        return false;
+    }
+
+    public boolean isShort(){
+        if(isNumber()){
+            Number n = getAsNumber();
+            return n.getClass() == Short.class || n.getClass()==short.class;
+        }
+        return false;
+    }
+
+    public boolean isByte(){
+        if(isNumber()){
+            Number n = getAsNumber();
+            return n.getClass() == Byte.class || n.getClass()==byte.class;
+        }
+        return false;
+    }
+
+    public boolean isBigInteger(){
+        if(isNumber()){
+            Number n = getAsNumber();
+            return n instanceof BigInteger;
+        }
+        return false;
+    }
+
+    public boolean isChar(){
+        return value instanceof Character || value.getClass() == char.class;
+    }
+
+    public boolean isBigDecimal(){
+        if(isNumber()){
+            Number n = getAsNumber();
+            return n instanceof BigDecimal;
+        }
+        return false;
     }
 
     /**
@@ -309,7 +379,7 @@ public class JsonPrimitiveNode extends JsonTreeNode {
      * Returns true if the specified number is an integral type
      * (Long, Integer, Short, Byte, BigInteger)
      */
-    private static boolean isIntegral(JsonPrimitiveNode primitive) {
+    public static boolean isIntegral(JsonPrimitiveNode primitive) {
         if (primitive.value instanceof Number) {
             Number number = (Number) primitive.value;
             return number instanceof BigInteger || number instanceof Long || number instanceof Integer

@@ -21,13 +21,14 @@ import com.github.fangjinuo.easyjson.api.JsonException;
 import com.github.fangjinuo.easyjson.api.JsonHandler;
 import com.github.fangjinuo.easyjson.api.JsonTreeNode;
 import com.github.fangjinuo.easyjson.api.util.type.Types;
-import com.github.fangjinuo.easyjson.jackson.node.JacksonBasedJsonTreeNodeFactory;
+import com.github.fangjinuo.easyjson.jackson.node.JacksonBasedJsonTreeNodeMapper;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 public class JacksonAdapter implements JsonHandler {
     private ObjectMapper objectMapper;
+    private JacksonBasedJsonTreeNodeMapper treeNodeMapper = new JacksonBasedJsonTreeNodeMapper();
 
     @Override
     public <T> T deserialize(String json, Type typeOfT) throws JsonException {
@@ -62,7 +63,7 @@ public class JacksonAdapter implements JsonHandler {
     public JsonTreeNode deserialize(String json) throws JsonException {
         try {
             JsonNode jsonNode = objectMapper.readTree(json);
-            return new JacksonBasedJsonTreeNodeFactory().create(jsonNode);
+            return treeNodeMapper.create(jsonNode);
         }catch (Throwable ex){
             throw new RuntimeException(ex);
         }
@@ -71,6 +72,9 @@ public class JacksonAdapter implements JsonHandler {
     @Override
     public String serialize(Object src, Type typeOfT) throws JsonException {
         try {
+            if(src instanceof JsonTreeNode){
+                return objectMapper.writeValueAsString(treeNodeMapper.mapping((JsonTreeNode)src));
+            }
             return objectMapper.writeValueAsString(src);
         } catch (JsonProcessingException e) {
             throw new JsonException(e);
