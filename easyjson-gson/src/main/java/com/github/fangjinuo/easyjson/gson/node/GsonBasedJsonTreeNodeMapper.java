@@ -2,14 +2,11 @@ package com.github.fangjinuo.easyjson.gson.node;
 
 import com.github.fangjinuo.easyjson.api.JsonTreeNode;
 import com.github.fangjinuo.easyjson.api.node.*;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
+import com.google.gson.*;
 
 import java.util.Map;
 
-public class GsonBasedJsonTreeNodeFactory implements JsonTreeNodeFactory<JsonElement> {
+public class GsonBasedJsonTreeNodeMapper implements JsonTreeNodeFactory<JsonElement> {
     @Override
     public JsonTreeNode create(JsonElement jsonElement) {
         if (jsonElement.isJsonNull()) {
@@ -47,5 +44,43 @@ public class GsonBasedJsonTreeNodeFactory implements JsonTreeNodeFactory<JsonEle
             return jsonObjectNode;
         }
         return JsonNullNode.INSTANCE;
+    }
+
+    public JsonElement mapping(JsonTreeNode jsonElement) {
+        if (jsonElement.isJsonNullNode()) {
+            return JsonNull.INSTANCE;
+        }
+        if (jsonElement.isJsonPrimitiveNode()) {
+            JsonPrimitiveNode jsonPrimitive = jsonElement.getAsJsonPrimitiveNode();
+            if (jsonPrimitive.isNumber()) {
+                return new JsonPrimitive(jsonPrimitive.getAsNumber());
+            }
+            if (jsonPrimitive.isBoolean()) {
+                return new JsonPrimitive(jsonPrimitive.getAsBoolean());
+            }
+            if (jsonPrimitive.isString()) {
+                return new JsonPrimitive(jsonPrimitive.getAsString());
+            }
+            return JsonNull.INSTANCE;
+        }
+        if (jsonElement.isJsonArrayNode()) {
+            JsonArrayNode jsonArray = jsonElement.getAsJsonArrayNode();
+            JsonArray jsonArrayNode = new JsonArray(jsonArray.size());
+            for (JsonTreeNode je : jsonArray) {
+                jsonArrayNode.add(mapping(je));
+            }
+            return jsonArrayNode;
+        }
+        if (jsonElement.isJsonObjectNode()) {
+            JsonObjectNode jsonObject = jsonElement.getAsJsonObjectNode();
+            JsonObject jsonObjectNode = new JsonObject();
+            for (Map.Entry<String, JsonTreeNode> property : jsonObject.propertySet()) {
+                String propertyName = property.getKey();
+                JsonTreeNode propertyValue = property.getValue();
+                jsonObjectNode.add(propertyName, mapping(propertyValue));
+            }
+            return jsonObjectNode;
+        }
+        return JsonNull.INSTANCE;
     }
 }
