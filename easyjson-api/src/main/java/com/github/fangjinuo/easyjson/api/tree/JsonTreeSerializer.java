@@ -75,7 +75,7 @@ public class JsonTreeSerializer {
 
 
     /**
-     * Returns a new JSON writer configured for the settings on this Gson instance.
+     * Returns a new JSON writer configured for the settings on this JSON instance.
      */
     private JsonWriter newJsonWriter(Writer writer) throws IOException {
         JsonWriter jsonWriter = new JsonWriter(writer);

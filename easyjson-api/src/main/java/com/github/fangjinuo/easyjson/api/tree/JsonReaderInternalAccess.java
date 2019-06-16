@@ -20,7 +20,7 @@ import com.github.fangjinuo.easyjson.api.tree.stream.JsonReader;
 import java.io.IOException;
 
 /**
- * Internal-only APIs of JsonReader available only to other classes in Gson.
+ * Internal-only APIs of JsonReader available only to other classes in JSON.
  */
 public abstract class JsonReaderInternalAccess {
     public static JsonReaderInternalAccess INSTANCE;

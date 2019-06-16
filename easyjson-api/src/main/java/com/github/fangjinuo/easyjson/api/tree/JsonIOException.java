@@ -16,7 +16,7 @@
 package com.github.fangjinuo.easyjson.api.tree;
 
 /**
- * This exception is raised when Gson was unable to read an input stream
+ * This exception is raised when JSON was unable to read an input stream
  * or write to one.
  *
  */

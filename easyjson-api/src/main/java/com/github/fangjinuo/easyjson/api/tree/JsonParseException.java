@@ -18,7 +18,7 @@ package com.github.fangjinuo.easyjson.api.tree;
 
 /**
  * This exception is raised if there is a serious issue that occurs during parsing of a Json
- * string.  One of the main usages for this class is for the Gson infrastructure.  If the incoming
+ * string.  One of the main usages for this class is for the JSON infrastructure.  If the incoming
  * Json is bad/malicious, an instance of this exception is raised.
  *
  * <p>This exception is a {@link RuntimeException} because it is exposed to the client.  Using a

@@ -16,7 +16,7 @@
 package com.github.fangjinuo.easyjson.api.tree;
 
 /**
- * This exception is raised when Gson attempts to read (or write) a malformed
+ * This exception is raised when JSON attempts to read (or write) a malformed
  * JSON element.
  *
  */

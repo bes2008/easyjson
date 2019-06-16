@@ -29,8 +29,8 @@ import java.io.*;
  * Converts Java objects to and from JSON.
  *
  * <h3>Defining a type's JSON form</h3>
- * By default Gson converts application classes to JSON using its built-in type
- * adapters. If Gson's default JSON conversion isn't appropriate for a type,
+ * By default JSON converts application classes to JSON using its built-in type
+ * adapters. If JSON's default JSON conversion isn't appropriate for a type,
  * extend this class to customize the conversion. Here's an example of a type
  * adapter for an (X,Y) coordinate point: <pre>   {@code
  *
@@ -55,7 +55,7 @@ import java.io.*;
  *       writer.value(xy);
  *     }
  *   }}</pre>
- * With this type adapter installed, Gson will convert {@code Points} to JSON as
+ * With this type adapter installed, JSON will convert {@code Points} to JSON as
  * strings like {@code "5,8"} rather than objects like {@code {"x":5,"y":8}}. In
  * this case the type adapter binds a rich Java class to a compact JSON value.
  *
@@ -73,21 +73,21 @@ import java.io.*;
  *
  * <p>Type adapters should be prepared to read null from the stream and write it
  * to the stream. Alternatively, they should use {@link #nullSafe()} method while
- * registering the type adapter with Gson. If your {@code Gson} instance
+ * registering the type adapter with JSON. If your {@code JSON} instance
  * has been configured to {@link com.github.fangjinuo.easyjson.api.JSONBuilder#serializeNulls()}, these nulls will be
  * written to the final document. Otherwise the value (and the corresponding name
  * when writing to a JSON object) will be omitted automatically. In either case
  * your type adapter must handle null.
  *
- * <p>To use a custom type adapter with Gson, you must <i>register</i> it with a
+ * <p>To use a custom type adapter with JSON, you must <i>register</i> it with a
  * {@link JSONBuilder}: <pre>   {@code
  *
- *   GsonBuilder builder = new GsonBuilder();
+ *   JSONBuilder builder = new JSONBuilder();
  *   builder.registerTypeAdapter(Point.class, new PointAdapter());
  *   // if PointAdapter didn't check for nulls in its read/write methods, you should instead use
  *   // builder.registerTypeAdapter(Point.class, new PointAdapter().nullSafe());
  *   ...
- *   Gson gson = builder.create();
+ *   JSON JSON = builder.create();
  * }</pre>
  *
  * @since 2.1
@@ -95,18 +95,18 @@ import java.io.*;
 // non-Javadoc:
 //
 // <h3>JSON Conversion</h3>
-// <p>A type adapter registered with Gson is automatically invoked while serializing
+// <p>A type adapter registered with JSON is automatically invoked while serializing
 // or deserializing JSON. However, you can also use type adapters directly to serialize
 // and deserialize JSON. Here is an example for deserialization: <pre>   {@code
 //
 //   String json = "{'origin':'0,0','points':['1,2','3,4']}";
-//   TypeAdapter<Graph> graphAdapter = gson.getAdapter(Graph.class);
+//   TypeAdapter<Graph> graphAdapter = JSON.getAdapter(Graph.class);
 //   Graph graph = graphAdapter.fromJson(json);
 // }</pre>
 // And an example for serialization: <pre>   {@code
 //
 //   Graph graph = new Graph(...);
-//   TypeAdapter<Graph> graphAdapter = gson.getAdapter(Graph.class);
+//   TypeAdapter<Graph> graphAdapter = JSON.getAdapter(Graph.class);
 //   String json = graphAdapter.toJson(graph);
 // }</pre>
 //
@@ -126,7 +126,7 @@ public abstract class TypeAdapter<T> {
 
     /**
      * Converts {@code value} to a JSON document and writes it to {@code out}.
-     * Unlike Gson's similar toJson}
+     * Unlike JSON's similar toJson}
      * method, this write is strict. Create a {@link
      * JsonWriter#setLenient(boolean) lenient} {@code JsonWriter} and call
      * {@link #write(com.github.fangjinuo.easyjson.api.tree.stream.JsonWriter, Object)} for lenient
@@ -146,7 +146,7 @@ public abstract class TypeAdapter<T> {
      * is typically done:<br>
      * <pre>   {@code
      *
-     * Gson gson = new GsonBuilder().registerTypeAdapter(Foo.class,
+     * JSON JSON = new JSONBuilder().registerTypeAdapter(Foo.class,
      *   new TypeAdapter<Foo>() {
      *     public Foo read(JsonReader in) throws IOException {
      *       if (in.peek() == JsonToken.NULL) {
@@ -168,7 +168,7 @@ public abstract class TypeAdapter<T> {
      * this method. Here is how we will rewrite the above example:
      * <pre>   {@code
      *
-     * Gson gson = new GsonBuilder().registerTypeAdapter(Foo.class,
+     * JSON JSON = new JSONBuilder().registerTypeAdapter(Foo.class,
      *   new TypeAdapter<Foo>() {
      *     public Foo read(JsonReader in) throws IOException {
      *       // read a Foo from in and return it
@@ -200,7 +200,7 @@ public abstract class TypeAdapter<T> {
     }
 
     /**
-     * Converts {@code value} to a JSON document. Unlike Gson's similar {@link
+     * Converts {@code value} to a JSON document. Unlike JSON's similar {@link
      * JSON#toJson(Object) toJson} method, this write is strict. Create a {@link
      * JsonWriter#setLenient(boolean) lenient} {@code JsonWriter} and call
      * {@link #write(com.github.fangjinuo.easyjson.api.tree.stream.JsonWriter, Object)} for lenient
@@ -245,7 +245,7 @@ public abstract class TypeAdapter<T> {
     public abstract T read(JsonReader in) throws IOException;
 
     /**
-     * Converts the JSON document in {@code in} to a Java object. Unlike Gson's
+     * Converts the JSON document in {@code in} to a Java object. Unlike JSON's
      * similar  fromJson} method, this
      * read is strict. Create a {@link JsonReader#setLenient(boolean) lenient}
      * {@code JsonReader} and call {@link #read(JsonReader)} for lenient reading.
@@ -259,7 +259,7 @@ public abstract class TypeAdapter<T> {
     }
 
     /**
-     * Converts the JSON document in {@code json} to a Java object. Unlike Gson's
+     * Converts the JSON document in {@code json} to a Java object. Unlike JSON's
      * similar {@link JSON#fromJson(String, Class) fromJson} method, this read is
      * strict. Create a {@link JsonReader#setLenient(boolean) lenient} {@code
      * JsonReader} and call {@link #read(JsonReader)} for lenient reading.

@@ -28,7 +28,7 @@ import java.io.IOException;
 import java.io.Writer;
 
 /**
- * Reads and writes GSON parse trees over streams.
+ * Reads and writes JSON parse trees over streams.
  */
 public final class Streams {
     private Streams() {
