@@ -18,6 +18,7 @@ import com.alibaba.fastjson.parser.DefaultJSONParser;
 import com.alibaba.fastjson.serializer.JSONSerializer;
 import com.github.fangjinuo.easyjson.api.JsonException;
 import com.github.fangjinuo.easyjson.api.JsonHandler;
+import com.github.fangjinuo.easyjson.api.JsonTreeNode;
 
 import java.lang.reflect.Type;
 
@@ -31,6 +32,11 @@ public class FastJsonAdapter implements JsonHandler {
         parser.handleResovleTask(value);
         parser.close();
         return value;
+    }
+
+    @Override
+    public JsonTreeNode deserialize(String json) throws JsonException {
+        return null;
     }
 
     @Override
