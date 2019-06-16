@@ -22,10 +22,7 @@ import com.github.fangjinuo.easyjson.api.JSON;
 import com.github.fangjinuo.easyjson.api.JSONBuilder;
 import com.github.fangjinuo.easyjson.api.annotation.DependOn;
 import com.github.fangjinuo.easyjson.api.annotation.Name;
-import com.github.fangjinuo.easyjson.fastjson.codec.BooleanCodec;
-import com.github.fangjinuo.easyjson.fastjson.codec.FastJsonParserBuilder;
-import com.github.fangjinuo.easyjson.fastjson.codec.FastJsonSerializerBuilder;
-import com.github.fangjinuo.easyjson.fastjson.codec.NumberCodec;
+import com.github.fangjinuo.easyjson.fastjson.codec.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +49,13 @@ public class FastJsonJSONBuilder extends JSONBuilder {
         serializerBuilder.apply(numberCodec);
         deserializerBuilder.apply(numberCodec);
 
+        // date
+        DateCodec dateCodec = new DateCodec();
+        dateCodec.setDatePattern(serializeDateUsingPattern);
+        dateCodec.setDateFormat(dateFormat);
+        dateCodec.setUsingToString(serializeDateUsingToString);
+        serializerBuilder.apply(dateCodec);
+        deserializerBuilder.apply(dateCodec);
 
         FastJson fastJson = new FastJson(serializerBuilder, deserializerBuilder);
         FastJsonAdapter jsonHandler = new FastJsonAdapter();
@@ -61,7 +65,6 @@ public class FastJsonJSONBuilder extends JSONBuilder {
 
     private FastJsonSerializerBuilder buildSerializer() {
         SerializeConfig config = new SerializeConfig();
-        config.setAsmEnable(false);
         FastJsonSerializerBuilder builder = new FastJsonSerializerBuilder();
         builder.config(config);
         builder.addFeature(SerializerFeature.DisableCircularReferenceDetect);
