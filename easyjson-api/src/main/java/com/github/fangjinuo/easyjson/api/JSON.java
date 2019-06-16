@@ -21,8 +21,7 @@ import java.lang.reflect.Type;
 
 public class JSON {
 
-    JsonHandler jsonHandler;
-
+    private JsonHandler jsonHandler;
     /**
      * This method serialize the specified object into its equivalent Json representation.
      * This method should be used when the specified object is not a generic type. This method uses
@@ -50,6 +49,7 @@ public class JSON {
         }
         return jsonHandler.serialize(src, typeOfSrc);
     }
+
 
     /**
      * This method deserializes the specified Json into an object of the specified class. It is not
