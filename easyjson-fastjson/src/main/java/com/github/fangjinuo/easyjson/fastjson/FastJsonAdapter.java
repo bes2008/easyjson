@@ -19,6 +19,7 @@ import com.alibaba.fastjson.serializer.JSONSerializer;
 import com.github.fangjinuo.easyjson.api.JsonException;
 import com.github.fangjinuo.easyjson.api.JsonHandler;
 import com.github.fangjinuo.easyjson.api.JsonTreeNode;
+import com.github.fangjinuo.easyjson.api.tree.JsonTreeDeserializer;
 
 import java.lang.reflect.Type;
 
@@ -36,11 +37,15 @@ public class FastJsonAdapter implements JsonHandler {
 
     @Override
     public JsonTreeNode deserialize(String json) throws JsonException {
-        return null;
+        return new JsonTreeDeserializer().parse(json);
     }
 
     @Override
     public String serialize(Object src, Type typeOfT) throws JsonException {
+        if(src instanceof JsonTreeNode){
+            JsonTreeNode element = (JsonTreeNode) src;
+            return fastJson.getJsonTreeSerializerBuilder().build().toJson(element);
+        }
         JSONSerializer serializer = fastJson.getSerializerBuilder().build();
         serializer.write(src);
         return serializer.toString();

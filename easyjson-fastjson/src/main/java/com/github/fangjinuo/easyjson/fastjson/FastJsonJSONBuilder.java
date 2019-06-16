@@ -22,6 +22,7 @@ import com.github.fangjinuo.easyjson.api.JSON;
 import com.github.fangjinuo.easyjson.api.JSONBuilder;
 import com.github.fangjinuo.easyjson.api.annotation.DependOn;
 import com.github.fangjinuo.easyjson.api.annotation.Name;
+import com.github.fangjinuo.easyjson.api.tree.JsonTreeSerializerBuilder;
 import com.github.fangjinuo.easyjson.fastjson.codec.*;
 
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ public class FastJsonJSONBuilder extends JSONBuilder {
     public JSON build() {
         FastJsonSerializerBuilder serializerBuilder = buildSerializer();
         FastJsonParserBuilder deserializerBuilder = buildDeserializer();
+        JsonTreeSerializerBuilder jsonTreeSerializerBuilder = buildJsonTreeWriter();
 
         // boolean
         BooleanCodec booleanCodec = new BooleanCodec();
@@ -57,10 +59,14 @@ public class FastJsonJSONBuilder extends JSONBuilder {
         serializerBuilder.apply(dateCodec);
         deserializerBuilder.apply(dateCodec);
 
-        FastJson fastJson = new FastJson(serializerBuilder, deserializerBuilder);
+        FastJson fastJson = new FastJson(serializerBuilder, deserializerBuilder, jsonTreeSerializerBuilder);
         FastJsonAdapter jsonHandler = new FastJsonAdapter();
         jsonHandler.setFastJson(fastJson);
         return new JSON().setJsonHandler(jsonHandler);
+    }
+
+    private JsonTreeSerializerBuilder buildJsonTreeWriter(){
+        return new JsonTreeSerializerBuilder().setPrettyFormat(prettyFormat).setSerializeNulls(serializeNulls);
     }
 
     private FastJsonSerializerBuilder buildSerializer() {
