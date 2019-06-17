@@ -13,7 +13,7 @@
  *
  */
 
-package com.github.fangjinuo.easyjson.api;
+package com.github.fangjinuo.easyjson.api.exclusion;
 
 import com.github.fangjinuo.easyjson.api.util.FieldAttributes;
 

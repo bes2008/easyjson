@@ -15,7 +15,6 @@
 
 package com.github.fangjinuo.easyjson.api.exclusion;
 
-import com.github.fangjinuo.easyjson.api.Exclusion;
 import com.github.fangjinuo.easyjson.api.util.FieldAttributes;
 import com.github.fangjinuo.easyjson.api.util.Reflects;
 
