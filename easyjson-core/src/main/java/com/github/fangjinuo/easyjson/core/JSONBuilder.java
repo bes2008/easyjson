@@ -114,15 +114,15 @@ public abstract class JSONBuilder {
     }
 
     /**
-     * Configures Gson to excludes all class fields that have the specified modifiers. By default,
-     * Gson will exclude all fields marked transient or static. This method will override that
+     * Configures JSON to excludes all class fields that have the specified modifiers. By default,
+     * JSON will exclude all fields marked transient or static. This method will override that
      * behavior.
      *
      * @param modifiers the field modifiers. You must use the modifiers specified in the
      *                  {@link java.lang.reflect.Modifier} class. For example,
      *                  {@link java.lang.reflect.Modifier#TRANSIENT},
      *                  {@link java.lang.reflect.Modifier#STATIC}.
-     * @return a reference to this {@code GsonBuilder} object to fulfill the "Builder" pattern
+     * @return a reference to this {@code JSONBuilder} object to fulfill the "Builder" pattern
      */
     public JSONBuilder excludeFieldsWithModifiers(int... modifiers) {
         exclusionConfiguration.withModifiers(modifiers);
