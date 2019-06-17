@@ -16,6 +16,7 @@
 package com.github.fangjinuo.easyjson.api.util;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Modifier;
 
 public class Reflects {
     public static Annotation getDeclaredAnnotation(Class clazz, Class<? extends Annotation> annotationClazz){
@@ -26,5 +27,18 @@ public class Reflects {
             }
         }
         return null;
+    }
+
+    public static boolean isInnerClass(Class<?> clazz) {
+        return clazz.isMemberClass() && !isStatic(clazz);
+    }
+
+    public static boolean isStatic(Class<?> clazz) {
+        return (clazz.getModifiers() & Modifier.STATIC) != 0;
+    }
+
+    public static boolean isAnonymousOrLocal(Class<?> clazz) {
+        return !Enum.class.isAssignableFrom(clazz)
+                && (clazz.isAnonymousClass() || clazz.isLocalClass());
     }
 }
