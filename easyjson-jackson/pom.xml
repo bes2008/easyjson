@@ -20,7 +20,7 @@
         </dependency>
         <dependency>
             <groupId>com.github.fangjinuo.easyjson</groupId>
-            <artifactId>easyjson-api</artifactId>
+            <artifactId>easyjson-core</artifactId>
         </dependency>
     </dependencies>
 </project>
