@@ -24,51 +24,39 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public final class ExclusionConfiguration implements Cloneable {
+public final class ExclusionConfiguration {
 
     private int modifiers = Modifier.TRANSIENT | Modifier.STATIC;
     private boolean serializeInnerClasses = true;
     private List<Exclusion> serializationStrategies = Collections.emptyList();
     private List<Exclusion> deserializationStrategies = Collections.emptyList();
 
-    @Override
-    protected ExclusionConfiguration clone() {
-        try {
-            return (ExclusionConfiguration) super.clone();
-        } catch (CloneNotSupportedException e) {
-            throw new AssertionError(e);
-        }
-    }
-
     public ExclusionConfiguration withModifiers(int... modifiers) {
-        ExclusionConfiguration result = clone();
-        result.modifiers = 0;
+        this.modifiers = 0;
         for (int modifier : modifiers) {
-            result.modifiers |= modifier;
+            this.modifiers |= modifier;
         }
-        return result;
+        return this;
     }
 
     public ExclusionConfiguration disableInnerClassSerialization() {
-        ExclusionConfiguration result = clone();
-        result.serializeInnerClasses = false;
-        return result;
+        this.serializeInnerClasses = false;
+        return this;
     }
 
 
     public ExclusionConfiguration withExclusion(Exclusion Exclusion,
                                                 boolean serialization, boolean deserialization) {
-        ExclusionConfiguration result = clone();
         if (serialization) {
-            result.serializationStrategies = new ArrayList<Exclusion>(serializationStrategies);
-            result.serializationStrategies.add(Exclusion);
+            this.serializationStrategies = new ArrayList<Exclusion>(serializationStrategies);
+            this.serializationStrategies.add(Exclusion);
         }
         if (deserialization) {
-            result.deserializationStrategies
+            this.deserializationStrategies
                     = new ArrayList<Exclusion>(deserializationStrategies);
-            result.deserializationStrategies.add(Exclusion);
+            this.deserializationStrategies.add(Exclusion);
         }
-        return result;
+        return this;
     }
 
 
