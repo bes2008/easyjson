@@ -66,7 +66,7 @@ public class FastJsonJSONBuilder extends JSONBuilder {
         return new JSON().setJsonHandler(jsonHandler);
     }
 
-    private JsonTreeSerializerBuilder buildJsonTreeWriter(){
+    private JsonTreeSerializerBuilder buildJsonTreeWriter() {
         return new JsonTreeSerializerBuilder().setPrettyFormat(prettyFormat).setSerializeNulls(serializeNulls);
     }
 
@@ -75,6 +75,10 @@ public class FastJsonJSONBuilder extends JSONBuilder {
         FastJsonSerializerBuilder builder = new FastJsonSerializerBuilder();
         builder.config(config);
         builder.addFeature(SerializerFeature.DisableCircularReferenceDetect);
+        builder.addFeature(SerializerFeature.SkipTransientField);
+        if (prettyFormat) {
+            builder.addFeature(SerializerFeature.PrettyFormat);
+        }
         return builder;
     }
 

@@ -129,10 +129,6 @@ public abstract class JSONBuilder {
         return this;
     }
 
-    public JSONBuilder disableTransientField() {
-        return excludeFieldsWithModifiers(Modifier.TRANSIENT);
-    }
-
     public JSONBuilder disableInnerClassSerialization() {
         exclusionConfiguration.disableInnerClassSerialization();
         return this;
