@@ -15,10 +15,10 @@
 
 package com.github.fangjinuo.easyjson.gson;
 
-import com.github.fangjinuo.easyjson.api.JSON;
-import com.github.fangjinuo.easyjson.api.JSONBuilder;
-import com.github.fangjinuo.easyjson.api.annotation.DependOn;
-import com.github.fangjinuo.easyjson.api.annotation.Name;
+import com.github.fangjinuo.easyjson.core.JSON;
+import com.github.fangjinuo.easyjson.core.JSONBuilder;
+import com.github.fangjinuo.easyjson.core.annotation.DependOn;
+import com.github.fangjinuo.easyjson.core.annotation.Name;
 import com.github.fangjinuo.easyjson.gson.typeadapter.BooleanTypeAdapter;
 import com.github.fangjinuo.easyjson.gson.typeadapter.DateTypeAdapter;
 import com.github.fangjinuo.easyjson.gson.typeadapter.EnumTypeAdapter;

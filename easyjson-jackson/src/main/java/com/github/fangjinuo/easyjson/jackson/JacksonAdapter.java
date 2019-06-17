@@ -18,10 +18,10 @@ package com.github.fangjinuo.easyjson.jackson;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.fangjinuo.easyjson.api.JsonException;
-import com.github.fangjinuo.easyjson.api.JsonHandler;
-import com.github.fangjinuo.easyjson.api.JsonTreeNode;
-import com.github.fangjinuo.easyjson.api.util.type.Types;
+import com.github.fangjinuo.easyjson.core.JsonException;
+import com.github.fangjinuo.easyjson.core.JsonHandler;
+import com.github.fangjinuo.easyjson.core.JsonTreeNode;
+import com.github.fangjinuo.easyjson.core.util.type.Types;
 import com.github.fangjinuo.easyjson.jackson.node.JacksonBasedJsonTreeNodeMapper;
 
 import java.lang.reflect.ParameterizedType;

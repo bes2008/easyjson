@@ -17,7 +17,7 @@ package com.github.fangjinuo.easyjson.jackson.serializer;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.*;
-import com.github.fangjinuo.easyjson.api.util.type.Types;
+import com.github.fangjinuo.easyjson.core.util.type.Types;
 import com.github.fangjinuo.easyjson.jackson.Jacksons;
 
 import java.io.IOException;

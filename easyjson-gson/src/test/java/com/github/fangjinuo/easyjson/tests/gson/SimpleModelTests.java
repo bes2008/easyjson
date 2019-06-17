@@ -15,10 +15,10 @@
 
 package com.github.fangjinuo.easyjson.tests.gson;
 
-import com.github.fangjinuo.easyjson.api.JSONBuilder;
-import com.github.fangjinuo.easyjson.api.JSONBuilderProvider;
-import com.github.fangjinuo.easyjson.api.JsonTreeNode;
-import com.github.fangjinuo.easyjson.api.util.type.Types;
+import com.github.fangjinuo.easyjson.core.JSONBuilder;
+import com.github.fangjinuo.easyjson.core.JSONBuilderProvider;
+import com.github.fangjinuo.easyjson.core.JsonTreeNode;
+import com.github.fangjinuo.easyjson.core.util.type.Types;
 import com.github.fangjinuo.easyjson.tests.gson.struct.Contact;
 import com.github.fangjinuo.easyjson.tests.gson.struct.Gender;
 import com.github.fangjinuo.easyjson.tests.gson.struct.Person;
@@ -95,7 +95,7 @@ public class SimpleModelTests {
 
         System.out.println("=====================EasyJson [Gson] test start =============================");
         JSONBuilder jsonBuilder = JSONBuilderProvider.create();
-        com.github.fangjinuo.easyjson.api.JSON gson = jsonBuilder.serializeNulls().serializeNumberAsString().serializeEnumUsingValue().build();
+        com.github.fangjinuo.easyjson.core.JSON gson = jsonBuilder.serializeNulls().serializeNumberAsString().serializeEnumUsingValue().build();
 
         // test simple object
         String str1 = gson.toJson(person, person.getClass());
@@ -122,7 +122,7 @@ public class SimpleModelTests {
 
         System.out.println("=====================EasyJson tree [Gson] test start =============================");
         JSONBuilder jsonBuilder = JSONBuilderProvider.create();
-        com.github.fangjinuo.easyjson.api.JSON gson = jsonBuilder.serializeNulls().serializeNumberAsString().serializeEnumUsingValue().build();
+        com.github.fangjinuo.easyjson.core.JSON gson = jsonBuilder.serializeNulls().serializeNumberAsString().serializeEnumUsingValue().build();
 
         // test simple object
         String str1 = gson.toJson(person, person.getClass());

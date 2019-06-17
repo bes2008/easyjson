@@ -17,11 +17,9 @@ package com.github.fangjinuo.easyjson.jackson.node;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.*;
-import com.github.fangjinuo.easyjson.api.JsonTreeNode;
-import com.github.fangjinuo.easyjson.api.node.*;
+import com.github.fangjinuo.easyjson.core.JsonTreeNode;
+import com.github.fangjinuo.easyjson.core.node.*;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;

@@ -15,8 +15,8 @@
 
 package com.github.fangjinuo.easyjson.gson.node;
 
-import com.github.fangjinuo.easyjson.api.JsonTreeNode;
-import com.github.fangjinuo.easyjson.api.node.*;
+import com.github.fangjinuo.easyjson.core.JsonTreeNode;
+import com.github.fangjinuo.easyjson.core.node.*;
 import com.google.gson.*;
 
 import java.util.Map;

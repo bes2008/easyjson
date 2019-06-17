@@ -19,11 +19,11 @@ import com.alibaba.fastjson.parser.Feature;
 import com.alibaba.fastjson.parser.ParserConfig;
 import com.alibaba.fastjson.serializer.SerializeConfig;
 import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.github.fangjinuo.easyjson.api.JSON;
-import com.github.fangjinuo.easyjson.api.JSONBuilder;
-import com.github.fangjinuo.easyjson.api.annotation.DependOn;
-import com.github.fangjinuo.easyjson.api.annotation.Name;
-import com.github.fangjinuo.easyjson.api.tree.JsonTreeSerializerBuilder;
+import com.github.fangjinuo.easyjson.core.JSON;
+import com.github.fangjinuo.easyjson.core.JSONBuilder;
+import com.github.fangjinuo.easyjson.core.annotation.DependOn;
+import com.github.fangjinuo.easyjson.core.annotation.Name;
+import com.github.fangjinuo.easyjson.core.tree.JsonTreeSerializerBuilder;
 import com.github.fangjinuo.easyjson.fastjson.codec.*;
 
 import java.util.ArrayList;

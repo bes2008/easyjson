@@ -15,7 +15,7 @@
 
 package com.github.fangjinuo.easyjson.fastjson;
 
-import com.github.fangjinuo.easyjson.api.tree.JsonTreeSerializerBuilder;
+import com.github.fangjinuo.easyjson.core.tree.JsonTreeSerializerBuilder;
 import com.github.fangjinuo.easyjson.fastjson.codec.FastJsonParserBuilder;
 import com.github.fangjinuo.easyjson.fastjson.codec.FastJsonSerializerBuilder;
 
