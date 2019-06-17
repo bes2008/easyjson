@@ -30,7 +30,7 @@ public final class ExclusionConfiguration {
     /**
      * modifier exlusion:
      * default : transient, static
-     * else: you specified using {@link #withModifiers(int...)}
+     * else: you specified using {@link #overrideModifiers(int...)}
      */
     private List<Integer> modifiers = new ArrayList<Integer>(Arrays.asList(new Integer[]{Modifier.TRANSIENT, Modifier.STATIC}));
     private int _modifiers = Modifier.STATIC | Modifier.TRANSIENT;
@@ -61,7 +61,7 @@ public final class ExclusionConfiguration {
      * @param modifier
      * @return
      */
-    public ExclusionConfiguration withModifier(int modifier) {
+    public ExclusionConfiguration appendModifier(int modifier) {
         this.modifiers.add(modifier);
         _modifiers |= modifier;
         return this;
@@ -72,7 +72,7 @@ public final class ExclusionConfiguration {
      * @param modifiers
      * @return
      */
-    public ExclusionConfiguration withModifiers(int... modifiers) {
+    public ExclusionConfiguration overrideModifiers(int... modifiers) {
         this.modifiers.clear();
         for (int modifier : modifiers) {
             this.modifiers.add(modifier);

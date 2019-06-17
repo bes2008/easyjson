@@ -18,7 +18,6 @@ package com.github.fangjinuo.easyjson.core;
 import com.github.fangjinuo.easyjson.core.exclusion.Exclusion;
 import com.github.fangjinuo.easyjson.core.exclusion.ExclusionConfiguration;
 
-import java.lang.reflect.Modifier;
 import java.text.DateFormat;
 
 public abstract class JSONBuilder {
@@ -125,7 +124,14 @@ public abstract class JSONBuilder {
      * @return a reference to this {@code JSONBuilder} object to fulfill the "Builder" pattern
      */
     public JSONBuilder excludeFieldsWithModifiers(int... modifiers) {
-        exclusionConfiguration.withModifiers(modifiers);
+        exclusionConfiguration.overrideModifiers(modifiers);
+        return this;
+    }
+
+    public JSONBuilder excludeFieldsWithAppendModifiers(int... modifiers) {
+        for (int modifier : modifiers) {
+            exclusionConfiguration.appendModifier(modifier);
+        }
         return this;
     }
 
