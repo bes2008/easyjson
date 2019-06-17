@@ -20,7 +20,6 @@ import com.github.fangjinuo.easyjson.core.JSONBuilder;
 import com.github.fangjinuo.easyjson.core.annotation.DependOn;
 import com.github.fangjinuo.easyjson.core.annotation.Name;
 import com.github.fangjinuo.easyjson.core.exclusion.Exclusion;
-import com.github.fangjinuo.easyjson.core.exclusion.ExclusionConfiguration;
 import com.github.fangjinuo.easyjson.gson.exclusion.DelegateExclusionStrategy;
 import com.github.fangjinuo.easyjson.gson.typeadapter.BooleanTypeAdapter;
 import com.github.fangjinuo.easyjson.gson.typeadapter.DateTypeAdapter;
@@ -87,7 +86,7 @@ public class GsonJSONBuilder extends JSONBuilder {
         for (Exclusion exclusion : exclusionConfiguration.getSerializationStrategies()) {
             gsonBuilder.addSerializationExclusionStrategy(new DelegateExclusionStrategy(exclusion));
         }
-        if(exclusionConfiguration.isSerializeInnerClasses()){
+        if (exclusionConfiguration.isSerializeInnerClasses()) {
             gsonBuilder.disableInnerClassSerialization();
         }
 
