@@ -21,20 +21,43 @@ import com.github.fangjinuo.easyjson.core.util.Reflects;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 public final class ExclusionConfiguration {
 
-    private int modifiers = Modifier.TRANSIENT | Modifier.STATIC;
+    private List<Integer> modifiers = new ArrayList<Integer>(Arrays.asList(new Integer[]{Modifier.TRANSIENT, Modifier.STATIC}));
+    private int _modifiers = 0;
+
     private boolean serializeInnerClasses = true;
     private List<Exclusion> serializationStrategies = Collections.emptyList();
     private List<Exclusion> deserializationStrategies = Collections.emptyList();
 
+
+    public List<Integer> getModifiers(){
+        return modifiers;
+    }
+
+    public boolean isSerializeInnerClasses() {
+        return serializeInnerClasses;
+    }
+
+    public List<Exclusion> isSerializationStrategies(){
+        return serializationStrategies;
+    }
+
+    public List<Exclusion> isDeserializationStrategies(){
+        return deserializationStrategies;
+    }
+
+
     public ExclusionConfiguration withModifiers(int... modifiers) {
-        this.modifiers = 0;
         for (int modifier : modifiers) {
-            this.modifiers |= modifier;
+            this.modifiers.add(modifier);
+        }
+        for (int modifier : modifiers) {
+            _modifiers |= modifier;
         }
         return this;
     }
@@ -60,8 +83,8 @@ public final class ExclusionConfiguration {
     }
 
 
-    public boolean excludeField(Field field, boolean serialize) {
-        if ((modifiers & field.getModifiers()) != 0) {
+    public boolean isExcludedField(Field field, boolean serialize) {
+        if ((_modifiers & field.getModifiers()) != 0) {
             return true;
         }
         if (field.isSynthetic()) {
@@ -88,7 +111,7 @@ public final class ExclusionConfiguration {
         return false;
     }
 
-    private boolean excludeClassChecks(Class<?> clazz) {
+    private boolean excludedClassChecks(Class<?> clazz) {
         if (!serializeInnerClasses && Reflects.isInnerClass(clazz)) {
             return true;
         }
@@ -100,12 +123,12 @@ public final class ExclusionConfiguration {
         return false;
     }
 
-    public boolean excludeClass(Class<?> clazz, boolean serialize) {
-        return excludeClassChecks(clazz) ||
-                excludeClassInStrategy(clazz, serialize);
+    public boolean isExcludedClass(Class<?> clazz, boolean serialize) {
+        return excludedClassChecks(clazz) ||
+                isExcludedClassInStrategy(clazz, serialize);
     }
 
-    private boolean excludeClassInStrategy(Class<?> clazz, boolean serialize) {
+    private boolean isExcludedClassInStrategy(Class<?> clazz, boolean serialize) {
         List<Exclusion> list = serialize ? serializationStrategies : deserializationStrategies;
         for (Exclusion Exclusion : list) {
             if (Exclusion.shouldSkipClass(clazz)) {
