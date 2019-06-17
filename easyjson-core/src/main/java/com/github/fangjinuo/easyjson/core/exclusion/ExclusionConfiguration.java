@@ -24,8 +24,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public final class Excluder implements Cloneable {
-    public static final Excluder DEFAULT = new Excluder();
+public final class ExclusionConfiguration implements Cloneable {
 
     private int modifiers = Modifier.TRANSIENT | Modifier.STATIC;
     private boolean serializeInnerClasses = true;
@@ -33,16 +32,16 @@ public final class Excluder implements Cloneable {
     private List<Exclusion> deserializationStrategies = Collections.emptyList();
 
     @Override
-    protected Excluder clone() {
+    protected ExclusionConfiguration clone() {
         try {
-            return (Excluder) super.clone();
+            return (ExclusionConfiguration) super.clone();
         } catch (CloneNotSupportedException e) {
             throw new AssertionError(e);
         }
     }
 
-    public Excluder withModifiers(int... modifiers) {
-        Excluder result = clone();
+    public ExclusionConfiguration withModifiers(int... modifiers) {
+        ExclusionConfiguration result = clone();
         result.modifiers = 0;
         for (int modifier : modifiers) {
             result.modifiers |= modifier;
@@ -50,16 +49,16 @@ public final class Excluder implements Cloneable {
         return result;
     }
 
-    public Excluder disableInnerClassSerialization() {
-        Excluder result = clone();
+    public ExclusionConfiguration disableInnerClassSerialization() {
+        ExclusionConfiguration result = clone();
         result.serializeInnerClasses = false;
         return result;
     }
 
 
-    public Excluder withExclusion(Exclusion Exclusion,
-                                  boolean serialization, boolean deserialization) {
-        Excluder result = clone();
+    public ExclusionConfiguration withExclusion(Exclusion Exclusion,
+                                                boolean serialization, boolean deserialization) {
+        ExclusionConfiguration result = clone();
         if (serialization) {
             result.serializationStrategies = new ArrayList<Exclusion>(serializationStrategies);
             result.serializationStrategies.add(Exclusion);
