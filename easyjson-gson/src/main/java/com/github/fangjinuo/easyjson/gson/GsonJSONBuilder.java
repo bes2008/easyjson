@@ -75,17 +75,20 @@ public class GsonJSONBuilder extends JSONBuilder {
         }
 
         // exclusion
-        List<Integer> modifiers  = exclusionConfiguration.getModifiers();
+        List<Integer> modifiers = exclusionConfiguration.getModifiers();
         int[] modifiers0 = new int[modifiers.size()];
-        for (int i=0;i<modifiers.size();i++){
+        for (int i = 0; i < modifiers.size(); i++) {
             modifiers0[i] = modifiers.get(i);
         }
         gsonBuilder.excludeFieldsWithModifiers(modifiers0);
-        for(Exclusion exclusion : exclusionConfiguration.getDeserializationStrategies()){
+        for (Exclusion exclusion : exclusionConfiguration.getDeserializationStrategies()) {
             gsonBuilder.addDeserializationExclusionStrategy(new DelegateExclusionStrategy(exclusion));
         }
-        for(Exclusion exclusion : exclusionConfiguration.getSerializationStrategies()){
+        for (Exclusion exclusion : exclusionConfiguration.getSerializationStrategies()) {
             gsonBuilder.addSerializationExclusionStrategy(new DelegateExclusionStrategy(exclusion));
+        }
+        if(exclusionConfiguration.isSerializeInnerClasses()){
+            gsonBuilder.disableInnerClassSerialization();
         }
 
         Gson gson = gsonBuilder.create();
