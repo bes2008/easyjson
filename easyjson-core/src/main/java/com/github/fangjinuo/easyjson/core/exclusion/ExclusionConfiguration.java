@@ -27,15 +27,20 @@ import java.util.List;
 
 public final class ExclusionConfiguration {
 
+    /**
+     * modifier exlusion:
+     * default : transient, static
+     * else: you specified using {@link #withModifiers(int...)}
+     */
     private List<Integer> modifiers = new ArrayList<Integer>(Arrays.asList(new Integer[]{Modifier.TRANSIENT, Modifier.STATIC}));
-    private int _modifiers = 0;
+    private int _modifiers = Modifier.STATIC | Modifier.TRANSIENT;
 
     private boolean serializeInnerClasses = true;
     private List<Exclusion> serializationStrategies = Collections.emptyList();
     private List<Exclusion> deserializationStrategies = Collections.emptyList();
 
 
-    public List<Integer> getModifiers(){
+    public List<Integer> getModifiers() {
         return modifiers;
     }
 
@@ -43,19 +48,36 @@ public final class ExclusionConfiguration {
         return serializeInnerClasses;
     }
 
-    public List<Exclusion> isSerializationStrategies(){
+    public List<Exclusion> isSerializationStrategies() {
         return serializationStrategies;
     }
 
-    public List<Exclusion> isDeserializationStrategies(){
+    public List<Exclusion> isDeserializationStrategies() {
         return deserializationStrategies;
     }
 
+    /**
+     * append modifier
+     * @param modifier
+     * @return
+     */
+    public ExclusionConfiguration withModifier(int modifier) {
+        this.modifiers.add(modifier);
+        _modifiers |= modifier;
+        return this;
+    }
 
+    /**
+     * override modifiers
+     * @param modifiers
+     * @return
+     */
     public ExclusionConfiguration withModifiers(int... modifiers) {
+        this.modifiers.clear();
         for (int modifier : modifiers) {
             this.modifiers.add(modifier);
         }
+        _modifiers = 0;
         for (int modifier : modifiers) {
             _modifiers |= modifier;
         }
