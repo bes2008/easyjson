@@ -8,7 +8,7 @@
     <artifactId>easyjson</artifactId>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>easyjson-api</module>
+        <module>easyjson-core</module>
         <module>easyjson-gson</module>
         <module>easyjson-jackson</module>
         <module>easyjson-fastjson</module>
