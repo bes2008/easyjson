@@ -19,6 +19,9 @@ import com.github.fangjinuo.easyjson.core.JSON;
 import com.github.fangjinuo.easyjson.core.JSONBuilder;
 import com.github.fangjinuo.easyjson.core.annotation.DependOn;
 import com.github.fangjinuo.easyjson.core.annotation.Name;
+import com.github.fangjinuo.easyjson.core.exclusion.Exclusion;
+import com.github.fangjinuo.easyjson.core.exclusion.ExclusionConfiguration;
+import com.github.fangjinuo.easyjson.gson.exclusion.DelegateExclusionStrategy;
 import com.github.fangjinuo.easyjson.gson.typeadapter.BooleanTypeAdapter;
 import com.github.fangjinuo.easyjson.gson.typeadapter.DateTypeAdapter;
 import com.github.fangjinuo.easyjson.gson.typeadapter.EnumTypeAdapter;
@@ -27,6 +30,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.util.Date;
+import java.util.List;
 
 @Name("gson")
 @DependOn("com.google.gson.Gson")
@@ -65,8 +69,23 @@ public class GsonJSONBuilder extends JSONBuilder {
         enumTypeAdapter.setUsingToString(serializeEnumUsingToString);
         gsonBuilder.registerTypeHierarchyAdapter(Enum.class, enumTypeAdapter);
 
+        // pretty printing
         if (prettyFormat) {
             gsonBuilder.setPrettyPrinting();
+        }
+
+        // exclusion
+        List<Integer> modifiers  = exclusionConfiguration.getModifiers();
+        int[] modifiers0 = new int[modifiers.size()];
+        for (int i=0;i<modifiers.size();i++){
+            modifiers0[i] = modifiers.get(i);
+        }
+        gsonBuilder.excludeFieldsWithModifiers(modifiers0);
+        for(Exclusion exclusion : exclusionConfiguration.getDeserializationStrategies()){
+            gsonBuilder.addDeserializationExclusionStrategy(new DelegateExclusionStrategy(exclusion));
+        }
+        for(Exclusion exclusion : exclusionConfiguration.getSerializationStrategies()){
+            gsonBuilder.addSerializationExclusionStrategy(new DelegateExclusionStrategy(exclusion));
         }
 
         Gson gson = gsonBuilder.create();

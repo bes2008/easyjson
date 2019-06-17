@@ -157,5 +157,9 @@ public abstract class JSONBuilder {
         return this;
     }
 
+    public ExclusionConfiguration getExclusionConfiguration() {
+        return exclusionConfiguration;
+    }
+
     public abstract JSON build();
 }

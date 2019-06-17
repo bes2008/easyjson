@@ -21,7 +21,7 @@ import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Collection;
 
-public final class FieldAttributes {
+public class FieldAttributes {
     private final Field field;
 
     /**
@@ -30,7 +30,6 @@ public final class FieldAttributes {
      * @param f the field to pull attributes from
      */
     public FieldAttributes(Field f) {
-        Preconditions.checkNotNull(f);
         this.field = f;
     }
 

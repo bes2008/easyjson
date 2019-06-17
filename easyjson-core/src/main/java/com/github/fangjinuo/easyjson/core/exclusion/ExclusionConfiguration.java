@@ -48,11 +48,11 @@ public final class ExclusionConfiguration {
         return serializeInnerClasses;
     }
 
-    public List<Exclusion> isSerializationStrategies() {
+    public List<Exclusion> getSerializationStrategies() {
         return serializationStrategies;
     }
 
-    public List<Exclusion> isDeserializationStrategies() {
+    public List<Exclusion> getDeserializationStrategies() {
         return deserializationStrategies;
     }
 
