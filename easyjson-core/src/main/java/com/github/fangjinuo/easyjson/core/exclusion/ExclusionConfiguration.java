@@ -26,7 +26,7 @@ import java.util.List;
 
 public final class ExclusionConfiguration {
 
-    private int modifiers = Modifier.TRANSIENT | Modifier.STATIC;
+    private int modifiers = Modifier.STATIC;
     private boolean serializeInnerClasses = true;
     private List<Exclusion> serializationStrategies = Collections.emptyList();
     private List<Exclusion> deserializationStrategies = Collections.emptyList();

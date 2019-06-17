@@ -15,6 +15,10 @@
 
 package com.github.fangjinuo.easyjson.core;
 
+import com.github.fangjinuo.easyjson.core.exclusion.Exclusion;
+import com.github.fangjinuo.easyjson.core.exclusion.ExclusionConfiguration;
+
+import java.lang.reflect.Modifier;
 import java.text.DateFormat;
 
 public abstract class JSONBuilder {
@@ -27,7 +31,7 @@ public abstract class JSONBuilder {
     protected String serializeEnumUsingField = null;
 
     // date priority: dateFormat > pattern > toString() > timestamp []
-    protected DateFormat dateFormat=null;
+    protected DateFormat dateFormat = null;
     protected String serializeDateUsingPattern = null;// default : using timestamp
     protected boolean serializeDateUsingToString = false;
 
@@ -41,6 +45,8 @@ public abstract class JSONBuilder {
 
     // print format
     protected boolean prettyFormat = false;
+
+    protected final ExclusionConfiguration exclusionConfiguration = new ExclusionConfiguration();
 
     public JSONBuilder() {
     }
@@ -82,7 +88,7 @@ public abstract class JSONBuilder {
         return this;
     }
 
-    public JSONBuilder serializeUseDateFormat(DateFormat df){
+    public JSONBuilder serializeUseDateFormat(DateFormat df) {
         this.dateFormat = df;
         return this;
     }
@@ -107,6 +113,47 @@ public abstract class JSONBuilder {
         return this;
     }
 
+    /**
+     * Configures Gson to excludes all class fields that have the specified modifiers. By default,
+     * Gson will exclude all fields marked transient or static. This method will override that
+     * behavior.
+     *
+     * @param modifiers the field modifiers. You must use the modifiers specified in the
+     *                  {@link java.lang.reflect.Modifier} class. For example,
+     *                  {@link java.lang.reflect.Modifier#TRANSIENT},
+     *                  {@link java.lang.reflect.Modifier#STATIC}.
+     * @return a reference to this {@code GsonBuilder} object to fulfill the "Builder" pattern
+     */
+    public JSONBuilder excludeFieldsWithModifiers(int... modifiers) {
+        exclusionConfiguration.withModifiers(modifiers);
+        return this;
+    }
+
+    public JSONBuilder disableTransientField() {
+        return excludeFieldsWithModifiers(Modifier.TRANSIENT);
+    }
+
+    public JSONBuilder disableInnerClassSerialization() {
+        exclusionConfiguration.disableInnerClassSerialization();
+        return this;
+    }
+
+    public JSONBuilder addExclusionStrategies(Exclusion... strategies) {
+        for (Exclusion strategy : strategies) {
+            exclusionConfiguration.withExclusion(strategy, true, true);
+        }
+        return this;
+    }
+
+    public JSONBuilder addSerializationExclusion(Exclusion strategy) {
+        exclusionConfiguration.withExclusion(strategy, true, false);
+        return this;
+    }
+
+    public JSONBuilder addDeserializationExclusion(Exclusion strategy) {
+        exclusionConfiguration.withExclusion(strategy, false, true);
+        return this;
+    }
 
     public abstract JSON build();
 }

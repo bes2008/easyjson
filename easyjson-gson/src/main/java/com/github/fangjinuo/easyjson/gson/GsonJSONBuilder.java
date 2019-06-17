@@ -31,6 +31,7 @@ import java.util.Date;
 @Name("gson")
 @DependOn("com.google.gson.Gson")
 public class GsonJSONBuilder extends JSONBuilder {
+    @Override
     public JSON build() {
         GsonBuilder gsonBuilder = new GsonBuilder();
         // Null
