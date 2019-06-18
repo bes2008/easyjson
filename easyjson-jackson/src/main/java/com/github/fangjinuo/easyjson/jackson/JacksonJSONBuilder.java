@@ -152,7 +152,7 @@ public class JacksonJSONBuilder extends JSONBuilder {
         configDate(mapper);
 
         mapper.configure(SerializationFeature.INDENT_OUTPUT, prettyFormat);
-
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         JacksonAdapter jsonHandler = new JacksonAdapter();
         jsonHandler.setObjectMapper(mapper);
         JSON json = new JSON();
