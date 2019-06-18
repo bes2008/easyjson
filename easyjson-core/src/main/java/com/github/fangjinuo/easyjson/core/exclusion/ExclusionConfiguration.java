@@ -90,8 +90,8 @@ public final class ExclusionConfiguration {
     }
 
 
-    public ExclusionConfiguration withExclusion(Exclusion Exclusion,
-                                                boolean serialization, boolean deserialization) {
+    public ExclusionConfiguration appendExclusion(Exclusion Exclusion,
+                                                  boolean serialization, boolean deserialization) {
         if (serialization) {
             this.serializationStrategies = new ArrayList<Exclusion>(serializationStrategies);
             this.serializationStrategies.add(Exclusion);

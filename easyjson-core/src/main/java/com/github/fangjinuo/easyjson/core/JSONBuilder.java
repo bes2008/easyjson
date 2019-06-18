@@ -17,6 +17,7 @@ package com.github.fangjinuo.easyjson.core;
 
 import com.github.fangjinuo.easyjson.core.exclusion.Exclusion;
 import com.github.fangjinuo.easyjson.core.exclusion.ExclusionConfiguration;
+import com.github.fangjinuo.easyjson.core.exclusion.IgnoreAnnotationExclusion;
 
 import java.text.DateFormat;
 
@@ -112,6 +113,12 @@ public abstract class JSONBuilder {
         return this;
     }
 
+    public JSONBuilder enableIgnoreAnnotation(){
+        IgnoreAnnotationExclusion ignoreAnnotationExclusion = new IgnoreAnnotationExclusion();
+        exclusionConfiguration.appendExclusion(ignoreAnnotationExclusion, true, true);
+        return this;
+    }
+
     /**
      * Configures JSON to excludes all class fields that have the specified modifiers. By default,
      * JSON will exclude all fields marked transient or static. This method will override that
@@ -142,18 +149,18 @@ public abstract class JSONBuilder {
 
     public JSONBuilder addExclusionStrategies(Exclusion... strategies) {
         for (Exclusion strategy : strategies) {
-            exclusionConfiguration.withExclusion(strategy, true, true);
+            exclusionConfiguration.appendExclusion(strategy, true, true);
         }
         return this;
     }
 
     public JSONBuilder addSerializationExclusion(Exclusion strategy) {
-        exclusionConfiguration.withExclusion(strategy, true, false);
+        exclusionConfiguration.appendExclusion(strategy, true, false);
         return this;
     }
 
     public JSONBuilder addDeserializationExclusion(Exclusion strategy) {
-        exclusionConfiguration.withExclusion(strategy, false, true);
+        exclusionConfiguration.appendExclusion(strategy, false, true);
         return this;
     }
 

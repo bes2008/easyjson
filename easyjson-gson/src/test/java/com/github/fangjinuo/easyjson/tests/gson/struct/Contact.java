@@ -15,11 +15,14 @@
 
 package com.github.fangjinuo.easyjson.tests.gson.struct;
 
+import com.github.fangjinuo.easyjson.core.annotation.Ignore;
+
 public class Contact {
     private String email;
     private String phone;
     private String mobilePhone;
     private String qq;
+    @Ignore
     private String msn;
     private String webchat;
 

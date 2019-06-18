@@ -95,7 +95,7 @@ public class SimpleModelTests {
 
         System.out.println("=====================EasyJson [Gson] test start =============================");
         JSONBuilder jsonBuilder = JSONBuilderProvider.create();
-        com.github.fangjinuo.easyjson.core.JSON gson = jsonBuilder.serializeNulls().serializeNumberAsString().serializeEnumUsingValue().build();
+        com.github.fangjinuo.easyjson.core.JSON gson = jsonBuilder.serializeNulls().serializeNumberAsString().serializeEnumUsingValue().enableIgnoreAnnotation().build();
 
         // test simple object
         String str1 = gson.toJson(person, person.getClass());
@@ -122,7 +122,7 @@ public class SimpleModelTests {
 
         System.out.println("=====================EasyJson tree [Gson] test start =============================");
         JSONBuilder jsonBuilder = JSONBuilderProvider.create();
-        com.github.fangjinuo.easyjson.core.JSON gson = jsonBuilder.serializeNulls().serializeNumberAsString().serializeEnumUsingValue().build();
+        com.github.fangjinuo.easyjson.core.JSON gson = jsonBuilder.serializeNulls().serializeNumberAsString().serializeEnumUsingValue().enableIgnoreAnnotation().build();
 
         // test simple object
         String str1 = gson.toJson(person, person.getClass());
