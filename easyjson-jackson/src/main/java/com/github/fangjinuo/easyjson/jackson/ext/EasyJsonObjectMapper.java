@@ -18,6 +18,7 @@ package com.github.fangjinuo.easyjson.jackson.ext;
 import com.fasterxml.jackson.databind.DeserializationConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationConfig;
+import com.fasterxml.jackson.databind.cfg.DeserializerFactoryConfig;
 import com.fasterxml.jackson.databind.deser.DefaultDeserializationContext;
 import com.github.fangjinuo.easyjson.jackson.JacksonJSONBuilder;
 
@@ -27,13 +28,13 @@ public class EasyJsonObjectMapper extends ObjectMapper {
 
     public EasyJsonObjectMapper() {
         super();
-        setDefaultDeserializationContext(new DefaultDeserializationContext.Impl(EasyJsonBeanDeserializerFactory.instance));
+        setDefaultDeserializationContext(new DefaultDeserializationContext.Impl(new EasyJsonBeanDeserializerFactory(new DeserializerFactoryConfig(),this)));
         setSerializerFactory(new EasyJsonBeanSerializerFactory(null, this));
     }
 
     public EasyJsonObjectMapper(ObjectMapper src) {
         super(src);
-        setDefaultDeserializationContext(new DefaultDeserializationContext.Impl(EasyJsonBeanDeserializerFactory.instance));
+        setDefaultDeserializationContext(new DefaultDeserializationContext.Impl(new EasyJsonBeanDeserializerFactory(new DeserializerFactoryConfig(),this)));
         setSerializerFactory(new EasyJsonBeanSerializerFactory(null, this));
     }
 

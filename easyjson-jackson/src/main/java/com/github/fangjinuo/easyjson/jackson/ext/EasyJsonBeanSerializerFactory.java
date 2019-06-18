@@ -73,7 +73,6 @@ public class EasyJsonBeanSerializerFactory extends BeanSerializerFactory {
                         }
                     }
                 }
-
             }else{
                 properties.clear();
             }
