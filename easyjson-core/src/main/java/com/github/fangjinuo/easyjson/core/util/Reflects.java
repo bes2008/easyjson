@@ -16,6 +16,7 @@
 package com.github.fangjinuo.easyjson.core.util;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
 public class Reflects {
@@ -40,5 +41,25 @@ public class Reflects {
     public static boolean isAnonymousOrLocal(Class<?> clazz) {
         return !Enum.class.isAssignableFrom(clazz)
                 && (clazz.isAnonymousClass() || clazz.isLocalClass());
+    }
+
+    public static Field getField(Class clazz, String fieldName){
+        Field field = null;
+        try {
+            field = clazz.getField(fieldName);
+        } catch (NoSuchFieldException e) {
+            // ignore it
+        }
+        return field;
+    }
+
+    public static Field getDeclaredField(Class clazz, String fieldName){
+        Field field = null;
+        try {
+            field = clazz.getDeclaredField(fieldName);
+        } catch (NoSuchFieldException e) {
+            // ignore it
+        }
+        return field;
     }
 }

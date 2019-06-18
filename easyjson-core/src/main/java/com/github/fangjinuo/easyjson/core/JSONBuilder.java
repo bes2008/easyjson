@@ -113,8 +113,10 @@ public abstract class JSONBuilder {
         return this;
     }
 
+    protected boolean ignoreAnnotationForSerialize = false;
     public JSONBuilder enableIgnoreAnnotation(){
         IgnoreAnnotationExclusion ignoreAnnotationExclusion = new IgnoreAnnotationExclusion();
+        ignoreAnnotationForSerialize = true;
         exclusionConfiguration.appendExclusion(ignoreAnnotationExclusion, true, true);
         return this;
     }
