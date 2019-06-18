@@ -26,17 +26,28 @@ import com.alibaba.fastjson.util.ASMUtils;
 import com.alibaba.fastjson.util.FieldInfo;
 import com.alibaba.fastjson.util.JavaBeanInfo;
 import com.alibaba.fastjson.util.TypeUtils;
+import com.github.fangjinuo.easyjson.core.exclusion.ExclusionConfiguration;
+import com.github.fangjinuo.easyjson.fastjson.FastJsonJSONBuilder;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EasyJsonParserConfig extends ParserConfig {
+    private FastJsonJSONBuilder jsonJSONBuilder;
+
+    public EasyJsonParserConfig(FastJsonJSONBuilder builder) {
+        super();
+        this.jsonJSONBuilder = builder;
+    }
+
     @Override
     public ObjectDeserializer createJavaBeanDeserializer(Class<?> clazz, Type type) {
         boolean asmEnable = this.isAsmEnable() & !this.fieldBased;
         if (asmEnable) {
-            JSONType jsonType = TypeUtils.getAnnotation(clazz,JSONType.class);
+            JSONType jsonType = TypeUtils.getAnnotation(clazz, JSONType.class);
 
             if (jsonType != null) {
                 Class<?> deserializerClass = jsonType.deserializer();
@@ -60,7 +71,7 @@ public class EasyJsonParserConfig extends ParserConfig {
                     superClass = clazz;
                 }
 
-                for (;;) {
+                for (; ; ) {
                     if (!Modifier.isPublic(superClass.getModifiers())) {
                         asmEnable = false;
                         break;
@@ -93,7 +104,7 @@ public class EasyJsonParserConfig extends ParserConfig {
             JavaBeanInfo beanInfo = JavaBeanInfo.build(clazz
                     , type
                     , propertyNamingStrategy
-                    ,false
+                    , false
                     , TypeUtils.compatibleWithJavaBean
                     , isJacksonCompatible()
             );
@@ -106,7 +117,9 @@ public class EasyJsonParserConfig extends ParserConfig {
             if (asmEnable && defaultConstructor == null && !clazz.isInterface()) {
                 asmEnable = false;
             }
-
+            // ==========EasyJson start=================
+            beanInfo = filterFields(beanInfo);
+            //===========EasyJson end===================
             for (FieldInfo fieldInfo : beanInfo.fields) {
                 if (fieldInfo.getOnly) {
                     asmEnable = false;
@@ -168,17 +181,67 @@ public class EasyJsonParserConfig extends ParserConfig {
         }
 
         JavaBeanInfo beanInfo = JavaBeanInfo.build(clazz, type, propertyNamingStrategy);
+        // ==========EasyJson start=================
+        beanInfo = filterFields(beanInfo);
+        //===========EasyJson end===================
         try {
             return asmFactory.createJavaBeanDeserializer(this, beanInfo);
             // } catch (VerifyError e) {
             // e.printStackTrace();
             // return new JavaBeanDeserializer(this, clazz, type);
         } catch (NoSuchMethodException ex) {
-            return new JavaBeanDeserializer(this, clazz, type);
+            // return new JavaBeanDeserializer(this, clazz, type);
+            //=================EasyJson start========================
+            return new EasyJsonJavaBeanDeserializer(this, clazz, type);
+            //=================EasyJson end==========================
         } catch (JSONException asmError) {
             return new JavaBeanDeserializer(this, beanInfo);
         } catch (Exception e) {
             throw new JSONException("create asm deserializer error, " + clazz.getName(), e);
         }
+    }
+
+    public JavaBeanInfo filterFields(JavaBeanInfo beanInfo) {
+        // ==========EasyJson start=================
+        Class clazz = beanInfo.clazz;
+        if (jsonJSONBuilder != null) {
+
+            ExclusionConfiguration exclusionConfiguration = jsonJSONBuilder.getExclusionConfiguration();
+            if (!exclusionConfiguration.isExcludedClass(clazz, false)) {
+                FieldInfo[] fields = beanInfo.fields;
+                if (fields != null) {
+                    List<FieldInfo> fieldInfoes = new ArrayList<FieldInfo>();
+                    for (FieldInfo fieldInfo : fields) {
+                        if (exclusionConfiguration.isExcludedField(fieldInfo.field, false)) {
+                            continue;
+                        }
+                        fieldInfoes.add(fieldInfo);
+                    }
+                    if (fieldInfoes.size() != fields.length) {
+                        beanInfo = new JavaBeanInfo(clazz,
+                                beanInfo.builderClass,
+                                beanInfo.defaultConstructor,
+                                beanInfo.creatorConstructor,
+                                beanInfo.factoryMethod,
+                                beanInfo.buildMethod,
+                                beanInfo.jsonType,
+                                fieldInfoes);
+                    }
+                }
+            } else {
+                if (beanInfo.fields.length > 0) {
+                    beanInfo = new JavaBeanInfo(clazz,
+                            beanInfo.builderClass,
+                            beanInfo.defaultConstructor,
+                            beanInfo.creatorConstructor,
+                            beanInfo.factoryMethod,
+                            beanInfo.buildMethod,
+                            beanInfo.jsonType,
+                            new ArrayList<FieldInfo>(0));
+                }
+            }
+        }
+        return beanInfo;
+        //===========EasyJson end===================
     }
 }
