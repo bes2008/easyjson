@@ -19,45 +19,62 @@ import com.alibaba.fastjson.serializer.ObjectSerializer;
 import com.alibaba.fastjson.serializer.SerializeBeanInfo;
 import com.alibaba.fastjson.serializer.SerializeConfig;
 import com.alibaba.fastjson.util.FieldInfo;
-import com.github.fangjinuo.easyjson.core.annotation.Ignore;
-import com.github.fangjinuo.easyjson.core.util.FieldAttributes;
+import com.github.fangjinuo.easyjson.core.exclusion.ExclusionConfiguration;
+import com.github.fangjinuo.easyjson.fastjson.FastJsonJSONBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class EasyFastJsonSerializeConfig extends SerializeConfig {
-    public EasyFastJsonSerializeConfig() {
+    private FastJsonJSONBuilder jsonJSONBuilder;
+    public EasyFastJsonSerializeConfig(FastJsonJSONBuilder jsonJSONBuilder) {
         super();
+        this.jsonJSONBuilder = jsonJSONBuilder;
     }
 
     @Override
     public ObjectSerializer createJavaBeanSerializer(SerializeBeanInfo beanInfo) {
         SerializeBeanInfoGetter getter = new SerializeBeanInfoGetter(beanInfo);
-        FieldInfo[] fields = getter.getFields();
-        FieldInfo[] sortedFields = getter.getSortedFields();
+        Class<?> beanType = getter.getBeanType();
+        ExclusionConfiguration exclusionConfiguration = jsonJSONBuilder.getExclusionConfiguration();
+        if(!exclusionConfiguration.isExcludedClass(beanType, true)){
+            FieldInfo[] fields = getter.getFields();
+            FieldInfo[] sortedFields = getter.getSortedFields();
 
-        List<FieldInfo> fieldInfoes = new ArrayList<FieldInfo>();
-        List<FieldInfo> sortedFieldInfoes = new ArrayList<FieldInfo>();
+            List<FieldInfo> fieldInfoes = new ArrayList<FieldInfo>();
+            List<FieldInfo> sortedFieldInfoes = new ArrayList<FieldInfo>();
 
-        for (FieldInfo fieldInfo : fields) {
-            Ignore ignore = new FieldAttributes(fieldInfo.field).getAnnotation(Ignore.class);
-            if (ignore != null && ignore.write()) {
-                continue;
+            for (FieldInfo fieldInfo : fields) {
+                if(exclusionConfiguration.isExcludedField(fieldInfo.field, true)) {
+                    continue;
+                }
+                fieldInfoes.add(fieldInfo);
             }
-            fieldInfoes.add(fieldInfo);
-        }
 
-        for (FieldInfo fieldInfo : sortedFields) {
-            Ignore ignore = new FieldAttributes(fieldInfo.field).getAnnotation(Ignore.class);
-            if (ignore != null && ignore.write()) {
-                continue;
+            for (FieldInfo fieldInfo : sortedFields) {
+                if(exclusionConfiguration.isExcludedField(fieldInfo.field, true)) {
+                    continue;
+                }
+                sortedFieldInfoes.add(fieldInfo);
             }
-            sortedFieldInfoes.add(fieldInfo);
-        }
 
-        if (fieldInfoes.size() != fields.length) {
-            // has ignored field
-            Class<?> beanType = getter.getBeanType();
+            if (fieldInfoes.size() != fields.length) {
+                // has ignored field
+
+                String typeName = getter.getTypeName();
+                String typeKey = getter.getTypeKey();
+                JSONType jsonType = getter.getJsonType();
+                int features = getter.getFeatures();
+                SerializeBeanInfo newBeanInfo = new SerializeBeanInfo(beanType,
+                        jsonType,
+                        typeName,
+                        typeKey,
+                        features,
+                        fieldInfoes.toArray(new FieldInfo[fieldInfoes.size()]),
+                        sortedFieldInfoes.toArray(new FieldInfo[sortedFieldInfoes.size()]));
+                return super.createJavaBeanSerializer(newBeanInfo);
+            }
+        }else{
             String typeName = getter.getTypeName();
             String typeKey = getter.getTypeKey();
             JSONType jsonType = getter.getJsonType();
@@ -67,10 +84,11 @@ public class EasyFastJsonSerializeConfig extends SerializeConfig {
                     typeName,
                     typeKey,
                     features,
-                    fieldInfoes.toArray(new FieldInfo[fieldInfoes.size()]),
-                    sortedFieldInfoes.toArray(new FieldInfo[sortedFieldInfoes.size()]));
+                    new FieldInfo[0],
+                    new FieldInfo[0]);
             return super.createJavaBeanSerializer(newBeanInfo);
         }
+
         return super.createJavaBeanSerializer(beanInfo);
     }
 

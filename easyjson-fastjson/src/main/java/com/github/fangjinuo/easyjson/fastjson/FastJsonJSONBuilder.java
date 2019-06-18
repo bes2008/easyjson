@@ -69,7 +69,7 @@ public class FastJsonJSONBuilder extends JSONBuilder {
     }
 
     private FastJsonSerializerBuilder buildSerializer() {
-        SerializeConfig config = ignoreAnnotationForSerialize ? new EasyFastJsonSerializeConfig() : new SerializeConfig();
+        SerializeConfig config = ignoreAnnotationForSerialize ? new EasyFastJsonSerializeConfig(this) : new SerializeConfig();
         FastJsonSerializerBuilder builder = new FastJsonSerializerBuilder();
         builder.config(config);
         builder.addFeature(SerializerFeature.DisableCircularReferenceDetect);
