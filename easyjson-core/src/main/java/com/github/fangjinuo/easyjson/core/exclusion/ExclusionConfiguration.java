@@ -124,7 +124,7 @@ public final class ExclusionConfiguration {
         if (!list.isEmpty()) {
             FieldAttributes fieldAttributes = new FieldAttributes(field);
             for (Exclusion Exclusion : list) {
-                if (Exclusion.shouldSkipField(fieldAttributes)) {
+                if (Exclusion.shouldSkipField(fieldAttributes, serialize)) {
                     return true;
                 }
             }
@@ -153,7 +153,7 @@ public final class ExclusionConfiguration {
     private boolean isExcludedClassInStrategy(Class<?> clazz, boolean serialize) {
         List<Exclusion> list = serialize ? serializationStrategies : deserializationStrategies;
         for (Exclusion Exclusion : list) {
-            if (Exclusion.shouldSkipClass(clazz)) {
+            if (Exclusion.shouldSkipClass(clazz, serialize)) {
                 return true;
             }
         }
