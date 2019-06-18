@@ -62,4 +62,17 @@ public class Reflects {
         }
         return field;
     }
+
+    public static <T>T getDeclaredFieldValue(Object object, String fieldName) {
+        Field field = Reflects.getDeclaredField(object.getClass(), fieldName);
+        if (field != null) {
+            field.setAccessible(true);
+            try {
+                return (T) field.get(object);
+            } catch (IllegalAccessException e) {
+                // ignore it
+            }
+        }
+        return null;
+    }
 }

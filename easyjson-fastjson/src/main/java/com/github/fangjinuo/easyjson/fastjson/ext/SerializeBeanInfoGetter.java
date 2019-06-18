@@ -42,81 +42,27 @@ public class SerializeBeanInfoGetter {
     }
 
     public String getTypeName() {
-        Field field = Reflects.getDeclaredField(beanInfo.getClass(), "typeName");
-        if (field != null) {
-            field.setAccessible(true);
-            try {
-                return (String) field.get(beanInfo);
-            } catch (IllegalAccessException e) {
-                // ignore it
-            }
-        }
-        return null;
+        return Reflects.getDeclaredFieldValue(beanInfo, "typeName");
     }
 
     public String getTypeKey() {
-        Field field = Reflects.getDeclaredField(beanInfo.getClass(), "typeKey");
-        if (field != null) {
-            field.setAccessible(true);
-            try {
-                return (String) field.get(beanInfo);
-            } catch (IllegalAccessException e) {
-                // ignore it
-            }
-        }
-        return null;
+        return Reflects.getDeclaredFieldValue(beanInfo, "typeKey");
     }
 
     public JSONType getJsonType() {
-        Field field = Reflects.getDeclaredField(beanInfo.getClass(), "jsonType");
-        if (field != null) {
-            field.setAccessible(true);
-            try {
-                return (JSONType) field.get(beanInfo);
-            } catch (IllegalAccessException e) {
-                // ignore it
-            }
-        }
-        return null;
+        return Reflects.getDeclaredFieldValue(beanInfo, "jsonType");
     }
 
     public FieldInfo[] getFields() {
-        Field field = Reflects.getDeclaredField(beanInfo.getClass(), "fields");
-        if (field != null) {
-            field.setAccessible(true);
-            try {
-                return (FieldInfo[]) field.get(beanInfo);
-            } catch (IllegalAccessException e) {
-                // ignore it
-            }
-        }
-        return null;
+        return Reflects.getDeclaredFieldValue(beanInfo, "fields");
     }
 
     public FieldInfo[] getSortedFields() {
-        Field field = Reflects.getDeclaredField(beanInfo.getClass(), "sortedFields");
-        if (field != null) {
-            field.setAccessible(true);
-            try {
-                return (FieldInfo[]) field.get(beanInfo);
-            } catch (IllegalAccessException e) {
-                // ignore it
-            }
-        }
-        return null;
+        return Reflects.getDeclaredFieldValue(beanInfo, "sortedFields");
     }
 
     public Integer getFeatures() {
-        Field field = Reflects.getDeclaredField(beanInfo.getClass(), "features");
-        if (field != null) {
-            field.setAccessible(true);
-            try {
-                return (Integer) field.get(beanInfo);
-            } catch (IllegalAccessException e) {
-                // ignore it
-            }
-        }
-        return null;
+        return Reflects.getDeclaredFieldValue(beanInfo, "features");
     }
 
 }

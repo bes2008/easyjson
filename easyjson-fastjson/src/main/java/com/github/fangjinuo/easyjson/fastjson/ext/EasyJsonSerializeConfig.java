@@ -25,9 +25,9 @@ import com.github.fangjinuo.easyjson.fastjson.FastJsonJSONBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EasyFastJsonSerializeConfig extends SerializeConfig {
+public class EasyJsonSerializeConfig extends SerializeConfig {
     private FastJsonJSONBuilder jsonJSONBuilder;
-    public EasyFastJsonSerializeConfig(FastJsonJSONBuilder jsonJSONBuilder) {
+    public EasyJsonSerializeConfig(FastJsonJSONBuilder jsonJSONBuilder) {
         super();
         this.jsonJSONBuilder = jsonJSONBuilder;
     }
