@@ -41,7 +41,7 @@ public class EasyFastJsonSerializeConfig extends SerializeConfig {
 
         for (FieldInfo fieldInfo : fields) {
             Ignore ignore = new FieldAttributes(fieldInfo.field).getAnnotation(Ignore.class);
-            if (ignore != null && ignore.read()) {
+            if (ignore != null && ignore.write()) {
                 continue;
             }
             fieldInfoes.add(fieldInfo);
@@ -49,7 +49,7 @@ public class EasyFastJsonSerializeConfig extends SerializeConfig {
 
         for (FieldInfo fieldInfo : sortedFields) {
             Ignore ignore = new FieldAttributes(fieldInfo.field).getAnnotation(Ignore.class);
-            if (ignore != null && ignore.read()) {
+            if (ignore != null && ignore.write()) {
                 continue;
             }
             sortedFieldInfoes.add(fieldInfo);
