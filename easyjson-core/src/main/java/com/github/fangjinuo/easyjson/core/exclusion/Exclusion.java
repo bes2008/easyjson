@@ -23,11 +23,11 @@ public interface Exclusion {
      * @param f the field object that is under test
      * @return true if the field should be ignored; otherwise false
      */
-    public boolean shouldSkipField(FieldAttributes f);
+    public boolean shouldSkipField(FieldAttributes f, boolean serialize);
 
     /**
      * @param clazz the class object that is under test
      * @return true if the class should be ignored; otherwise false
      */
-    public boolean shouldSkipClass(Class<?> clazz);
+    public boolean shouldSkipClass(Class<?> clazz, boolean serialize);
 }

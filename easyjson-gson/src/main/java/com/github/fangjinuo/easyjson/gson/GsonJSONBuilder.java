@@ -81,10 +81,10 @@ public class GsonJSONBuilder extends JSONBuilder {
         }
         gsonBuilder.excludeFieldsWithModifiers(modifiers0);
         for (Exclusion exclusion : exclusionConfiguration.getDeserializationStrategies()) {
-            gsonBuilder.addDeserializationExclusionStrategy(new DelegateExclusionStrategy(exclusion));
+            gsonBuilder.addDeserializationExclusionStrategy(new DelegateExclusionStrategy(exclusion, false));
         }
         for (Exclusion exclusion : exclusionConfiguration.getSerializationStrategies()) {
-            gsonBuilder.addSerializationExclusionStrategy(new DelegateExclusionStrategy(exclusion));
+            gsonBuilder.addSerializationExclusionStrategy(new DelegateExclusionStrategy(exclusion, true));
         }
         if (exclusionConfiguration.isSerializeInnerClasses()) {
             gsonBuilder.disableInnerClassSerialization();

@@ -21,18 +21,20 @@ import com.google.gson.FieldAttributes;
 
 public class DelegateExclusionStrategy implements ExclusionStrategy {
     private Exclusion exclusion;
+    private boolean serialize;
 
-    public DelegateExclusionStrategy(Exclusion exclusion) {
+    public DelegateExclusionStrategy(Exclusion exclusion, boolean serialize) {
         this.exclusion = exclusion;
+        this.serialize = serialize;
     }
 
     @Override
     public boolean shouldSkipField(FieldAttributes f) {
-        return exclusion.shouldSkipField(new GsonFieldAttributesAdapter(f, null));
+        return exclusion.shouldSkipField(new GsonFieldAttributesAdapter(f, null), serialize);
     }
 
     @Override
     public boolean shouldSkipClass(Class<?> clazz) {
-        return exclusion.shouldSkipClass(clazz);
+        return exclusion.shouldSkipClass(clazz, serialize);
     }
 }
