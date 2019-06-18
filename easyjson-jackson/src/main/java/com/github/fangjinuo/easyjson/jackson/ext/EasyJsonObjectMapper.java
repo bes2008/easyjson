@@ -19,18 +19,22 @@ import com.fasterxml.jackson.databind.DeserializationConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationConfig;
 import com.fasterxml.jackson.databind.deser.DefaultDeserializationContext;
+import com.github.fangjinuo.easyjson.jackson.JacksonJSONBuilder;
 
 public class EasyJsonObjectMapper extends ObjectMapper {
+
+    private JacksonJSONBuilder jsonBuilder;
+
     public EasyJsonObjectMapper() {
         super();
         setDefaultDeserializationContext(new DefaultDeserializationContext.Impl(EasyJsonBeanDeserializerFactory.instance));
-        setSerializerFactory(EasyJsonBeanSerializerFactory.instance);
+        setSerializerFactory(new EasyJsonBeanSerializerFactory(null, this));
     }
 
     public EasyJsonObjectMapper(ObjectMapper src) {
         super(src);
         setDefaultDeserializationContext(new DefaultDeserializationContext.Impl(EasyJsonBeanDeserializerFactory.instance));
-        setSerializerFactory(EasyJsonBeanSerializerFactory.instance);
+        setSerializerFactory(new EasyJsonBeanSerializerFactory(null, this));
     }
 
     @Override
@@ -48,5 +52,13 @@ public class EasyJsonObjectMapper extends ObjectMapper {
 
     public void setDefaultDeserializationContext(DefaultDeserializationContext context) {
         this._deserializationContext = context;
+    }
+
+    public JacksonJSONBuilder getJsonBuilder() {
+        return jsonBuilder;
+    }
+
+    public void setJsonBuilder(JacksonJSONBuilder jsonBuilder) {
+        this.jsonBuilder = jsonBuilder;
     }
 }

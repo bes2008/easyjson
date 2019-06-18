@@ -140,6 +140,7 @@ public class JacksonJSONBuilder extends JSONBuilder {
     public JSON build() {
         makesureModuleRegister();
         EasyJsonObjectMapper mapper = new EasyJsonObjectMapper(objectMapper);
+        mapper.setJsonBuilder(this);
 
         if (serializeNulls) {
             //  objectMapper.configure(SerializationFeature);
