@@ -22,6 +22,7 @@ import com.alibaba.fastjson.util.ParameterizedTypeImpl;
 import com.github.fangjinuo.easyjson.core.JSONBuilder;
 import com.github.fangjinuo.easyjson.core.JSONBuilderProvider;
 import com.github.fangjinuo.easyjson.core.JsonTreeNode;
+import com.github.fangjinuo.easyjson.core.exclusion.IgnoreAnnotationExclusion;
 import com.github.fangjinuo.easyjson.core.util.type.Types;
 import com.github.fangjinuo.easyjson.tests.fastjson.struct.Contact;
 import com.github.fangjinuo.easyjson.tests.fastjson.struct.Gender;
@@ -51,6 +52,7 @@ public class SimpleModelTests {
             c.setMobilePhone("mphone" + i);
             c.setPhone("phone" + i);
             c.setQq("qq" + i);
+            c.setMsn("msn"+i);
             c.setWebchat("webchat" + i);
 
 
@@ -93,14 +95,14 @@ public class SimpleModelTests {
     public void testEasyJson_FastJson() throws Exception {
         System.out.println("=====================EasyJson [fastjson] test start =============================");
         JSONBuilder jsonBuilder = JSONBuilderProvider.create();
-        com.github.fangjinuo.easyjson.core.JSON gson = jsonBuilder.serializeNulls().serializeNumberAsString().serializeEnumUsingValue().enableIgnoreAnnotation().build();
+        com.github.fangjinuo.easyjson.core.JSON gson = jsonBuilder.serializeNulls().serializeNumberAsString().serializeEnumUsingValue().addDeserializationExclusion(new IgnoreAnnotationExclusion()).build();
 
         // test simple object
         String str1 = gson.toJson(person, person.getClass());
         System.out.println(str1);
         Person p1 = gson.fromJson(str1, Person.class);
         System.out.println(p1.equals(person));
-        System.out.println(gson.toJson(person));
+        System.out.println(gson.toJson(p1));
 
         // test list
         String str2 = gson.toJson(persons);
