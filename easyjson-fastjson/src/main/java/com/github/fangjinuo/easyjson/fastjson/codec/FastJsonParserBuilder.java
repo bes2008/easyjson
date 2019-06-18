@@ -34,7 +34,7 @@ public class FastJsonParserBuilder {
         return this;
     }
 
-    public FastJsonParserBuilder defaultFeatureValues(int value){
+    public FastJsonParserBuilder defaultFeatureValues(int value) {
         defaultFeatureValues = value;
         return this;
     }
@@ -62,8 +62,8 @@ public class FastJsonParserBuilder {
     }
 
     public DefaultJSONParser build(String jsonString) {
-        int featureValues=defaultFeatureValues;
-        for(Feature feature : features){
+        int featureValues = defaultFeatureValues;
+        for (Feature feature : features) {
             featureValues |= feature.getMask();
         }
         return new DefaultJSONParser(jsonString, config, featureValues);

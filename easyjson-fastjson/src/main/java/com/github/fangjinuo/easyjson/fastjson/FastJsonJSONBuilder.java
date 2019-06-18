@@ -26,9 +26,6 @@ import com.github.fangjinuo.easyjson.core.annotation.Name;
 import com.github.fangjinuo.easyjson.core.tree.JsonTreeSerializerBuilder;
 import com.github.fangjinuo.easyjson.fastjson.codec.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Name("fastjson")
 @DependOn("com.alibaba.fastjson.JSON")
 public class FastJsonJSONBuilder extends JSONBuilder {
@@ -78,7 +75,7 @@ public class FastJsonJSONBuilder extends JSONBuilder {
         builder.addFeature(SerializerFeature.SkipTransientField);
         builder.addFeature(SerializerFeature.IgnoreErrorGetter);
         builder.addFeature(SerializerFeature.IgnoreNonFieldGetter);
-        if(serializeEnumUsingToString){
+        if (serializeEnumUsingToString) {
             builder.addFeature(SerializerFeature.WriteEnumUsingToString);
         }
         if (prettyFormat) {
