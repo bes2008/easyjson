@@ -16,23 +16,31 @@
 package com.github.fangjinuo.easyjson.fastjson.codec;
 
 import com.alibaba.fastjson.parser.DefaultJSONParser;
+import com.alibaba.fastjson.parser.Feature;
 import com.alibaba.fastjson.parser.ParserConfig;
 import com.alibaba.fastjson.parser.deserializer.ObjectDeserializer;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 public class FastJsonParserBuilder {
     private ParserConfig config;
-    private int featureValues;
+    private List<Feature> features = new ArrayList<Feature>();
+    private int defaultFeatureValues = 0;
 
     public FastJsonParserBuilder config(ParserConfig config) {
         this.config = config;
         return this;
     }
 
-    public FastJsonParserBuilder featureValues(int featureValues) {
-        this.featureValues = featureValues;
+    public FastJsonParserBuilder defaultFeatureValues(int value){
+        defaultFeatureValues = value;
+        return this;
+    }
+
+    public FastJsonParserBuilder addFeature(Feature feature) {
+        this.features.add(feature);
         return this;
     }
 
@@ -54,6 +62,10 @@ public class FastJsonParserBuilder {
     }
 
     public DefaultJSONParser build(String jsonString) {
+        int featureValues=defaultFeatureValues;
+        for(Feature feature : features){
+            featureValues |= feature.getMask();
+        }
         return new DefaultJSONParser(jsonString, config, featureValues);
     }
 }

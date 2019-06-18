@@ -89,12 +89,9 @@ public class FastJsonJSONBuilder extends JSONBuilder {
 
     private FastJsonParserBuilder buildDeserializer() {
         ParserConfig config = new ParserConfig();
-        List<Feature> features = new ArrayList<Feature>();
         int featureValues = com.alibaba.fastjson.JSON.DEFAULT_PARSER_FEATURE;
-        for (Feature feature : features) {
-            featureValues = Feature.config(featureValues, feature, true);
-        }
-        FastJsonParserBuilder builder = new FastJsonParserBuilder().config(config).featureValues(featureValues);
+        FastJsonParserBuilder builder = new FastJsonParserBuilder().config(config).defaultFeatureValues(featureValues);
+        builder.addFeature(Feature.DisableCircularReferenceDetect);
         return builder;
     }
 }
