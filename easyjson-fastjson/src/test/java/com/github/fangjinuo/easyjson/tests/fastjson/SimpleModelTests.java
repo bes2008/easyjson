@@ -50,8 +50,8 @@ public class SimpleModelTests {
             p.setContact(c);
             c.setEmail(p.getName() + "@gmail.com");
             c.setMobilePhone("mphone" + i);
+            c.setQq(null);
             c.setPhone("phone" + i);
-            c.setQq("qq" + i);
             c.setMsn("msn"+i);
             c.setWebchat("webchat" + i);
 

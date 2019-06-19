@@ -77,6 +77,8 @@ public class FastJsonJSONBuilder extends JSONBuilder {
         builder.addFeature(SerializerFeature.SkipTransientField);
         builder.addFeature(SerializerFeature.IgnoreErrorGetter);
         builder.addFeature(SerializerFeature.IgnoreNonFieldGetter);
+
+
         if (serializeEnumUsingToString()) {
             builder.addFeature(SerializerFeature.WriteEnumUsingToString);
         }
