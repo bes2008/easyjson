@@ -39,23 +39,23 @@ public class FastJsonJSONBuilder extends JSONBuilder {
 
         // boolean
         BooleanCodec booleanCodec = new BooleanCodec();
-        booleanCodec.setUsing1_0(serializeBooleanUsing1_0);
-        booleanCodec.setUsingOnOff(serializeBooleanUsingOnOff);
+        booleanCodec.setUsing1_0(serializeBooleanUsing1_0());
+        booleanCodec.setUsingOnOff(serializeBooleanUsingOnOff());
         serializerBuilder.apply(booleanCodec);
         deserializerBuilder.apply(booleanCodec);
 
         // number
         NumberCodec numberCodec = new NumberCodec();
-        numberCodec.setLongUsingString(serializeLongAsString);
-        numberCodec.setUsingString(serializeNumberAsString);
+        numberCodec.setLongUsingString(serializeLongAsString());
+        numberCodec.setUsingString(serializeNumberAsString());
         serializerBuilder.apply(numberCodec);
         deserializerBuilder.apply(numberCodec);
 
         // date
         DateCodec dateCodec = new DateCodec();
-        dateCodec.setDatePattern(serializeDateUsingPattern);
-        dateCodec.setDateFormat(dateFormat);
-        dateCodec.setUsingToString(serializeDateUsingToString);
+        dateCodec.setDatePattern(serializeDateUsingPattern());
+        dateCodec.setDateFormat(serializeUseDateFormat());
+        dateCodec.setUsingToString(serializeDateUsingToString());
         serializerBuilder.apply(dateCodec);
         deserializerBuilder.apply(dateCodec);
 
@@ -66,7 +66,7 @@ public class FastJsonJSONBuilder extends JSONBuilder {
     }
 
     private JsonTreeSerializerBuilder buildJsonTreeWriter() {
-        return new JsonTreeSerializerBuilder().setPrettyFormat(prettyFormat).setSerializeNulls(serializeNulls);
+        return new JsonTreeSerializerBuilder().setPrettyFormat(prettyFormat()).setSerializeNulls(serializeNulls());
     }
 
     private FastJsonSerializerBuilder buildSerializer() {
@@ -77,10 +77,10 @@ public class FastJsonJSONBuilder extends JSONBuilder {
         builder.addFeature(SerializerFeature.SkipTransientField);
         builder.addFeature(SerializerFeature.IgnoreErrorGetter);
         builder.addFeature(SerializerFeature.IgnoreNonFieldGetter);
-        if (serializeEnumUsingToString) {
+        if (serializeEnumUsingToString()) {
             builder.addFeature(SerializerFeature.WriteEnumUsingToString);
         }
-        if (prettyFormat) {
+        if (prettyFormat()) {
             builder.addFeature(SerializerFeature.PrettyFormat);
         }
         return builder;
