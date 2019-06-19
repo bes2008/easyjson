@@ -49,7 +49,6 @@ public class SimpleModelTests {
             c.setEmail(p.getName() + "@gmail.com");
             c.setMobilePhone("mphone" + i);
             c.setPhone("phone" + i);
-            c.setQq("qq" + i);
             c.setMsn("msn"+i);
             c.setWebchat("webchat" + i);
 
@@ -95,7 +94,7 @@ public class SimpleModelTests {
     public void testEasyJson_jackson() {
         System.out.println("=====================EasyJson [Jackson] test start =============================");
         JSONBuilder jsonBuilder = JSONBuilderProvider.create();
-        com.github.fangjinuo.easyjson.core.JSON gson = jsonBuilder.serializeNulls().serializeNumberAsString().serializeEnumUsingValue().addDeserializationExclusion(new IgnoreAnnotationExclusion()).build();
+        com.github.fangjinuo.easyjson.core.JSON gson = jsonBuilder.serializeNulls(false).serializeNumberAsString(true).serializeEnumUsingValue(true).addDeserializationExclusion(new IgnoreAnnotationExclusion()).build();
 
         // test simple object
         String str1 = gson.toJson(person, person.getClass());
@@ -126,7 +125,7 @@ public class SimpleModelTests {
         genders.add(Gender.woman);
         genders.add(Gender.man);
 
-        com.github.fangjinuo.easyjson.core.JSON json = new JacksonJSONBuilder().serializeEnumUsingValue().build();
+        com.github.fangjinuo.easyjson.core.JSON json = new JacksonJSONBuilder().serializeEnumUsingValue(true).build();
         String jsonString = json.toJson(genders);
         System.out.println(jsonString);
         List<Gender> a = json.fromJson(jsonString, Types.getListParameterizedType(Gender.class));
@@ -140,7 +139,7 @@ public class SimpleModelTests {
 
         System.out.println("=====================EasyJson tree [Jackson] test start =============================");
         JSONBuilder jsonBuilder = JSONBuilderProvider.create();
-        com.github.fangjinuo.easyjson.core.JSON gson = jsonBuilder.serializeNulls().serializeNumberAsString().serializeEnumUsingValue().build();
+        com.github.fangjinuo.easyjson.core.JSON gson = jsonBuilder.serializeNulls(true).serializeNumberAsString(true).serializeEnumUsingValue(true).build();
 
         // test simple object
         String str1 = gson.toJson(person, person.getClass());
