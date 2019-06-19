@@ -28,10 +28,7 @@ import com.github.fangjinuo.easyjson.jackson.serializer.DateSerializer;
 import com.github.fangjinuo.easyjson.jackson.serializer.NumberSerializer;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class EasyJsonBeanSerializerFactory extends BeanSerializerFactory {
     private EasyJsonObjectMapper objectMapper;
@@ -57,7 +54,8 @@ public class EasyJsonBeanSerializerFactory extends BeanSerializerFactory {
     protected List<BeanPropertyWriter> findBeanProperties(SerializerProvider prov,
                                                           BeanDescription beanDesc, BeanSerializerBuilder builder)
             throws JsonMappingException{
-        if(objectMapper!=null){
+        if(objectMapper!=null && objectMapper.getJsonBuilder()!=null){
+            // filter using exclusion strategies
             ExclusionConfiguration exclusionConfiguration = objectMapper.getJsonBuilder().getExclusionConfiguration();
             Class clazz = beanDesc.getType().getRawClass();
             List<BeanPropertyDefinition> properties = beanDesc.findProperties();
@@ -78,6 +76,21 @@ public class EasyJsonBeanSerializerFactory extends BeanSerializerFactory {
             }
         }
         return super.findBeanProperties(prov, beanDesc, builder);
+    }
+
+    protected JsonSerializer<Object> constructBeanSerializer(SerializerProvider prov,
+                                                             BeanDescription beanDesc)
+            throws JsonMappingException{
+        // serializeNulls
+        JsonSerializer serializer = super.constructBeanSerializer(prov, beanDesc);
+        BeanSerializer beanSerializer = (BeanSerializer)serializer;
+        Iterator<PropertyWriter> iter = beanSerializer.properties();
+        while (iter.hasNext()){
+            BeanPropertyWriter writer =(BeanPropertyWriter) iter.next();
+            writer.willSuppressNulls();
+        }
+
+        return beanSerializer;
     }
 
     @Override
