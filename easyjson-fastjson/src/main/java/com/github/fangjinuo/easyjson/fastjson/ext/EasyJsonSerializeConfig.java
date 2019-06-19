@@ -34,6 +34,7 @@ public class EasyJsonSerializeConfig extends SerializeConfig {
 
     @Override
     public ObjectSerializer createJavaBeanSerializer(SerializeBeanInfo beanInfo) {
+        //=====================EasyJson exclusion start==========================
         SerializeBeanInfoGetter getter = new SerializeBeanInfoGetter(beanInfo);
         Class<?> beanType = getter.getBeanType();
         ExclusionConfiguration exclusionConfiguration = jsonJSONBuilder.getExclusionConfiguration();
@@ -60,7 +61,6 @@ public class EasyJsonSerializeConfig extends SerializeConfig {
 
             if (fieldInfoes.size() != fields.length) {
                 // has ignored field
-
                 String typeName = getter.getTypeName();
                 String typeKey = getter.getTypeKey();
                 JSONType jsonType = getter.getJsonType();
@@ -88,6 +88,8 @@ public class EasyJsonSerializeConfig extends SerializeConfig {
                     new FieldInfo[0]);
             return super.createJavaBeanSerializer(newBeanInfo);
         }
+
+        //=====================EasyJson exclusion end==========================
 
         return super.createJavaBeanSerializer(beanInfo);
     }

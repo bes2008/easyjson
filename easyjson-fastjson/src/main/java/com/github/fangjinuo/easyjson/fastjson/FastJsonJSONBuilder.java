@@ -27,6 +27,7 @@ import com.github.fangjinuo.easyjson.core.tree.JsonTreeSerializerBuilder;
 import com.github.fangjinuo.easyjson.fastjson.codec.*;
 import com.github.fangjinuo.easyjson.fastjson.ext.EasyJsonParserConfig;
 import com.github.fangjinuo.easyjson.fastjson.ext.EasyJsonSerializeConfig;
+import com.github.fangjinuo.easyjson.fastjson.ext.NullPropertyFilter;
 
 @Name("fastjson")
 @DependOn("com.alibaba.fastjson.JSON")
@@ -78,6 +79,12 @@ public class FastJsonJSONBuilder extends JSONBuilder {
         builder.addFeature(SerializerFeature.IgnoreErrorGetter);
         builder.addFeature(SerializerFeature.IgnoreNonFieldGetter);
 
+        // SerializerFeature.WriteNullStringAsEmpty ==> ""
+        // SerializerFeature.WriteNullListAsEmpty ==>[]
+
+        if(serializeNulls()){
+            builder.addFeature(SerializerFeature.WriteMapNullValue);
+        }
 
         if (serializeEnumUsingToString()) {
             builder.addFeature(SerializerFeature.WriteEnumUsingToString);

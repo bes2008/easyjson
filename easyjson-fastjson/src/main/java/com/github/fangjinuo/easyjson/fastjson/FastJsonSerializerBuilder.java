@@ -45,11 +45,11 @@ public class FastJsonSerializerBuilder {
         return this;
     }
 
-    public FastJsonSerializerBuilder apply(ObjectSerializer serializer){
-        if(serializer instanceof Typed){
-            List<Type> applyTo = ((Typed)serializer).applyTo();
-            if(applyTo!=null && !applyTo.isEmpty()){
-                for (Type type : applyTo){
+    public FastJsonSerializerBuilder apply(ObjectSerializer serializer) {
+        if (serializer instanceof Typed) {
+            List<Type> applyTo = ((Typed) serializer).applyTo();
+            if (applyTo != null && !applyTo.isEmpty()) {
+                for (Type type : applyTo) {
                     apply(type, serializer);
                 }
             }
@@ -57,7 +57,7 @@ public class FastJsonSerializerBuilder {
         return this;
     }
 
-    public FastJsonSerializerBuilder apply(Type type, ObjectSerializer serializer){
+    public FastJsonSerializerBuilder apply(Type type, ObjectSerializer serializer) {
         config.put(type, serializer);
         return this;
     }
