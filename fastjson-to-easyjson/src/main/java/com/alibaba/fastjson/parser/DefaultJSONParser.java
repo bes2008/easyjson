@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.alibaba.fastjson.serializer;
+package com.alibaba.fastjson.parser;
 
-public class JSONSerializer {
+public class DefaultJSONParser {
 }

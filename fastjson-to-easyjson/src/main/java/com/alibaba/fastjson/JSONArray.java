@@ -18,8 +18,6 @@ package com.alibaba.fastjson;
 import com.alibaba.fastjson.parser.ParserConfig;
 import com.alibaba.fastjson.util.TypeUtils;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
@@ -27,31 +25,29 @@ import java.math.BigInteger;
 import java.util.*;
 
 import static com.alibaba.fastjson.util.TypeUtils.*;
-import static com.alibaba.fastjson.util.TypeUtils.castToSqlDate;
-import static com.alibaba.fastjson.util.TypeUtils.castToTimestamp;
 
 public class JSONArray extends JSON implements List<Object>, Cloneable, RandomAccess, Serializable {
 
-    private static final long  serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
     private final List<Object> list;
     protected transient Object relatedArray;
     protected transient Type componentType;
 
-    public JSONArray(){
+    public JSONArray() {
         this.list = new ArrayList<Object>();
     }
 
-    public JSONArray(List<Object> list){
+    public JSONArray(List<Object> list) {
         this.list = list;
     }
 
-    public JSONArray(int initialCapacity){
+    public JSONArray(int initialCapacity) {
         this.list = new ArrayList<Object>(initialCapacity);
     }
 
     /**
-     * @since 1.1.16
      * @return
+     * @since 1.1.16
      */
     public Object getRelatedArray() {
         return relatedArray;
@@ -69,30 +65,37 @@ public class JSONArray extends JSON implements List<Object>, Cloneable, RandomAc
         this.componentType = componentType;
     }
 
+    @Override
     public int size() {
         return list.size();
     }
 
+    @Override
     public boolean isEmpty() {
         return list.isEmpty();
     }
 
+    @Override
     public boolean contains(Object o) {
         return list.contains(o);
     }
 
+    @Override
     public Iterator<Object> iterator() {
         return list.iterator();
     }
 
+    @Override
     public Object[] toArray() {
         return list.toArray();
     }
 
+    @Override
     public <T> T[] toArray(T[] a) {
         return list.toArray(a);
     }
 
+    @Override
     public boolean add(Object e) {
         return list.add(e);
     }
@@ -102,6 +105,7 @@ public class JSONArray extends JSON implements List<Object>, Cloneable, RandomAc
         return this;
     }
 
+    @Override
     public boolean remove(Object o) {
         return list.remove(o);
     }
@@ -111,10 +115,12 @@ public class JSONArray extends JSON implements List<Object>, Cloneable, RandomAc
         return this;
     }
 
+    @Override
     public boolean containsAll(Collection<?> c) {
         return list.containsAll(c);
     }
 
+    @Override
     public boolean addAll(Collection<? extends Object> c) {
         return list.addAll(c);
     }
@@ -124,6 +130,7 @@ public class JSONArray extends JSON implements List<Object>, Cloneable, RandomAc
         return this;
     }
 
+    @Override
     public boolean addAll(int index, Collection<? extends Object> c) {
         return list.addAll(index, c);
     }
@@ -133,6 +140,7 @@ public class JSONArray extends JSON implements List<Object>, Cloneable, RandomAc
         return this;
     }
 
+    @Override
     public boolean removeAll(Collection<?> c) {
         return list.removeAll(c);
     }
@@ -142,6 +150,7 @@ public class JSONArray extends JSON implements List<Object>, Cloneable, RandomAc
         return this;
     }
 
+    @Override
     public boolean retainAll(Collection<?> c) {
         return list.retainAll(c);
     }
@@ -151,6 +160,7 @@ public class JSONArray extends JSON implements List<Object>, Cloneable, RandomAc
         return this;
     }
 
+    @Override
     public void clear() {
         list.clear();
     }
@@ -160,6 +170,7 @@ public class JSONArray extends JSON implements List<Object>, Cloneable, RandomAc
         return this;
     }
 
+    @Override
     public Object set(int index, Object element) {
         if (index == -1) {
             list.add(element);
@@ -182,6 +193,7 @@ public class JSONArray extends JSON implements List<Object>, Cloneable, RandomAc
         return this;
     }
 
+    @Override
     public void add(int index, Object element) {
         list.add(index, element);
     }
@@ -191,6 +203,7 @@ public class JSONArray extends JSON implements List<Object>, Cloneable, RandomAc
         return this;
     }
 
+    @Override
     public Object remove(int index) {
         return list.remove(index);
     }
@@ -200,26 +213,32 @@ public class JSONArray extends JSON implements List<Object>, Cloneable, RandomAc
         return this;
     }
 
+    @Override
     public int indexOf(Object o) {
         return list.indexOf(o);
     }
 
+    @Override
     public int lastIndexOf(Object o) {
         return list.lastIndexOf(o);
     }
 
+    @Override
     public ListIterator<Object> listIterator() {
         return list.listIterator();
     }
 
+    @Override
     public ListIterator<Object> listIterator(int index) {
         return list.listIterator(index);
     }
 
+    @Override
     public List<Object> subList(int fromIndex, int toIndex) {
         return list.subList(fromIndex, toIndex);
     }
 
+    @Override
     public Object get(int index) {
         return list.get(index);
     }
@@ -426,7 +445,7 @@ public class JSONArray extends JSON implements List<Object>, Cloneable, RandomAc
     }
 
     /**
-     * @since  1.2.23
+     * @since 1.2.23
      */
     public <T> List<T> toJavaList(Class<T> clazz) {
         List<T> list = new ArrayList<T>(this.size());
@@ -446,31 +465,14 @@ public class JSONArray extends JSON implements List<Object>, Cloneable, RandomAc
         return new JSONArray(new ArrayList<Object>(list));
     }
 
+    @Override
     public boolean equals(Object obj) {
         return this.list.equals(obj);
     }
 
+    @Override
     public int hashCode() {
         return this.list.hashCode();
     }
 
-    private void readObject(final java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
-        JSONObject.SecureObjectInputStream.ensureFields();
-        if (JSONObject.SecureObjectInputStream.fields != null && !JSONObject.SecureObjectInputStream.fields_error) {
-            ObjectInputStream secIn = new JSONObject.SecureObjectInputStream(in);
-            try {
-                secIn.defaultReadObject();
-                return;
-            } catch (java.io.NotActiveException e) {
-                // skip
-            }
-        }
-
-        in.defaultReadObject();
-        for (Object item : list) {
-            if (item != null) {
-                ParserConfig.global.checkAutoType(item.getClass().getName(), null);
-            }
-        }
-    }
 }

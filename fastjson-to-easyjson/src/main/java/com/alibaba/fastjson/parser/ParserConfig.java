@@ -30,46 +30,24 @@
  */
 package com.alibaba.fastjson.parser;
 
-import java.io.*;
-import java.lang.ref.SoftReference;
-import java.lang.ref.WeakReference;
-import java.lang.reflect.*;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.PropertyNamingStrategy;
+import com.alibaba.fastjson.parser.deserializer.ObjectDeserializer;
+import com.alibaba.fastjson.spi.Module;
+import com.alibaba.fastjson.util.IOUtils;
+import com.alibaba.fastjson.util.TypeUtils;
+
+import java.io.Closeable;
+import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.net.Inet4Address;
-import java.net.Inet6Address;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.URI;
-import java.net.URL;
-import java.nio.charset.Charset;
-import java.security.AccessControlException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicIntegerArray;
-import java.util.concurrent.atomic.AtomicLong;
-import java.util.concurrent.atomic.AtomicLongArray;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.regex.Pattern;
 
-import com.alibaba.fastjson.*;
-import com.alibaba.fastjson.annotation.JSONField;
-import com.alibaba.fastjson.annotation.JSONType;
-import com.alibaba.fastjson.asm.ClassReader;
-import com.alibaba.fastjson.asm.TypeCollector;
-import com.alibaba.fastjson.parser.deserializer.*;
-import com.alibaba.fastjson.serializer.*;
-import com.alibaba.fastjson.spi.Module;
-import com.alibaba.fastjson.support.moneta.MonetaCodec;
-import com.alibaba.fastjson.util.*;
-import com.alibaba.fastjson.util.IdentityHashMap;
-import com.alibaba.fastjson.util.ServiceLoader;
-
-import javax.xml.datatype.XMLGregorianCalendar;
 
 /**
  * @author wenshao[szujobs@hotmail.com]
@@ -112,7 +90,7 @@ public class ParserConfig {
     private final IdentityHashMap<Type, ObjectDeserializer> deserializers = new IdentityHashMap<Type, ObjectDeserializer>();
     private final ConcurrentMap<String, Class<?>> typeMapping = new ConcurrentHashMap<String, Class<?>>(16, 0.75f, 1);
 
-    private boolean asmEnable = !ASMUtils.IS_ANDROID;
+    private boolean asmEnable = false;
 
     public final SymbolTable symbolTable = new SymbolTable(4096);
 
@@ -206,6 +184,18 @@ public class ParserConfig {
         this(null, parentClassLoader, false);
     }
 
+    private ParserConfig(Object asmFactory, ClassLoader parentClassLoader, boolean fieldBased) {
+        if (asmFactory == null) {
+            asmEnable = false;
+        }
+
+        initDeserializers();
+
+        addItemsToDeny(DENYS);
+        addItemsToAccept(AUTO_TYPE_ACCEPT_LIST);
+
+    }
+
     private void initDeserializers() {
     }
 
@@ -287,477 +277,15 @@ public class ParserConfig {
     }
 
     public ObjectDeserializer getDeserializer(Type type) {
-        ObjectDeserializer derializer = this.deserializers.get(type);
-        if (derializer != null) {
-            return derializer;
-        }
-
-        if (type instanceof Class<?>) {
-            return getDeserializer((Class<?>) type, type);
-        }
-
-        if (type instanceof ParameterizedType) {
-            Type rawType = ((ParameterizedType) type).getRawType();
-            if (rawType instanceof Class<?>) {
-                return getDeserializer((Class<?>) rawType, type);
-            } else {
-                return getDeserializer(rawType);
-            }
-        }
-
-        if (type instanceof WildcardType) {
-            WildcardType wildcardType = (WildcardType) type;
-            Type[] upperBounds = wildcardType.getUpperBounds();
-            if (upperBounds.length == 1) {
-                Type upperBoundType = upperBounds[0];
-                return getDeserializer(upperBoundType);
-            }
-        }
-
-        return JavaObjectDeserializer.instance;
+        return null;
     }
 
     public ObjectDeserializer getDeserializer(Class<?> clazz, Type type) {
-        ObjectDeserializer derializer = deserializers.get(type);
-        if (derializer != null) {
-            return derializer;
-        }
-
-        if (type == null) {
-            type = clazz;
-        }
-
-        derializer = deserializers.get(type);
-        if (derializer != null) {
-            return derializer;
-        }
-
-        {
-            JSONType annotation = TypeUtils.getAnnotation(clazz, JSONType.class);
-            if (annotation != null) {
-                Class<?> mappingTo = annotation.mappingTo();
-                if (mappingTo != Void.class) {
-                    return getDeserializer(mappingTo, mappingTo);
-                }
-            }
-        }
-
-        if (type instanceof WildcardType || type instanceof TypeVariable || type instanceof ParameterizedType) {
-            derializer = deserializers.get(clazz);
-        }
-
-        if (derializer != null) {
-            return derializer;
-        }
-
-        for (Module module : modules) {
-            derializer = module.createDeserializer(this, clazz);
-            if (derializer != null) {
-                putDeserializer(type, derializer);
-                return derializer;
-            }
-        }
-
-        String className = clazz.getName();
-        className = className.replace('$', '.');
-
-        if (className.startsWith("java.awt.") //
-                && AwtCodec.support(clazz)) {
-            if (!awtError) {
-                String[] names = new String[]{
-                        "java.awt.Point",
-                        "java.awt.Font",
-                        "java.awt.Rectangle",
-                        "java.awt.Color"
-                };
-
-                try {
-                    for (String name : names) {
-                        if (name.equals(className)) {
-                            deserializers.put(Class.forName(name), derializer = AwtCodec.instance);
-                            return derializer;
-                        }
-                    }
-                } catch (Throwable e) {
-                    // skip
-                    awtError = true;
-                }
-
-                derializer = AwtCodec.instance;
-            }
-        }
-
-        if (!jdk8Error) {
-            try {
-                if (className.startsWith("java.time.")) {
-                    String[] names = new String[]{
-                            "java.time.LocalDateTime",
-                            "java.time.LocalDate",
-                            "java.time.LocalTime",
-                            "java.time.ZonedDateTime",
-                            "java.time.OffsetDateTime",
-                            "java.time.OffsetTime",
-                            "java.time.ZoneOffset",
-                            "java.time.ZoneRegion",
-                            "java.time.ZoneId",
-                            "java.time.Period",
-                            "java.time.Duration",
-                            "java.time.Instant"
-                    };
-
-                    for (String name : names) {
-                        if (name.equals(className)) {
-                            deserializers.put(Class.forName(name), derializer = Jdk8DateCodec.instance);
-                            return derializer;
-                        }
-                    }
-                } else if (className.startsWith("java.util.Optional")) {
-                    String[] names = new String[]{
-                            "java.util.Optional",
-                            "java.util.OptionalDouble",
-                            "java.util.OptionalInt",
-                            "java.util.OptionalLong"
-                    };
-                    for (String name : names) {
-                        if (name.equals(className)) {
-                            deserializers.put(Class.forName(name), derializer = OptionalCodec.instance);
-                            return derializer;
-                        }
-                    }
-                }
-            } catch (Throwable e) {
-                // skip
-                jdk8Error = true;
-            }
-        }
-
-        if (!jodaError) {
-            try {
-                if (className.startsWith("org.joda.time.")) {
-                    String[] names = new String[]{
-                            "org.joda.time.DateTime",
-                            "org.joda.time.LocalDate",
-                            "org.joda.time.LocalDateTime",
-                            "org.joda.time.LocalTime",
-                            "org.joda.time.Instant",
-                            "org.joda.time.Period",
-                            "org.joda.time.Duration",
-                            "org.joda.time.DateTimeZone",
-                            "org.joda.time.format.DateTimeFormatter"
-                    };
-
-                    for (String name : names) {
-                        if (name.equals(className)) {
-                            deserializers.put(Class.forName(name), derializer = JodaCodec.instance);
-                            return derializer;
-                        }
-                    }
-                }
-            } catch (Throwable e) {
-                // skip
-                jodaError = true;
-            }
-        }
-
-        if ((!guavaError) //
-                && className.startsWith("com.google.common.collect.")) {
-            try {
-                String[] names = new String[]{
-                        "com.google.common.collect.HashMultimap",
-                        "com.google.common.collect.LinkedListMultimap",
-                        "com.google.common.collect.LinkedHashMultimap",
-                        "com.google.common.collect.ArrayListMultimap",
-                        "com.google.common.collect.TreeMultimap"
-                };
-
-                for (String name : names) {
-                    if (name.equals(className)) {
-                        deserializers.put(Class.forName(name), derializer = GuavaCodec.instance);
-                        return derializer;
-                    }
-                }
-            } catch (ClassNotFoundException e) {
-                // skip
-                guavaError = true;
-            }
-        }
-
-        if (className.equals("java.nio.ByteBuffer")) {
-            deserializers.put(clazz, derializer = ByteBufferCodec.instance);
-        }
-
-        if (className.equals("java.nio.file.Path")) {
-            deserializers.put(clazz, derializer = MiscCodec.instance);
-        }
-
-        if (clazz == Map.Entry.class) {
-            deserializers.put(clazz, derializer = MiscCodec.instance);
-        }
-
-        if (className.equals("org.javamoney.moneta.Money")) {
-            deserializers.put(clazz, derializer = MonetaCodec.instance);
-        }
-
-        final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        try {
-            for (AutowiredObjectDeserializer autowired : ServiceLoader.load(AutowiredObjectDeserializer.class,
-                    classLoader)) {
-                for (Type forType : autowired.getAutowiredFor()) {
-                    deserializers.put(forType, autowired);
-                }
-            }
-        } catch (Exception ex) {
-            // skip
-        }
-
-        if (derializer == null) {
-            derializer = deserializers.get(type);
-        }
-
-        if (derializer != null) {
-            return derializer;
-        }
-
-        if (clazz.isEnum()) {
-            if (jacksonCompatible) {
-                Method[] methods = clazz.getMethods();
-                for (Method method : methods) {
-                    if (TypeUtils.isJacksonCreator(method)) {
-                        derializer = createJavaBeanDeserializer(clazz, type);
-                        putDeserializer(type, derializer);
-                        return derializer;
-                    }
-                }
-            }
-
-            Class<?> deserClass = null;
-            JSONType jsonType = clazz.getAnnotation(JSONType.class);
-            if (jsonType != null) {
-                deserClass = jsonType.deserializer();
-                try {
-                    derializer = (ObjectDeserializer) deserClass.newInstance();
-                    deserializers.put(clazz, derializer);
-                    return derializer;
-                } catch (Throwable error) {
-                    // skip
-                }
-            }
-
-            derializer = new EnumDeserializer(clazz);
-        } else if (clazz.isArray()) {
-            derializer = ObjectArrayCodec.instance;
-        } else if (clazz == Set.class || clazz == HashSet.class || clazz == Collection.class || clazz == List.class
-                || clazz == ArrayList.class) {
-            derializer = CollectionCodec.instance;
-        } else if (Collection.class.isAssignableFrom(clazz)) {
-            derializer = CollectionCodec.instance;
-        } else if (Map.class.isAssignableFrom(clazz)) {
-            derializer = MapDeserializer.instance;
-        } else if (Throwable.class.isAssignableFrom(clazz)) {
-            derializer = new ThrowableDeserializer(this, clazz);
-        } else if (PropertyProcessable.class.isAssignableFrom(clazz)) {
-            derializer = new PropertyProcessableDeserializer((Class<PropertyProcessable>) clazz);
-        } else if (clazz == InetAddress.class) {
-            derializer = MiscCodec.instance;
-        } else {
-            derializer = createJavaBeanDeserializer(clazz, type);
-        }
-
-        putDeserializer(type, derializer);
-
-        return derializer;
+        return null;
     }
 
-    /**
-     * @since 1.2.25
-     */
-    public void initJavaBeanDeserializers(Class<?>... classes) {
-        if (classes == null) {
-            return;
-        }
-
-        for (Class<?> type : classes) {
-            if (type == null) {
-                continue;
-            }
-            ObjectDeserializer deserializer = createJavaBeanDeserializer(type, type);
-            putDeserializer(type, deserializer);
-        }
-    }
-
-    public ObjectDeserializer createJavaBeanDeserializer(Class<?> clazz, Type type) {
-        boolean asmEnable = this.asmEnable & !this.fieldBased;
-        if (asmEnable) {
-            JSONType jsonType = TypeUtils.getAnnotation(clazz, JSONType.class);
-
-            if (jsonType != null) {
-                Class<?> deserializerClass = jsonType.deserializer();
-                if (deserializerClass != Void.class) {
-                    try {
-                        Object deseralizer = deserializerClass.newInstance();
-                        if (deseralizer instanceof ObjectDeserializer) {
-                            return (ObjectDeserializer) deseralizer;
-                        }
-                    } catch (Throwable e) {
-                        // skip
-                    }
-                }
-
-                asmEnable = jsonType.asm();
-            }
-
-            if (asmEnable) {
-                Class<?> superClass = JavaBeanInfo.getBuilderClass(clazz, jsonType);
-                if (superClass == null) {
-                    superClass = clazz;
-                }
-
-                for (; ; ) {
-                    if (!Modifier.isPublic(superClass.getModifiers())) {
-                        asmEnable = false;
-                        break;
-                    }
-
-                    superClass = superClass.getSuperclass();
-                    if (superClass == Object.class || superClass == null) {
-                        break;
-                    }
-                }
-            }
-        }
-
-        if (clazz.getTypeParameters().length != 0) {
-            asmEnable = false;
-        }
-
-        if (asmEnable && asmFactory != null && asmFactory.classLoader.isExternalClass(clazz)) {
-            asmEnable = false;
-        }
-
-        if (asmEnable) {
-            asmEnable = ASMUtils.checkName(clazz.getSimpleName());
-        }
-
-        if (asmEnable) {
-            if (clazz.isInterface()) {
-                asmEnable = false;
-            }
-            JavaBeanInfo beanInfo = JavaBeanInfo.build(clazz
-                    , type
-                    , propertyNamingStrategy
-                    , false
-                    , TypeUtils.compatibleWithJavaBean
-                    , jacksonCompatible
-            );
-
-            if (asmEnable && beanInfo.fields.length > 200) {
-                asmEnable = false;
-            }
-
-            Constructor<?> defaultConstructor = beanInfo.defaultConstructor;
-            if (asmEnable && defaultConstructor == null && !clazz.isInterface()) {
-                asmEnable = false;
-            }
-
-            for (FieldInfo fieldInfo : beanInfo.fields) {
-                if (fieldInfo.getOnly) {
-                    asmEnable = false;
-                    break;
-                }
-
-                Class<?> fieldClass = fieldInfo.fieldClass;
-                if (!Modifier.isPublic(fieldClass.getModifiers())) {
-                    asmEnable = false;
-                    break;
-                }
-
-                if (fieldClass.isMemberClass() && !Modifier.isStatic(fieldClass.getModifiers())) {
-                    asmEnable = false;
-                    break;
-                }
-
-                if (fieldInfo.getMember() != null //
-                        && !ASMUtils.checkName(fieldInfo.getMember().getName())) {
-                    asmEnable = false;
-                    break;
-                }
-
-                JSONField annotation = fieldInfo.getAnnotation();
-                if (annotation != null //
-                        && ((!ASMUtils.checkName(annotation.name())) //
-                        || annotation.format().length() != 0 //
-                        || annotation.deserializeUsing() != Void.class //
-                        || annotation.unwrapped())
-                        || (fieldInfo.method != null && fieldInfo.method.getParameterTypes().length > 1)) {
-                    asmEnable = false;
-                    break;
-                }
-
-                if (fieldClass.isEnum()) { // EnumDeserializer
-                    ObjectDeserializer fieldDeser = this.getDeserializer(fieldClass);
-                    if (!(fieldDeser instanceof EnumDeserializer)) {
-                        asmEnable = false;
-                        break;
-                    }
-                }
-            }
-        }
-
-        if (asmEnable) {
-            if (clazz.isMemberClass() && !Modifier.isStatic(clazz.getModifiers())) {
-                asmEnable = false;
-            }
-        }
-
-        if (asmEnable) {
-            if (TypeUtils.isXmlField(clazz)) {
-                asmEnable = false;
-            }
-        }
-
-        if (!asmEnable) {
-            return new JavaBeanDeserializer(this, clazz, type);
-        }
-
-        JavaBeanInfo beanInfo = JavaBeanInfo.build(clazz, type, propertyNamingStrategy);
-        try {
-            return asmFactory.createJavaBeanDeserializer(this, beanInfo);
-            // } catch (VerifyError e) {
-            // e.printStackTrace();
-            // return new JavaBeanDeserializer(this, clazz, type);
-        } catch (NoSuchMethodException ex) {
-            return new JavaBeanDeserializer(this, clazz, type);
-        } catch (JSONException asmError) {
-            return new JavaBeanDeserializer(this, beanInfo);
-        } catch (Exception e) {
-            throw new JSONException("create asm deserializer error, " + clazz.getName(), e);
-        }
-    }
-
-    public FieldDeserializer createFieldDeserializer(ParserConfig mapping, //
-                                                     JavaBeanInfo beanInfo, //
-                                                     FieldInfo fieldInfo) {
-        Class<?> clazz = beanInfo.clazz;
-        Class<?> fieldClass = fieldInfo.fieldClass;
-
-        Class<?> deserializeUsing = null;
-        JSONField annotation = fieldInfo.getAnnotation();
-        if (annotation != null) {
-            deserializeUsing = annotation.deserializeUsing();
-            if (deserializeUsing == Void.class) {
-                deserializeUsing = null;
-            }
-        }
-
-        if (deserializeUsing == null && (fieldClass == List.class || fieldClass == ArrayList.class)) {
-            return new ArrayListTypeFieldDeserializer(mapping, clazz, fieldInfo);
-        }
-
-        return new DefaultFieldDeserializer(mapping, clazz, fieldInfo);
-    }
 
     public void putDeserializer(Type type, ObjectDeserializer deserializer) {
-        deserializers.put(type, deserializer);
     }
 
 
@@ -971,117 +499,6 @@ public class ParserConfig {
 
         if (clazz == null) {
             clazz = TypeUtils.getClassFromMapping(typeName);
-        }
-
-        if (clazz == null) {
-            clazz = deserializers.findClass(typeName);
-        }
-
-        if (clazz == null) {
-            clazz = typeMapping.get(typeName);
-        }
-
-        if (clazz != null) {
-            if (expectClass != null
-                    && clazz != java.util.HashMap.class
-                    && !expectClass.isAssignableFrom(clazz)) {
-                throw new JSONException("type not match. " + typeName + " -> " + expectClass.getName());
-            }
-
-            return clazz;
-        }
-
-        if (!autoTypeSupport) {
-            long hash = h3;
-            for (int i = 3; i < className.length(); ++i) {
-                char c = className.charAt(i);
-                hash ^= c;
-                hash *= PRIME;
-
-                if (Arrays.binarySearch(denyHashCodes, hash) >= 0) {
-                    throw new JSONException("autoType is not support. " + typeName);
-                }
-
-                // white list
-                if (Arrays.binarySearch(acceptHashCodes, hash) >= 0) {
-                    if (clazz == null) {
-                        clazz = TypeUtils.loadClass(typeName, defaultClassLoader, true);
-                    }
-
-                    if (expectClass != null && expectClass.isAssignableFrom(clazz)) {
-                        throw new JSONException("type not match. " + typeName + " -> " + expectClass.getName());
-                    }
-
-                    return clazz;
-                }
-            }
-        }
-
-        boolean jsonType = false;
-        InputStream is = null;
-        try {
-            String resource = typeName.replace('.', '/') + ".class";
-            if (defaultClassLoader != null) {
-                is = defaultClassLoader.getResourceAsStream(resource);
-            } else {
-                is = ParserConfig.class.getClassLoader().getResourceAsStream(resource);
-            }
-            if (is != null) {
-                ClassReader classReader = new ClassReader(is, true);
-                TypeCollector visitor = new TypeCollector("<clinit>", new Class[0]);
-                classReader.accept(visitor);
-                jsonType = visitor.hasJsonType();
-            }
-        } catch (Exception e) {
-            // skip
-        } finally {
-            IOUtils.close(is);
-        }
-
-        final int mask = Feature.SupportAutoType.mask;
-        boolean autoTypeSupport = this.autoTypeSupport
-                || (features & mask) != 0
-                || (JSON.DEFAULT_PARSER_FEATURE & mask) != 0;
-
-        if (clazz == null && (autoTypeSupport || jsonType || expectClassFlag)) {
-            boolean cacheClass = autoTypeSupport || jsonType;
-            clazz = TypeUtils.loadClass(typeName, defaultClassLoader, cacheClass);
-        }
-
-        if (clazz != null) {
-            if (jsonType) {
-                TypeUtils.addMapping(typeName, clazz);
-                return clazz;
-            }
-
-            if (ClassLoader.class.isAssignableFrom(clazz) // classloader is danger
-                    || javax.sql.DataSource.class.isAssignableFrom(clazz) // dataSource can load jdbc driver
-                    || javax.sql.RowSet.class.isAssignableFrom(clazz) //
-                    ) {
-                throw new JSONException("autoType is not support. " + typeName);
-            }
-
-            if (expectClass != null) {
-                if (expectClass.isAssignableFrom(clazz)) {
-                    TypeUtils.addMapping(typeName, clazz);
-                    return clazz;
-                } else {
-                    throw new JSONException("type not match. " + typeName + " -> " + expectClass.getName());
-                }
-            }
-
-            JavaBeanInfo beanInfo = JavaBeanInfo.build(clazz, clazz, propertyNamingStrategy);
-            if (beanInfo.creatorConstructor != null && autoTypeSupport) {
-                throw new JSONException("autoType is not support. " + typeName);
-            }
-        }
-
-        if (!autoTypeSupport) {
-            throw new JSONException("autoType is not support. " + typeName);
-        }
-
-        if (clazz != null) {
-            TypeUtils.addMapping(typeName, clazz);
         }
 
         return clazz;

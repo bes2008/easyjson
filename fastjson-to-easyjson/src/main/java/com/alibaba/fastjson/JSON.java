@@ -16,6 +16,23 @@
 package com.alibaba.fastjson;
 
 
+import com.alibaba.fastjson.parser.DefaultJSONParser;
+import com.alibaba.fastjson.parser.Feature;
+import com.alibaba.fastjson.parser.ParserConfig;
+import com.alibaba.fastjson.parser.deserializer.ParseProcess;
+import com.alibaba.fastjson.serializer.JSONSerializable;
+import com.alibaba.fastjson.serializer.SerializeConfig;
+import com.alibaba.fastjson.serializer.SerializeFilter;
+import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.alibaba.fastjson.util.IOUtils;
+import com.alibaba.fastjson.util.TypeUtils;
+import com.github.fangjinuo.easyjson.core.JSONBuilder;
+import com.github.fangjinuo.easyjson.core.JSONBuilderProvider;
+import com.github.fangjinuo.easyjson.core.JsonTreeNode;
+import com.github.fangjinuo.easyjson.core.node.JsonArrayNode;
+import com.github.fangjinuo.easyjson.core.node.JsonObjectNode;
+import com.github.fangjinuo.easyjson.core.util.type.Types;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -27,21 +44,6 @@ import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.util.*;
-
-import com.alibaba.fastjson.parser.*;
-import com.alibaba.fastjson.parser.deserializer.ExtraProcessor;
-import com.alibaba.fastjson.parser.deserializer.ExtraTypeProvider;
-import com.alibaba.fastjson.parser.deserializer.FieldTypeResolver;
-import com.alibaba.fastjson.parser.deserializer.ParseProcess;
-import com.alibaba.fastjson.serializer.*;
-import com.alibaba.fastjson.util.IOUtils;
-import com.alibaba.fastjson.util.TypeUtils;
-import com.github.fangjinuo.easyjson.core.JSONBuilder;
-import com.github.fangjinuo.easyjson.core.JSONBuilderProvider;
-import com.github.fangjinuo.easyjson.core.JsonTreeNode;
-import com.github.fangjinuo.easyjson.core.node.JsonArrayNode;
-import com.github.fangjinuo.easyjson.core.node.JsonObjectNode;
-import com.github.fangjinuo.easyjson.core.util.type.Types;
 
 /**
  * This is the main class for using Fastjson. You usually call these two methods {@link #toJSONString(Object)} and {@link #parseObject(String, Class)}.
@@ -287,8 +289,8 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
      *             {@link com.alibaba.fastjson.TypeReference} class. For example, to get the type for
      *             {@code Collection<Foo>}, you should use:
      *             <pre>
-     *             Type type = new TypeReference&lt;Collection&lt;Foo&gt;&gt;(){}.getType();
-     *             </pre>
+     *                         Type type = new TypeReference&lt;Collection&lt;Foo&gt;&gt;(){}.getType();
+     *                         </pre>
      * @return an object of type T from the string
      */
     @SuppressWarnings("unchecked")
@@ -635,7 +637,7 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
                                       String dateFormat, //
                                       int defaultFeatures, //
                                       SerializerFeature... features) {
-       return JSONBuilderProvider.create().build().toJson(object);
+        return JSONBuilderProvider.create().build().toJson(object);
     }
 
     /**
@@ -790,7 +792,7 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
                                             String dateFormat, //
                                             int defaultFeatures, //
                                             SerializerFeature... features) throws IOException {
-        String str =JSONBuilderProvider.create().build().toJson(object);
+        String str = JSONBuilderProvider.create().build().toJson(object);
         os.write(str.getBytes());
         return str.length();
     }
@@ -801,39 +803,25 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
         return toJSONString();
     }
 
+    @Override
     public String toJSONString() {
-        SerializeWriter out = new SerializeWriter();
-        try {
-            new JSONSerializer(out).write(this);
-            return out.toString();
-        } finally {
-            out.close();
-        }
+        return JSONBuilderProvider.create().build().toJson(this);
     }
 
     /**
      * @since 1.2.57
      */
     public String toString(SerializerFeature... features) {
-        SerializeWriter out = new SerializeWriter(null, JSON.DEFAULT_GENERATE_FEATURE, features);
-
-        try {
-            new JSONSerializer(out).write(this);
-            return out.toString();
-        } finally {
-            out.close();
-        }
+        return JSONBuilderProvider.create().build().toJson(this);
     }
 
+    @Override
     public void writeJSONString(Appendable appendable) {
-        SerializeWriter out = new SerializeWriter();
+        String str = JSONBuilderProvider.create().build().toJson(this);
         try {
-            new JSONSerializer(out).write(this);
-            appendable.append(out.toString());
+            appendable.append(str);
         } catch (IOException e) {
-            throw new JSONException(e.getMessage(), e);
-        } finally {
-            out.close();
+            e.printStackTrace();
         }
     }
 
@@ -930,21 +918,8 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
             return javaObject;
         }
 
-        ObjectSerializer serializer = config.getObjectWriter(clazz);
-        if (serializer instanceof JavaBeanSerializer) {
-            JavaBeanSerializer javaBeanSerializer = (JavaBeanSerializer) serializer;
-
-            JSONObject json = new JSONObject();
-            try {
-                Map<String, Object> values = javaBeanSerializer.getFieldValuesMap(javaObject);
-                for (Map.Entry<String, Object> entry : values.entrySet()) {
-                    json.put(entry.getKey(), toJSON(entry.getValue()));
-                }
-            } catch (Exception e) {
-                throw new JSONException("toJSON error", e);
-            }
-            return json;
-        }
+        JSONObject json = new JSONObject();
+        // TODO as JSONObject
 
         String text = JSON.toJSONString(javaObject);
         return JSON.parse(text);
@@ -1015,94 +990,22 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
     }
 
     public static boolean isValid(String str) {
-        if (str == null || str.length() == 0) {
-            return false;
-        }
-
-        JSONScanner lexer = new JSONScanner(str);
-        try {
-            lexer.nextToken();
-
-            final int token = lexer.token();
-            switch (token) {
-                case JSONToken.LBRACE:
-                    if (lexer.getCurrent() == JSONLexer.EOI) {
-                        return false;
-                    }
-                    lexer.skipObject(true);
-                    break;
-                case JSONToken.LBRACKET:
-                    lexer.skipArray(true);
-                    break;
-                case JSONToken.LITERAL_INT:
-                case JSONToken.LITERAL_STRING:
-                case JSONToken.LITERAL_FLOAT:
-                case JSONToken.LITERAL_ISO8601_DATE:
-                case JSONToken.NULL:
-                case JSONToken.TRUE:
-                case JSONToken.FALSE:
-                    lexer.nextToken();
-                    break;
-                default:
-                    return false;
-            }
-
-            return lexer.token() == JSONToken.EOF;
-        } catch (Exception ex) {
-            return false;
-        } finally {
-            lexer.close();
-        }
+        JsonTreeNode node = JSONBuilderProvider.create().build().fromJson(str);
+        return node == null;
     }
 
     public static boolean isValidObject(String str) {
-        if (str == null || str.length() == 0) {
-            return false;
-        }
-
-        JSONScanner lexer = new JSONScanner(str);
-
-        try {
-            lexer.nextToken();
-            final int token = lexer.token();
-            if (token == JSONToken.LBRACE) {
-                if (lexer.getCurrent() == JSONLexer.EOI) {
-                    return false;
-                }
-                lexer.skipObject(true);
-                return lexer.token() == JSONToken.EOF;
-            }
-            return false;
-        } catch (Exception ex) {
-            return false;
-        } finally {
-            lexer.close();
-        }
+        JsonTreeNode node = JSONBuilderProvider.create().build().fromJson(str);
+        return node != null && node.isJsonObjectNode();
     }
 
     public static boolean isValidArray(String str) {
-        if (str == null || str.length() == 0) {
-            return false;
-        }
-
-        JSONScanner lexer = new JSONScanner(str);
-        try {
-            lexer.nextToken();
-            final int token = lexer.token();
-            if (token == JSONToken.LBRACKET) {
-                lexer.skipArray(true);
-                return lexer.token() == JSONToken.EOF;
-            }
-            return false;
-        } catch (Exception ex) {
-            return false;
-        } finally {
-            lexer.close();
-        }
+        JsonTreeNode node = JSONBuilderProvider.create().build().fromJson(str);
+        return node != null && node.isJsonArrayNode();
     }
 
     public static <T> void handleResovleTask(DefaultJSONParser parser, T value) {
-        parser.handleResovleTask(value);
+        // NOOP
     }
 
     public final static String VERSION = "1.2.58";

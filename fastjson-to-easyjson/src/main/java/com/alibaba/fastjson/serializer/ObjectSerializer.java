@@ -18,10 +18,6 @@ package com.alibaba.fastjson.serializer;
 import java.io.IOException;
 import java.lang.reflect.Type;
 
-public class ObjectSerializer {
-    void write(JSONSerializer serializer, //
-               Object object, //
-               Object fieldName, //
-               Type fieldType, //
-               int features) throws IOException;
+public interface ObjectSerializer {
+    void write(JSONSerializer serializer, Object object, Object fieldName, Type fieldType, int features) throws IOException;
 }
