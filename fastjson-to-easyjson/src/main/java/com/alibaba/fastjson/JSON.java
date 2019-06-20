@@ -30,7 +30,7 @@ import com.github.fangjinuo.easyjson.core.JSONBuilder;
 import com.github.fangjinuo.easyjson.core.JSONBuilderProvider;
 import com.github.fangjinuo.easyjson.core.JsonTreeNode;
 import com.github.fangjinuo.easyjson.core.node.JsonArrayNode;
-import com.github.fangjinuo.easyjson.core.node.JsonObjectNode;
+import com.github.fangjinuo.easyjson.core.node.JsonTreeNodes;
 import com.github.fangjinuo.easyjson.core.util.type.Types;
 
 import java.io.IOException;
@@ -38,6 +38,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Writer;
 import java.lang.reflect.Array;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
@@ -161,8 +162,29 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
         if (text == null) {
             return null;
         }
+        return JsonTreeNodes.toJavaObject(getJsonBuilder(DEFAULT_GENERATE_FEATURE).build().fromJson(text));
+    }
 
-        return JSONBuilderProvider.create().build().fromJson(text);
+    private static JSONBuilder getJsonBuilder(int features, SerializerFeature... features2) {
+        JSONBuilder jsonBuilder = JSONBuilderProvider.create();
+        if (features2 != null) {
+            for (SerializerFeature feature : features2) {
+                features |= feature.getMask();
+            }
+        }
+        boolean serializeNulls = (SerializerFeature.WriteMapNullValue.getMask() & features) != 0;
+        jsonBuilder.serializeNulls(serializeNulls);
+        boolean serializeEnumUsingToString = (SerializerFeature.WriteEnumUsingToString.getMask() & features) != 0;
+        jsonBuilder.serializeEnumUsingToString(serializeEnumUsingToString);
+        boolean serializeEnumUsingName = (SerializerFeature.WriteEnumUsingName.getMask() & features) != 0;
+        jsonBuilder.serializeEnumUsingValue(!serializeEnumUsingName);
+        boolean skipTransientField = (SerializerFeature.SkipTransientField.getMask() & features) != 0;
+        if (skipTransientField) {
+            jsonBuilder.excludeFieldsWithAppendModifiers(Modifier.TRANSIENT);
+        }
+        boolean prettyFormat = (SerializerFeature.PrettyFormat.getMask() & features) != 0;
+        jsonBuilder.prettyFormat(prettyFormat);
+        return jsonBuilder;
     }
 
     public static Object parse(String text, int features) {
@@ -200,11 +222,7 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
         ByteBuffer byteBuf = ByteBuffer.wrap(input, off, len);
         CharBuffer charBuf = CharBuffer.wrap(chars);
         IOUtils.decode(charsetDecoder, byteBuf, charBuf);
-
-        int position = charBuf.position();
-
-        String text = null;
-        // TODO text
+        String text = charBuf.toString();
         return parse(text, features);
     }
 
@@ -218,7 +236,7 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
     }
 
     public static JSONObject parseObject(String text, Feature... features) {
-        return (JSONObject) parse(text, features);
+        return parseObject(text);
     }
 
     public static JSONObject parseObject(String text) {
@@ -289,8 +307,8 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
      *             {@link com.alibaba.fastjson.TypeReference} class. For example, to get the type for
      *             {@code Collection<Foo>}, you should use:
      *             <pre>
-     *                         Type type = new TypeReference&lt;Collection&lt;Foo&gt;&gt;(){}.getType();
-     *                         </pre>
+     *                                                 Type type = new TypeReference&lt;Collection&lt;Foo&gt;&gt;(){}.getType();
+     *                                                 </pre>
      * @return an object of type T from the string
      */
     @SuppressWarnings("unchecked")
@@ -308,13 +326,7 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
         if (input == null) {
             return null;
         }
-
-        for (Feature feature : features) {
-            featureValues = Feature.config(featureValues, feature, true);
-        }
-
-        return JSONBuilderProvider.create().build().fromJson(input, clazz);
-
+        return parseObject(input, clazz);
     }
 
     /**
@@ -335,17 +347,7 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
         if (input == null) {
             return null;
         }
-
-        if (features != null) {
-            for (Feature feature : features) {
-                featureValues |= feature.mask;
-            }
-        }
-
-        JSONBuilder builder = JSONBuilderProvider.create();
-        // TODO adapter
-
-        return builder.build().fromJson(input, clazz);
+        return getJsonBuilder(JSON.DEFAULT_GENERATE_FEATURE).build().fromJson(input, clazz);
 
     }
 
@@ -424,9 +426,8 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
         CharBuffer charByte = CharBuffer.wrap(chars);
         IOUtils.decode(charsetDecoder, byteBuf, charByte);
 
-        int position = charByte.position();
 
-        return (T) parseObject(chars, position, clazz, features);
+        return (T) parseObject(charByte.toString(), clazz, features);
     }
 
     @SuppressWarnings("unchecked")
@@ -434,20 +435,7 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
         if (input == null || input.length == 0) {
             return null;
         }
-
-        int featureValues = DEFAULT_PARSER_FEATURE;
-        for (Feature feature : features) {
-            featureValues = Feature.config(featureValues, feature, true);
-        }
-
-        JsonTreeNode node = JSONBuilderProvider.create().build().fromJson(new String(input));
-        if (node.isJsonObjectNode()) {
-            JsonObjectNode objectNode = node.getAsJsonObjectNode();
-        }
-
-        JSONObject obj = null;
-        // TODO adapter
-        return (T) obj;
+        return parseObject(new String(input), clazz);
     }
 
     /**
@@ -539,10 +527,7 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
         if (text == null) {
             return null;
         }
-
-        List<T> list;
-
-        return JSONBuilderProvider.create().build().fromJson(text, Types.getListParameterizedType(clazz));
+        return getJsonBuilder(JSON.DEFAULT_GENERATE_FEATURE).build().fromJson(text, Types.getListParameterizedType(clazz));
     }
 
     public static List<Object> parseArray(String text, Type[] types) {
@@ -575,7 +560,7 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
      * @since 1.2.11
      */
     public static String toJSONString(Object object, int defaultFeatures, SerializerFeature... features) {
-        return JSONBuilderProvider.create().build().toJson(object);
+        return getJsonBuilder(defaultFeatures, features).build().toJson(object);
     }
 
     /**
@@ -583,7 +568,12 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
      */
     public static String toJSONStringWithDateFormat(Object object, String dateFormat,
                                                     SerializerFeature... features) {
-        return toJSONString(object, SerializeConfig.globalInstance, null, dateFormat, DEFAULT_GENERATE_FEATURE, features);
+        return toJSONStringWithDateFormat(object, dateFormat, JSON.DEFAULT_GENERATE_FEATURE, features);
+    }
+
+    public static String toJSONStringWithDateFormat(Object object, String dateFormat, int defaultFeatures,
+                                                    SerializerFeature... features) {
+        return getJsonBuilder(defaultFeatures, features).serializeDateUsingPattern(dateFormat).build().toJson(object);
     }
 
     public static String toJSONString(Object object, SerializeFilter filter, SerializerFeature... features) {
@@ -637,7 +627,7 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
                                       String dateFormat, //
                                       int defaultFeatures, //
                                       SerializerFeature... features) {
-        return JSONBuilderProvider.create().build().toJson(object);
+        return toJSONStringWithDateFormat(object, dateFormat, defaultFeatures, features);
     }
 
     /**
@@ -696,7 +686,7 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
                                      String dateFormat, //
                                      int defaultFeatures, //
                                      SerializerFeature... features) {
-        return JSONBuilderProvider.create().build().toJson(object).getBytes();
+        return toJSONStringWithDateFormat(object, dateFormat, defaultFeatures, features).getBytes(charset);
     }
 
     public static String toJSONString(Object object, boolean prettyFormat) {
@@ -730,7 +720,7 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
      * @since 1.2.11
      */
     public static void writeJSONString(Writer writer, Object object, int defaultFeatures, SerializerFeature... features) {
-        String string = JSONBuilderProvider.create().build().toJson(object);
+        String string = toJSONString(object, defaultFeatures, features);
         try {
             writer.write(string);
         } catch (IOException e) {
@@ -792,8 +782,8 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
                                             String dateFormat, //
                                             int defaultFeatures, //
                                             SerializerFeature... features) throws IOException {
-        String str = JSONBuilderProvider.create().build().toJson(object);
-        os.write(str.getBytes());
+        String str = toJSONStringWithDateFormat(object, dateFormat, defaultFeatures, features);
+        os.write(str.getBytes(charset));
         return str.length();
     }
 
@@ -805,19 +795,19 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
 
     @Override
     public String toJSONString() {
-        return JSONBuilderProvider.create().build().toJson(this);
+        return toJSONString(this);
     }
 
     /**
      * @since 1.2.57
      */
     public String toString(SerializerFeature... features) {
-        return JSONBuilderProvider.create().build().toJson(this);
+        return toJSONString(this, features);
     }
 
     @Override
     public void writeJSONString(Appendable appendable) {
-        String str = JSONBuilderProvider.create().build().toJson(this);
+        String str = toString();
         try {
             appendable.append(str);
         } catch (IOException e) {
@@ -922,7 +912,7 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
         // TODO as JSONObject
 
         String text = JSON.toJSONString(javaObject);
-        return JSON.parse(text);
+        return parse(text);
     }
 
     public static <T> T toJavaObject(JSON json, Class<T> clazz) {
@@ -990,17 +980,20 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
     }
 
     public static boolean isValid(String str) {
-        JsonTreeNode node = JSONBuilderProvider.create().build().fromJson(str);
-        return node == null;
+        try {
+            return parse(str) != null;
+        } catch (Throwable ex) {
+            return false;
+        }
     }
 
     public static boolean isValidObject(String str) {
-        JsonTreeNode node = JSONBuilderProvider.create().build().fromJson(str);
+        JsonTreeNode node = getJsonBuilder(DEFAULT_GENERATE_FEATURE).build().fromJson(str);
         return node != null && node.isJsonObjectNode();
     }
 
     public static boolean isValidArray(String str) {
-        JsonTreeNode node = JSONBuilderProvider.create().build().fromJson(str);
+        JsonTreeNode node = getJsonBuilder(DEFAULT_GENERATE_FEATURE).build().fromJson(str);
         return node != null && node.isJsonArrayNode();
     }
 
