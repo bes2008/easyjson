@@ -246,6 +246,10 @@ public class JsonPrimitiveNode extends JsonTreeNode {
         return false;
     }
 
+    public Object getValue() {
+        return value;
+    }
+
     /**
      * convenience method to get this element as a primitive double.
      *
