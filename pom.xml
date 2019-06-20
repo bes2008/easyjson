@@ -12,6 +12,9 @@
         <module>easyjson-gson</module>
         <module>easyjson-jackson</module>
         <module>easyjson-fastjson</module>
+        <module>gson-to-easyjson</module>
+        <module>jackson-to-easyjson</module>
+        <module>fastjson-to-easyjson</module>
     </modules>
     <name>easyjson</name>
     <packaging>pom</packaging>

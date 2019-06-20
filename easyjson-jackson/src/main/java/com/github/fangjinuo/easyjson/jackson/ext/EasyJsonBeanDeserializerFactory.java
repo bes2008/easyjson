@@ -36,7 +36,7 @@ import java.util.Set;
 public class EasyJsonBeanDeserializerFactory extends BeanDeserializerFactory {
     private EasyJsonObjectMapper objectMapper;
 
-    public EasyJsonBeanDeserializerFactory(DeserializerFactoryConfig config, EasyJsonObjectMapper objectMapper) {
+    EasyJsonBeanDeserializerFactory(DeserializerFactoryConfig config, EasyJsonObjectMapper objectMapper) {
         super(config);
         this.objectMapper = objectMapper;
     }

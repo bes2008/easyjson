@@ -39,7 +39,7 @@ import java.util.List;
 public class EasyJsonBeanSerializerFactory extends BeanSerializerFactory {
     private EasyJsonObjectMapper objectMapper;
 
-    public EasyJsonBeanSerializerFactory(SerializerFactoryConfig config, EasyJsonObjectMapper objectMapper) {
+    EasyJsonBeanSerializerFactory(SerializerFactoryConfig config, EasyJsonObjectMapper objectMapper) {
         super(config);
         this.objectMapper = objectMapper;
     }
