@@ -61,7 +61,7 @@ public abstract class JSONBuilder {
     }
 
     public JSONBuilder prettyFormat(boolean prettyFormat) {
-        this.prettyFormat = true;
+        this.prettyFormat = prettyFormat;
         return this;
     }
 
