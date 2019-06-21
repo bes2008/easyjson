@@ -60,14 +60,11 @@ public class SimpleModelTests {
             if (i == 1) {
                 person = p;
             }
-
             persons.add(person);
             nameToPersonMap.put(p.getName(), p);
             idToPersonMap.put(p.getId(), p);
         }
     }
-
-
     @Test
     public void testFastJson() throws Exception {
         System.out.println("=====================FastJson test start =============================");
