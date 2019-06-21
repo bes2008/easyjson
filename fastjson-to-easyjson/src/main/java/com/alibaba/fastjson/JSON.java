@@ -514,14 +514,15 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
             return null;
         }
 
-        JsonTreeNode node = JSONBuilderProvider.create().build().fromJson(text);
+        JsonTreeNode node = getJsonBuilder(DEFAULT_GENERATE_FEATURE).build().fromJson(text);
+        JsonArrayNode arrayNode = null;
         if (node.isJsonArrayNode()) {
-            JsonArrayNode arrayNode = node.getAsJsonArrayNode();
+            arrayNode = node.getAsJsonArrayNode();
+        }else {
+            arrayNode = new JsonArrayNode();
+            arrayNode.add(node);
         }
-
-        JSONArray array = null;
-        // TODO adapter
-        return array;
+        return (JSONArray) toJSON(JsonTreeNodes.toJavaObject(arrayNode));
     }
 
     public static <T> List<T> parseArray(String text, Class<T> clazz) {
