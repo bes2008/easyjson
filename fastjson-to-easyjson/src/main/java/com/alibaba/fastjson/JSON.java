@@ -885,6 +885,9 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
         }
 
         Class<?> clazz = javaObject.getClass();
+        if(JsonTreeNode.class.isAssignableFrom(clazz)){
+            return toJSON(JsonTreeNodes.toJavaObject((JsonTreeNode)javaObject), config);
+        }
 
         if (clazz.isEnum()) {
             return ((Enum<?>) javaObject).name();
