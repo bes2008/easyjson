@@ -27,6 +27,21 @@
                 <version>${project.version}</version>
             </dependency>
             <dependency>
+                <groupId>com.github.fangjinuo.easyjson</groupId>
+                <artifactId>easyjson-gson</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.fangjinuo.easyjson</groupId>
+                <artifactId>easyjson-fastjson</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.fangjinuo.easyjson</groupId>
+                <artifactId>easyjson-jackson</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
                 <version>1.7.25</version>
