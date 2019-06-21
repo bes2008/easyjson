@@ -17,5 +17,9 @@
             <groupId>com.github.fangjinuo.easyjson</groupId>
             <artifactId>easyjson-core</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.github.fangjinuo.easyjson</groupId>
+            <artifactId>easyjson-gson</artifactId>
+        </dependency>
     </dependencies>
 </project>
