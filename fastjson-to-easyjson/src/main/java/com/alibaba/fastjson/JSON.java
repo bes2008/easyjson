@@ -71,6 +71,7 @@ import java.util.*;
  * @author wenshao[szujobs@hotmail.com]
  * @see com.alibaba.fastjson.TypeReference
  */
+@SuppressWarnings({"all"})
 public abstract class JSON implements JSONStreamAware, JSONAware {
     public static TimeZone defaultTimeZone = TimeZone.getDefault();
     public static Locale defaultLocale = Locale.getDefault();
@@ -917,11 +918,7 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
             return ((Number) javaObject).longValue();
         }
 
-        JSONObject json = new JSONObject();
-        // TODO as JSONObject
-
-        String text = JSON.toJSONString(javaObject);
-        return parse(text);
+        return toJSON(parse(toJSONString(javaObject)));
     }
 
     public static <T> T toJavaObject(JSON json, Class<T> clazz) {
