@@ -16,6 +16,7 @@
 package com.github.fangjinuo.easyjson.tests.fastjson;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.parser.Feature;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.util.ParameterizedTypeImpl;
@@ -52,7 +53,7 @@ public class SimpleModelTests {
             c.setMobilePhone("mphone" + i);
             c.setQq(null);
             c.setPhone("phone" + i);
-            c.setMsn("msn"+i);
+            c.setMsn("msn" + i);
             c.setWebchat("webchat" + i);
 
 
@@ -72,18 +73,28 @@ public class SimpleModelTests {
         System.out.println("=====================FastJson test start =============================");
 
         // test simple object
+        System.out.println("test simple object");
         String str1 = JSON.toJSONString(person, SerializerFeature.WriteMapNullValue);
         System.out.println(str1);
         Person p1 = JSON.parseObject(str1, Person.class, Feature.AutoCloseSource);
         System.out.println(p1.equals(person));
-        System.out.println(JSON.toJSONString(person, SerializerFeature.WriteMapNullValue));
+        System.out.println(JSON.toJSONString(p1, SerializerFeature.WriteMapNullValue));
+
+        // test fastjson JSONObject
+        System.out.println("test fastjson JSONObject");
+        JSONObject jsonObject = JSON.parseObject(str1);
+        System.out.println(jsonObject);
+        System.out.println(JSON.toJSONString(jsonObject));
 
         // test list
+        System.out.println("test list");
         String str2 = JSON.toJSONString(persons, SerializerFeature.WriteMapNullValue, SerializerFeature.DisableCircularReferenceDetect);
         System.out.println(str2);
         List<Person> persons2 = JSON.parseObject(str2, new ParameterizedTypeImpl(new Class[]{Person.class}, null, List.class));
         System.out.println(JSON.toJSONString(persons2, SerializerFeature.WriteMapNullValue, SerializerFeature.DisableCircularReferenceDetect));
+
         // test map
+        System.out.println("test map");
         String str3 = JSON.toJSONString(idToPersonMap);
         System.out.println(str3);
         Map<Integer, Person> personMap = JSON.parseObject(str3, new ParameterizedTypeImpl(new Class[]{Integer.class, Person.class}, null, Map.class));
