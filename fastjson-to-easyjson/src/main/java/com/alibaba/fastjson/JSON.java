@@ -907,6 +907,12 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
         if (ParserConfig.isPrimitive2(clazz)) {
             return javaObject;
         }
+        if(Number.class.isAssignableFrom(clazz)){
+            if(javaObject.toString().contains(".")) {
+                return ((Number) javaObject).doubleValue();
+            }
+            return ((Number) javaObject).longValue();
+        }
 
         JSONObject json = new JSONObject();
         // TODO as JSONObject
