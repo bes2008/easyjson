@@ -13,6 +13,8 @@
         <module>easyjson-jackson</module>
         <module>easyjson-fastjson</module>
         <module>fastjson-to-easyjson</module>
+        <module>progsbase-to-easyjson</module>
+        <module>easyjson-examples</module>
     </modules>
     <name>easyjson</name>
     <packaging>pom</packaging>
