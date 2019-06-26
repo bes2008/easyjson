@@ -25,46 +25,15 @@ import com.github.fangjinuo.easyjson.core.JSONBuilderProvider;
 import com.github.fangjinuo.easyjson.core.JsonTreeNode;
 import com.github.fangjinuo.easyjson.core.exclusion.IgnoreAnnotationExclusion;
 import com.github.fangjinuo.easyjson.core.util.type.Types;
-import com.github.fangjinuo.easyjson.tests.examples.struct.Contact;
-import com.github.fangjinuo.easyjson.tests.examples.struct.Gender;
+import com.github.fangjinuo.easyjson.tests.examples.BaseTests;
 import com.github.fangjinuo.easyjson.tests.examples.struct.Person;
 import org.junit.Test;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
-public class FastjsonToEasyjsonTests {
-    private static Person person;
-    private static final List<Person> persons = new ArrayList<Person>();
-    private static final Map<String, Person> nameToPersonMap = new HashMap<String, Person>();
-    private static final Map<Integer, Person> idToPersonMap = new HashMap<Integer, Person>();
+public class FastjsonToEasyjsonTests extends BaseTests {
 
-    static {
-        for (int i = 1; i <= 10; i++) {
-            Person p = new Person();
-            p.setId(i);
-            p.setName("name_" + i);
-            p.setBirthday(new Date());
-            p.setGender(i % 2 == 0 ? Gender.man : Gender.woman);
-            p.setAuthCode(12312425353464564L + i);
-
-            Contact c = new Contact();
-            p.setContact(c);
-            c.setEmail(p.getName() + "@gmail.com");
-            c.setMobilePhone("mphone" + i);
-            c.setQq(null);
-            c.setPhone("phone" + i);
-            c.setMsn("msn" + i);
-            c.setWebchat("webchat" + i);
-
-
-            if (i == 1) {
-                person = p;
-            }
-            persons.add(person);
-            nameToPersonMap.put(p.getName(), p);
-            idToPersonMap.put(p.getId(), p);
-        }
-    }
     @Test
     public void testFastJson() throws Exception {
         System.out.println("=====================FastJson test start =============================");

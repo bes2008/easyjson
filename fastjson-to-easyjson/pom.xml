@@ -19,13 +19,14 @@
         </dependency>
         <dependency>
             <groupId>com.github.fangjinuo.easyjson</groupId>
-            <artifactId>easyjson-gson</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.fangjinuo.easyjson</groupId>
             <artifactId>easyjson-examples</artifactId>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.alibaba</groupId>
+                    <artifactId>fastjson</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 </project>
