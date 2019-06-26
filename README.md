@@ -67,3 +67,5 @@ if you want adapter progsbase to easyjson:
 </dependency>
 ```
 
+#### How to:
+   ***@see*** easyjson-examples testcases
