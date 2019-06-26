@@ -16,6 +16,17 @@
             <artifactId>JSON</artifactId>
             <version>0.3.9</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.fangjinuo.easyjson</groupId>
+            <artifactId>easyjson-gson</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.fangjinuo.easyjson</groupId>
+            <artifactId>easyjson-jackson</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.fangjinuo.easyjson</groupId>
+            <artifactId>easyjson-fastjson</artifactId>
+        </dependency>
     </dependencies>
-
 </project>
