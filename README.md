@@ -50,7 +50,7 @@ if you want use fastjson:
     <version>${easyjson.version}</version>
 </dependency>
 ```
-if you want adapter fastjson to other:
+if you want adapter fastjson to easyjson:
 ```xml
 <dependency>
     <groupId>com.github.fangjinuo.easyjson</groupId>
@@ -58,7 +58,7 @@ if you want adapter fastjson to other:
     <version>${easyjson.version}</version>
 </dependency>
 ```
-if you want adapter progsbase to other:
+if you want adapter progsbase to easyjson:
 ```xml
 <dependency>
     <groupId>com.github.fangjinuo.easyjson</groupId>
