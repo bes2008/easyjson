@@ -115,4 +115,30 @@ public class JsonLibraryTests extends BaseTests {
         System.out.println(objectMapper.writeValueAsString(personMap));
         System.out.println("=====================Jackson test end =============================");
     }
+
+    @Test
+    public void testProgsbase() throws Exception {
+        System.out.println("=====================Jackson test start =============================");
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        // test simple object
+        String str1 = objectMapper.writeValueAsString(person);
+        System.out.println(str1);
+        Person p1 = objectMapper.readValue(str1, Person.class);
+        System.out.println(p1.equals(person));
+        System.out.println(objectMapper.writeValueAsString(person));
+
+        // test list
+        String str2 = objectMapper.writeValueAsString(persons);
+        System.out.println(str2);
+        List<Person> persons2 = objectMapper.readValue(str2, objectMapper.getTypeFactory().constructParametricType(List.class, Person.class));
+        System.out.println(objectMapper.writeValueAsString(persons2));
+        // test map
+        String str3 = objectMapper.writeValueAsString(idToPersonMap);
+        System.out.println(str3);
+        Map<Integer, Person> personMap = objectMapper.readValue(str3, objectMapper.getTypeFactory().constructMapLikeType(Map.class, Integer.class, Person.class));
+        System.out.println(objectMapper.writeValueAsString(personMap));
+        System.out.println("=====================Jackson test end =============================");
+    }
+
 }

@@ -25,14 +25,14 @@ import com.github.fangjinuo.easyjson.core.JSONBuilderProvider;
 import com.github.fangjinuo.easyjson.core.JsonTreeNode;
 import com.github.fangjinuo.easyjson.core.exclusion.IgnoreAnnotationExclusion;
 import com.github.fangjinuo.easyjson.core.util.type.Types;
-import com.github.fangjinuo.easyjson.tests.fastjson.struct.Contact;
-import com.github.fangjinuo.easyjson.tests.fastjson.struct.Gender;
-import com.github.fangjinuo.easyjson.tests.fastjson.struct.Person;
+import com.github.fangjinuo.easyjson.tests.examples.struct.Contact;
+import com.github.fangjinuo.easyjson.tests.examples.struct.Gender;
+import com.github.fangjinuo.easyjson.tests.examples.struct.Person;
 import org.junit.Test;
 
 import java.util.*;
 
-public class SimpleModelTests {
+public class FastjsonToEasyjsonTests {
     private static Person person;
     private static final List<Person> persons = new ArrayList<Person>();
     private static final Map<String, Person> nameToPersonMap = new HashMap<String, Person>();
