@@ -25,6 +25,8 @@ import com.github.fangjinuo.easyjson.core.JSONBuilderProvider;
 import com.github.fangjinuo.easyjson.core.JsonTreeNode;
 import com.github.fangjinuo.easyjson.core.exclusion.IgnoreAnnotationExclusion;
 import com.github.fangjinuo.easyjson.core.util.type.Types;
+import com.github.fangjinuo.easyjson.fastjson.FastJsonJSONBuilder;
+import com.github.fangjinuo.easyjson.gson.GsonJSONBuilder;
 import com.github.fangjinuo.easyjson.jackson.JacksonJSONBuilder;
 import com.github.fangjinuo.easyjson.tests.examples.struct.Contact;
 import com.github.fangjinuo.easyjson.tests.examples.struct.Gender;
@@ -50,14 +52,14 @@ public class SimpleModelTests {
             p.setName("name_" + i);
             p.setBirthday(new Date());
             p.setGender(i % 2 == 0 ? Gender.man : Gender.woman);
-            p.setAuthCode(12312425353464564L+i);
+            p.setAuthCode(12312425353464564L + i);
 
             Contact c = new Contact();
             p.setContact(c);
             c.setEmail(p.getName() + "@gmail.com");
             c.setMobilePhone("mphone" + i);
             c.setPhone("phone" + i);
-            c.setMsn("msn"+i);
+            c.setMsn("msn" + i);
             c.setWebchat("webchat" + i);
 
 
@@ -156,80 +158,105 @@ public class SimpleModelTests {
     }
 
     @Test
-    public void testEasyJson_jackson() {
-        System.out.println("=====================EasyJson [Jackson] test start =============================");
-        JSONBuilder jsonBuilder = JSONBuilderProvider.create();
-        com.github.fangjinuo.easyjson.core.JSON gson = jsonBuilder.serializeNulls(false).serializeNumberAsString(true).serializeEnumUsingValue(true).addDeserializationExclusion(new IgnoreAnnotationExclusion()).build();
+    public void testEasyJson() {
+        Map<String, JSONBuilder> jsonBuilderMap = new HashMap<String, JSONBuilder>();
+        jsonBuilderMap.put("jackson", new JacksonJSONBuilder());
+        jsonBuilderMap.put("fastjson", new FastJsonJSONBuilder());
+        jsonBuilderMap.put("gson", new GsonJSONBuilder());
 
-        // test simple object
-        String str1 = gson.toJson(person, person.getClass());
-        System.out.println(str1);
-        Person p1 = gson.fromJson(str1, Person.class);
-        System.out.println(p1.equals(person));
-        System.out.println(gson.toJson(p1));
+        for(Map.Entry<String, JSONBuilder> entry : jsonBuilderMap.entrySet()) {
+            String jsonLibraryName = entry.getKey();
+            System.out.println("=====================EasyJson test ["+jsonLibraryName+"] start =============================");
+            JSONBuilder jsonBuilder = entry.getValue();
+            com.github.fangjinuo.easyjson.core.JSON gson = jsonBuilder.serializeNulls(false).serializeNumberAsString(true).serializeEnumUsingValue(true).addDeserializationExclusion(new IgnoreAnnotationExclusion()).build();
 
-        // test list
-        String str2 = gson.toJson(persons);
-        System.out.println(str2);
-        List<Person> persons2 = gson.fromJson(str2, Types.getListParameterizedType(Person.class));
-        System.out.println(gson.toJson(persons2));
-        // test map
-        String str3 = gson.toJson(idToPersonMap);
-        System.out.println(str3);
-        Map<Integer, Person> personMap = gson.fromJson(str3, Types.getMapParameterizedType(Integer.class, Person.class));
-        System.out.println(gson.toJson(personMap, Types.getMapParameterizedType(Integer.class, Person.class)));
-        System.out.println("=====================EasyJson [Jackson] test end =============================");
+            // test simple object
+            String str1 = gson.toJson(person, person.getClass());
+            System.out.println(str1);
+            Person p1 = gson.fromJson(str1, Person.class);
+            System.out.println(p1.equals(person));
+            System.out.println(gson.toJson(p1));
+
+            // test list
+            String str2 = gson.toJson(persons);
+            System.out.println(str2);
+            List<Person> persons2 = gson.fromJson(str2, Types.getListParameterizedType(Person.class));
+            System.out.println(gson.toJson(persons2));
+            // test map
+            String str3 = gson.toJson(idToPersonMap);
+            System.out.println(str3);
+            Map<Integer, Person> personMap = gson.fromJson(str3, Types.getMapParameterizedType(Integer.class, Person.class));
+            System.out.println(gson.toJson(personMap, Types.getMapParameterizedType(Integer.class, Person.class)));
+            System.out.println("=====================EasyJson test ["+jsonLibraryName+"] end =============================");
+        }
     }
 
     @Test
-    public void testEasyJson_jackson_enum_list(){
-        System.out.println("===============EasyJson [Jackson] enum test start=================");
-        List<Gender> genders = new ArrayList<Gender>();
-        genders.add(Gender.man);
-        genders.add(Gender.woman);
-        genders.add(Gender.woman);
-        genders.add(Gender.man);
+    public void testEasyJson_enum_list() {
+        Map<String, JSONBuilder> jsonBuilderMap = new HashMap<String, JSONBuilder>();
+        jsonBuilderMap.put("jackson", new JacksonJSONBuilder());
+        jsonBuilderMap.put("fastjson", new FastJsonJSONBuilder());
+        jsonBuilderMap.put("gson", new GsonJSONBuilder());
 
-        com.github.fangjinuo.easyjson.core.JSON json = new JacksonJSONBuilder().serializeEnumUsingValue(true).build();
-        String jsonString = json.toJson(genders);
-        System.out.println(jsonString);
-        List<Gender> a = json.fromJson(jsonString, Types.getListParameterizedType(Gender.class));
-        jsonString = json.toJson(a);
-        System.out.println(jsonString);
-        System.out.println("===============EasyJson [Jackson] enum test end=================");
+        for(Map.Entry<String, JSONBuilder> entry : jsonBuilderMap.entrySet()) {
+            String jsonLibraryName = entry.getKey();
+
+            System.out.println("===============EasyJson enum test ["+jsonLibraryName+"] start=================");
+            List<Gender> genders = new ArrayList<Gender>();
+            genders.add(Gender.man);
+            genders.add(Gender.woman);
+            genders.add(Gender.woman);
+            genders.add(Gender.man);
+
+            com.github.fangjinuo.easyjson.core.JSON json = new JacksonJSONBuilder().serializeEnumUsingValue(true).build();
+            String jsonString = json.toJson(genders);
+            System.out.println(jsonString);
+            List<Gender> a = json.fromJson(jsonString, Types.getListParameterizedType(Gender.class));
+            jsonString = json.toJson(a);
+            System.out.println(jsonString);
+            System.out.println("===============EasyJson enum test ["+jsonLibraryName+"]  end=================");
+        }
     }
 
     @Test
-    public void testEasyJson_jackson_tree() {
+    public void testEasyJson_tree() {
+        Map<String, JSONBuilder> jsonBuilderMap = new HashMap<String, JSONBuilder>();
+        jsonBuilderMap.put("jackson", new JacksonJSONBuilder());
+        jsonBuilderMap.put("fastjson", new FastJsonJSONBuilder());
+        jsonBuilderMap.put("gson", new GsonJSONBuilder());
 
-        System.out.println("=====================EasyJson tree [Jackson] test start =============================");
-        JSONBuilder jsonBuilder = JSONBuilderProvider.create();
-        com.github.fangjinuo.easyjson.core.JSON gson = jsonBuilder.serializeNulls(true).serializeNumberAsString(true).serializeEnumUsingValue(true).build();
+        for(Map.Entry<String, JSONBuilder> entry : jsonBuilderMap.entrySet()) {
+            String jsonLibraryName = entry.getKey();
 
-        // test simple object
-        String str1 = gson.toJson(person, person.getClass());
-        System.out.println(str1);
-        Person p1 = gson.fromJson(str1, Person.class);
-        System.out.println(gson.toJson(p1));
-        JsonTreeNode t1 = gson.fromJson(str1);
-        System.out.println(gson.toJson(t1));
+            System.out.println("=====================EasyJson tree ["+jsonLibraryName+"] test start =============================");
+            JSONBuilder jsonBuilder = JSONBuilderProvider.create();
+            com.github.fangjinuo.easyjson.core.JSON gson = jsonBuilder.serializeNulls(true).serializeNumberAsString(true).serializeEnumUsingValue(true).build();
 
-        // test list
-        String str2 = gson.toJson(persons);
-        System.out.println(str2);
-        List<Person> persons2 = gson.fromJson(str2, Types.getListParameterizedType(Person.class));
-        System.out.println(gson.toJson(persons2));
-        JsonTreeNode t2 = gson.fromJson(str2);
-        System.out.println(gson.toJson(t2));
+            // test simple object
+            String str1 = gson.toJson(person, person.getClass());
+            System.out.println(str1);
+            Person p1 = gson.fromJson(str1, Person.class);
+            System.out.println(gson.toJson(p1));
+            JsonTreeNode t1 = gson.fromJson(str1);
+            System.out.println(gson.toJson(t1));
 
-        // test map
-        String str3 = gson.toJson(idToPersonMap);
-        System.out.println(str3);
-        Map<Integer, Person> personMap = gson.fromJson(str3, Types.getMapParameterizedType(Integer.class, Person.class));
-        System.out.println(gson.toJson(personMap, Types.getMapParameterizedType(Integer.class, Person.class)));
-        JsonTreeNode t3 = gson.fromJson(str3);
-        System.out.println(gson.toJson(t3));
-        System.out.println("=====================EasyJson tree [Jackson] test end =============================");
+            // test list
+            String str2 = gson.toJson(persons);
+            System.out.println(str2);
+            List<Person> persons2 = gson.fromJson(str2, Types.getListParameterizedType(Person.class));
+            System.out.println(gson.toJson(persons2));
+            JsonTreeNode t2 = gson.fromJson(str2);
+            System.out.println(gson.toJson(t2));
+
+            // test map
+            String str3 = gson.toJson(idToPersonMap);
+            System.out.println(str3);
+            Map<Integer, Person> personMap = gson.fromJson(str3, Types.getMapParameterizedType(Integer.class, Person.class));
+            System.out.println(gson.toJson(personMap, Types.getMapParameterizedType(Integer.class, Person.class)));
+            JsonTreeNode t3 = gson.fromJson(str3);
+            System.out.println(gson.toJson(t3));
+            System.out.println("=====================EasyJson tree ["+jsonLibraryName+"] test end =============================");
+        }
     }
 
 }
