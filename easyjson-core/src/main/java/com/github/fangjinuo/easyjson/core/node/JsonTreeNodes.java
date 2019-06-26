@@ -22,8 +22,54 @@ import java.util.*;
 
 public class JsonTreeNodes {
     public static JsonTreeNode fromJavaObject(Object object) {
+        return fromJavaObject(object, null);
+    }
+
+    public static JsonTreeNode fromJavaObject(Object object, MapingToJsonTreeNode mapper) {
         if (object == null) {
             return JsonNullNode.INSTANCE;
+        }
+        if (object instanceof JsonTreeNode) {
+            return (JsonTreeNode) object;
+        }
+
+        if (object instanceof Collection) {
+            JsonArrayNode arrayNode = new JsonArrayNode();
+            Collection c = (Collection) object;
+            for (Object e : c) {
+                JsonTreeNode element = fromJavaObject(e, mapper);
+                arrayNode.add(element);
+            }
+            return arrayNode;
+        }
+
+        if (object.getClass().isArray()) {
+            Object[] array = (Object[]) object;
+            JsonArrayNode arrayNode = new JsonArrayNode();
+            for (int i = 0; i < array.length; i++) {
+                Object e = array[i];
+                JsonTreeNode element = fromJavaObject(e, mapper);
+                arrayNode.add(element);
+            }
+            return arrayNode;
+        }
+
+        if (object instanceof Map) {
+            JsonObjectNode objectNode = new JsonObjectNode();
+            Map map = (Map) object;
+            Set keySet = map.keySet();
+            for (Object key : keySet) {
+                objectNode.addProperty(key.toString(), fromJavaObject(map.get(key), mapper));
+            }
+            return objectNode;
+        }
+
+        JsonTreeNode node = null;
+        if (mapper != null) {
+            node = mapper.mapping(object);
+        }
+        if(node!=null){
+            return node;
         }
         JSON json = JSONBuilderProvider.create().build();
         String jsonString = json.toJson(object);
