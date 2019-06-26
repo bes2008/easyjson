@@ -21,5 +21,11 @@
             <groupId>com.github.fangjinuo.easyjson</groupId>
             <artifactId>easyjson-gson</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.fangjinuo.easyjson</groupId>
+            <artifactId>easyjson-examples</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 </project>
