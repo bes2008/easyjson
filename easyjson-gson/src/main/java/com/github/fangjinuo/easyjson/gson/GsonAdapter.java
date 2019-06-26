@@ -22,6 +22,7 @@ import com.github.fangjinuo.easyjson.gson.node.GsonBasedJsonTreeNodeMapper;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import org.junit.Test;
 
 import java.lang.reflect.Type;
 
@@ -29,6 +30,7 @@ public class GsonAdapter implements JsonHandler {
     private GsonBasedJsonTreeNodeMapper mapper = new GsonBasedJsonTreeNodeMapper();
     private Gson gson;
 
+    @Override
     public String serialize(Object src, Type typeOfT) throws JsonException {
         if(src instanceof JsonTreeNode){
             JsonElement element = mapper.mapping((JsonTreeNode) src);
@@ -37,6 +39,7 @@ public class GsonAdapter implements JsonHandler {
         return gson.toJson(src, typeOfT);
     }
 
+    @Override
     public <T> T deserialize(String json, Type typeOfT) throws JsonException {
         return gson.fromJson(json, typeOfT);
     }
