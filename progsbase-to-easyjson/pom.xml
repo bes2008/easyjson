@@ -19,6 +19,16 @@
         <dependency>
             <groupId>com.github.fangjinuo.easyjson</groupId>
             <artifactId>easyjson-examples</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.progsbase.libraries</groupId>
+                    <artifactId>JSON</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.github.fangjinuo.easyjson</groupId>
+                    <artifactId>easyjson-gson</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
     </dependencies>

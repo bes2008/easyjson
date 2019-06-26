@@ -22,7 +22,6 @@ import com.github.fangjinuo.easyjson.gson.node.GsonBasedJsonTreeNodeMapper;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import org.junit.Test;
 
 import java.lang.reflect.Type;
 
