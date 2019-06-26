@@ -18,7 +18,7 @@ branches:
 
 script:
   - echo $TRAVIS_BUILD_DIR
-  - mvn clean package -DskipDocs -s "$TRAVIS_BUILD_DIR/maven_settings_for_travisci.xml"
+    && mvn clean package -DskipDocs -s "$TRAVIS_BUILD_DIR/maven_settings_for_travisci.xml"
 
 
 notifications:
