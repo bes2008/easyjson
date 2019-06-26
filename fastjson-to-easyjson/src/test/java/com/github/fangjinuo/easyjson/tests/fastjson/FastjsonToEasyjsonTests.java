@@ -16,19 +16,16 @@
 package com.github.fangjinuo.easyjson.tests.fastjson;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.parser.Feature;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.util.ParameterizedTypeImpl;
-import com.github.fangjinuo.easyjson.core.JSONBuilder;
-import com.github.fangjinuo.easyjson.core.JSONBuilderProvider;
-import com.github.fangjinuo.easyjson.core.JsonTreeNode;
-import com.github.fangjinuo.easyjson.core.exclusion.IgnoreAnnotationExclusion;
-import com.github.fangjinuo.easyjson.core.util.type.Types;
 import com.github.fangjinuo.easyjson.tests.examples.BaseTests;
 import com.github.fangjinuo.easyjson.tests.examples.struct.Person;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -69,62 +66,63 @@ public class FastjsonToEasyjsonTests extends BaseTests {
     }
 
     @Test
-    public void testEasyJson_FastJson() throws Exception {
-        System.out.println("=====================EasyJson [fastjson] test start =============================");
-        JSONBuilder jsonBuilder = JSONBuilderProvider.create();
-        com.github.fangjinuo.easyjson.core.JSON gson = jsonBuilder.serializeNulls(true).serializeNumberAsString(true).serializeEnumUsingValue(true).addDeserializationExclusion(new IgnoreAnnotationExclusion()).build();
+    public void testJSONArray() {
+        System.out.println("=====================FastJson JSONArray start=============================");
 
-        // test simple object
-        String str1 = gson.toJson(person, person.getClass());
-        System.out.println(str1);
-        Person p1 = gson.fromJson(str1, Person.class);
-        System.out.println(p1.equals(person));
-        System.out.println(gson.toJson(p1));
+        JSONArray jsonArray = new JSONArray();
+        for (Person person : persons) {
+            jsonArray.add(person);
+        }
 
         // test list
-        String str2 = gson.toJson(persons);
+        String str2 = JSON.toJSONString(persons, SerializerFeature.WriteMapNullValue, SerializerFeature.DisableCircularReferenceDetect);
         System.out.println(str2);
-        List<Person> persons2 = gson.fromJson(str2, Types.getListParameterizedType(Person.class));
-        System.out.println(gson.toJson(persons2));
-        // test map
-        String str3 = gson.toJson(idToPersonMap);
+        List<Person> persons2 = JSON.parseObject(str2, new ParameterizedTypeImpl(new Class[]{Person.class}, null, List.class));
+        System.out.println(JSON.toJSONString(persons2, SerializerFeature.WriteMapNullValue, SerializerFeature.DisableCircularReferenceDetect));
+
+        String str22 = JSON.toJSONString(jsonArray, SerializerFeature.WriteMapNullValue, SerializerFeature.DisableCircularReferenceDetect);
+        System.out.println(str22);
+        List<Person> persons22 = JSON.parseObject(str22, new ParameterizedTypeImpl(new Class[]{Person.class}, null, List.class));
+        System.out.println(JSON.toJSONString(persons22, SerializerFeature.WriteMapNullValue, SerializerFeature.DisableCircularReferenceDetect));
+
+        List<Person> persons23 = JSON.parseArray(str22, Person.class);
+        System.out.println(JSON.toJSONString(persons23, SerializerFeature.WriteMapNullValue, SerializerFeature.DisableCircularReferenceDetect));
+
+        JSONArray jsonArray3 = JSON.parseArray(str22);
+        String str3 = JSON.toJSONString(jsonArray3, SerializerFeature.WriteMapNullValue, SerializerFeature.DisableCircularReferenceDetect);
         System.out.println(str3);
-        Map<Integer, Person> personMap = gson.fromJson(str3, Types.getMapParameterizedType(Integer.class, Person.class));
-        System.out.println(gson.toJson(personMap, Types.getMapParameterizedType(Integer.class, Person.class)));
-        System.out.println("=====================EasyJson [fastjson] test end =============================");
+
+        System.out.println("=====================FastJson JSONArray end=============================");
     }
 
     @Test
-    public void testEasyJson_fastjson_tree() {
+    public void testJSONArrayList() {
+        System.out.println("=====================FastJson JSONArray List start=============================");
 
-        System.out.println("=====================EasyJson tree [FastJson] test start =============================");
-        JSONBuilder jsonBuilder = JSONBuilderProvider.create();
-        com.github.fangjinuo.easyjson.core.JSON gson = jsonBuilder.serializeNulls(true).serializeNumberAsString(true).serializeEnumUsingValue(true).build();
-
-        // test simple object
-        String str1 = gson.toJson(person, person.getClass());
-        System.out.println(str1);
-        Person p1 = gson.fromJson(str1, Person.class);
-        System.out.println(gson.toJson(p1));
-        JsonTreeNode t1 = gson.fromJson(str1);
-        System.out.println(gson.toJson(t1));
+        List<JSONArray> jsonArrayList = new ArrayList<JSONArray>();
+        JSONArray jsonArray = null;
+        for (int i = 0; i < persons.size(); i++) {
+            if (i % 3 == 0) {
+                jsonArray = new JSONArray();
+                jsonArrayList.add(jsonArray);
+            }
+            jsonArray.add(persons.get(i));
+        }
 
         // test list
-        String str2 = gson.toJson(persons);
+        String str2 = JSON.toJSONString(jsonArrayList, SerializerFeature.WriteMapNullValue, SerializerFeature.DisableCircularReferenceDetect);
         System.out.println(str2);
-        List<Person> persons2 = gson.fromJson(str2, Types.getListParameterizedType(Person.class));
-        System.out.println(gson.toJson(persons2));
-        JsonTreeNode t2 = gson.fromJson(str2);
-        System.out.println(gson.toJson(t2));
+        List<JSONArray> persons2 = JSON.parseObject(str2, new ParameterizedTypeImpl(new Class[]{JSONArray.class}, null, List.class));
+        System.out.println(JSON.toJSONString(persons2, SerializerFeature.WriteMapNullValue, SerializerFeature.DisableCircularReferenceDetect));
 
-        // test map
-        String str3 = gson.toJson(idToPersonMap);
+        List<JSONArray> persons23 = JSON.parseArray(str2, JSONArray.class);
+        System.out.println(JSON.toJSONString(persons23, SerializerFeature.WriteMapNullValue, SerializerFeature.DisableCircularReferenceDetect));
+
+        JSONArray jsonArray3 = JSON.parseArray(str2);
+        String str3 = JSON.toJSONString(jsonArray3, SerializerFeature.WriteMapNullValue, SerializerFeature.DisableCircularReferenceDetect);
         System.out.println(str3);
-        Map<Integer, Person> personMap = gson.fromJson(str3, Types.getMapParameterizedType(Integer.class, Person.class));
-        System.out.println(gson.toJson(personMap, Types.getMapParameterizedType(Integer.class, Person.class)));
-        JsonTreeNode t3 = gson.fromJson(str3);
-        System.out.println(gson.toJson(t3));
-        System.out.println("=====================EasyJson tree [FastJson] test end =============================");
+
+        System.out.println("=====================FastJson JSONArray List end=============================");
     }
 
 }
