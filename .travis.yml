@@ -15,6 +15,10 @@ git:
 branches:
   only:
     - master
+
+script: mvn clean package -DskipDocs
+
+
 notifications:
   slack:
     on_success: always
