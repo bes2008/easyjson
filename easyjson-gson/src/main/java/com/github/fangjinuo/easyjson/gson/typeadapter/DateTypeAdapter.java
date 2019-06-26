@@ -41,6 +41,7 @@ public class DateTypeAdapter implements JsonSerializer<Date>, JsonDeserializer<D
         usingToString = using;
     }
 
+    @Override
     public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         if (json.isJsonObject() || json.isJsonArray() || json.isJsonNull()) {
             return null;
@@ -59,6 +60,7 @@ public class DateTypeAdapter implements JsonSerializer<Date>, JsonDeserializer<D
         return new Date(json.getAsLong());
     }
 
+    @Override
     public JsonElement serialize(Date src, Type typeOfSrc, JsonSerializationContext context) {
         if(src==null){
             return JsonNull.INSTANCE;

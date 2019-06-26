@@ -54,6 +54,7 @@ public class EnumTypeAdapter implements JsonSerializer<Enum>, JsonDeserializer<E
         this.usingField = usingField;
     }
 
+    @Override
     public Enum deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         if (json.isJsonNull() || json.isJsonArray() || json.isJsonObject()) {
             return null;
@@ -132,6 +133,7 @@ public class EnumTypeAdapter implements JsonSerializer<Enum>, JsonDeserializer<E
         return null;
     }
 
+    @Override
     public JsonElement serialize(Enum e, Type typeOfSrc, JsonSerializationContext context) {
         if(e==null){
             return JsonNull.INSTANCE;
