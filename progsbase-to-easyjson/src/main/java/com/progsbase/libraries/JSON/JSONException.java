@@ -8,4 +8,8 @@ public class JSONException extends Exception {
     public JSONException(Exception e) {
         super(e);
     }
+
+    public JSONException(Throwable e) {
+        super(e);
+    }
 }
