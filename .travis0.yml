@@ -10,6 +10,12 @@ jdk:
   - openjdk7
   - openjdk8
   - openjdk10
+
+before_script: export && echo invoking before script, build directory: $TRAVIS_BUILD_DIR
+script: echo $TRAVIS_BUILD_DIR && mvn clean package -DskipDocs -s "$TRAVIS_BUILD_DIR/maven_settings_for_travisci.xml"
+
+
+
 git:
   quiet: true
 branches:
@@ -24,7 +30,4 @@ notifications:
       - fs1194361820@163.com
     on_success: never
     on_failure: always
-
-before_script: export && echo invoking before script, build directory: $TRAVIS_BUILD_DIR
-script: echo $TRAVIS_BUILD_DIR && mvn clean package -DskipDocs -s "$TRAVIS_BUILD_DIR/maven_settings_for_travisci.xml"
 
