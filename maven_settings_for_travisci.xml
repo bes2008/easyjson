@@ -146,6 +146,12 @@ under the License.
    |-->
   <mirrors>
       <mirror>
+          <id>central</id>
+          <name>Maven Repository Switchboard</name>
+          <url>http://repo1.maven.org/maven2/</url>
+          <mirrorOf>central</mirrorOf>
+      </mirror>
+      <mirror>
           <id>alimaven</id>
           <mirrorOf>central</mirrorOf>
           <name>aliyun maven</name>
@@ -156,12 +162,6 @@ under the License.
           <mirrorOf>central</mirrorOf>
           <name>Nexus aliyun</name>
           <url>http://maven.aliyun.com/nexus/content/groups/public</url>
-      </mirror>
-      <mirror>
-          <id>central</id>
-          <name>Maven Repository Switchboard</name>
-          <url>http://repo1.maven.org/maven2/</url>
-          <mirrorOf>central</mirrorOf>
       </mirror>
       <mirror>
           <id>repo2</id>
