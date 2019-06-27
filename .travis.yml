@@ -26,6 +26,8 @@ before_script:
   - export
   - !!str "[[ $compilejdk = 'openjdk6' ]] && export JAVA_HOME='/usr/lib/jvm/java-6-openjdk-amd64'"
   - export
+  - java -version
+  - mvn --version
   - mvn clean package -DskipDocs -s "$TRAVIS_BUILD_DIR/maven_settings_for_travisci.xml"
 
 git:
