@@ -1,3 +1,19 @@
+[![JSON](https://www.json.org/img/json160.gif)](http://www.json.org/)
+
+[![License](https://img.shields.io/badge/license-LGPL3.0-green.svg)](https://github.com/fangjinuo/sqlhelper/blob/master/LICENSE)
+
+[![Build Status](https://www.travis-ci.com/fangjinuo/easyjson.svg?branch=master)](https://travis-ci.com/fangjinuo/easyjson)
+[![code quality](https://codebeat.co/badges/37791135-62dd-4d5e-800f-35668895324a)](https://codebeat.co/projects/github-com-fangjinuo-easyjson-master)
+[![CodeFactor](https://www.codefactor.io/repository/github/fangjinuo/easyjson/badge/master)](https://www.codefactor.io/repository/github/fangjinuo/easyjson/overview/master)
+
+[![gson](https://img.shields.io/badge/gson-2.x-green.svg)](https://github.com/google/gson)
+[![fastjson](https://img.shields.io/badge/fastjson-1.2.x-green.svg)](https://github.com/alibaba/fastjson)
+[![jackson](https://img.shields.io/badge/jackson-2.x-green.svg)](https://github.com/FasterXML/jackson)
+[![progsbase](https://img.shields.io/badge/progsbase-0.3.x-green.svg)](https://repo.progsbase.com/repoviewer/no.inductive.idea10.programs/JSON/latest/)
+
+[![JDK](https://img.shields.io/badge/JDK-1.6+-green.svg)](https://www.oracle.com/technetwork/java/javase/downloads/index.html)
+
+
 # easyjson
 Provides a unified JSON access API, you can adapter any JSON library to Gson, Jackson, FastJson with easyjson.
 
