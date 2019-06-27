@@ -24,7 +24,7 @@ install: true  # use it to skip default install dependencies command: mvn instal
 before_script:
   - echo "environment variables :"
   - export
-  - [[ $compilejdk = 'openjdk6' ]] && export JAVA_HOME="/usr/lib/jvm/java-7-openjdk-amd64"
+  - !!str "[[ $compilejdk = 'openjdk6' ]] && export JAVA_HOME='/usr/lib/jvm/java-7-openjdk-amd64'"
   - export
   - mvn clean package -DskipDocs -s "$TRAVIS_BUILD_DIR/maven_settings_for_travisci.xml"
 
