@@ -23,7 +23,7 @@ install: true  # use it to skip default install dependencies command: mvn instal
 
 before_script:
   - export
-  - !!str "[[ $compilejdk = 'openjdk6' ]] && export JAVA_HOME='/usr/lib/jvm/java-6-openjdk-amd64'"
+#  - !!str "[[ $compilejdk = 'openjdk6' ]] && export JAVA_HOME='/usr/lib/jvm/java-6-openjdk-amd64'"
   - export
   - java -version
   - mvn --version
