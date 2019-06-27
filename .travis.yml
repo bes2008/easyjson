@@ -10,7 +10,7 @@ matrix:
   include:
     - jdk: oraclejdk8
       env: compilejdk=oraclejdk8
-    - jdk: openjdk6
+    - jdk: openjdk8
       env: compilejdk=openjdk6
     - jdk: openjdk7
       env: compilejdk=openjdk7
