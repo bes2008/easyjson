@@ -7,10 +7,10 @@ matrix:
     - jdk: openjdk8
     - jdk: openjdk10
     - jdk: openjdk8
-      addons:
-        apt:
-          packages:
-            - openjdk-6-jdk
+#      addons:
+#        apt:
+#          packages:
+#            - openjdk-6-jdk
 
 before_script: export && echo invoking before script, build directory: $TRAVIS_BUILD_DIR
 script: echo $TRAVIS_BUILD_DIR && mvn clean package -DskipDocs -s "$TRAVIS_BUILD_DIR/maven_settings_for_travisci.xml"
