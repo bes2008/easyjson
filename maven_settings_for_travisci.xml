@@ -146,6 +146,13 @@ under the License.
    |-->
   <mirrors>
       <mirror>
+          <id>repo2</id>
+          <mirrorOf>central</mirrorOf>
+          <name>Human Readable Name for this Mirror.</name>
+          <url>http://repo2.maven.org/maven2/</url>
+      </mirror>
+      <!--
+      <mirror>
           <id>central</id>
           <name>Maven Repository Switchboard</name>
           <url>http://repo1.maven.org/maven2/</url>
@@ -181,7 +188,7 @@ under the License.
           <name>JBoss Public Repository Group</name>
           <url>http://repository.jboss.org/nexus/content/groups/public</url>
       </mirror>
-
+        -->
     <!-- mirror
      | Specifies a repository mirror site to use instead of a given repository. The repository that
      | this mirror serves has an ID that matches the mirrorOf element of this mirror. IDs are used
