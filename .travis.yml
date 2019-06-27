@@ -1,22 +1,25 @@
 language: java
 
-
+addons:
+  apt:
+    packages:
+      - openjdk-6-jdk
 
 
 matrix:
   include:
     - jdk: oraclejdk8
+      env: compilejdk=oraclejdk8
+    - jdk: openjdk8
+      env: compilejdk=openjdk6
     - jdk: openjdk7
+      env: compilejdk=openjdk7
     - jdk: openjdk8
+      env: compilejdk=openjdk8
     - jdk: openjdk10
-    - jdk: openjdk8
-      env: jdk6
-#      addons:
-#        apt:
-#          packages:
-#            - openjdk-6-jdk
+      env: compilejdk=openjdk10
 
-install: true
+install: true  # use it to skip default install dependencies command: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 
 before_script:
   - echo "environment variables :"
