@@ -2,11 +2,11 @@ language: java
 
 matrix:
   include:
-    - jdk: oraclejdk8
-    - jdk: openjdk7
-    - jdk: openjdk8
-    - jdk: openjdk10
-    - jdk: openjdk8
+    - jvm: "6"
+    - jvm: "7"
+    - jvm: "8"
+    - jvm: "10"
+#    - jdk: openjdk8
 #      addons:
 #        apt:
 #          packages:
