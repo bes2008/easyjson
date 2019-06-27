@@ -15,6 +15,7 @@
 package com.github.fangjinuo.easyjson.tests.examples;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.parser.Feature;
 import com.alibaba.fastjson.serializer.SerializerFeature;
@@ -23,7 +24,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fangjinuo.easyjson.tests.examples.struct.Person;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
+import com.progsbase.libraries.JSON.*;
 import org.junit.Test;
 
 import java.text.DateFormat;
@@ -63,6 +67,31 @@ public class JsonLibraryTests extends BaseTests {
         System.out.println(str3);
         Map<Integer, Person> personMap = JSON.parseObject(str3, new ParameterizedTypeImpl(new Class[]{Integer.class, Person.class}, null, Map.class));
         System.out.println(JSON.toJSONString(personMap, SerializerFeature.WriteMapNullValue));
+
+        JSONArray jsonArray = new JSONArray();
+        for (Person person : persons) {
+            jsonArray.add(person);
+        }
+
+        // test list
+        String str20 = JSON.toJSONString(persons, SerializerFeature.WriteMapNullValue, SerializerFeature.DisableCircularReferenceDetect);
+        System.out.println(str20);
+        List<Person> persons20 = JSON.parseObject(str20, new ParameterizedTypeImpl(new Class[]{Person.class}, null, List.class));
+        System.out.println(JSON.toJSONString(persons20, SerializerFeature.WriteMapNullValue, SerializerFeature.DisableCircularReferenceDetect));
+
+        String str22 = JSON.toJSONString(jsonArray, SerializerFeature.WriteMapNullValue, SerializerFeature.DisableCircularReferenceDetect);
+        System.out.println(str22);
+        List<Person> persons22 = JSON.parseObject(str22, new ParameterizedTypeImpl(new Class[]{Person.class}, null, List.class));
+        System.out.println(JSON.toJSONString(persons22, SerializerFeature.WriteMapNullValue, SerializerFeature.DisableCircularReferenceDetect));
+
+        List<Person> persons23 = JSON.parseArray(str22, Person.class);
+        System.out.println(JSON.toJSONString(persons23, SerializerFeature.WriteMapNullValue, SerializerFeature.DisableCircularReferenceDetect));
+
+        JSONArray jsonArray4 = JSON.parseArray(str22);
+        String str4 = JSON.toJSONString(jsonArray4, SerializerFeature.WriteMapNullValue, SerializerFeature.DisableCircularReferenceDetect);
+        System.out.println(str4);
+
+
         System.out.println("=====================FastJson test end =============================");
     }
 
@@ -77,6 +106,9 @@ public class JsonLibraryTests extends BaseTests {
         Person p1 = gson.fromJson(str1, Person.class);
         System.out.println(p1.equals(person));
         System.out.println(gson.toJson(p1));
+        JsonElement element = new JsonParser().parse(str1);
+        System.out.println(gson.toJson(element));
+
 
         // test list
         String str2 = gson.toJson(persons);
@@ -88,6 +120,9 @@ public class JsonLibraryTests extends BaseTests {
         System.out.println(str3);
         Map<Integer, Person> personMap = gson.fromJson(str3, TypeToken.getParameterized(Map.class, Integer.class, Person.class).getType());
         System.out.println(gson.toJson(personMap, TypeToken.getParameterized(Map.class, Integer.class, Person.class).getType()));
+
+
+
         System.out.println("=====================Gson test end =============================");
     }
 
@@ -101,7 +136,7 @@ public class JsonLibraryTests extends BaseTests {
         System.out.println(str1);
         Person p1 = objectMapper.readValue(str1, Person.class);
         System.out.println(p1.equals(person));
-        System.out.println(objectMapper.writeValueAsString(person));
+        System.out.println(objectMapper.writeValueAsString(p1));
 
         // test list
         String str2 = objectMapper.writeValueAsString(persons);
@@ -118,27 +153,27 @@ public class JsonLibraryTests extends BaseTests {
 
     @Test
     public void testProgsbase() throws Exception {
-        System.out.println("=====================Jackson test start =============================");
-        ObjectMapper objectMapper = new ObjectMapper();
+        System.out.println("=====================Progsbase test start =============================");
 
         // test simple object
-        String str1 = objectMapper.writeValueAsString(person);
+        String str1 = JSONReflectiveWriter.writeJSON(person);
         System.out.println(str1);
-        Person p1 = objectMapper.readValue(str1, Person.class);
+        Person p1 = JSONReflectiveReader.readJSON(str1, Person.class);
         System.out.println(p1.equals(person));
-        System.out.println(objectMapper.writeValueAsString(person));
+        System.out.println(JSONReflectiveWriter.writeJSON(p1));
 
         // test list
-        String str2 = objectMapper.writeValueAsString(persons);
+        String str2 = JSONReflectiveWriter.writeJSON(persons);
         System.out.println(str2);
-        List<Person> persons2 = objectMapper.readValue(str2, objectMapper.getTypeFactory().constructParametricType(List.class, Person.class));
-        System.out.println(objectMapper.writeValueAsString(persons2));
+        List<Person> persons2 = JSONReflectiveReader.readJSON(str2, List.class, new GenericTypeGetter<List<Person>>().getType());
+        System.out.println(JSONReflectiveWriter.writeJSON(persons2));
         // test map
-        String str3 = objectMapper.writeValueAsString(idToPersonMap);
+        String str3 = JSONReflectiveWriter.writeJSON(idToPersonMap);
         System.out.println(str3);
-        Map<Integer, Person> personMap = objectMapper.readValue(str3, objectMapper.getTypeFactory().constructMapLikeType(Map.class, Integer.class, Person.class));
-        System.out.println(objectMapper.writeValueAsString(personMap));
-        System.out.println("=====================Jackson test end =============================");
+        Map<Integer, Person> personMap = JSONReflectiveReader.readJSON(str3, Map.class, new GenericTypeGetter<Map<String, Person>>().getType());
+        System.out.println(JSONReflectiveWriter.writeJSON(personMap));
+
+        System.out.println("=====================Progsbase test end =============================");
     }
 
 }
