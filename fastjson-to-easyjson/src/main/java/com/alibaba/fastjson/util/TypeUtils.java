@@ -37,10 +37,12 @@ import java.util.concurrent.ConcurrentMap;
 /**
  * @author wenshao[szujobs@hotmail.com]
  */
-public class TypeUtils{
+public class TypeUtils {
 
     public static boolean compatibleWithJavaBean = false;
-    /** 根据field name的大小写输出输入数据 */
+    /**
+     * 根据field name的大小写输出输入数据
+     */
     public static boolean compatibleWithFieldName = false;
     private static boolean setAccessibleEnable = true;
     private static boolean oracleTimestampMethodInited = false;
@@ -67,9 +69,9 @@ public class TypeUtils{
     private static volatile Method kotlin_kfunction_getParameters;
     private static volatile Method kotlin_kparameter_getName;
     private static volatile boolean kotlin_error;
-    private static volatile Map<Class,String[]> kotlinIgnores;
+    private static volatile Map<Class, String[]> kotlinIgnores;
     private static volatile boolean kotlinIgnores_error;
-    private static ConcurrentMap<String,Class<?>> mappings = new ConcurrentHashMap<String,Class<?>>(256, 0.75f, 1);
+    private static ConcurrentMap<String, Class<?>> mappings = new ConcurrentHashMap<String, Class<?>>(256, 0.75f, 1);
     private static Class<?> pathClass;
     private static boolean pathClass_error = false;
 
@@ -86,16 +88,16 @@ public class TypeUtils{
     private static volatile Field field_XmlAccessType_FIELD = null;
     private static volatile Object field_XmlAccessType_FIELD_VALUE = null;
 
-    static{
-        try{
+    static {
+        try {
             TypeUtils.compatibleWithJavaBean = "true".equals(IOUtils.getStringProperty(IOUtils.FASTJSON_COMPATIBLEWITHJAVABEAN));
             TypeUtils.compatibleWithFieldName = "true".equals(IOUtils.getStringProperty(IOUtils.FASTJSON_COMPATIBLEWITHFIELDNAME));
-        } catch(Throwable e){
+        } catch (Throwable e) {
             // skip
         }
     }
 
-    static{
+    static {
         addBaseClassMappings();
     }
 
@@ -104,7 +106,7 @@ public class TypeUtils{
         if (class_XmlAccessorType == null && !classXmlAccessorType_error) {
             try {
                 class_XmlAccessorType = Class.forName("javax.xml.bind.annotation.XmlAccessorType");
-            } catch(Throwable ex){
+            } catch (Throwable ex) {
                 classXmlAccessorType_error = true;
             }
         }
@@ -121,7 +123,7 @@ public class TypeUtils{
         if (method_XmlAccessorType_value == null && !classXmlAccessorType_error) {
             try {
                 method_XmlAccessorType_value = class_XmlAccessorType.getMethod("value");
-            } catch(Throwable ex){
+            } catch (Throwable ex) {
                 classXmlAccessorType_error = true;
             }
         }
@@ -147,7 +149,7 @@ public class TypeUtils{
                 class_XmlAccessType = Class.forName("javax.xml.bind.annotation.XmlAccessType");
                 field_XmlAccessType_FIELD = class_XmlAccessType.getField("FIELD");
                 field_XmlAccessType_FIELD_VALUE = field_XmlAccessType_FIELD.get(null);
-            } catch(Throwable ex){
+            } catch (Throwable ex) {
                 classXmlAccessorType_error = true;
             }
         }
@@ -158,9 +160,9 @@ public class TypeUtils{
     public static Annotation getXmlAccessorType(Class clazz) {
         if (class_XmlAccessorType == null && !classXmlAccessorType_error) {
 
-            try{
+            try {
                 class_XmlAccessorType = Class.forName("javax.xml.bind.annotation.XmlAccessorType");
-            } catch(Throwable ex){
+            } catch (Throwable ex) {
                 classXmlAccessorType_error = true;
             }
         }
@@ -169,7 +171,7 @@ public class TypeUtils{
             return null;
         }
 
-        return  clazz.getAnnotation(class_XmlAccessorType);
+        return clazz.getAnnotation(class_XmlAccessorType);
     }
 
 //
@@ -193,9 +195,9 @@ public class TypeUtils{
     public static boolean isClob(Class clazz) {
         if (class_Clob == null && !class_Clob_error) {
 
-            try{
+            try {
                 class_Clob = Class.forName("java.sql.Clob");
-            } catch(Throwable ex){
+            } catch (Throwable ex) {
                 class_Clob_error = true;
             }
         }
@@ -204,34 +206,34 @@ public class TypeUtils{
             return false;
         }
 
-        return  class_Clob.isAssignableFrom(clazz);
+        return class_Clob.isAssignableFrom(clazz);
     }
 
-    public static String castToString(Object value){
-        if(value == null){
+    public static String castToString(Object value) {
+        if (value == null) {
             return null;
         }
         return value.toString();
     }
 
-    public static Byte castToByte(Object value){
-        if(value == null){
+    public static Byte castToByte(Object value) {
+        if (value == null) {
             return null;
         }
 
-        if(value instanceof BigDecimal){
+        if (value instanceof BigDecimal) {
             return byteValue((BigDecimal) value);
         }
 
-        if(value instanceof Number){
+        if (value instanceof Number) {
             return ((Number) value).byteValue();
         }
 
-        if(value instanceof String){
+        if (value instanceof String) {
             String strVal = (String) value;
-            if(strVal.length() == 0 //
+            if (strVal.length() == 0 //
                     || "null".equals(strVal) //
-                    || "NULL".equals(strVal)){
+                    || "NULL".equals(strVal)) {
                 return null;
             }
             return Byte.parseByte(strVal);
@@ -239,19 +241,19 @@ public class TypeUtils{
         throw new JSONException("can not cast to byte, value : " + value);
     }
 
-    public static Character castToChar(Object value){
-        if(value == null){
+    public static Character castToChar(Object value) {
+        if (value == null) {
             return null;
         }
-        if(value instanceof Character){
+        if (value instanceof Character) {
             return (Character) value;
         }
-        if(value instanceof String){
+        if (value instanceof String) {
             String strVal = (String) value;
-            if(strVal.length() == 0){
+            if (strVal.length() == 0) {
                 return null;
             }
-            if(strVal.length() != 1){
+            if (strVal.length() != 1) {
                 throw new JSONException("can not cast to char, value : " + value);
             }
             return strVal.charAt(0);
@@ -259,24 +261,24 @@ public class TypeUtils{
         throw new JSONException("can not cast to char, value : " + value);
     }
 
-    public static Short castToShort(Object value){
-        if(value == null){
+    public static Short castToShort(Object value) {
+        if (value == null) {
             return null;
         }
 
-        if(value instanceof BigDecimal){
+        if (value instanceof BigDecimal) {
             return shortValue((BigDecimal) value);
         }
 
-        if(value instanceof Number){
+        if (value instanceof Number) {
             return ((Number) value).shortValue();
         }
 
-        if(value instanceof String){
+        if (value instanceof String) {
             String strVal = (String) value;
-            if(strVal.length() == 0 //
+            if (strVal.length() == 0 //
                     || "null".equals(strVal) //
-                    || "NULL".equals(strVal)){
+                    || "NULL".equals(strVal)) {
                 return null;
             }
             return Short.parseShort(strVal);
@@ -285,37 +287,37 @@ public class TypeUtils{
         throw new JSONException("can not cast to short, value : " + value);
     }
 
-    public static BigDecimal castToBigDecimal(Object value){
-        if(value == null){
+    public static BigDecimal castToBigDecimal(Object value) {
+        if (value == null) {
             return null;
         }
-        if(value instanceof BigDecimal){
+        if (value instanceof BigDecimal) {
             return (BigDecimal) value;
         }
-        if(value instanceof BigInteger){
+        if (value instanceof BigInteger) {
             return new BigDecimal((BigInteger) value);
         }
         String strVal = value.toString();
-        if(strVal.length() == 0){
+        if (strVal.length() == 0) {
             return null;
         }
-        if(value instanceof Map && ((Map) value).size() == 0){
+        if (value instanceof Map && ((Map) value).size() == 0) {
             return null;
         }
         return new BigDecimal(strVal);
     }
 
-    public static BigInteger castToBigInteger(Object value){
-        if(value == null){
+    public static BigInteger castToBigInteger(Object value) {
+        if (value == null) {
             return null;
         }
-        if(value instanceof BigInteger){
+        if (value instanceof BigInteger) {
             return (BigInteger) value;
         }
-        if(value instanceof Float || value instanceof Double){
+        if (value instanceof Float || value instanceof Double) {
             return BigInteger.valueOf(((Number) value).longValue());
         }
-        if(value instanceof BigDecimal){
+        if (value instanceof BigDecimal) {
             BigDecimal decimal = (BigDecimal) value;
             int scale = decimal.scale();
             if (scale > -1000 && scale < 1000) {
@@ -323,29 +325,29 @@ public class TypeUtils{
             }
         }
         String strVal = value.toString();
-        if(strVal.length() == 0 //
+        if (strVal.length() == 0 //
                 || "null".equals(strVal) //
-                || "NULL".equals(strVal)){
+                || "NULL".equals(strVal)) {
             return null;
         }
         return new BigInteger(strVal);
     }
 
-    public static Float castToFloat(Object value){
-        if(value == null){
+    public static Float castToFloat(Object value) {
+        if (value == null) {
             return null;
         }
-        if(value instanceof Number){
+        if (value instanceof Number) {
             return ((Number) value).floatValue();
         }
-        if(value instanceof String){
+        if (value instanceof String) {
             String strVal = value.toString();
-            if(strVal.length() == 0 //
+            if (strVal.length() == 0 //
                     || "null".equals(strVal) //
-                    || "NULL".equals(strVal)){
+                    || "NULL".equals(strVal)) {
                 return null;
             }
-            if(strVal.indexOf(',') != 0){
+            if (strVal.indexOf(',') != 0) {
                 strVal = strVal.replaceAll(",", "");
             }
             return Float.parseFloat(strVal);
@@ -353,21 +355,21 @@ public class TypeUtils{
         throw new JSONException("can not cast to float, value : " + value);
     }
 
-    public static Double castToDouble(Object value){
-        if(value == null){
+    public static Double castToDouble(Object value) {
+        if (value == null) {
             return null;
         }
-        if(value instanceof Number){
+        if (value instanceof Number) {
             return ((Number) value).doubleValue();
         }
-        if(value instanceof String){
+        if (value instanceof String) {
             String strVal = value.toString();
-            if(strVal.length() == 0 //
+            if (strVal.length() == 0 //
                     || "null".equals(strVal) //
-                    || "NULL".equals(strVal)){
+                    || "NULL".equals(strVal)) {
                 return null;
             }
-            if(strVal.indexOf(',') != 0){
+            if (strVal.indexOf(',') != 0) {
                 strVal = strVal.replaceAll(",", "");
             }
             return Double.parseDouble(strVal);
@@ -375,38 +377,38 @@ public class TypeUtils{
         throw new JSONException("can not cast to double, value : " + value);
     }
 
-    public static Date castToDate(Object value){
+    public static Date castToDate(Object value) {
         return castToDate(value, null);
     }
 
-    public static Date castToDate(Object value, String format){
-        if(value == null){
+    public static Date castToDate(Object value, String format) {
+        if (value == null) {
             return null;
         }
 
-        if(value instanceof Date){ // 使用频率最高的，应优先处理
+        if (value instanceof Date) { // 使用频率最高的，应优先处理
             return (Date) value;
         }
 
-        if(value instanceof Calendar){
+        if (value instanceof Calendar) {
             return ((Calendar) value).getTime();
         }
 
         long longValue = -1;
 
-        if(value instanceof BigDecimal){
+        if (value instanceof BigDecimal) {
             longValue = longValue((BigDecimal) value);
             return new Date(longValue);
         }
 
-        if(value instanceof Number){
+        if (value instanceof Number) {
             longValue = ((Number) value).longValue();
             return new Date(longValue);
         }
 
-        if(value instanceof String){
+        if (value instanceof String) {
             try {
-                return new SimpleDateFormat(format).parse((String)value);
+                return new SimpleDateFormat(format).parse((String) value);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -416,14 +418,14 @@ public class TypeUtils{
     }
 
 
-    public static boolean isNumber(String str){
-        for(int i = 0; i < str.length(); ++i){
+    public static boolean isNumber(String str) {
+        for (int i = 0; i < str.length(); ++i) {
             char ch = str.charAt(i);
-            if(ch == '+' || ch == '-'){
-                if(i != 0){
+            if (ch == '+' || ch == '-') {
+                if (i != 0) {
                     return false;
                 }
-            } else if(ch < '0' || ch > '9'){
+            } else if (ch < '0' || ch > '9') {
                 return false;
             }
         }
@@ -483,44 +485,44 @@ public class TypeUtils{
         return decimal.longValueExact();
     }
 
-    public static Integer castToInt(Object value){
-        if(value == null){
+    public static Integer castToInt(Object value) {
+        if (value == null) {
             return null;
         }
 
-        if(value instanceof Integer){
+        if (value instanceof Integer) {
             return (Integer) value;
         }
 
-        if(value instanceof BigDecimal){
+        if (value instanceof BigDecimal) {
             return intValue((BigDecimal) value);
         }
 
-        if(value instanceof Number){
+        if (value instanceof Number) {
             return ((Number) value).intValue();
         }
 
-        if(value instanceof String){
+        if (value instanceof String) {
             String strVal = (String) value;
-            if(strVal.length() == 0 //
+            if (strVal.length() == 0 //
                     || "null".equals(strVal) //
-                    || "NULL".equals(strVal)){
+                    || "NULL".equals(strVal)) {
                 return null;
             }
-            if(strVal.indexOf(',') != 0){
+            if (strVal.indexOf(',') != 0) {
                 strVal = strVal.replaceAll(",", "");
             }
             return Integer.parseInt(strVal);
         }
 
-        if(value instanceof Boolean){
+        if (value instanceof Boolean) {
             return ((Boolean) value).booleanValue() ? 1 : 0;
         }
-        if(value instanceof Map){
+        if (value instanceof Map) {
             Map map = (Map) value;
-            if(map.size() == 2
+            if (map.size() == 2
                     && map.containsKey("andIncrement")
-                    && map.containsKey("andDecrement")){
+                    && map.containsKey("andDecrement")) {
                 Iterator iter = map.values().iterator();
                 iter.next();
                 Object value2 = iter.next();
@@ -530,71 +532,71 @@ public class TypeUtils{
         throw new JSONException("can not cast to int, value : " + value);
     }
 
-    public static byte[] castToBytes(Object value){
-        if(value instanceof byte[]){
+    public static byte[] castToBytes(Object value) {
+        if (value instanceof byte[]) {
             return (byte[]) value;
         }
-        if(value instanceof String){
+        if (value instanceof String) {
             return IOUtils.decodeBase64((String) value);
         }
         throw new JSONException("can not cast to int, value : " + value);
     }
 
-    public static Boolean castToBoolean(Object value){
-        if(value == null){
+    public static Boolean castToBoolean(Object value) {
+        if (value == null) {
             return null;
         }
-        if(value instanceof Boolean){
+        if (value instanceof Boolean) {
             return (Boolean) value;
         }
 
-        if(value instanceof BigDecimal){
+        if (value instanceof BigDecimal) {
             return intValue((BigDecimal) value) == 1;
         }
 
-        if(value instanceof Number){
+        if (value instanceof Number) {
             return ((Number) value).intValue() == 1;
         }
 
-        if(value instanceof String){
+        if (value instanceof String) {
             String strVal = (String) value;
-            if(strVal.length() == 0 //
+            if (strVal.length() == 0 //
                     || "null".equals(strVal) //
-                    || "NULL".equals(strVal)){
+                    || "NULL".equals(strVal)) {
                 return null;
             }
-            if("true".equalsIgnoreCase(strVal) //
-                    || "1".equals(strVal)){
+            if ("true".equalsIgnoreCase(strVal) //
+                    || "1".equals(strVal)) {
                 return Boolean.TRUE;
             }
-            if("false".equalsIgnoreCase(strVal) //
-                    || "0".equals(strVal)){
+            if ("false".equalsIgnoreCase(strVal) //
+                    || "0".equals(strVal)) {
                 return Boolean.FALSE;
             }
-            if("Y".equalsIgnoreCase(strVal) //
-                    || "T".equals(strVal)){
+            if ("Y".equalsIgnoreCase(strVal) //
+                    || "T".equals(strVal)) {
                 return Boolean.TRUE;
             }
-            if("F".equalsIgnoreCase(strVal) //
-                    || "N".equals(strVal)){
+            if ("F".equalsIgnoreCase(strVal) //
+                    || "N".equals(strVal)) {
                 return Boolean.FALSE;
             }
         }
         throw new JSONException("can not cast to boolean, value : " + value);
     }
 
-    public static <T> T castToJavaBean(Object obj, Class<T> clazz){
+    public static <T> T castToJavaBean(Object obj, Class<T> clazz) {
         return cast(obj, clazz, ParserConfig.getGlobalInstance());
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
 
-    public static Locale toLocale(String strVal){
+    public static Locale toLocale(String strVal) {
         String[] items = strVal.split("_");
-        if(items.length == 1){
+        if (items.length == 1) {
             return new Locale(items[0]);
         }
-        if(items.length == 2){
+        if (items.length == 2) {
             return new Locale(items[0], items[1]);
         }
         return new Locale(items[0], items[1], items[2]);
@@ -602,32 +604,32 @@ public class TypeUtils{
 
 
     @SuppressWarnings("unchecked")
-    public static <T> T cast(Object obj, Type type, ParserConfig mapping){
-        if(obj == null){
+    public static <T> T cast(Object obj, Type type, ParserConfig mapping) {
+        if (obj == null) {
             return null;
         }
-        if(type instanceof Class){
+        if (type instanceof Class) {
             return (T) cast(obj, (Class<T>) type, mapping);
         }
-        if(type instanceof ParameterizedType){
+        if (type instanceof ParameterizedType) {
             return (T) cast(obj, (ParameterizedType) type, mapping);
         }
-        if(obj instanceof String){
+        if (obj instanceof String) {
             String strVal = (String) obj;
-            if(strVal.length() == 0 //
+            if (strVal.length() == 0 //
                     || "null".equals(strVal) //
-                    || "NULL".equals(strVal)){
+                    || "NULL".equals(strVal)) {
                 return null;
             }
         }
-        if(type instanceof TypeVariable){
+        if (type instanceof TypeVariable) {
             return (T) obj;
         }
         throw new JSONException("can not cast to : " + type);
     }
 
 
-    private static void addBaseClassMappings(){
+    private static void addBaseClassMappings() {
         mappings.put("byte", byte.class);
         mappings.put("short", short.class);
         mappings.put("int", int.class);
@@ -726,8 +728,8 @@ public class TypeUtils{
                 com.alibaba.fastjson.JSONObject.class,
                 com.alibaba.fastjson.JSONArray.class,
         };
-        for(Class clazz : classes){
-            if(clazz == null){
+        for (Class clazz : classes) {
+            if (clazz == null) {
                 continue;
             }
             mappings.put(clazz.getName(), clazz);
@@ -736,9 +738,9 @@ public class TypeUtils{
         String[] w = new String[]{
                 "java.util.Collections$UnmodifiableMap"
         };
-        for(String className : w){
+        for (String className : w) {
             Class<?> clazz = loadClass(className);
-            if(clazz == null){
+            if (clazz == null) {
                 break;
             }
             mappings.put(clazz.getName(), clazz);
@@ -749,9 +751,9 @@ public class TypeUtils{
                 "java.awt.Point",
                 "java.awt.Font",
                 "java.awt.Color"};
-        for(String className : awt){
+        for (String className : awt) {
             Class<?> clazz = loadClass(className);
-            if(clazz == null){
+            if (clazz == null) {
                 break;
             }
             mappings.put(clazz.getName(), clazz);
@@ -775,16 +777,16 @@ public class TypeUtils{
                 "org.springframework.security.oauth2.common.DefaultOAuth2RefreshToken",
                 "org.springframework.cache.support.NullValue",
         };
-        for(String className : spring){
+        for (String className : spring) {
             Class<?> clazz = loadClass(className);
-            if(clazz == null){
+            if (clazz == null) {
                 continue;
             }
             mappings.put(clazz.getName(), clazz);
         }
     }
 
-    public static void clearClassMapping(){
+    public static void clearClassMapping() {
         mappings.clear();
         addBaseClassMappings();
     }
@@ -793,26 +795,27 @@ public class TypeUtils{
         mappings.put(className, clazz);
     }
 
-    public static Class<?> loadClass(String className){
-        return loadClass(className, null);
-    }
 
-    public static boolean isPath(Class<?> clazz){
-        if(pathClass == null && !pathClass_error){
-            try{
+    public static boolean isPath(Class<?> clazz) {
+        if (pathClass == null && !pathClass_error) {
+            try {
                 pathClass = Class.forName("java.nio.file.Path");
-            } catch(Throwable ex){
+            } catch (Throwable ex) {
                 pathClass_error = true;
             }
         }
-        if(pathClass != null){
+        if (pathClass != null) {
             return pathClass.isAssignableFrom(clazz);
         }
         return false;
     }
 
-    public static Class<?> getClassFromMapping(String className){
+    public static Class<?> getClassFromMapping(String className) {
         return mappings.get(className);
+    }
+
+    public static Class<?> loadClass(String className) {
+        return loadClass(className, null);
     }
 
     public static Class<?> loadClass(String className, ClassLoader classLoader) {
@@ -820,66 +823,66 @@ public class TypeUtils{
     }
 
     public static Class<?> loadClass(String className, ClassLoader classLoader, boolean cache) {
-        if(className == null || className.length() == 0 || className.length() > 128){
+        if (className == null || className.length() == 0 || className.length() > 128) {
             return null;
         }
 
         Class<?> clazz = mappings.get(className);
-        if(clazz != null){
+        if (clazz != null) {
             return clazz;
         }
 
-        if(className.charAt(0) == '['){
+        if (className.charAt(0) == '[') {
             Class<?> componentType = loadClass(className.substring(1), classLoader);
             return Array.newInstance(componentType, 0).getClass();
         }
 
-        if(className.startsWith("L") && className.endsWith(";")){
+        if (className.startsWith("L") && className.endsWith(";")) {
             String newClassName = className.substring(1, className.length() - 1);
             return loadClass(newClassName, classLoader);
         }
 
-        try{
-            if(classLoader != null){
+        try {
+            if (classLoader != null) {
                 clazz = classLoader.loadClass(className);
                 if (cache) {
                     mappings.put(className, clazz);
                 }
                 return clazz;
             }
-        } catch(Throwable e){
+        } catch (Throwable e) {
             e.printStackTrace();
             // skip
         }
-        try{
+        try {
             ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
-            if(contextClassLoader != null && contextClassLoader != classLoader){
+            if (contextClassLoader != null && contextClassLoader != classLoader) {
                 clazz = contextClassLoader.loadClass(className);
                 if (cache) {
                     mappings.put(className, clazz);
                 }
                 return clazz;
             }
-        } catch(Throwable e){
+        } catch (Throwable e) {
             // skip
         }
-        try{
+        try {
             clazz = Class.forName(className);
             if (cache) {
                 mappings.put(className, clazz);
             }
             return clazz;
-        } catch(Throwable e){
+        } catch (Throwable e) {
             // skip
         }
         return clazz;
     }
 
 
-    private static String getPropertyNameByCompatibleFieldName(Map<String,Field> fieldCacheMap, String methodName,
-                                                               String propertyName, int fromIdx){
-        if(compatibleWithFieldName){
-            if(!fieldCacheMap.containsKey(propertyName)){
+    private static String getPropertyNameByCompatibleFieldName(Map<String, Field> fieldCacheMap, String methodName,
+                                                               String propertyName, int fromIdx) {
+        if (compatibleWithFieldName) {
+            if (!fieldCacheMap.containsKey(propertyName)) {
                 String tempPropertyName = methodName.substring(fromIdx);
                 return fieldCacheMap.containsKey(tempPropertyName) ? tempPropertyName : propertyName;
             }
@@ -887,62 +890,62 @@ public class TypeUtils{
         return propertyName;
     }
 
-    public static JSONField getSuperMethodAnnotation(final Class<?> clazz, final Method method){
+    public static JSONField getSuperMethodAnnotation(final Class<?> clazz, final Method method) {
         Class<?>[] interfaces = clazz.getInterfaces();
-        if(interfaces.length > 0){
+        if (interfaces.length > 0) {
             Class<?>[] types = method.getParameterTypes();
-            for(Class<?> interfaceClass : interfaces){
-                for(Method interfaceMethod : interfaceClass.getMethods()){
+            for (Class<?> interfaceClass : interfaces) {
+                for (Method interfaceMethod : interfaceClass.getMethods()) {
                     Class<?>[] interfaceTypes = interfaceMethod.getParameterTypes();
-                    if(interfaceTypes.length != types.length){
+                    if (interfaceTypes.length != types.length) {
                         continue;
                     }
-                    if(!interfaceMethod.getName().equals(method.getName())){
+                    if (!interfaceMethod.getName().equals(method.getName())) {
                         continue;
                     }
                     boolean match = true;
-                    for(int i = 0; i < types.length; ++i){
-                        if(!interfaceTypes[i].equals(types[i])){
+                    for (int i = 0; i < types.length; ++i) {
+                        if (!interfaceTypes[i].equals(types[i])) {
                             match = false;
                             break;
                         }
                     }
-                    if(!match){
+                    if (!match) {
                         continue;
                     }
                     JSONField annotation = interfaceMethod.getAnnotation(JSONField.class);
-                    if(annotation != null){
+                    if (annotation != null) {
                         return annotation;
                     }
                 }
             }
         }
         Class<?> superClass = clazz.getSuperclass();
-        if(superClass == null){
+        if (superClass == null) {
             return null;
         }
-        if(Modifier.isAbstract(superClass.getModifiers())){
+        if (Modifier.isAbstract(superClass.getModifiers())) {
             Class<?>[] types = method.getParameterTypes();
-            for(Method interfaceMethod : superClass.getMethods()){
+            for (Method interfaceMethod : superClass.getMethods()) {
                 Class<?>[] interfaceTypes = interfaceMethod.getParameterTypes();
-                if(interfaceTypes.length != types.length){
+                if (interfaceTypes.length != types.length) {
                     continue;
                 }
-                if(!interfaceMethod.getName().equals(method.getName())){
+                if (!interfaceMethod.getName().equals(method.getName())) {
                     continue;
                 }
                 boolean match = true;
-                for(int i = 0; i < types.length; ++i){
-                    if(!interfaceTypes[i].equals(types[i])){
+                for (int i = 0; i < types.length; ++i) {
+                    if (!interfaceTypes[i].equals(types[i])) {
                         match = false;
                         break;
                     }
                 }
-                if(!match){
+                if (!match) {
                     continue;
                 }
                 JSONField annotation = interfaceMethod.getAnnotation(JSONField.class);
-                if(annotation != null){
+                if (annotation != null) {
                     return annotation;
                 }
             }
@@ -950,87 +953,87 @@ public class TypeUtils{
         return null;
     }
 
-    private static boolean isJSONTypeIgnore(Class<?> clazz, String propertyName){
-        JSONType jsonType = TypeUtils.getAnnotation(clazz,JSONType.class);
-        if(jsonType != null){
+    private static boolean isJSONTypeIgnore(Class<?> clazz, String propertyName) {
+        JSONType jsonType = TypeUtils.getAnnotation(clazz, JSONType.class);
+        if (jsonType != null) {
             // 1、新增 includes 支持，如果 JSONType 同时设置了includes 和 ignores 属性，则以includes为准。
             // 2、个人认为对于大小写敏感的Java和JS而言，使用 equals() 比 equalsIgnoreCase() 更好，改动的唯一风险就是向后兼容性的问题
             // 不过，相信开发者应该都是严格按照大小写敏感的方式进行属性设置的
             String[] fields = jsonType.includes();
-            if(fields.length > 0){
-                for(int i = 0; i < fields.length; i++){
-                    if(propertyName.equals(fields[i])){
+            if (fields.length > 0) {
+                for (int i = 0; i < fields.length; i++) {
+                    if (propertyName.equals(fields[i])) {
                         return false;
                     }
                 }
                 return true;
-            } else{
+            } else {
                 fields = jsonType.ignores();
-                for(int i = 0; i < fields.length; i++){
-                    if(propertyName.equals(fields[i])){
+                for (int i = 0; i < fields.length; i++) {
+                    if (propertyName.equals(fields[i])) {
                         return true;
                     }
                 }
             }
         }
-        if(clazz.getSuperclass() != Object.class && clazz.getSuperclass() != null){
-            if(isJSONTypeIgnore(clazz.getSuperclass(), propertyName)){
+        if (clazz.getSuperclass() != Object.class && clazz.getSuperclass() != null) {
+            if (isJSONTypeIgnore(clazz.getSuperclass(), propertyName)) {
                 return true;
             }
         }
         return false;
     }
 
-    public static boolean isGenericParamType(Type type){
-        if(type instanceof ParameterizedType){
+    public static boolean isGenericParamType(Type type) {
+        if (type instanceof ParameterizedType) {
             return true;
         }
-        if(type instanceof Class) {
+        if (type instanceof Class) {
             Type superType = ((Class<?>) type).getGenericSuperclass();
             return superType != Object.class && isGenericParamType(superType);
         }
         return false;
     }
 
-    public static Type getGenericParamType(Type type){
-        if(type instanceof ParameterizedType){
+    public static Type getGenericParamType(Type type) {
+        if (type instanceof ParameterizedType) {
             return type;
         }
-        if(type instanceof Class){
+        if (type instanceof Class) {
             return getGenericParamType(((Class<?>) type).getGenericSuperclass());
         }
         return type;
     }
 
-    public static Type unwrapOptional(Type type){
-        if(!optionalClassInited){
-            try{
+    public static Type unwrapOptional(Type type) {
+        if (!optionalClassInited) {
+            try {
                 optionalClass = Class.forName("java.util.Optional");
-            } catch(Exception e){
+            } catch (Exception e) {
                 // skip
-            } finally{
+            } finally {
                 optionalClassInited = true;
             }
         }
-        if(type instanceof ParameterizedType){
+        if (type instanceof ParameterizedType) {
             ParameterizedType parameterizedType = (ParameterizedType) type;
-            if(parameterizedType.getRawType() == optionalClass){
+            if (parameterizedType.getRawType() == optionalClass) {
                 return parameterizedType.getActualTypeArguments()[0];
             }
         }
         return type;
     }
 
-    public static Class<?> getClass(Type type){
-        if(type.getClass() == Class.class){
+    public static Class<?> getClass(Type type) {
+        if (type.getClass() == Class.class) {
             return (Class<?>) type;
         }
 
-        if(type instanceof ParameterizedType){
+        if (type instanceof ParameterizedType) {
             return getClass(((ParameterizedType) type).getRawType());
         }
 
-        if(type instanceof TypeVariable){
+        if (type instanceof TypeVariable) {
             Type boundType = ((TypeVariable<?>) type).getBounds()[0];
             if (boundType instanceof Class) {
                 return (Class) boundType;
@@ -1038,7 +1041,7 @@ public class TypeUtils{
             return getClass(boundType);
         }
 
-        if(type instanceof WildcardType){
+        if (type instanceof WildcardType) {
             Type[] upperBounds = ((WildcardType) type).getUpperBounds();
             if (upperBounds.length == 1) {
                 return getClass(upperBounds[0]);
@@ -1048,10 +1051,10 @@ public class TypeUtils{
         return Object.class;
     }
 
-    public static Field getField(Class<?> clazz, String fieldName, Field[] declaredFields){
-        for(Field field : declaredFields){
+    public static Field getField(Class<?> clazz, String fieldName, Field[] declaredFields) {
+        for (Field field : declaredFields) {
             String itemName = field.getName();
-            if(fieldName.equals(itemName)){
+            if (fieldName.equals(itemName)) {
                 return field;
             }
 
@@ -1064,7 +1067,7 @@ public class TypeUtils{
             }
         }
         Class<?> superClass = clazz.getSuperclass();
-        if(superClass != null && superClass != Object.class){
+        if (superClass != null && superClass != Object.class) {
             return getField(superClass, fieldName, superClass.getDeclaredFields());
         }
         return null;
@@ -1073,27 +1076,27 @@ public class TypeUtils{
     /**
      * @deprecated
      */
-    public static int getSerializeFeatures(Class<?> clazz){
-        JSONType annotation = TypeUtils.getAnnotation(clazz,JSONType.class);
-        if(annotation == null){
+    public static int getSerializeFeatures(Class<?> clazz) {
+        JSONType annotation = TypeUtils.getAnnotation(clazz, JSONType.class);
+        if (annotation == null) {
             return 0;
         }
         return SerializerFeature.of(annotation.serialzeFeatures());
     }
 
-    public static int getParserFeatures(Class<?> clazz){
-        JSONType annotation = TypeUtils.getAnnotation(clazz,JSONType.class);
-        if(annotation == null){
+    public static int getParserFeatures(Class<?> clazz) {
+        JSONType annotation = TypeUtils.getAnnotation(clazz, JSONType.class);
+        if (annotation == null) {
             return 0;
         }
         return Feature.of(annotation.parseFeatures());
     }
 
-    public static String decapitalize(String name){
-        if(name == null || name.length() == 0){
+    public static String decapitalize(String name) {
+        if (name == null || name.length() == 0) {
             return name;
         }
-        if(name.length() > 1 && Character.isUpperCase(name.charAt(1)) && Character.isUpperCase(name.charAt(0))){
+        if (name.length() > 1 && Character.isUpperCase(name.charAt(1)) && Character.isUpperCase(name.charAt(0))) {
             return name;
         }
         char chars[] = name.toCharArray();
@@ -1101,16 +1104,16 @@ public class TypeUtils{
         return new String(chars);
     }
 
-    static void setAccessible(AccessibleObject obj){
-        if(!setAccessibleEnable){
+    static void setAccessible(AccessibleObject obj) {
+        if (!setAccessibleEnable) {
             return;
         }
-        if(obj.isAccessible()){
+        if (obj.isAccessible()) {
             return;
         }
-        try{
+        try {
             obj.setAccessible(true);
-        } catch(AccessControlException error){
+        } catch (AccessControlException error) {
             setAccessibleEnable = false;
         }
     }
@@ -1193,81 +1196,82 @@ public class TypeUtils{
         return typeParameter;
     }
 
-    public static java.sql.Timestamp castToTimestamp(Object value){
-        if(value == null){
+    public static java.sql.Timestamp castToTimestamp(Object value) {
+        if (value == null) {
             return null;
         }
-        if(value instanceof Calendar){
+        if (value instanceof Calendar) {
             return new java.sql.Timestamp(((Calendar) value).getTimeInMillis());
         }
-        if(value instanceof java.sql.Timestamp){
+        if (value instanceof java.sql.Timestamp) {
             return (java.sql.Timestamp) value;
         }
-        if(value instanceof java.util.Date){
+        if (value instanceof java.util.Date) {
             return new java.sql.Timestamp(((java.util.Date) value).getTime());
         }
         long longValue = 0;
-        if(value instanceof BigDecimal){
+        if (value instanceof BigDecimal) {
             longValue = longValue((BigDecimal) value);
-        } else if(value instanceof Number){
+        } else if (value instanceof Number) {
             longValue = ((Number) value).longValue();
         }
-        if(value instanceof String){
+        if (value instanceof String) {
             String strVal = (String) value;
-            if(strVal.length() == 0 //
+            if (strVal.length() == 0 //
                     || "null".equals(strVal) //
-                    || "NULL".equals(strVal)){
+                    || "NULL".equals(strVal)) {
                 return null;
             }
-            if(strVal.endsWith(".000000000")){
+            if (strVal.endsWith(".000000000")) {
                 strVal = strVal.substring(0, strVal.length() - 10);
-            } else if(strVal.endsWith(".000000")){
+            } else if (strVal.endsWith(".000000")) {
                 strVal = strVal.substring(0, strVal.length() - 7);
             }
-            if(isNumber(strVal)){
+            if (isNumber(strVal)) {
                 longValue = Long.parseLong(strVal);
             }
         }
-        if(longValue <= 0){
+        if (longValue <= 0) {
             throw new JSONException("can not cast to Timestamp, value : " + value);
         }
         return new java.sql.Timestamp(longValue);
     }
 
-    public static java.sql.Date castToSqlDate(Object value){
-        if(value == null){
+    public static java.sql.Date castToSqlDate(Object value) {
+        if (value == null) {
             return null;
         }
-        if(value instanceof java.sql.Date){
+        if (value instanceof java.sql.Date) {
             return (java.sql.Date) value;
         }
-        if(value instanceof java.util.Date){
+        if (value instanceof java.util.Date) {
             return new java.sql.Date(((java.util.Date) value).getTime());
         }
-        if(value instanceof Calendar){
+        if (value instanceof Calendar) {
             return new java.sql.Date(((Calendar) value).getTimeInMillis());
         }
 
         long longValue = 0;
-        if(value instanceof BigDecimal){
+        if (value instanceof BigDecimal) {
             longValue = longValue((BigDecimal) value);
-        } else if(value instanceof Number){
+        } else if (value instanceof Number) {
             longValue = ((Number) value).longValue();
         }
 
-        if(value instanceof String){
+        if (value instanceof String) {
             String strVal = (String) value;
-            if(strVal.length() == 0 //
+            if (strVal.length() == 0 //
                     || "null".equals(strVal) //
-                    || "NULL".equals(strVal)){
+                    || "NULL".equals(strVal)) {
                 return null;
             }
-            if(isNumber(strVal)){
+            if (isNumber(strVal)) {
                 longValue = Long.parseLong(strVal);
             }
         }
-        if(longValue <= 0){
-            throw new JSONException("can not cast to Date, value : " + value); // TODO 忽略 1970-01-01 之前的时间处理？
+        if (longValue <= 0) {
+            // TODO 忽略 1970-01-01 之前的时间处理？
+            throw new JSONException("can not cast to Date, value : " + value);
         }
         return new java.sql.Date(longValue);
     }
@@ -1306,57 +1310,57 @@ public class TypeUtils{
     public static Collection createCollection(Type type) {
         Class<?> rawClass = getRawClass(type);
         Collection list;
-        if(rawClass == AbstractCollection.class //
-                || rawClass == Collection.class){
+        if (rawClass == AbstractCollection.class //
+                || rawClass == Collection.class) {
             list = new ArrayList();
-        } else if(rawClass.isAssignableFrom(HashSet.class)){
+        } else if (rawClass.isAssignableFrom(HashSet.class)) {
             list = new HashSet();
-        } else if(rawClass.isAssignableFrom(LinkedHashSet.class)){
+        } else if (rawClass.isAssignableFrom(LinkedHashSet.class)) {
             list = new LinkedHashSet();
-        } else if(rawClass.isAssignableFrom(TreeSet.class)){
+        } else if (rawClass.isAssignableFrom(TreeSet.class)) {
             list = new TreeSet();
-        } else if(rawClass.isAssignableFrom(ArrayList.class)){
+        } else if (rawClass.isAssignableFrom(ArrayList.class)) {
             list = new ArrayList();
-        } else if(rawClass.isAssignableFrom(EnumSet.class)){
+        } else if (rawClass.isAssignableFrom(EnumSet.class)) {
             Type itemType;
-            if(type instanceof ParameterizedType){
+            if (type instanceof ParameterizedType) {
                 itemType = ((ParameterizedType) type).getActualTypeArguments()[0];
-            } else{
+            } else {
                 itemType = Object.class;
             }
             list = EnumSet.noneOf((Class<Enum>) itemType);
-        } else if(rawClass.isAssignableFrom(Queue.class)){
+        } else if (rawClass.isAssignableFrom(Queue.class)) {
             list = new LinkedList();
-        } else{
-            try{
+        } else {
+            try {
                 list = (Collection) rawClass.newInstance();
-            } catch(Exception e){
+            } catch (Exception e) {
                 throw new JSONException("create instance error, class " + rawClass.getName());
             }
         }
         return list;
     }
 
-    public static Class<?> getRawClass(Type type){
-        if(type instanceof Class<?>){
+    public static Class<?> getRawClass(Type type) {
+        if (type instanceof Class<?>) {
             return (Class<?>) type;
-        } else if(type instanceof ParameterizedType){
+        } else if (type instanceof ParameterizedType) {
             return getRawClass(((ParameterizedType) type).getRawType());
-        } else{
+        } else {
             throw new JSONException("TODO");
         }
     }
 
-    public static boolean isProxy(Class<?> clazz){
-        for(Class<?> item : clazz.getInterfaces()){
+    public static boolean isProxy(Class<?> clazz) {
+        for (Class<?> item : clazz.getInterfaces()) {
             String interfaceName = item.getName();
-            if(interfaceName.equals("net.sf.cglib.proxy.Factory") //
-                    || interfaceName.equals("org.springframework.cglib.proxy.Factory")){
+            if (interfaceName.equals("net.sf.cglib.proxy.Factory") //
+                    || interfaceName.equals("org.springframework.cglib.proxy.Factory")) {
                 return true;
             }
-            if(interfaceName.equals("javassist.util.proxy.ProxyObject") //
+            if (interfaceName.equals("javassist.util.proxy.ProxyObject") //
                     || interfaceName.equals("org.apache.ibatis.javassist.util.proxy.ProxyObject")
-                    ){
+                    ) {
                 return true;
             }
             if (interfaceName.equals("org.hibernate.proxy.HibernateProxy")) {
@@ -1366,20 +1370,20 @@ public class TypeUtils{
         return false;
     }
 
-    public static boolean isTransient(Method method){
-        if(method == null){
+    public static boolean isTransient(Method method) {
+        if (method == null) {
             return false;
         }
-        if(!transientClassInited){
-            try{
+        if (!transientClassInited) {
+            try {
                 transientClass = (Class<? extends Annotation>) Class.forName("java.beans.Transient");
-            } catch(Exception e){
+            } catch (Exception e) {
                 // skip
-            } finally{
+            } finally {
                 transientClassInited = true;
             }
         }
-        if(transientClass != null){
+        if (transientClass != null) {
             Annotation annotation = method.getAnnotation(transientClass);
             return annotation != null;
         }
@@ -1420,24 +1424,24 @@ public class TypeUtils{
 
     }
 
-    public static boolean isHibernateInitialized(Object object){
-        if(object == null){
+    public static boolean isHibernateInitialized(Object object) {
+        if (object == null) {
             return false;
         }
-        if(method_HibernateIsInitialized == null && !method_HibernateIsInitialized_error){
-            try{
+        if (method_HibernateIsInitialized == null && !method_HibernateIsInitialized_error) {
+            try {
                 Class<?> class_Hibernate = Class.forName("org.hibernate.Hibernate");
                 method_HibernateIsInitialized = class_Hibernate.getMethod("isInitialized", Object.class);
-            } catch(Throwable e){
+            } catch (Throwable e) {
                 // skip
                 method_HibernateIsInitialized_error = true;
             }
         }
-        if(method_HibernateIsInitialized != null){
-            try{
+        if (method_HibernateIsInitialized != null) {
+            try {
                 Boolean initialized = (Boolean) method_HibernateIsInitialized.invoke(null, object);
                 return initialized.booleanValue();
-            } catch(Throwable e){
+            } catch (Throwable e) {
                 // skip
             }
         }
@@ -1502,6 +1506,8 @@ public class TypeUtils{
                 return ((double) longValue) / 100000000;
             case 9:
                 return ((double) longValue) / 1000000000;
+            default:
+                break;
         }
 
         return Double.parseDouble(str);
@@ -1565,19 +1571,21 @@ public class TypeUtils{
                 return ((float) longValue) / 100000000;
             case 9:
                 return ((float) longValue) / 1000000000;
+            default:
+                break;
         }
 
         return Float.parseFloat(str);
     }
 
-    public static long fnv1a_64_lower(String key){
+    public static long fnv1a_64_lower(String key) {
         long hashCode = 0xcbf29ce484222325L;
-        for(int i = 0; i < key.length(); ++i){
+        for (int i = 0; i < key.length(); ++i) {
             char ch = key.charAt(i);
-            if(ch == '_' || ch == '-'){
+            if (ch == '_' || ch == '-') {
                 continue;
             }
-            if(ch >= 'A' && ch <= 'Z'){
+            if (ch >= 'A' && ch <= 'Z') {
                 ch = (char) (ch + 32);
             }
             hashCode ^= ch;
@@ -1586,9 +1594,9 @@ public class TypeUtils{
         return hashCode;
     }
 
-    public static long fnv1a_64(String key){
+    public static long fnv1a_64(String key) {
         long hashCode = 0xcbf29ce484222325L;
-        for(int i = 0; i < key.length(); ++i){
+        for (int i = 0; i < key.length(); ++i) {
             char ch = key.charAt(i);
             hashCode ^= ch;
             hashCode *= 0x100000001b3L;
@@ -1607,22 +1615,22 @@ public class TypeUtils{
         return kotlin_metadata != null && clazz.isAnnotationPresent(kotlin_metadata);
     }
 
-    public static Constructor getKoltinConstructor(Constructor[] constructors){
+    public static Constructor getKoltinConstructor(Constructor[] constructors) {
         return getKoltinConstructor(constructors, null);
     }
 
-    public static Constructor getKoltinConstructor(Constructor[] constructors, String[] paramNames){
+    public static Constructor getKoltinConstructor(Constructor[] constructors, String[] paramNames) {
         Constructor creatorConstructor = null;
-        for(Constructor<?> constructor : constructors){
+        for (Constructor<?> constructor : constructors) {
             Class<?>[] parameterTypes = constructor.getParameterTypes();
             if (paramNames != null && parameterTypes.length != paramNames.length) {
                 continue;
             }
 
-            if(parameterTypes.length > 0 && parameterTypes[parameterTypes.length - 1].getName().equals("kotlin.jvm.internal.DefaultConstructorMarker")){
+            if (parameterTypes.length > 0 && parameterTypes[parameterTypes.length - 1].getName().equals("kotlin.jvm.internal.DefaultConstructorMarker")) {
                 continue;
             }
-            if(creatorConstructor != null && creatorConstructor.getParameterTypes().length >= parameterTypes.length){
+            if (creatorConstructor != null && creatorConstructor.getParameterTypes().length >= parameterTypes.length) {
                 continue;
             }
             creatorConstructor = constructor;
@@ -1630,55 +1638,55 @@ public class TypeUtils{
         return creatorConstructor;
     }
 
-    public static String[] getKoltinConstructorParameters(Class clazz){
-        if(kotlin_kclass_constructor == null && !kotlin_class_klass_error){
-            try{
+    public static String[] getKoltinConstructorParameters(Class clazz) {
+        if (kotlin_kclass_constructor == null && !kotlin_class_klass_error) {
+            try {
                 Class class_kotlin_kclass = Class.forName("kotlin.reflect.jvm.internal.KClassImpl");
                 kotlin_kclass_constructor = class_kotlin_kclass.getConstructor(Class.class);
-            } catch(Throwable e){
+            } catch (Throwable e) {
                 kotlin_class_klass_error = true;
             }
         }
-        if (kotlin_kclass_constructor == null){
+        if (kotlin_kclass_constructor == null) {
             return null;
         }
 
         if (kotlin_kclass_getConstructors == null && !kotlin_class_klass_error) {
-            try{
+            try {
                 Class class_kotlin_kclass = Class.forName("kotlin.reflect.jvm.internal.KClassImpl");
                 kotlin_kclass_getConstructors = class_kotlin_kclass.getMethod("getConstructors");
-            } catch(Throwable e){
+            } catch (Throwable e) {
                 kotlin_class_klass_error = true;
             }
         }
 
         if (kotlin_kfunction_getParameters == null && !kotlin_class_klass_error) {
-            try{
+            try {
                 Class class_kotlin_kfunction = Class.forName("kotlin.reflect.KFunction");
                 kotlin_kfunction_getParameters = class_kotlin_kfunction.getMethod("getParameters");
-            } catch(Throwable e){
+            } catch (Throwable e) {
                 kotlin_class_klass_error = true;
             }
         }
 
         if (kotlin_kparameter_getName == null && !kotlin_class_klass_error) {
-            try{
+            try {
                 Class class_kotlinn_kparameter = Class.forName("kotlin.reflect.KParameter");
                 kotlin_kparameter_getName = class_kotlinn_kparameter.getMethod("getName");
-            } catch(Throwable e){
+            } catch (Throwable e) {
                 kotlin_class_klass_error = true;
             }
         }
 
-        if (kotlin_error){
+        if (kotlin_error) {
             return null;
         }
 
-        try{
+        try {
             Object constructor = null;
             Object kclassImpl = kotlin_kclass_constructor.newInstance(clazz);
             Iterable it = (Iterable) kotlin_kclass_getConstructors.invoke(kclassImpl);
-            for(Iterator iterator = it.iterator(); iterator.hasNext(); iterator.hasNext()){
+            for (Iterator iterator = it.iterator(); iterator.hasNext(); iterator.hasNext()) {
                 Object item = iterator.next();
                 List parameters = (List) kotlin_kfunction_getParameters.invoke(item);
                 if (constructor != null && parameters.size() == 0) {
@@ -1688,12 +1696,12 @@ public class TypeUtils{
             }
             List parameters = (List) kotlin_kfunction_getParameters.invoke(constructor);
             String[] names = new String[parameters.size()];
-            for(int i = 0; i < parameters.size(); i++){
+            for (int i = 0; i < parameters.size(); i++) {
                 Object param = parameters.get(i);
                 names[i] = (String) kotlin_kparameter_getName.invoke(param);
             }
             return names;
-        } catch(Throwable e){
+        } catch (Throwable e) {
             e.printStackTrace();
             kotlin_error = true;
         }
@@ -1726,16 +1734,16 @@ public class TypeUtils{
         return ignores != null && Arrays.binarySearch(ignores, methodName) >= 0;
     }
 
-    public static <A extends Annotation> A getAnnotation(Class<?> clazz, Class<A> annotationClass){
+    public static <A extends Annotation> A getAnnotation(Class<?> clazz, Class<A> annotationClass) {
         A a = clazz.getAnnotation(annotationClass);
-        if (a != null){
+        if (a != null) {
             return a;
         }
 
-        if(clazz.getAnnotations().length > 0){
-            for(Annotation annotation : clazz.getAnnotations()){
+        if (clazz.getAnnotations().length > 0) {
+            for (Annotation annotation : clazz.getAnnotations()) {
                 a = annotation.annotationType().getAnnotation(annotationClass);
-                if(a != null){
+                if (a != null) {
                     return a;
                 }
             }
