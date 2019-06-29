@@ -24,12 +24,7 @@ import java.text.DateFormat;
 
 public class Jacksons {
     public static boolean isJacksonJavaType(Type type) {
-        try {
-            JavaType jType = (JavaType) type;
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+        return type instanceof JavaType;
     }
 
     public static JavaType toJavaType(Type type) {

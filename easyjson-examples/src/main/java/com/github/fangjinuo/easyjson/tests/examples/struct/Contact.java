@@ -75,16 +75,30 @@ public class Contact {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Contact contact = (Contact) o;
 
-        if (!email.equals(contact.email)) return false;
-        if (phone != null ? !phone.equals(contact.phone) : contact.phone != null) return false;
-        if (mobilePhone != null ? !mobilePhone.equals(contact.mobilePhone) : contact.mobilePhone != null) return false;
-        if (qq != null ? !qq.equals(contact.qq) : contact.qq != null) return false;
-        if (msn != null ? !msn.equals(contact.msn) : contact.msn != null) return false;
+        if (!email.equals(contact.email)) {
+            return false;
+        }
+        if (phone != null ? !phone.equals(contact.phone) : contact.phone != null) {
+            return false;
+        }
+        if (mobilePhone != null ? !mobilePhone.equals(contact.mobilePhone) : contact.mobilePhone != null) {
+            return false;
+        }
+        if (qq != null ? !qq.equals(contact.qq) : contact.qq != null) {
+            return false;
+        }
+        if (msn != null ? !msn.equals(contact.msn) : contact.msn != null) {
+            return false;
+        }
         return webchat != null ? webchat.equals(contact.webchat) : contact.webchat == null;
     }
 

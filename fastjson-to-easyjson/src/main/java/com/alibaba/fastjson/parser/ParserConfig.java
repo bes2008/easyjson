@@ -85,7 +85,7 @@ public class ParserConfig {
         return global;
     }
 
-    public static ParserConfig global = new ParserConfig();
+    public static final ParserConfig global = new ParserConfig();
 
     private final IdentityHashMap<Type, ObjectDeserializer> deserializers = new IdentityHashMap<Type, ObjectDeserializer>();
     private final ConcurrentMap<String, Class<?>> typeMapping = new ConcurrentHashMap<String, Class<?>>(16, 0.75f, 1);

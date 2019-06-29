@@ -231,7 +231,6 @@ public class arrays{
     }
 
     public static boolean IsLastElement(double length, double index){
-
         return index + 1d == length;
     }
 

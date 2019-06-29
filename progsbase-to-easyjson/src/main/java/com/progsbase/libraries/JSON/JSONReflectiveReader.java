@@ -21,6 +21,7 @@ import static JSON.StringElementMaps.StringElementMaps.GetStringElementMapNumber
   - boolean -> Boolean
   - Getters and setters not supported.
  */
+@SuppressWarnings({"unchecked"})
 public class JSONReflectiveReader {
     public static <T> boolean readJSON(String json, Reference<T> tReference, Class<T> clazz, StringReference errorMessage) {
         return readJSON(json, tReference, clazz, null, errorMessage);

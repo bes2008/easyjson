@@ -45,9 +45,6 @@ public class EnumDeserializer<T extends Enum> extends JsonDeserializer<T> implem
         boolean usingIndex = Jacksons.getBooleanAttr(ctx, SERIALIZE_ENUM_USING_INDEX_ATTR_KEY);
         boolean usingToString = ctx.isEnabled(DeserializationFeature.READ_ENUMS_USING_TO_STRING);
         String usingField = (String) ctx.getAttribute(SERIALIZE_ENUM_USING_FIELD_ATTR_KEY);
-
-        DeserializationConfig config = ctx.getConfig();
-
         Class<T> enumClass = clazz;
         if (enumClass == null) {
             Object currentOwner = p.getCurrentValue();

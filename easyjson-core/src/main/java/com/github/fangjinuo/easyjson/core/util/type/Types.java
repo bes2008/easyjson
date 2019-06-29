@@ -32,12 +32,7 @@ public class Types {
     }
 
     public static boolean isClass(Type type) {
-        try {
-            Class clazz = (Class) type;
-            return true;
-        } catch (Throwable ex) {
-            return false;
-        }
+        return type instanceof Class;
     }
 
     public static boolean isParameterizedType(Type type) {
