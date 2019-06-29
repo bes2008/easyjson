@@ -1,20 +1,19 @@
 package arrays.arrays;
 
 
-import static java.lang.Math.*;
+import com.github.fangjinuo.easyjson.core.util.type.PrimitiveArrays;
+import references.references.BooleanArrayReference;
+import references.references.NumberArrayReference;
+import references.references.StringReference;
 
-import references.references.*;
-import static references.references.references.*;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 
 
 public class arrays{
     public static double [] StringToNumberArray(char [] string){
-        double i;
-        double [] array;
-
-        array = new double [(int)(string.length)];
-
-        for(i = 0d; i < string.length; i = i + 1d){
+        double [] array = new double [(int)(string.length)];
+        for(int i = 0; i < string.length; i = i + 1){
             array[(int)(i)] = string[(int)(i)];
         }
         return array;
@@ -33,31 +32,19 @@ public class arrays{
     }
 
     public static boolean NumberArraysEqual(double [] a, double [] b){
-        boolean equal;
-        double i;
-
-        equal = true;
-        if(a.length == b.length){
-            for(i = 0d; i < a.length && equal; i = i + 1d){
-                if(a[(int)(i)] != b[(int)(i)]){
-                    equal = false;
-                }
-            }
-        }else{
-            equal = false;
-        }
-
-        return equal;
+        return primitiveEquels(PrimitiveArrays.wrap(a), PrimitiveArrays.wrap(b));
     }
 
     public static boolean BooleanArraysEqual(boolean [] a, boolean [] b){
-        boolean equal;
-        double i;
+        return primitiveEquels(PrimitiveArrays.wrap(a), PrimitiveArrays.wrap(b));
+    }
 
-        equal = true;
+    private static <T> boolean primitiveEquels(T[] a, T[] b){
+        boolean equal= true;
+
         if(a.length == b.length){
-            for(i = 0d; i < a.length && equal; i = i + 1d){
-                if(a[(int)(i)] != b[(int)(i)]){
+            for(int i = 0; i < a.length && equal; i = i + 1){
+                if(a[i] != b[i]){
                     equal = false;
                 }
             }
@@ -69,21 +56,7 @@ public class arrays{
     }
 
     public static boolean StringsEqual(char [] a, char [] b){
-        boolean equal;
-        double i;
-
-        equal = true;
-        if(a.length == b.length){
-            for(i = 0d; i < a.length && equal; i = i + 1d){
-                if(a[(int)(i)] != b[(int)(i)]){
-                    equal = false;
-                }
-            }
-        }else{
-            equal = false;
-        }
-
-        return equal;
+        return new String(a).equals(new String(b));
     }
 
     public static void FillNumberArray(double [] a, double value){

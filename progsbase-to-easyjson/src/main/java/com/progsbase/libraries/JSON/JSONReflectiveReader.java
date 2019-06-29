@@ -45,11 +45,11 @@ public class JSONReflectiveReader {
     }
 
     public static <T> T readJSON(String json, Class<T> clazz, Type genericType) throws JSONException {
-        if(clazz!=null) {
-            T t = JSONBuilderProvider.create().build().fromJson(json, clazz);
-            return t;
-        }else if(genericType!=null){
+        if (genericType != null) {
             T t = JSONBuilderProvider.create().build().fromJson(json, genericType);
+            return t;
+        } else if (clazz != null) {
+            T t = JSONBuilderProvider.create().build().fromJson(json, clazz);
             return t;
         }
         throw new JSONException("Clazz not specified");
@@ -60,17 +60,17 @@ public class JSONReflectiveReader {
 
         String type = new String(element.type.name);
 
-        if(type.equals("nullValue")){
-        }else{
+        if (type.equals("nullValue")) {
+        } else {
             if (type.equals("object")) {
                 t = javaifyJSONObject(element.object, clazz);
             } else if (type.equals("array")) {
                 t = javaifyJSONArray(element.array, clazz, genericType);
             } else if (type.equals("string")) {
-                if(clazz == String.class){
-                    t = (T)new String(element.string);
+                if (clazz == String.class) {
+                    t = (T) new String(element.string);
                 }
-                if(clazz.isEnum()){
+                if (clazz.isEnum()) {
                     Method valueOf;
                     try {
                         valueOf = clazz.getMethod("valueOf", String.class);
@@ -78,33 +78,33 @@ public class JSONReflectiveReader {
                         throw new JSONException(e.getMessage());
                     }
                     try {
-                        t = (T)valueOf.invoke(null, new String(element.string));
+                        t = (T) valueOf.invoke(null, new String(element.string));
                     } catch (Throwable e) {
                         throw new JSONException(e.getMessage());
                     }
                 }
             } else if (type.equals("number")) {
-                if(clazz == Double.class || clazz == double.class){
-                    t = (T)new Double(element.number);
+                if (clazz == Double.class || clazz == double.class) {
+                    t = (T) new Double(element.number);
                 }
-                if(clazz == Float.class || clazz == float.class){
-                    t = (T)new Float(element.number);
+                if (clazz == Float.class || clazz == float.class) {
+                    t = (T) new Float(element.number);
                 }
-                if(clazz == Integer.class || clazz == int.class){
-                    t = (T)new Integer((int)Math.round(element.number));
+                if (clazz == Integer.class || clazz == int.class) {
+                    t = (T) new Integer((int) Math.round(element.number));
                 }
-                if(clazz == Long.class || clazz == long.class){
-                    t = (T)new Long(Math.round(element.number));
+                if (clazz == Long.class || clazz == long.class) {
+                    t = (T) new Long(Math.round(element.number));
                 }
-                if(clazz == Short.class || clazz == short.class){
-                    t = (T)new Short((short)Math.round(element.number));
+                if (clazz == Short.class || clazz == short.class) {
+                    t = (T) new Short((short) Math.round(element.number));
                 }
-                if(clazz == Byte.class || clazz == byte.class){
-                    t = (T)new Byte((byte)Math.round(element.number));
+                if (clazz == Byte.class || clazz == byte.class) {
+                    t = (T) new Byte((byte) Math.round(element.number));
                 }
             } else if (type.equals("booleanValue")) {
-                if(clazz == Boolean.class || clazz == boolean.class){
-                    t = (T)(Boolean)element.booleanValue;
+                if (clazz == Boolean.class || clazz == boolean.class) {
+                    t = (T) (Boolean) element.booleanValue;
                 }
             }
         }
@@ -121,7 +121,7 @@ public class JSONReflectiveReader {
             throw new JSONException(e);
         }
 
-        for(int i = 0; i < GetStringElementMapNumberOfKeys(object); i++){
+        for (int i = 0; i < GetStringElementMapNumberOfKeys(object); i++) {
             try {
                 String key = new String(object.stringListRef.stringArray[i].string);
                 Field field = clazz.getField(key);
@@ -138,34 +138,34 @@ public class JSONReflectiveReader {
     public static <T> T javaifyJSONArray(Element[] array, Class<T> clazz, Type genericType) throws JSONException {
 
         Class<?> componentType = clazz.getComponentType();
-        if(componentType != null){
-            Object a[] = (Object[])Array.newInstance(componentType, array.length);
+        if (componentType != null) {
+            Object a[] = (Object[]) Array.newInstance(componentType, array.length);
 
-            for(int i = 0; i < array.length; i++){
+            for (int i = 0; i < array.length; i++) {
                 a[i] = javaifyJSONValue(array[i], componentType, null);
             }
 
-            return (T)a;
-        }else{
+            return (T) a;
+        } else {
             List<Object> list = new ArrayList<Object>(array.length);
-            ParameterizedType p = (ParameterizedType)genericType;
+            ParameterizedType p = (ParameterizedType) genericType;
             Type type = p.getActualTypeArguments()[0];
             Class<?> typeClass;
             Type typeGeneric;
-            if(type instanceof Class){
+            if (type instanceof Class) {
                 typeClass = (Class<?>) type;
                 typeGeneric = null;
-            }else{
+            } else {
                 typeClass = List.class;
                 typeGeneric = type;
             }
 
 
-            for(int i = 0; i < array.length; i++){
+            for (int i = 0; i < array.length; i++) {
                 list.add(javaifyJSONValue(array[i], typeClass, typeGeneric));
             }
 
-            return (T)list;
+            return (T) list;
         }
     }
 }

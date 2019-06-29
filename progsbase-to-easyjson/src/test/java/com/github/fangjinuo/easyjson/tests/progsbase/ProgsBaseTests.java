@@ -15,11 +15,14 @@
 package com.github.fangjinuo.easyjson.tests.progsbase;
 
 import com.github.fangjinuo.easyjson.tests.examples.BaseTests;
+import com.github.fangjinuo.easyjson.tests.examples.struct.Person;
 import com.progsbase.libraries.JSON.GenericTypeGetter;
 import com.progsbase.libraries.JSON.JSONReflectiveReader;
+import com.progsbase.libraries.JSON.JSONReflectiveWriter;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.Map;
 
 public class ProgsBaseTests extends BaseTests {
 
@@ -36,5 +39,30 @@ public class ProgsBaseTests extends BaseTests {
         }catch (Throwable ex){
             ex.printStackTrace();
         }
+    }
+
+    @Test
+    public void testProgsbase() throws Exception {
+        System.out.println("=====================Progsbase test start =============================");
+
+        // test simple object
+        String str1 = JSONReflectiveWriter.writeJSON(person);
+        System.out.println(str1);
+        Person p1 = JSONReflectiveReader.readJSON(str1, Person.class);
+        System.out.println(p1.equals(person));
+        System.out.println(JSONReflectiveWriter.writeJSON(p1));
+
+        // test list
+        String str2 = JSONReflectiveWriter.writeJSON(persons);
+        System.out.println(str2);
+        List<Person> persons2 = JSONReflectiveReader.readJSON(str2, List.class, new GenericTypeGetter<List<Person>>(){}.getType());
+        System.out.println(JSONReflectiveWriter.writeJSON(persons2));
+        // test map
+        String str3 = JSONReflectiveWriter.writeJSON(idToPersonMap);
+        System.out.println(str3);
+        Map<Integer, Person> personMap = JSONReflectiveReader.readJSON(str3, Map.class, new GenericTypeGetter<Map<String, Person>>(){}.getType());
+        System.out.println(JSONReflectiveWriter.writeJSON(personMap));
+
+        System.out.println("=====================Progsbase test end =============================");
     }
 }
