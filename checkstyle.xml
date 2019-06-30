@@ -53,7 +53,7 @@
             <property name="format" value="^[a-zA-Z_][a-z_A-Z0-9]+$"/>
         </module>
         <module name="LineLength">
-            <property name="max" value="200"/>
+            <property name="max" value="400"/>
             <property name="tabWidth" value="4"/>
         </module>
         <module name="EmptyForIteratorPad"/>

@@ -152,8 +152,8 @@ public final class ExclusionConfiguration {
 
     private boolean isExcludedClassInStrategy(Class<?> clazz, boolean serialize) {
         List<Exclusion> list = serialize ? serializationStrategies : deserializationStrategies;
-        for (Exclusion Exclusion : list) {
-            if (Exclusion.shouldSkipClass(clazz, serialize)) {
+        for (Exclusion exclusion : list) {
+            if (exclusion.shouldSkipClass(clazz, serialize)) {
                 return true;
             }
         }
