@@ -45,48 +45,44 @@ public class TypeUtils {
      */
     public static boolean compatibleWithFieldName = false;
     private static boolean setAccessibleEnable = true;
-    private static boolean oracleTimestampMethodInited = false;
-    private static Method oracleTimestampMethod;
-    private static boolean oracleDateMethodInited = false;
-    private static Method oracleDateMethod;
     private static boolean optionalClassInited = false;
     private static Class<?> optionalClass;
     private static boolean transientClassInited = false;
     private static Class<? extends Annotation> transientClass;
 
-    private static Class<? extends Annotation> class_OneToMany = null;
-    private static boolean class_OneToMany_error = false;
-    private static Class<? extends Annotation> class_ManyToMany = null;
-    private static boolean class_ManyToMany_error = false;
+    private static Class<? extends Annotation> classOneToMany = null;
+    private static boolean classOneToManyError = false;
+    private static Class<? extends Annotation> classManyToMany = null;
+    private static boolean classManyToManyError = false;
 
-    private static Method method_HibernateIsInitialized = null;
-    private static boolean method_HibernateIsInitialized_error = false;
+    private static Method methodHibernateIsInitialized = null;
+    private static boolean methodHibernateIsInitializedError = false;
     private static volatile Class kotlin_metadata;
     private static volatile boolean kotlin_metadata_error;
-    private static volatile boolean kotlin_class_klass_error;
-    private static volatile Constructor kotlin_kclass_constructor;
-    private static volatile Method kotlin_kclass_getConstructors;
-    private static volatile Method kotlin_kfunction_getParameters;
-    private static volatile Method kotlin_kparameter_getName;
-    private static volatile boolean kotlin_error;
+    private static volatile boolean kotlinClassKlassError;
+    private static volatile Constructor kotlinClassConstructor;
+    private static volatile Method kotlinClassGetConstructors;
+    private static volatile Method kotlinFunctionGetParameters;
+    private static volatile Method kotlinParameterGetName;
+    private static volatile boolean kotlinError;
     private static volatile Map<Class, String[]> kotlinIgnores;
-    private static volatile boolean kotlinIgnores_error;
+    private static volatile boolean kotlinIgnoresError;
     private static ConcurrentMap<String, Class<?>> mappings = new ConcurrentHashMap<String, Class<?>>(256, 0.75f, 1);
     private static Class<?> pathClass;
-    private static boolean pathClass_error = false;
+    private static boolean pathClassError = false;
 
-    private static Class<? extends Annotation> class_JacksonCreator = null;
-    private static boolean class_JacksonCreator_error = false;
+    private static Class<? extends Annotation> classJacksonCreator = null;
+    private static boolean classJacksonCreatorError = false;
 
-    private static volatile Class class_Clob = null;
-    private static volatile boolean class_Clob_error = false;
+    private static volatile Class classClob = null;
+    private static volatile boolean classClobError = false;
 
     private static volatile Class class_XmlAccessType = null;
-    private static volatile Class class_XmlAccessorType = null;
+    private static volatile Class classXmlAccessorType = null;
     private static volatile boolean classXmlAccessorType_error = false;
-    private static volatile Method method_XmlAccessorType_value = null;
-    private static volatile Field field_XmlAccessType_FIELD = null;
-    private static volatile Object field_XmlAccessType_FIELD_VALUE = null;
+    private static volatile Method methodXmlAccessorTypeValue = null;
+    private static volatile Field fieldXmlAccessTypeField = null;
+    private static volatile Object fieldXmlAccessTypeFieldValue = null;
 
     static {
         try {
@@ -103,39 +99,39 @@ public class TypeUtils {
 
 
     public static boolean isXmlField(Class clazz) {
-        if (class_XmlAccessorType == null && !classXmlAccessorType_error) {
+        if (classXmlAccessorType == null && !classXmlAccessorType_error) {
             try {
-                class_XmlAccessorType = Class.forName("javax.xml.bind.annotation.XmlAccessorType");
+                classXmlAccessorType = Class.forName("javax.xml.bind.annotation.XmlAccessorType");
             } catch (Throwable ex) {
                 classXmlAccessorType_error = true;
             }
         }
 
-        if (class_XmlAccessorType == null) {
+        if (classXmlAccessorType == null) {
             return false;
         }
 
-        Annotation annotation = clazz.getAnnotation(class_XmlAccessorType);
+        Annotation annotation = clazz.getAnnotation(classXmlAccessorType);
         if (annotation == null) {
             return false;
         }
 
-        if (method_XmlAccessorType_value == null && !classXmlAccessorType_error) {
+        if (methodXmlAccessorTypeValue == null && !classXmlAccessorType_error) {
             try {
-                method_XmlAccessorType_value = class_XmlAccessorType.getMethod("value");
+                methodXmlAccessorTypeValue = classXmlAccessorType.getMethod("value");
             } catch (Throwable ex) {
                 classXmlAccessorType_error = true;
             }
         }
 
-        if (method_XmlAccessorType_value == null) {
+        if (methodXmlAccessorTypeValue == null) {
             return false;
         }
 
         Object value = null;
         if (!classXmlAccessorType_error) {
             try {
-                value = method_XmlAccessorType_value.invoke(annotation);
+                value = methodXmlAccessorTypeValue.invoke(annotation);
             } catch (Throwable ex) {
                 classXmlAccessorType_error = true;
             }
@@ -147,31 +143,31 @@ public class TypeUtils {
         if (class_XmlAccessType == null && !classXmlAccessorType_error) {
             try {
                 class_XmlAccessType = Class.forName("javax.xml.bind.annotation.XmlAccessType");
-                field_XmlAccessType_FIELD = class_XmlAccessType.getField("FIELD");
-                field_XmlAccessType_FIELD_VALUE = field_XmlAccessType_FIELD.get(null);
+                fieldXmlAccessTypeField = class_XmlAccessType.getField("FIELD");
+                fieldXmlAccessTypeFieldValue = fieldXmlAccessTypeField.get(null);
             } catch (Throwable ex) {
                 classXmlAccessorType_error = true;
             }
         }
 
-        return value == field_XmlAccessType_FIELD_VALUE;
+        return value == fieldXmlAccessTypeFieldValue;
     }
 
     public static Annotation getXmlAccessorType(Class clazz) {
-        if (class_XmlAccessorType == null && !classXmlAccessorType_error) {
+        if (classXmlAccessorType == null && !classXmlAccessorType_error) {
 
             try {
-                class_XmlAccessorType = Class.forName("javax.xml.bind.annotation.XmlAccessorType");
+                classXmlAccessorType = Class.forName("javax.xml.bind.annotation.XmlAccessorType");
             } catch (Throwable ex) {
                 classXmlAccessorType_error = true;
             }
         }
 
-        if (class_XmlAccessorType == null) {
+        if (classXmlAccessorType == null) {
             return null;
         }
 
-        return clazz.getAnnotation(class_XmlAccessorType);
+        return clazz.getAnnotation(classXmlAccessorType);
     }
 
 //
@@ -193,20 +189,20 @@ public class TypeUtils {
 //    }
 
     public static boolean isClob(Class clazz) {
-        if (class_Clob == null && !class_Clob_error) {
+        if (classClob == null && !classClobError) {
 
             try {
-                class_Clob = Class.forName("java.sql.Clob");
+                classClob = Class.forName("java.sql.Clob");
             } catch (Throwable ex) {
-                class_Clob_error = true;
+                classClobError = true;
             }
         }
 
-        if (class_Clob == null) {
+        if (classClob == null) {
             return false;
         }
 
-        return class_Clob.isAssignableFrom(clazz);
+        return classClob.isAssignableFrom(clazz);
     }
 
     public static String castToString(Object value) {
@@ -797,11 +793,11 @@ public class TypeUtils {
 
 
     public static boolean isPath(Class<?> clazz) {
-        if (pathClass == null && !pathClass_error) {
+        if (pathClass == null && !pathClassError) {
             try {
                 pathClass = Class.forName("java.nio.file.Path");
             } catch (Throwable ex) {
-                pathClass_error = true;
+                pathClassError = true;
             }
         }
         if (pathClass != null) {
@@ -1395,15 +1391,15 @@ public class TypeUtils {
             return false;
         }
 
-        if (class_OneToMany == null && !class_OneToMany_error) {
+        if (classOneToMany == null && !classOneToManyError) {
             try {
-                class_OneToMany = (Class<? extends Annotation>) Class.forName("javax.persistence.OneToMany");
+                classOneToMany = (Class<? extends Annotation>) Class.forName("javax.persistence.OneToMany");
             } catch (Throwable e) {
                 // skip
-                class_OneToMany_error = true;
+                classOneToManyError = true;
             }
         }
-        return class_OneToMany != null && method.isAnnotationPresent(class_OneToMany);
+        return classOneToMany != null && method.isAnnotationPresent(classOneToMany);
 
     }
 
@@ -1412,15 +1408,15 @@ public class TypeUtils {
             return false;
         }
 
-        if (class_ManyToMany == null && !class_ManyToMany_error) {
+        if (classManyToMany == null && !classManyToManyError) {
             try {
-                class_ManyToMany = (Class<? extends Annotation>) Class.forName("javax.persistence.ManyToMany");
+                classManyToMany = (Class<? extends Annotation>) Class.forName("javax.persistence.ManyToMany");
             } catch (Throwable e) {
                 // skip
-                class_ManyToMany_error = true;
+                classManyToManyError = true;
             }
         }
-        return class_ManyToMany != null && (method.isAnnotationPresent(class_OneToMany) || method.isAnnotationPresent(class_ManyToMany));
+        return classManyToMany != null && (method.isAnnotationPresent(classOneToMany) || method.isAnnotationPresent(classManyToMany));
 
     }
 
@@ -1428,18 +1424,18 @@ public class TypeUtils {
         if (object == null) {
             return false;
         }
-        if (method_HibernateIsInitialized == null && !method_HibernateIsInitialized_error) {
+        if (methodHibernateIsInitialized == null && !methodHibernateIsInitializedError) {
             try {
-                Class<?> class_Hibernate = Class.forName("org.hibernate.Hibernate");
-                method_HibernateIsInitialized = class_Hibernate.getMethod("isInitialized", Object.class);
+                Class<?> classHibernate = Class.forName("org.hibernate.Hibernate");
+                methodHibernateIsInitialized = classHibernate.getMethod("isInitialized", Object.class);
             } catch (Throwable e) {
                 // skip
-                method_HibernateIsInitialized_error = true;
+                methodHibernateIsInitializedError = true;
             }
         }
-        if (method_HibernateIsInitialized != null) {
+        if (methodHibernateIsInitialized != null) {
             try {
-                Boolean initialized = (Boolean) method_HibernateIsInitialized.invoke(null, object);
+                Boolean initialized = (Boolean) methodHibernateIsInitialized.invoke(null, object);
                 return initialized.booleanValue();
             } catch (Throwable e) {
                 // skip
@@ -1639,77 +1635,77 @@ public class TypeUtils {
     }
 
     public static String[] getKoltinConstructorParameters(Class clazz) {
-        if (kotlin_kclass_constructor == null && !kotlin_class_klass_error) {
+        if (kotlinClassConstructor == null && !kotlinClassKlassError) {
             try {
-                Class class_kotlin_kclass = Class.forName("kotlin.reflect.jvm.internal.KClassImpl");
-                kotlin_kclass_constructor = class_kotlin_kclass.getConstructor(Class.class);
+                Class classKotlinClazz = Class.forName("kotlin.reflect.jvm.internal.KClassImpl");
+                kotlinClassConstructor = classKotlinClazz.getConstructor(Class.class);
             } catch (Throwable e) {
-                kotlin_class_klass_error = true;
+                kotlinClassKlassError = true;
             }
         }
-        if (kotlin_kclass_constructor == null) {
+        if (kotlinClassConstructor == null) {
             return null;
         }
 
-        if (kotlin_kclass_getConstructors == null && !kotlin_class_klass_error) {
+        if (kotlinClassGetConstructors == null && !kotlinClassKlassError) {
             try {
-                Class class_kotlin_kclass = Class.forName("kotlin.reflect.jvm.internal.KClassImpl");
-                kotlin_kclass_getConstructors = class_kotlin_kclass.getMethod("getConstructors");
+                Class classKotlinClazz = Class.forName("kotlin.reflect.jvm.internal.KClassImpl");
+                kotlinClassGetConstructors = classKotlinClazz.getMethod("getConstructors");
             } catch (Throwable e) {
-                kotlin_class_klass_error = true;
+                kotlinClassKlassError = true;
             }
         }
 
-        if (kotlin_kfunction_getParameters == null && !kotlin_class_klass_error) {
+        if (kotlinFunctionGetParameters == null && !kotlinClassKlassError) {
             try {
-                Class class_kotlin_kfunction = Class.forName("kotlin.reflect.KFunction");
-                kotlin_kfunction_getParameters = class_kotlin_kfunction.getMethod("getParameters");
+                Class classKotlinFunction = Class.forName("kotlin.reflect.KFunction");
+                kotlinFunctionGetParameters = classKotlinFunction.getMethod("getParameters");
             } catch (Throwable e) {
-                kotlin_class_klass_error = true;
+                kotlinClassKlassError = true;
             }
         }
 
-        if (kotlin_kparameter_getName == null && !kotlin_class_klass_error) {
+        if (kotlinParameterGetName == null && !kotlinClassKlassError) {
             try {
-                Class class_kotlinn_kparameter = Class.forName("kotlin.reflect.KParameter");
-                kotlin_kparameter_getName = class_kotlinn_kparameter.getMethod("getName");
+                Class classKotlinParameter = Class.forName("kotlin.reflect.KParameter");
+                kotlinParameterGetName = classKotlinParameter.getMethod("getName");
             } catch (Throwable e) {
-                kotlin_class_klass_error = true;
+                kotlinClassKlassError = true;
             }
         }
 
-        if (kotlin_error) {
+        if (kotlinError) {
             return null;
         }
 
         try {
             Object constructor = null;
-            Object kclassImpl = kotlin_kclass_constructor.newInstance(clazz);
-            Iterable it = (Iterable) kotlin_kclass_getConstructors.invoke(kclassImpl);
+            Object kclassImpl = kotlinClassConstructor.newInstance(clazz);
+            Iterable it = (Iterable) kotlinClassGetConstructors.invoke(kclassImpl);
             for (Iterator iterator = it.iterator(); iterator.hasNext(); iterator.hasNext()) {
                 Object item = iterator.next();
-                List parameters = (List) kotlin_kfunction_getParameters.invoke(item);
+                List parameters = (List) kotlinFunctionGetParameters.invoke(item);
                 if (constructor != null && parameters.size() == 0) {
                     continue;
                 }
                 constructor = item;
             }
-            List parameters = (List) kotlin_kfunction_getParameters.invoke(constructor);
+            List parameters = (List) kotlinFunctionGetParameters.invoke(constructor);
             String[] names = new String[parameters.size()];
             for (int i = 0; i < parameters.size(); i++) {
                 Object param = parameters.get(i);
-                names[i] = (String) kotlin_kparameter_getName.invoke(param);
+                names[i] = (String) kotlinParameterGetName.invoke(param);
             }
             return names;
         } catch (Throwable e) {
             e.printStackTrace();
-            kotlin_error = true;
+            kotlinError = true;
         }
         return null;
     }
 
     private static boolean isKotlinIgnore(Class clazz, String methodName) {
-        if (kotlinIgnores == null && !kotlinIgnores_error) {
+        if (kotlinIgnores == null && !kotlinIgnoresError) {
             try {
                 Map<Class, String[]> map = new HashMap<Class, String[]>();
                 Class charRangeClass = Class.forName("kotlin.ranges.CharRange");
@@ -1724,7 +1720,7 @@ public class TypeUtils {
                 map.put(doubleRangeClass, new String[]{"getEndInclusive", "isEmpty"});
                 kotlinIgnores = map;
             } catch (Throwable error) {
-                kotlinIgnores_error = true;
+                kotlinIgnoresError = true;
             }
         }
         if (kotlinIgnores == null) {
@@ -1756,14 +1752,14 @@ public class TypeUtils {
             return false;
         }
 
-        if (class_JacksonCreator == null && !class_JacksonCreator_error) {
+        if (classJacksonCreator == null && !classJacksonCreatorError) {
             try {
-                class_JacksonCreator = (Class<? extends Annotation>) Class.forName("com.fasterxml.jackson.annotation.JsonCreator");
+                classJacksonCreator = (Class<? extends Annotation>) Class.forName("com.fasterxml.jackson.annotation.JsonCreator");
             } catch (Throwable e) {
                 // skip
-                class_JacksonCreator_error = true;
+                classJacksonCreatorError = true;
             }
         }
-        return class_JacksonCreator != null && method.isAnnotationPresent(class_JacksonCreator);
+        return classJacksonCreator != null && method.isAnnotationPresent(classJacksonCreator);
     }
 }
