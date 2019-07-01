@@ -13,20 +13,22 @@
   ~ limitations under the License.
   -->
 
-<!DOCTYPE module PUBLIC "-//Puppy Crawl//DTD Check Configuration 1.2//EN"
-        "http://www.puppycrawl.com/dtds/configuration_1_2.dtd">
+<!DOCTYPE module PUBLIC "-//Checkstyle//DTD Checkstyle Configuration 1.3//EN"
+        "http://checkstyle.org/dtds/configuration_1_3.dtd">
 <module name="Checker">
     <property name="severity" value="warning"/>
     <property name="charset" value="UTF-8"/>
     <property name="tabWidth" value="4"/>
-    
-    <module name="com.puppycrawl.tools.checkstyle.api.BeforeExecutionFileFilterSet">
-        <module name="BeforeExecutionExclusionFileFilter">
-            <property name="fileNamePattern" value="module\-info\.java$"/>
-        </module>
-        <module name="com.github.fangjinuo.checkstyles.modules.filefilter.PackageFilter">
-            <property name="packages" value="arrays, charCharacters, com.progsbase.libraries.JSON, JSON, lists, math.math, nnumbers, references.references, strstrings.strings" />
-        </module>
+
+    <!-- file filters-->
+    <module name="BeforeExecutionExclusionFileFilter">
+        <property name="fileNamePattern" value="module\-info\.java$"/>
+    </module>
+    <module name="com.github.fangjinuo.checkstyles.modules.filefilter.PackageExclusionFilter">
+        <property name="module" value="progsbase-to-easyjson"/>
+        <!--
+        <property name="packages" value="arrays, charCharacters, com.progsbase.libraries.JSON, JSON, lists, math.math, nnumbers, references.references, strstrings.strings" />
+        -->
     </module>
 
     
