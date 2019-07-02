@@ -22,11 +22,6 @@
             <version>1.8.0</version>
         </dependency>
         <dependency>
-            <groupId>net.liftweb</groupId>
-            <artifactId>lift-json_2.12</artifactId>
-            <version>3.3.0</version>
-        </dependency>
-        <dependency>
             <groupId>io.airlift</groupId>
             <artifactId>json</artifactId>
             <version>0.183</version>
