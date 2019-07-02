@@ -15,6 +15,7 @@
         <module>fastjson-to-easyjson</module>
         <module>progsbase-to-easyjson</module>
         <module>easyjson-examples</module>
+        <module>jsonsmart-to-easyjson</module>
     </modules>
     <name>easyjson</name>
     <packaging>pom</packaging>
