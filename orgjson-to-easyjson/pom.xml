@@ -25,5 +25,11 @@
 
     <artifactId>orgjson-to-easyjson</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.github.fangjinuo.easyjson</groupId>
+            <artifactId>easyjson-core</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>
