@@ -63,7 +63,7 @@
             <property name="format" value="^[a-z][a-zA-Z0-9]+$"/>
         </module>
         <module name="ParameterName">
-            <property name="format" value="^[a-z][a-zA-Z0-9]+$"/>
+            <property name="format" value="^[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)*$"/>
         </module>
         <module name="PackageName">
             <property name="format" value="^[a-z][a-zA-Z0-9]+$"/>
