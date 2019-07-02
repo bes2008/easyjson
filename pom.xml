@@ -16,6 +16,10 @@
         <module>progsbase-to-easyjson</module>
         <module>easyjson-examples</module>
         <module>jsonsmart-to-easyjson</module>
+        <module>jsonlib-to-easyjson</module>
+        <module>orgjson-to-easyjson</module>
+        <module>simplejson-to-easyjson</module>
+        <module>minimaljson-to-easyjson</module>
     </modules>
     <name>easyjson</name>
     <packaging>pom</packaging>
