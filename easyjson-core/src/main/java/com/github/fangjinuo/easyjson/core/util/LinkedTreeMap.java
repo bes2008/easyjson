@@ -20,7 +20,7 @@ import java.io.Serializable;
 import java.util.*;
 
 public final class LinkedTreeMap<K, V> extends AbstractMap<K, V> implements Serializable {
-    @SuppressWarnings({ "unchecked", "rawtypes" }) // to avoid Comparable<Comparable<Comparable<...>>>
+    @SuppressWarnings({"unchecked", "rawtypes"}) // to avoid Comparable<Comparable<Comparable<...>>>
     private static final Comparator<Comparable> NATURAL_ORDER = new Comparator<Comparable>() {
         public int compare(Comparable a, Comparable b) {
             return a.compareTo(b);
@@ -49,29 +49,33 @@ public final class LinkedTreeMap<K, V> extends AbstractMap<K, V> implements Seri
      * be null if {@code comparator} permits.
      *
      * @param comparator the comparator to order elements with, or {@code null} to
-     *     use the natural ordering.
+     *                   use the natural ordering.
      */
-    @SuppressWarnings({ "unchecked", "rawtypes" }) // unsafe! if comparator is null, this assumes K is comparable
+    @SuppressWarnings({"unchecked", "rawtypes"}) // unsafe! if comparator is null, this assumes K is comparable
     public LinkedTreeMap(Comparator<? super K> comparator) {
         this.comparator = comparator != null
                 ? comparator
                 : (Comparator) NATURAL_ORDER;
     }
 
-    @Override public int size() {
+    @Override
+    public int size() {
         return size;
     }
 
-    @Override public V get(Object key) {
+    @Override
+    public V get(Object key) {
         Node<K, V> node = findByObject(key);
         return node != null ? node.value : null;
     }
 
-    @Override public boolean containsKey(Object key) {
+    @Override
+    public boolean containsKey(Object key) {
         return findByObject(key) != null;
     }
 
-    @Override public V put(K key, V value) {
+    @Override
+    public V put(K key, V value) {
         if (key == null) {
             throw new NullPointerException("key == null");
         }
@@ -81,7 +85,8 @@ public final class LinkedTreeMap<K, V> extends AbstractMap<K, V> implements Seri
         return result;
     }
 
-    @Override public void clear() {
+    @Override
+    public void clear() {
         root = null;
         size = 0;
         modCount++;
@@ -91,7 +96,8 @@ public final class LinkedTreeMap<K, V> extends AbstractMap<K, V> implements Seri
         header.next = header.prev = header;
     }
 
-    @Override public V remove(Object key) {
+    @Override
+    public V remove(Object key) {
         Node<K, V> node = removeInternalByKey(key);
         return node != null ? node.value : null;
     }
@@ -100,7 +106,7 @@ public final class LinkedTreeMap<K, V> extends AbstractMap<K, V> implements Seri
      * Returns the node at or adjacent to the given key, creating it if requested.
      *
      * @throws ClassCastException if {@code key} and the tree's keys aren't
-     *     mutually comparable.
+     *                            mutually comparable.
      */
     Node<K, V> find(K key, boolean create) {
         Comparator<? super K> comparator = this.comparator;
@@ -176,7 +182,7 @@ public final class LinkedTreeMap<K, V> extends AbstractMap<K, V> implements Seri
     /**
      * Returns this map's entry that has the same key and value as {@code
      * entry}, or null if this map has no such entry.
-     *
+     * <p>
      * <p>This method uses the comparator for key equality rather than {@code
      * equals}. If this map's comparator isn't consistent with equals (such as
      * {@code String.CASE_INSENSITIVE_ORDER}), then {@code remove()} and {@code
@@ -289,7 +295,7 @@ public final class LinkedTreeMap<K, V> extends AbstractMap<K, V> implements Seri
      * newly-unbalanced node and the tree's root.
      *
      * @param insert true if the node was unbalanced by an insert; false if it
-     *     was by a removal.
+     *               was by a removal.
      */
     private void rebalance(Node<K, V> unbalanced, boolean insert) {
         for (Node<K, V> node = unbalanced; node != null; node = node.parent) {
@@ -410,12 +416,14 @@ public final class LinkedTreeMap<K, V> extends AbstractMap<K, V> implements Seri
     private EntrySet entrySet;
     private KeySet keySet;
 
-    @Override public Set<Entry<K, V>> entrySet() {
+    @Override
+    public Set<Entry<K, V>> entrySet() {
         EntrySet result = entrySet;
         return result != null ? result : (entrySet = new EntrySet());
     }
 
-    @Override public Set<K> keySet() {
+    @Override
+    public Set<K> keySet() {
         KeySet result = keySet;
         return result != null ? result : (keySet = new KeySet());
     }
@@ -430,13 +438,17 @@ public final class LinkedTreeMap<K, V> extends AbstractMap<K, V> implements Seri
         V value;
         int height;
 
-        /** Create the header entry */
+        /**
+         * Create the header entry
+         */
         Node() {
             key = null;
             next = prev = this;
         }
 
-        /** Create a regular entry */
+        /**
+         * Create a regular entry
+         */
         Node(Node<K, V> parent, K key, Node<K, V> next, Node<K, V> prev) {
             this.parent = parent;
             this.key = key;
@@ -462,7 +474,8 @@ public final class LinkedTreeMap<K, V> extends AbstractMap<K, V> implements Seri
         }
 
         @SuppressWarnings("rawtypes")
-        @Override public boolean equals(Object o) {
+        @Override
+        public boolean equals(Object o) {
             if (o instanceof Entry) {
                 Entry other = (Entry) o;
                 return (key == null ? other.getKey() == null : key.equals(other.getKey()))
@@ -471,12 +484,14 @@ public final class LinkedTreeMap<K, V> extends AbstractMap<K, V> implements Seri
             return false;
         }
 
-        @Override public int hashCode() {
+        @Override
+        public int hashCode() {
             return (key == null ? 0 : key.hashCode())
                     ^ (value == null ? 0 : value.hashCode());
         }
 
-        @Override public String toString() {
+        @Override
+        public String toString() {
             return key + "=" + value;
         }
 
@@ -542,11 +557,13 @@ public final class LinkedTreeMap<K, V> extends AbstractMap<K, V> implements Seri
     }
 
     class EntrySet extends AbstractSet<Entry<K, V>> {
-        @Override public int size() {
+        @Override
+        public int size() {
             return size;
         }
 
-        @Override public Iterator<Entry<K, V>> iterator() {
+        @Override
+        public Iterator<Entry<K, V>> iterator() {
             return new LinkedTreeMapIterator<Entry<K, V>>() {
                 public Entry<K, V> next() {
                     return nextNode();
@@ -554,11 +571,13 @@ public final class LinkedTreeMap<K, V> extends AbstractMap<K, V> implements Seri
             };
         }
 
-        @Override public boolean contains(Object o) {
+        @Override
+        public boolean contains(Object o) {
             return o instanceof Entry && findByEntry((Entry<?, ?>) o) != null;
         }
 
-        @Override public boolean remove(Object o) {
+        @Override
+        public boolean remove(Object o) {
             if (!(o instanceof Entry)) {
                 return false;
             }
@@ -571,17 +590,20 @@ public final class LinkedTreeMap<K, V> extends AbstractMap<K, V> implements Seri
             return true;
         }
 
-        @Override public void clear() {
+        @Override
+        public void clear() {
             LinkedTreeMap.this.clear();
         }
     }
 
     final class KeySet extends AbstractSet<K> {
-        @Override public int size() {
+        @Override
+        public int size() {
             return size;
         }
 
-        @Override public Iterator<K> iterator() {
+        @Override
+        public Iterator<K> iterator() {
             return new LinkedTreeMapIterator<K>() {
                 public K next() {
                     return nextNode().key;
@@ -589,15 +611,18 @@ public final class LinkedTreeMap<K, V> extends AbstractMap<K, V> implements Seri
             };
         }
 
-        @Override public boolean contains(Object o) {
+        @Override
+        public boolean contains(Object o) {
             return containsKey(o);
         }
 
-        @Override public boolean remove(Object key) {
+        @Override
+        public boolean remove(Object key) {
             return removeInternalByKey(key) != null;
         }
 
-        @Override public void clear() {
+        @Override
+        public void clear() {
             LinkedTreeMap.this.clear();
         }
     }

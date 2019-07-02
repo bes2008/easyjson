@@ -23,9 +23,9 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 public class JsonPrimitiveNode extends JsonTreeNode {
-    private static final Class<?>[] PRIMITIVE_TYPES = { int.class, long.class, short.class,
+    private static final Class<?>[] PRIMITIVE_TYPES = {int.class, long.class, short.class,
             float.class, double.class, byte.class, boolean.class, char.class, Integer.class, Long.class,
-            Short.class, Float.class, Double.class, Byte.class, Boolean.class, Character.class };
+            Short.class, Float.class, Double.class, Byte.class, Boolean.class, Character.class};
 
     private Object value;
 
@@ -78,6 +78,7 @@ public class JsonPrimitiveNode extends JsonTreeNode {
 
     /**
      * Returns the same value as primitives are immutable.
+     *
      * @since 2.8.2
      */
     @Override
@@ -171,75 +172,75 @@ public class JsonPrimitiveNode extends JsonTreeNode {
             return getAsNumber().toString();
         } else if (isBoolean()) {
             return getAsBooleanWrapper().toString();
-        }else if (isChar()){
-            return ""+value;
+        } else if (isChar()) {
+            return "" + value;
         } else {
             return (String) value;
         }
     }
 
-    public boolean isDouble(){
-        if(isNumber()){
+    public boolean isDouble() {
+        if (isNumber()) {
             Number n = getAsNumber();
-            return n.getClass() == Double.class || n.getClass()==double.class;
+            return n.getClass() == Double.class || n.getClass() == double.class;
         }
         return false;
     }
 
-    public boolean isLong(){
-        if(isNumber()){
+    public boolean isLong() {
+        if (isNumber()) {
             Number n = getAsNumber();
-            return n.getClass() == Long.class || n.getClass()==long.class;
+            return n.getClass() == Long.class || n.getClass() == long.class;
         }
         return false;
     }
 
-    public boolean isFloat(){
-        if(isNumber()){
+    public boolean isFloat() {
+        if (isNumber()) {
             Number n = getAsNumber();
-            return n.getClass() == Float.class || n.getClass()==float.class;
+            return n.getClass() == Float.class || n.getClass() == float.class;
         }
         return false;
     }
 
-    public boolean isInteger(){
-        if(isNumber()){
+    public boolean isInteger() {
+        if (isNumber()) {
             Number n = getAsNumber();
-            return n.getClass() == Integer.class || n.getClass()==int.class;
+            return n.getClass() == Integer.class || n.getClass() == int.class;
         }
         return false;
     }
 
-    public boolean isShort(){
-        if(isNumber()){
+    public boolean isShort() {
+        if (isNumber()) {
             Number n = getAsNumber();
-            return n.getClass() == Short.class || n.getClass()==short.class;
+            return n.getClass() == Short.class || n.getClass() == short.class;
         }
         return false;
     }
 
-    public boolean isByte(){
-        if(isNumber()){
+    public boolean isByte() {
+        if (isNumber()) {
             Number n = getAsNumber();
-            return n.getClass() == Byte.class || n.getClass()==byte.class;
+            return n.getClass() == Byte.class || n.getClass() == byte.class;
         }
         return false;
     }
 
-    public boolean isBigInteger(){
-        if(isNumber()){
+    public boolean isBigInteger() {
+        if (isNumber()) {
             Number n = getAsNumber();
             return n instanceof BigInteger;
         }
         return false;
     }
 
-    public boolean isChar(){
+    public boolean isChar() {
         return value instanceof Character || value.getClass() == char.class;
     }
 
-    public boolean isBigDecimal(){
-        if(isNumber()){
+    public boolean isBigDecimal() {
+        if (isNumber()) {
             Number n = getAsNumber();
             return n instanceof BigDecimal;
         }
@@ -377,7 +378,7 @@ public class JsonPrimitiveNode extends JsonTreeNode {
         if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
-        JsonPrimitiveNode other = (JsonPrimitiveNode)obj;
+        JsonPrimitiveNode other = (JsonPrimitiveNode) obj;
         if (value == null) {
             return other.value == null;
         }

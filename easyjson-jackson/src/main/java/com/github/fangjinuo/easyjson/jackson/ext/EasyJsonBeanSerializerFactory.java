@@ -88,8 +88,8 @@ public class EasyJsonBeanSerializerFactory extends BeanSerializerFactory {
 
     @Override
     protected PropertyBuilder constructPropertyBuilder(SerializationConfig config, BeanDescription beanDesc) {
-        if(!objectMapper.getJsonBuilder().serializeNulls()){
-            return new PropertyBuilder(config, beanDesc){
+        if (!objectMapper.getJsonBuilder().serializeNulls()) {
+            return new PropertyBuilder(config, beanDesc) {
                 @Override
                 protected BeanPropertyWriter buildWriter(SerializerProvider prov, BeanPropertyDefinition propDef, JavaType declaredType, JsonSerializer<?> ser, TypeSerializer typeSer, TypeSerializer contentTypeSer, AnnotatedMember am, boolean defaultUseStaticTyping) throws JsonMappingException {
                     // do we have annotation that forces type to use (to declared type or its super type)?
@@ -116,7 +116,7 @@ public class EasyJsonBeanSerializerFactory extends BeanSerializerFactory {
                         // Not exactly sure why, but this used to occur; better check explicitly:
                         if (ct == null) {
                             prov.reportBadPropertyDefinition(_beanDesc, propDef,
-                                    "serialization type "+serializationType+" has no content");
+                                    "serialization type " + serializationType + " has no content");
                         }
                         serializationType = serializationType.withContentTypeHandler(contentTypeSer);
                         ct = serializationType.getContentType();
@@ -247,7 +247,7 @@ public class EasyJsonBeanSerializerFactory extends BeanSerializerFactory {
                     return bpw;
                 }
             };
-        }else {
+        } else {
             return new PropertyBuilder(config, beanDesc);
         }
 
