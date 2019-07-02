@@ -64,10 +64,10 @@ public class NumberDeserializer extends JsonDeserializer<Number> implements Cont
             if (clazz == byte.class || clazz == Byte.class) {
                 return Byte.parseByte(v);
             }
-            if(clazz==BigDecimal.class){
+            if (clazz == BigDecimal.class) {
                 return p.getDecimalValue();
             }
-            if(clazz == BigInteger.class){
+            if (clazz == BigInteger.class) {
                 return p.getBigIntegerValue();
             }
         }
@@ -92,7 +92,7 @@ public class NumberDeserializer extends JsonDeserializer<Number> implements Cont
         } else if (clazz == BigInteger.class) {
             n = p.getBigIntegerValue();
         }
-        if(n!=null){
+        if (n != null) {
             return n;
         }
         return 0;
@@ -102,12 +102,12 @@ public class NumberDeserializer extends JsonDeserializer<Number> implements Cont
     public JsonDeserializer<?> createContextual(DeserializationContext context, BeanProperty beanProperty, Class<?> type) throws JsonMappingException {
         if (handledType() == null || (type != null && handledType() != type)) {
             if (Number.class.isAssignableFrom(type)) {
-                if(Jacksons.getBooleanAttr(context, SERIALIZE_LONG_USING_STRING_ATTR_KEY) || Jacksons.getBooleanAttr(context, SERIALIZE_NUMBER_USING_STRING_ATTR_KEY)){
+                if (Jacksons.getBooleanAttr(context, SERIALIZE_LONG_USING_STRING_ATTR_KEY) || Jacksons.getBooleanAttr(context, SERIALIZE_NUMBER_USING_STRING_ATTR_KEY)) {
                     NumberDeserializer d = new NumberDeserializer();
                     d.clazz = (Class<Number>) type;
                     return d;
-                }else{
-                    if(type.getName().startsWith("java.")) {
+                } else {
+                    if (type.getName().startsWith("java.")) {
                         return NumberDeserializers.find(type, type.getName());
                     }
                 }
