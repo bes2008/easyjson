@@ -20,7 +20,9 @@ import com.alibaba.fastjson.parser.JSONLexer;
 import com.alibaba.fastjson.parser.JSONToken;
 import com.alibaba.fastjson.parser.deserializer.NumberDeserializer;
 import com.alibaba.fastjson.parser.deserializer.ObjectDeserializer;
-import com.alibaba.fastjson.serializer.*;
+import com.alibaba.fastjson.serializer.JSONSerializer;
+import com.alibaba.fastjson.serializer.ObjectSerializer;
+import com.alibaba.fastjson.serializer.SerializeWriter;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -71,54 +73,54 @@ public class NumberCodec implements ObjectSerializer, ObjectDeserializer, Typed 
 
                     }
                 }
-                if(n==null){
+                if (n == null) {
                     try {
                         n = Byte.parseByte(value);
-                    }catch (NumberFormatException ex){
+                    } catch (NumberFormatException ex) {
 
                     }
                 }
-                if(n==null){
+                if (n == null) {
                     try {
                         n = Short.parseShort(value);
-                    }catch (NumberFormatException ex){
+                    } catch (NumberFormatException ex) {
 
                     }
                 }
-            }else {
-                if(asLong.contains(type)){
+            } else {
+                if (asLong.contains(type)) {
                     n = Long.parseLong(value);
                 }
-                if(n==null){
-                    if(asFloat.contains(type)){
+                if (n == null) {
+                    if (asFloat.contains(type)) {
                         n = Float.parseFloat(value);
                     }
                 }
-                if(n==null){
-                    if(asDouble.contains(type)){
+                if (n == null) {
+                    if (asDouble.contains(type)) {
                         n = Double.parseDouble(value);
                     }
                 }
-                if(n==null){
-                    if(int.class == type || Integer.class==type){
+                if (n == null) {
+                    if (int.class == type || Integer.class == type) {
                         n = Integer.parseInt(value);
                     }
                 }
-                if(n==null){
-                    if(byte.class == type || Byte.class==type){
+                if (n == null) {
+                    if (byte.class == type || Byte.class == type) {
                         n = Integer.parseInt(value);
                     }
                 }
-                if(n==null){
-                    if(short.class == type || Short.class==type){
+                if (n == null) {
+                    if (short.class == type || Short.class == type) {
                         n = Integer.parseInt(value);
                     }
                 }
             }
             lexer.nextToken(JSONToken.COMMA);
         }
-        if(n!=null){
-            return (T)n;
+        if (n != null) {
+            return (T) n;
         }
         return NumberDeserializer.instance.deserialze(parser, type, fieldName);
     }
