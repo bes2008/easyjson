@@ -1,4 +1,10 @@
 */src/test/*
+androidjson-to-easyjson/*
 easyjson-examples/*
 fastjson-to-easyjson/*
-progsbase-to-easyjson/src/*
+jsonlib-to-easyjson/*
+jsonsmart-to-easyjson/*
+minimaljson-to-easyjson/*
+orgjson-to-easyjson/*
+progsbase-to-easyjson/*
+simplejson-to-easyjson/*

@@ -28,15 +28,32 @@
     <module name="BeforeExecutionExclusionFileFilter">
         <property name="fileNamePattern" value="package\-info\.java$"/>
     </module>
-    <!-- fastjson-to-easyjson-->
+    <module name="BeforeExecutionExclusionFileFilter">
+        <property name="fileNamePattern" value=".*androidjson-to-easyjson.*.java$"/>
+    </module>
+    <module name="BeforeExecutionExclusionFileFilter">
+        <property name="fileNamePattern" value=".*easyjson-examples.*.java$"/>
+    </module>
     <module name="BeforeExecutionExclusionFileFilter">
         <property name="fileNamePattern" value=".*fastjson-to-easyjson.*.java$"/>
+    </module>
+    <module name="BeforeExecutionExclusionFileFilter">
+        <property name="fileNamePattern" value=".*jsonlib-to-easyjson.*.java$"/>
+    </module>
+    <module name="BeforeExecutionExclusionFileFilter">
+        <property name="fileNamePattern" value=".*jsonsmart-to-easyjson.*.java$"/>
+    </module>
+    <module name="BeforeExecutionExclusionFileFilter">
+        <property name="fileNamePattern" value=".*minimaljson-to-easyjson.*.java$"/>
+    </module>
+    <module name="BeforeExecutionExclusionFileFilter">
+        <property name="fileNamePattern" value=".*orgjson-to-easyjson.*.java$"/>
     </module>
     <module name="BeforeExecutionExclusionFileFilter">
         <property name="fileNamePattern" value=".*progsbase-to-easyjson.*.java$"/>
     </module>
     <module name="BeforeExecutionExclusionFileFilter">
-        <property name="fileNamePattern" value=".*easyjson-examples.*.java$"/>
+        <property name="fileNamePattern" value=".*simplejson-to-easyjson.*.java$"/>
     </module>
 
     
