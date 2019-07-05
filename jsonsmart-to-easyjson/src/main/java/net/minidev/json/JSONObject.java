@@ -81,11 +81,11 @@ public class JSONObject extends HashMap<String, Object> implements JSONAware, JS
      * Write a Key : value entry to a stream
      */
     public static void writeJSONKV(String key, Object value, Appendable out, JSONStyle compression) throws IOException {
-        if (key == null)
+        if (key == null) {
             out.append("null");
-        else if (!compression.mustProtectKey(key))
+        } else if (!compression.mustProtectKey(key)) {
             out.append(key);
-        else {
+        } else {
             out.append('"');
             JSONValue.escape(key, out, compression);
             out.append('"');

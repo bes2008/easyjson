@@ -1609,8 +1609,9 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
 
         @Override
         public void remove() {
-            if (lastIndex == -1)
+            if (lastIndex == -1) {
                 throw new IllegalStateException();
+            }
             try {
                 JSONArray.this.remove(lastIndex);
                 if (lastIndex < currentIndex) {

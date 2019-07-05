@@ -17,6 +17,7 @@ package com.github.fangjinuo.easyjson.core.node;
 import com.github.fangjinuo.easyjson.core.JSON;
 import com.github.fangjinuo.easyjson.core.JSONBuilderProvider;
 import com.github.fangjinuo.easyjson.core.JsonTreeNode;
+import com.github.fangjinuo.easyjson.core.util.type.Primitives;
 
 import java.util.*;
 
@@ -31,6 +32,10 @@ public class JsonTreeNodes {
         }
         if (object instanceof JsonTreeNode) {
             return (JsonTreeNode) object;
+        }
+
+        if(Primitives.isPrimitive(object.getClass())){
+            return new JsonPrimitiveNode(object);
         }
 
         if (object instanceof Collection) {

@@ -191,7 +191,7 @@ public class JsonMapper {
             return json.fromJson(stringBuilder.toString());
         }
 
-        return json.fromJson(json.toJson(jsonObj));
+        return JsonTreeNodes.fromJavaObject(jsonObj);
     }
 
 }

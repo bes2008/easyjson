@@ -22,6 +22,7 @@
 package com.eclipsesource.json;
 
 import com.github.fangjinuo.easyjson.core.JSONBuilderProvider;
+import com.github.fangjinuo.easyjson.core.util.IOs;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -299,14 +300,7 @@ public final class Json {
         if (reader == null) {
             throw new NullPointerException("reader is null");
         }
-        StringBuilder stringBuilder = new StringBuilder(256);
-        char[] chars = new char[1024];
-        int length = -1;
-        while ((length = reader.read(chars)) != -1) {
-            stringBuilder.append(chars, 0, length);
-        }
-
-        return parse(stringBuilder.toString());
+        return parse(IOs.readAsString(reader));
     }
 
     private static String cutOffPointZero(String string) {
