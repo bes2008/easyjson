@@ -15,51 +15,51 @@
 package com.eclipsesource.json;
 
 import com.github.fangjinuo.easyjson.core.JsonTreeNode;
-import com.github.fangjinuo.easyjson.core.node.JsonArrayNode;
-import com.github.fangjinuo.easyjson.core.node.JsonNullNode;
-import com.github.fangjinuo.easyjson.core.node.JsonObjectNode;
-import com.github.fangjinuo.easyjson.core.node.JsonPrimitiveNode;
+import com.github.fangjinuo.easyjson.core.node.*;
 
 import java.util.Map;
 
 public class JsonMapper {
 
     public static JsonValue fromJsonTreeNode(JsonTreeNode treeNode) {
-        if (treeNode == null || treeNode instanceof JsonNullNode) {
-            return Json.NULL;
-        }
+        return (JsonValue) JsonTreeNodes.toJavaObject(treeNode, new MappingToJavaObject<JsonObject, JsonArray, JsonValue, JsonValue>() {
+            @Override
+            public JsonValue mappingNull(JsonNullNode node) {
+                return Json.NULL;
+            }
 
-        if (treeNode.isJsonPrimitiveNode()) {
-            JsonPrimitiveNode primitiveNode = treeNode.getAsJsonPrimitiveNode();
-            if (primitiveNode.isBoolean()) {
-                return primitiveNode.getAsBoolean() ? Json.TRUE : Json.FALSE;
+            @Override
+            public JsonValue mappingPrimitive(JsonPrimitiveNode primitiveNode) {
+                if (primitiveNode.isBoolean()) {
+                    return primitiveNode.getAsBoolean() ? Json.TRUE : Json.FALSE;
+                }
+                if (primitiveNode.isString()) {
+                    return new JsonString(primitiveNode.getAsString());
+                }
+                if (primitiveNode.isNumber()) {
+                    return new JsonNumber(primitiveNode.getAsString());
+                }
+                return Json.NULL;
             }
-            if (primitiveNode.isString()) {
-                return new JsonString(primitiveNode.getAsString());
-            }
-            if (primitiveNode.isNumber()) {
-                return new JsonNumber(primitiveNode.getAsString());
-            }
-        }
 
-        if (treeNode.isJsonArrayNode()) {
-            JsonArrayNode arrayNode = treeNode.getAsJsonArrayNode();
-            JsonArray jsonArray = new JsonArray();
-            for (JsonTreeNode node : arrayNode) {
-                jsonArray.add(fromJsonTreeNode(node));
+            @Override
+            public JsonArray mappingArray(JsonArrayNode arrayNode) {
+                JsonArray jsonArray = new JsonArray();
+                for (JsonTreeNode node : arrayNode) {
+                    jsonArray.add((JsonValue) JsonTreeNodes.toJavaObject(node, this));
+                }
+                return jsonArray;
             }
-            return jsonArray;
-        }
 
-        if (treeNode.isJsonObjectNode()) {
-            JsonObjectNode objectNode = treeNode.getAsJsonObjectNode();
-            JsonObject jsonObject = new JsonObject();
-            for (Map.Entry<String, JsonTreeNode> entry : objectNode.propertySet()) {
-                jsonObject.add(entry.getKey(), fromJsonTreeNode(entry.getValue()));
+            @Override
+            public JsonObject mappingObject(JsonObjectNode objectNode) {
+                JsonObject jsonObject = new JsonObject();
+                for (Map.Entry<String, JsonTreeNode> entry : objectNode.propertySet()) {
+                    jsonObject.add(entry.getKey(), (JsonValue) JsonTreeNodes.toJavaObject(entry.getValue(), this));
+                }
+                return jsonObject;
             }
-            return jsonObject;
-        }
-        return Json.NULL;
+        });
     }
 
 
@@ -98,7 +98,7 @@ public class JsonMapper {
             return objectNode;
         }
 
-        return JsonNullNode.INSTANCE;
+        return JsonTreeNodes.fromJavaObject(jsonValue);
     }
 
     private static boolean isNull(JsonValue jsonValue) {

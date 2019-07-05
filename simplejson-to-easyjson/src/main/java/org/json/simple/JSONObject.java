@@ -4,6 +4,8 @@
  */
 package org.json.simple;
 
+import com.github.fangjinuo.easyjson.core.JSONBuilderProvider;
+
 import java.io.IOException;
 import java.io.Writer;
 import java.util.HashMap;
@@ -44,29 +46,8 @@ public class JSONObject extends HashMap implements Map, JSONAware, JSONStreamAwa
      * @see org.json.simple.JSONValue#writeJSONString(Object, Writer)
      */
     public static void writeJSONString(Map map, Writer out) throws IOException {
-        if (map == null) {
-            out.write("null");
-            return;
-        }
-
-        boolean first = true;
-        Iterator iter = map.entrySet().iterator();
-
-        out.write('{');
-        while (iter.hasNext()) {
-            if (first) {
-                first = false;
-            } else {
-                out.write(',');
-            }
-            Map.Entry entry = (Map.Entry) iter.next();
-            out.write('\"');
-            out.write(escape(String.valueOf(entry.getKey())));
-            out.write('\"');
-            out.write(':');
-            JSONValue.writeJSONString(entry.getValue(), out);
-        }
-        out.write('}');
+        String string = toJSONString(map);
+        out.write(string);
     }
 
     @Override
@@ -83,27 +64,7 @@ public class JSONObject extends HashMap implements Map, JSONAware, JSONStreamAwa
      * @see org.json.simple.JSONValue#toJSONString(Object)
      */
     public static String toJSONString(Map map) {
-        if (map == null) {
-            return "null";
-        }
-
-        StringBuffer sb = new StringBuffer();
-        boolean first = true;
-        Iterator iter = map.entrySet().iterator();
-
-        sb.append('{');
-        while (iter.hasNext()) {
-            if (first) {
-                first = false;
-            } else {
-                sb.append(',');
-            }
-
-            Map.Entry entry = (Map.Entry) iter.next();
-            toJSONString(String.valueOf(entry.getKey()), entry.getValue(), sb);
-        }
-        sb.append('}');
-        return sb.toString();
+        return JSONValue.toJSONString(map);
     }
 
     @Override

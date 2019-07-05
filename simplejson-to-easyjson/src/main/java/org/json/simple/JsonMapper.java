@@ -17,17 +17,53 @@ package org.json.simple;
 import com.github.fangjinuo.easyjson.core.JSON;
 import com.github.fangjinuo.easyjson.core.JSONBuilderProvider;
 import com.github.fangjinuo.easyjson.core.JsonTreeNode;
-import com.github.fangjinuo.easyjson.core.node.JsonArrayNode;
-import com.github.fangjinuo.easyjson.core.node.JsonObjectNode;
-import com.github.fangjinuo.easyjson.core.node.JsonTreeNodes;
-import com.github.fangjinuo.easyjson.core.node.MapingToJsonTreeNode;
+import com.github.fangjinuo.easyjson.core.node.*;
 
 import java.util.Iterator;
 import java.util.Map;
 
 public class JsonMapper {
+
+    public static Object fromJsonTreeNode(JsonObjectNode treeNode){
+        return JsonTreeNodes.toJavaObject(treeNode, new MappingToJavaObject<JSONObject, JSONArray, Object, Object>() {
+            @Override
+            public Object mappingNull(JsonNullNode node) {
+                return null;
+            }
+
+            @Override
+            public Object mappingPrimitive(JsonPrimitiveNode node) {
+                if(node.isNumber()){
+                    return node.getAsNumber();
+                }
+                if(node.isString()){
+                    return node.getAsString();
+                }
+                return node.getValue();
+            }
+
+            @Override
+            public JSONArray mappingArray(JsonArrayNode node) {
+                JSONArray jsonArray = new JSONArray();
+                for(JsonTreeNode item : node){
+                    jsonArray.add(JsonTreeNodes.toJavaObject(item,this));
+                }
+                return jsonArray;
+            }
+
+            @Override
+            public JSONObject mappingObject(JsonObjectNode node) {
+                JSONObject jsonObject = new JSONObject();
+                for(Map.Entry<String, JsonTreeNode> entry: node.propertySet()){
+                    jsonObject.put(entry.getKey(), JsonTreeNodes.toJavaObject(entry.getValue(),this));
+                }
+                return jsonObject;
+            }
+        });
+    }
+
     public static JsonTreeNode toJsonTreeNode(Object object) {
-        return JsonTreeNodes.fromJavaObject(object, new MapingToJsonTreeNode() {
+        return JsonTreeNodes.fromJavaObject(object, new MappingToJsonTreeNode() {
             @Override
             public JsonTreeNode mapping(Object object) {
                 if (object instanceof JSONArray) {

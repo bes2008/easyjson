@@ -26,7 +26,7 @@ public class JsonTreeNodes {
         return fromJavaObject(object, null);
     }
 
-    public static JsonTreeNode fromJavaObject(Object object, MapingToJsonTreeNode mapper) {
+    public static JsonTreeNode fromJavaObject(Object object, MappingToJsonTreeNode mapper) {
         if (object == null) {
             return JsonNullNode.INSTANCE;
         }
@@ -82,13 +82,26 @@ public class JsonTreeNodes {
     }
 
     public static Object toJavaObject(JsonTreeNode node) {
+        return toJavaObject(node,null);
+    }
+
+    public static Object toJavaObject(JsonTreeNode node, MappingToJavaObject mapping) {
         if (node == null || JsonNullNode.INSTANCE == node) {
+            if(mapping!=null){
+                return mapping.mappingNull(JsonNullNode.INSTANCE);
+            }
             return null;
         }
         if (node.isJsonPrimitiveNode()) {
+            if(mapping!=null){
+                return mapping.mappingPrimitive(node.getAsJsonPrimitiveNode());
+            }
             return node.getAsJsonPrimitiveNode().getValue();
         }
         if (node.isJsonArrayNode()) {
+            if(mapping!=null){
+                return mapping.mappingArray(node.getAsJsonArrayNode());
+            }
             JsonArrayNode arrayNode = node.getAsJsonArrayNode();
             List<Object> array = new ArrayList<Object>();
             for (int i = 0; i < arrayNode.size(); i++) {
@@ -97,6 +110,9 @@ public class JsonTreeNodes {
             return array;
         }
         if (node.isJsonObjectNode()) {
+            if(mapping!=null){
+                return mapping.mappingObject(node.getAsJsonObjectNode());
+            }
             JsonObjectNode objectNode = node.getAsJsonObjectNode();
             Iterator<Map.Entry<String, JsonTreeNode>> iter = objectNode.propertySet().iterator();
             Map<String, Object> map = new HashMap<String, Object>();
@@ -106,7 +122,7 @@ public class JsonTreeNodes {
             }
             return map;
         }
-        return null;
+        return node;
     }
 
     /**

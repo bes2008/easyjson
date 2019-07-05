@@ -4,6 +4,7 @@
  */
 package org.json.simple;
 
+import com.github.fangjinuo.easyjson.core.JSONBuilderProvider;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
@@ -86,65 +87,7 @@ public class JSONValue {
      * @see org.json.simple.JSONArray#writeJSONString(List, Writer)
      */
     public static void writeJSONString(Object value, Writer out) throws IOException {
-        if (value == null) {
-            out.write("null");
-            return;
-        }
-
-        if (value instanceof String) {
-            out.write('\"');
-            out.write(escape((String) value));
-            out.write('\"');
-            return;
-        }
-
-        if (value instanceof Double) {
-            if (((Double) value).isInfinite() || ((Double) value).isNaN())
-                out.write("null");
-            else
-                out.write(value.toString());
-            return;
-        }
-
-        if (value instanceof Float) {
-            if (((Float) value).isInfinite() || ((Float) value).isNaN())
-                out.write("null");
-            else
-                out.write(value.toString());
-            return;
-        }
-
-        if (value instanceof Number) {
-            out.write(value.toString());
-            return;
-        }
-
-        if (value instanceof Boolean) {
-            out.write(value.toString());
-            return;
-        }
-
-        if ((value instanceof JSONStreamAware)) {
-            ((JSONStreamAware) value).writeJSONString(out);
-            return;
-        }
-
-        if ((value instanceof JSONAware)) {
-            out.write(((JSONAware) value).toJSONString());
-            return;
-        }
-
-        if (value instanceof Map) {
-            JSONObject.writeJSONString((Map) value, out);
-            return;
-        }
-
-        if (value instanceof List) {
-            JSONArray.writeJSONString((List) value, out);
-            return;
-        }
-
-        out.write(value.toString());
+        out.write(toJSONString(value));
     }
 
     /**
@@ -161,51 +104,7 @@ public class JSONValue {
      * @see org.json.simple.JSONArray#toJSONString(List)
      */
     public static String toJSONString(Object value) {
-        if (value == null) {
-            return "null";
-        }
-
-        if (value instanceof String) {
-            return "\"" + escape((String) value) + "\"";
-        }
-
-        if (value instanceof Double) {
-            if (((Double) value).isInfinite() || ((Double) value).isNaN()) {
-                return "null";
-            }
-            else {
-                return value.toString();
-            }
-        }
-
-        if (value instanceof Float) {
-            if (((Float) value).isInfinite() || ((Float) value).isNaN()) {
-                return "null";
-            }
-            else {
-                return value.toString();
-            }
-        }
-
-        if (value instanceof Number) {
-            return value.toString();
-        }
-
-        if (value instanceof Boolean) {
-            return value.toString();
-        }
-
-        if ((value instanceof JSONAware)) {
-            return ((JSONAware) value).toJSONString();
-        }
-
-        if (value instanceof Map)
-            return JSONObject.toJSONString((Map) value);
-
-        if (value instanceof List)
-            return JSONArray.toJSONString((List) value);
-
-        return value.toString();
+        return JSONBuilderProvider.simplest().toJson(JsonMapper.toJsonTreeNode(value));
     }
 
     /**
@@ -215,8 +114,9 @@ public class JSONValue {
      * @return
      */
     public static String escape(String s) {
-        if (s == null)
+        if (s == null) {
             return null;
+        }
         StringBuffer sb = new StringBuffer();
         escape(s, sb);
         return sb.toString();
