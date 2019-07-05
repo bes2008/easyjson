@@ -15,38 +15,55 @@
 package net.minidev.json;
 
 import com.github.fangjinuo.easyjson.core.JsonTreeNode;
-import com.github.fangjinuo.easyjson.core.node.JsonArrayNode;
-import com.github.fangjinuo.easyjson.core.node.JsonNullNode;
-import com.github.fangjinuo.easyjson.core.node.JsonObjectNode;
+import com.github.fangjinuo.easyjson.core.node.*;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.Map;
 
 public class JsonMapper {
-    public static Object fromJsonTreeNode(JsonTreeNode node){
-        if (node == null || JsonNullNode.INSTANCE == node) {
-            return null;
-        }
-        if (node.isJsonPrimitiveNode()) {
-            return node.getAsJsonPrimitiveNode().getValue();
-        }
-        if (node.isJsonArrayNode()) {
-            JsonArrayNode arrayNode = node.getAsJsonArrayNode();
-            JSONArray array = new JSONArray();
-            for (int i = 0; i < arrayNode.size(); i++) {
-                array.appendElement(fromJsonTreeNode(arrayNode.get(i)));
+    public static Object fromJsonTreeNode(JsonTreeNode node) {
+        return JsonTreeNodes.toJavaObject(node, new MappingToJavaObject<JSONObject, JSONArray, Object, Object>() {
+            @Override
+            public Object mappingNull(JsonNullNode node) {
+                return null;
             }
-            return array;
-        }
-        if (node.isJsonObjectNode()) {
-            JsonObjectNode objectNode = node.getAsJsonObjectNode();
-            Iterator<Map.Entry<String, JsonTreeNode>> iter = objectNode.propertySet().iterator();
-            JSONObject map = new JSONObject();
-            while (iter.hasNext()) {
-                Map.Entry<String, JsonTreeNode> entry = iter.next();
-                map.appendField(entry.getKey(), fromJsonTreeNode(entry.getValue()));
+
+            @Override
+            public Object mappingPrimitive(JsonPrimitiveNode node) {
+                if (node.isBoolean()) {
+                    return node.getAsBoolean();
+                }
+                if (node.isString()) {
+                    return node.getAsString();
+                }
+                if (node.isNumber()) {
+                    return node.getAsNumber();
+                }
+                return node.getValue();
             }
-            return map;
-        }
-        return null;
+
+            @Override
+            public JSONArray mappingArray(JsonArrayNode arrayNode) {
+                JSONArray array = new JSONArray();
+                for (int i = 0; i < arrayNode.size(); i++) {
+                    array.appendElement(JsonTreeNodes.toJavaObject(arrayNode.get(i), this));
+                }
+                return array;
+            }
+
+            @Override
+            public JSONObject mappingObject(JsonObjectNode node) {
+                JsonObjectNode objectNode = node.getAsJsonObjectNode();
+                Iterator<Map.Entry<String, JsonTreeNode>> iter = objectNode.propertySet().iterator();
+                JSONObject map = new JSONObject();
+                while (iter.hasNext()) {
+                    Map.Entry<String, JsonTreeNode> entry = iter.next();
+                    map.appendField(entry.getKey(), JsonTreeNodes.toJavaObject(entry.getValue(), this));
+                }
+                return map;
+            }
+        });
+
+
     }
 }

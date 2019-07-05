@@ -90,36 +90,45 @@ public class JsonMapper {
      * @return
      */
     public static Object fromJsonTreeNode(JsonTreeNode treeNode) {
-        if (treeNode == null) {
-            return JSONNull.getInstance();
-        }
-
-        if (treeNode.isJsonNullNode()) {
-            return JSONNull.getInstance();
-        }
-
-        if (treeNode.isJsonPrimitiveNode()) {
-            return treeNode.getAsJsonPrimitiveNode().getValue();
-        }
-
-        if (treeNode.isJsonArrayNode()) {
-            JSONArray jsonArray = new JSONArray();
-            JsonArrayNode arrayNode = treeNode.getAsJsonArrayNode();
-            for (JsonTreeNode jsonTreeNode : arrayNode) {
-                jsonArray.element(fromJsonTreeNode(jsonTreeNode));
+        return JsonTreeNodes.toJavaObject(treeNode, new MappingToJavaObject<JSONObject, JSONArray, Object, JSONNull>() {
+            @Override
+            public JSONNull mappingNull(JsonNullNode node) {
+                return JSONNull.getInstance();
             }
-            return jsonArray;
-        }
 
-        if (treeNode.isJsonObjectNode()) {
-            JSONObject jsonObject = new JSONObject();
-            JsonObjectNode objectNode = treeNode.getAsJsonObjectNode();
-            for (Map.Entry<String, JsonTreeNode> entry : objectNode.propertySet()) {
-                jsonObject.put(entry.getKey(), fromJsonTreeNode(entry.getValue()));
+            @Override
+            public Object mappingPrimitive(JsonPrimitiveNode node) {
+                if (node.isBoolean()) {
+                    return node.getAsBoolean();
+                }
+                if (node.isString()) {
+                    return node.getAsString();
+                }
+                if (node.isNumber()) {
+                    return node.getAsNumber();
+                }
+                return node.getValue();
             }
-            return jsonObject;
-        }
-        return JSONNull.getInstance();
+
+            @Override
+            public JSONArray mappingArray(JsonArrayNode arrayNode) {
+                JSONArray jsonArray = new JSONArray();
+                for (JsonTreeNode jsonTreeNode : arrayNode) {
+                    jsonArray.element(JsonTreeNodes.toJavaObject(jsonTreeNode, this));
+                }
+                return jsonArray;
+            }
+
+            @Override
+            public JSONObject mappingObject(JsonObjectNode objectNode) {
+                JSONObject jsonObject = new JSONObject();
+                for (Map.Entry<String, JsonTreeNode> entry : objectNode.propertySet()) {
+                    jsonObject.put(entry.getKey(), JsonTreeNodes.toJavaObject(entry.getValue(), this));
+                }
+                return jsonObject;
+            }
+        });
+
     }
 
     /**
