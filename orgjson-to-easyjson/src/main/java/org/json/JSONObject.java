@@ -3,6 +3,7 @@ package org.json;
 import com.github.fangjinuo.easyjson.core.JSONBuilderProvider;
 import com.github.fangjinuo.easyjson.core.JsonTreeNode;
 import com.github.fangjinuo.easyjson.core.node.JsonTreeNodes;
+import com.github.fangjinuo.easyjson.core.util.type.Primitives;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -498,12 +499,9 @@ public class JSONObject {
     public boolean getBoolean(String key) throws JSONException {
         Object object = this.get(key);
         if (object.equals(Boolean.FALSE)
-                || (object instanceof String && ((String) object)
-                .equalsIgnoreCase("false"))) {
+                || (object instanceof String && ((String) object).equalsIgnoreCase("false"))) {
             return false;
-        } else if (object.equals(Boolean.TRUE)
-                || (object instanceof String && ((String) object)
-                .equalsIgnoreCase("true"))) {
+        } else if (object.equals(Boolean.TRUE) || (object instanceof String && ((String) object).equalsIgnoreCase("true"))) {
             return true;
         }
         throw new JSONException("JSONObject[" + quote(key)
@@ -2121,14 +2119,11 @@ public class JSONObject {
             if (object == null) {
                 return NULL;
             }
-            if (object instanceof JSONObject || object instanceof JSONArray
-                    || NULL.equals(object) || object instanceof JSONString
-                    || object instanceof Byte || object instanceof Character
-                    || object instanceof Short || object instanceof Integer
-                    || object instanceof Long || object instanceof Boolean
-                    || object instanceof Float || object instanceof Double
-                    || object instanceof String || object instanceof BigInteger
-                    || object instanceof BigDecimal || object instanceof Enum) {
+            if (object instanceof JSONObject || object instanceof JSONArray || NULL.equals(object) || object instanceof JSONString) {
+                return object;
+            }
+
+            if (Primitives.isPrimitive(object.getClass()) || object instanceof String || object instanceof BigInteger || object instanceof BigDecimal || object instanceof Enum) {
                 return object;
             }
 
@@ -2146,9 +2141,7 @@ public class JSONObject {
             Package objectPackage = object.getClass().getPackage();
             String objectPackageName = objectPackage != null ? objectPackage
                     .getName() : "";
-            if (objectPackageName.startsWith("java.")
-                    || objectPackageName.startsWith("javax.")
-                    || object.getClass().getClassLoader() == null) {
+            if (objectPackageName.startsWith("java.") || objectPackageName.startsWith("javax.") || object.getClass().getClassLoader() == null) {
                 return object.toString();
             }
             return new JSONObject(object);
