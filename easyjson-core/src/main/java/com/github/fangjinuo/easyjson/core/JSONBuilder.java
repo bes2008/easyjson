@@ -161,7 +161,7 @@ public abstract class JSONBuilder {
         return serializeBooleanUsing1_0;
     }
 
-    public JSONBuilder enableIgnoreAnnotation(){
+    public JSONBuilder enableIgnoreAnnotation() {
         IgnoreAnnotationExclusion ignoreAnnotationExclusion = new IgnoreAnnotationExclusion();
         exclusionConfiguration.appendExclusion(ignoreAnnotationExclusion, true, true);
         return this;

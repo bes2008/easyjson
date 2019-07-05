@@ -1,5 +1,5 @@
 package references.references;
 
-public class StringArrayReference{
-    public StringReference [] stringArray;
+public class StringArrayReference {
+    public StringReference[] stringArray;
 }

@@ -20,10 +20,10 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
 public class Reflects {
-    public static Annotation getDeclaredAnnotation(Class clazz, Class<? extends Annotation> annotationClazz){
+    public static Annotation getDeclaredAnnotation(Class clazz, Class<? extends Annotation> annotationClazz) {
         Annotation[] annotations = clazz.getDeclaredAnnotations();
-        for(Annotation anno : annotations){
-            if(annotationClazz.isInstance(anno)){
+        for (Annotation anno : annotations) {
+            if (annotationClazz.isInstance(anno)) {
                 return anno;
             }
         }
@@ -43,7 +43,7 @@ public class Reflects {
                 && (clazz.isAnonymousClass() || clazz.isLocalClass());
     }
 
-    public static Field getField(Class clazz, String fieldName){
+    public static Field getField(Class clazz, String fieldName) {
         Field field = null;
         try {
             field = clazz.getField(fieldName);
@@ -53,7 +53,7 @@ public class Reflects {
         return field;
     }
 
-    public static Field getDeclaredField(Class clazz, String fieldName){
+    public static Field getDeclaredField(Class clazz, String fieldName) {
         Field field = null;
         try {
             field = clazz.getDeclaredField(fieldName);
@@ -63,7 +63,7 @@ public class Reflects {
         return field;
     }
 
-    public static <T>T getDeclaredFieldValue(Object object, String fieldName) {
+    public static <T> T getDeclaredFieldValue(Object object, String fieldName) {
         Field field = Reflects.getDeclaredField(object.getClass(), fieldName);
         if (field != null) {
             field.setAccessible(true);

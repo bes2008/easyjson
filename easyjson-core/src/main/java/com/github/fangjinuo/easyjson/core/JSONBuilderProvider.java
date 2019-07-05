@@ -47,7 +47,7 @@ public class JSONBuilderProvider {
         return create(defaultJsonBuilderClass);
     }
 
-    public static JSON simplest(){
+    public static JSON simplest() {
         return create().serializeNulls(true).build();
     }
 
@@ -85,7 +85,7 @@ public class JSONBuilderProvider {
                     logger.warn("Won't registry json builder {}, because of can't find its dependency class {}", jsonBuildClass.getCanonicalName(), dependency);
                 }
             } catch (Throwable ex) {
-                logger.error(ex.getMessage(),ex);
+                logger.error(ex.getMessage(), ex);
             }
         }
     }

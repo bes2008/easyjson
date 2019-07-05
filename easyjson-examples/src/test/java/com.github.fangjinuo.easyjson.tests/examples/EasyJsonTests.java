@@ -40,9 +40,9 @@ public class EasyJsonTests extends BaseTests {
         jsonBuilderMap.put("fastjson", new FastJsonJSONBuilder());
         jsonBuilderMap.put("gson", new GsonJSONBuilder());
 
-        for(Map.Entry<String, JSONBuilder> entry : jsonBuilderMap.entrySet()) {
+        for (Map.Entry<String, JSONBuilder> entry : jsonBuilderMap.entrySet()) {
             String jsonLibraryName = entry.getKey();
-            System.out.println("=====================EasyJson test ["+jsonLibraryName+"] start =============================");
+            System.out.println("=====================EasyJson test [" + jsonLibraryName + "] start =============================");
             JSONBuilder jsonBuilder = entry.getValue();
             com.github.fangjinuo.easyjson.core.JSON gson = jsonBuilder.serializeNulls(false).serializeNumberAsString(true).serializeEnumUsingValue(true).addDeserializationExclusion(new IgnoreAnnotationExclusion()).build();
 
@@ -63,7 +63,7 @@ public class EasyJsonTests extends BaseTests {
             System.out.println(str3);
             Map<Integer, Person> personMap = gson.fromJson(str3, Types.getMapParameterizedType(Integer.class, Person.class));
             System.out.println(gson.toJson(personMap, Types.getMapParameterizedType(Integer.class, Person.class)));
-            System.out.println("=====================EasyJson test ["+jsonLibraryName+"] end =============================");
+            System.out.println("=====================EasyJson test [" + jsonLibraryName + "] end =============================");
         }
     }
 
@@ -74,10 +74,10 @@ public class EasyJsonTests extends BaseTests {
         jsonBuilderMap.put("fastjson", new FastJsonJSONBuilder());
         jsonBuilderMap.put("gson", new GsonJSONBuilder());
 
-        for(Map.Entry<String, JSONBuilder> entry : jsonBuilderMap.entrySet()) {
+        for (Map.Entry<String, JSONBuilder> entry : jsonBuilderMap.entrySet()) {
             String jsonLibraryName = entry.getKey();
 
-            System.out.println("===============EasyJson enum test ["+jsonLibraryName+"] start=================");
+            System.out.println("===============EasyJson enum test [" + jsonLibraryName + "] start=================");
             List<Gender> genders = new ArrayList<Gender>();
             genders.add(Gender.man);
             genders.add(Gender.woman);
@@ -90,7 +90,7 @@ public class EasyJsonTests extends BaseTests {
             List<Gender> a = json.fromJson(jsonString, Types.getListParameterizedType(Gender.class));
             jsonString = json.toJson(a);
             System.out.println(jsonString);
-            System.out.println("===============EasyJson enum test ["+jsonLibraryName+"]  end=================");
+            System.out.println("===============EasyJson enum test [" + jsonLibraryName + "]  end=================");
         }
     }
 
@@ -101,10 +101,10 @@ public class EasyJsonTests extends BaseTests {
         jsonBuilderMap.put("fastjson", new FastJsonJSONBuilder());
         jsonBuilderMap.put("gson", new GsonJSONBuilder());
 
-        for(Map.Entry<String, JSONBuilder> entry : jsonBuilderMap.entrySet()) {
+        for (Map.Entry<String, JSONBuilder> entry : jsonBuilderMap.entrySet()) {
             String jsonLibraryName = entry.getKey();
 
-            System.out.println("=====================EasyJson tree ["+jsonLibraryName+"] test start =============================");
+            System.out.println("=====================EasyJson tree [" + jsonLibraryName + "] test start =============================");
             JSONBuilder jsonBuilder = JSONBuilderProvider.create();
             com.github.fangjinuo.easyjson.core.JSON gson = jsonBuilder.serializeNulls(true).serializeNumberAsString(true).serializeEnumUsingValue(true).build();
 
@@ -131,7 +131,7 @@ public class EasyJsonTests extends BaseTests {
             System.out.println(gson.toJson(personMap, Types.getMapParameterizedType(Integer.class, Person.class)));
             JsonTreeNode t3 = gson.fromJson(str3);
             System.out.println(gson.toJson(t3));
-            System.out.println("=====================EasyJson tree ["+jsonLibraryName+"] test end =============================");
+            System.out.println("=====================EasyJson tree [" + jsonLibraryName + "] test end =============================");
         }
     }
 

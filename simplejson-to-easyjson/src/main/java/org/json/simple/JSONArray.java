@@ -4,19 +4,16 @@
  */
 package org.json.simple;
 
-import com.github.fangjinuo.easyjson.core.JSONBuilderProvider;
-
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 
 /**
  * A JSON array. JSONObject supports java.util.List interface.
  *
- * @author FangYidong<fangyidong       @       yahoo.com.cn>
+ * @author FangYidong<fangyidong               @               yahoo.com.cn>
  */
 public class JSONArray extends ArrayList implements List, JSONAware, JSONStreamAware {
     private static final long serialVersionUID = 3957988303675231981L;

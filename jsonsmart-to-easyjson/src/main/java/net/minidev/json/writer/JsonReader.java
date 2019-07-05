@@ -49,7 +49,7 @@ public class JsonReader {
 
     @SuppressWarnings("unchecked")
     public <T> JsonReaderI<T> getMapper(Type type) {
-        return (JsonReaderI<T>)FakeMapper.DEFAULT;
+        return (JsonReaderI<T>) FakeMapper.DEFAULT;
     }
 
     /**

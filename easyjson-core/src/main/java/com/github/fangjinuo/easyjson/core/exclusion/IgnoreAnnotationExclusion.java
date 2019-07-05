@@ -17,11 +17,11 @@ package com.github.fangjinuo.easyjson.core.exclusion;
 import com.github.fangjinuo.easyjson.core.annotation.Ignore;
 import com.github.fangjinuo.easyjson.core.util.FieldAttributes;
 
-public class IgnoreAnnotationExclusion implements Exclusion{
+public class IgnoreAnnotationExclusion implements Exclusion {
     @Override
     public boolean shouldSkipField(FieldAttributes f, boolean serialize) {
         Ignore ignore = f.getAnnotation(Ignore.class);
-        if(ignore==null) {
+        if (ignore == null) {
             return false;
         }
         return (serialize && ignore.write()) || (!serialize && ignore.read());

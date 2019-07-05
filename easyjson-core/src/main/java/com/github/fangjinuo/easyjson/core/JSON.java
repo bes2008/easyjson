@@ -23,6 +23,7 @@ import java.lang.reflect.Type;
 public class JSON {
 
     private JsonHandler jsonHandler;
+
     /**
      * This method serialize the specified object into its equivalent Json representation.
      * This method should be used when the specified object is not a generic type. This method uses
@@ -84,8 +85,8 @@ public class JSON {
      *                {com.google.gson.reflect.TypeToken} class. For example, to get the type for
      *                {@code Collection<Foo>}, you should use:
      *                <pre>
-     *                Type typeOfT = new TypeToken&lt;Collection&lt;Foo&gt;&gt;(){}.getType();
-     *                </pre>
+     *                               Type typeOfT = new TypeToken&lt;Collection&lt;Foo&gt;&gt;(){}.getType();
+     *                               </pre>
      * @return an object of type T from the string. Returns {@code null} if {@code json} is {@code null}.
      * @throws JsonException if json is not a valid representation for an object of type
      */
@@ -97,8 +98,8 @@ public class JSON {
         return jsonHandler.deserialize(json, typeOfT);
     }
 
-    public JsonTreeNode fromJson(String json) throws JsonException{
-        if(json==null){
+    public JsonTreeNode fromJson(String json) throws JsonException {
+        if (json == null) {
             return JsonNullNode.INSTANCE;
         }
         return jsonHandler.deserialize(json);

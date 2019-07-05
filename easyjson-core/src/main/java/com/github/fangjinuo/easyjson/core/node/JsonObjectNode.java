@@ -27,6 +27,7 @@ public class JsonObjectNode extends JsonTreeNode {
 
     /**
      * Creates a deep copy of this element and all its children
+     *
      * @since 2.8.2
      */
     @Override
@@ -44,7 +45,7 @@ public class JsonObjectNode extends JsonTreeNode {
      * rooted at this node.
      *
      * @param property name of the member.
-     * @param value the member object.
+     * @param value    the member object.
      */
     public void addProperty(String property, JsonTreeNode value) {
         if (value == null) {
@@ -69,7 +70,7 @@ public class JsonObjectNode extends JsonTreeNode {
      * JsonPrimitiveNode of String.
      *
      * @param property name of the member.
-     * @param value the string value associated with the member.
+     * @param value    the string value associated with the member.
      */
     public void addProperty(String property, String value) {
         addProperty(property, createJsonTreeNode(value));
@@ -80,7 +81,7 @@ public class JsonObjectNode extends JsonTreeNode {
      * JsonPrimitiveNode of Number.
      *
      * @param property name of the member.
-     * @param value the number value associated with the member.
+     * @param value    the number value associated with the member.
      */
     public void addProperty(String property, Number value) {
         addProperty(property, createJsonTreeNode(value));
@@ -91,7 +92,7 @@ public class JsonObjectNode extends JsonTreeNode {
      * JsonPrimitiveNode of Boolean.
      *
      * @param property name of the member.
-     * @param value the number value associated with the member.
+     * @param value    the number value associated with the member.
      */
     public void addProperty(String property, Boolean value) {
         addProperty(property, createJsonTreeNode(value));
@@ -102,7 +103,7 @@ public class JsonObjectNode extends JsonTreeNode {
      * JsonPrimitiveNode of Character.
      *
      * @param property name of the member.
-     * @param value the number value associated with the member.
+     * @param value    the number value associated with the member.
      */
     public void addProperty(String property, Character value) {
         addProperty(property, createJsonTreeNode(value));

@@ -161,7 +161,7 @@ public class JacksonBasedJsonTreeNodeMapper implements JsonTreeNodeFactory<JsonN
             if (jsonPrimitiveNode.isBoolean()) {
                 return jsonNodeFactory.booleanNode(jsonPrimitiveNode.getAsBoolean());
             }
-            if(jsonPrimitiveNode.isChar() || jsonPrimitiveNode.isString()) {
+            if (jsonPrimitiveNode.isChar() || jsonPrimitiveNode.isString()) {
                 return jsonNodeFactory.textNode(jsonPrimitiveNode.getAsString());
             }
         }

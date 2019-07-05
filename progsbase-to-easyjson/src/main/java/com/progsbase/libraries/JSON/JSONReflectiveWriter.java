@@ -38,46 +38,46 @@ public class JSONReflectiveWriter {
         return success;
     }
 
-    public static <T> String writeJSON(T t) throws JSONException{
+    public static <T> String writeJSON(T t) throws JSONException {
         return JSONBuilderProvider.simplest().toJson(t);
     }
 
     private static <T> Element unjavaifyJSONValue(T t) throws JSONException {
         Element e;
 
-        if(t == null) {
+        if (t == null) {
             e = CreateNullElement();
-        }else if(t.getClass().isArray()) {
+        } else if (t.getClass().isArray()) {
             e = unjavaifyJSONArrayArray(t);
-        }else if(t.getClass().isEnum()) {
+        } else if (t.getClass().isEnum()) {
             e = unjavaifyJSONEnum(t);
-        }else if(t instanceof List) {
+        } else if (t instanceof List) {
             e = unjavaifyJSONArrayList(t);
-        }else if(t instanceof String) {
-            String s = (String)t;
+        } else if (t instanceof String) {
+            String s = (String) t;
             e = CreateStringElement(s.toCharArray());
-        }else if(t instanceof Double) {
-            Double n = (Double)t;
+        } else if (t instanceof Double) {
+            Double n = (Double) t;
             e = CreateNumberElement(n);
-        }else if(t instanceof Float) {
-            Float n = (Float)t;
+        } else if (t instanceof Float) {
+            Float n = (Float) t;
             e = CreateNumberElement(n);
-        }else if(t instanceof Integer) {
-            Integer n = (Integer)t;
+        } else if (t instanceof Integer) {
+            Integer n = (Integer) t;
             e = CreateNumberElement(n);
-        }else if(t instanceof Long) {
-            Long n = (Long)t;
+        } else if (t instanceof Long) {
+            Long n = (Long) t;
             e = CreateNumberElement(n);
-        }else if(t instanceof Short) {
-            Short n = (Short)t;
+        } else if (t instanceof Short) {
+            Short n = (Short) t;
             e = CreateNumberElement(n);
-        }else if(t instanceof Byte) {
-            Byte n = (Byte)t;
+        } else if (t instanceof Byte) {
+            Byte n = (Byte) t;
             e = CreateNumberElement(n);
-        }else if(t instanceof Boolean) {
-            Boolean b = (Boolean)t;
+        } else if (t instanceof Boolean) {
+            Boolean b = (Boolean) t;
             e = CreateBooleanElement(b);
-        }else{
+        } else {
             e = unjavaifyJSONObject(t);
         }
 
@@ -93,7 +93,7 @@ public class JSONReflectiveWriter {
         Element e = CreateObjectElement(fields.length);
         int i = 0;
 
-        for(Field f : fields){
+        for (Field f : fields) {
             Element s;
             try {
                 s = unjavaifyJSONValue(f.get(t));
@@ -108,11 +108,11 @@ public class JSONReflectiveWriter {
     }
 
     public static Element unjavaifyJSONArrayList(Object o) throws JSONException {
-        List<Object> l = (List<Object>)o;
+        List<Object> l = (List<Object>) o;
         Element e = CreateArrayElement(l.size());
         int i = 0;
 
-        for(Object p : l){
+        for (Object p : l) {
             Element s = unjavaifyJSONValue(p);
             e.array[i] = s;
             i++;
@@ -122,11 +122,11 @@ public class JSONReflectiveWriter {
     }
 
     public static Element unjavaifyJSONArrayArray(Object o) throws JSONException {
-        Object a[] = (Object[])o;
+        Object a[] = (Object[]) o;
         Element e = CreateArrayElement(a.length);
         int i = 0;
 
-        for(Object p : a){
+        for (Object p : a) {
             Element s = unjavaifyJSONValue(p);
             e.array[i] = s;
             i++;

@@ -21,7 +21,9 @@ import java.math.BigDecimal;
 public final class LazilyParsedNumber extends Number {
     private final String value;
 
-    /** @param value must not be null */
+    /**
+     * @param value must not be null
+     */
     public LazilyParsedNumber(String value) {
         this.value = value;
     }

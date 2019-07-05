@@ -60,7 +60,7 @@ public class JsonTreeSerializer {
      * Writes out the equivalent JSON for a tree of {@link JsonTreeNode}s.
      *
      * @param jsonElement root of a tree of {@link JsonTreeNode}s
-     * @param writer Writer to which the Json representation needs to be written
+     * @param writer      Writer to which the Json representation needs to be written
      * @throws JsonException if there was a problem writing to the writer
      * @since 1.4
      */
@@ -88,6 +88,7 @@ public class JsonTreeSerializer {
 
     /**
      * Writes the JSON for {@code jsonElement} to {@code writer}.
+     *
      * @throws JsonException if there was a problem writing to the writer
      */
     public void toJson(JsonTreeNode jsonElement, JsonWriter writer) throws JsonException {

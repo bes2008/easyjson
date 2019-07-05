@@ -20,9 +20,9 @@ import com.alibaba.fastjson.JSON;
 public class SymbolTable {
 
     private final String[] symbols;
-    private final int      indexMask;
+    private final int indexMask;
 
-    public SymbolTable(int tableSize){
+    public SymbolTable(int tableSize) {
         this.indexMask = tableSize - 1;
         this.symbols = new String[tableSize];
 
@@ -43,7 +43,7 @@ public class SymbolTable {
      *
      * @param buffer The buffer containing the new symbol.
      * @param offset The offset into the buffer of the new symbol.
-     * @param len The length of the new symbol in the buffer.
+     * @param len    The length of the new symbol in the buffer.
      */
     public String addSymbol(char[] buffer, int offset, int len, int hash) {
         final int bucket = hash & indexMask;

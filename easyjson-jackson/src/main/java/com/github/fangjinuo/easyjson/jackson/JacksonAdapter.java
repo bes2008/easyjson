@@ -65,7 +65,7 @@ public class JacksonAdapter implements JsonHandler {
         try {
             JsonNode jsonNode = objectMapper.readTree(json);
             return treeNodeMapper.create(jsonNode);
-        }catch (Throwable ex){
+        } catch (Throwable ex) {
             throw new RuntimeException(ex);
         }
     }
@@ -73,8 +73,8 @@ public class JacksonAdapter implements JsonHandler {
     @Override
     public String serialize(Object src, Type typeOfT) throws JsonException {
         try {
-            if(src instanceof JsonTreeNode){
-                return objectMapper.writeValueAsString(treeNodeMapper.mapping((JsonTreeNode)src));
+            if (src instanceof JsonTreeNode) {
+                return objectMapper.writeValueAsString(treeNodeMapper.mapping((JsonTreeNode) src));
             }
             return objectMapper.writeValueAsString(src);
         } catch (JsonProcessingException e) {

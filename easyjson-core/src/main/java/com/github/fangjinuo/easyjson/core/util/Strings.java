@@ -57,8 +57,8 @@ public class Strings {
                 if (separatorChars != null) {
                     if (separatorChars.length() != 1) {
                         label87:
-                        while(true) {
-                            while(true) {
+                        while (true) {
+                            while (true) {
                                 if (i >= len) {
                                     break label87;
                                 }
@@ -88,8 +88,8 @@ public class Strings {
                         char sep = separatorChars.charAt(0);
 
                         label71:
-                        while(true) {
-                            while(true) {
+                        while (true) {
+                            while (true) {
                                 if (i >= len) {
                                     break label71;
                                 }
@@ -118,8 +118,8 @@ public class Strings {
                     }
                 } else {
                     label103:
-                    while(true) {
-                        while(true) {
+                    while (true) {
+                        while (true) {
                             if (i >= len) {
                                 break label103;
                             }
@@ -151,7 +151,7 @@ public class Strings {
                     list.add(str.substring(start, i));
                 }
 
-                return (String[])((String[])list.toArray(new String[list.size()]));
+                return (String[]) ((String[]) list.toArray(new String[list.size()]));
             }
         }
     }
@@ -159,7 +159,7 @@ public class Strings {
     /**
      * <p>Deletes all whitespaces from a String as defined by
      * {@link Character#isWhitespace(char)}.</p>
-     *
+     * <p>
      * <pre>
      * StringUtils.deleteWhitespace(null)         = null
      * StringUtils.deleteWhitespace("")           = ""
@@ -167,7 +167,7 @@ public class Strings {
      * StringUtils.deleteWhitespace("   ab  c  ") = "abc"
      * </pre>
      *
-     * @param str  the String to delete whitespace from, may be null
+     * @param str the String to delete whitespace from, may be null
      * @return the String without whitespaces, <code>null</code> if null String input
      */
     public static String deleteWhitespace(String str) {

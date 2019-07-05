@@ -15,18 +15,17 @@
 
 package com.github.fangjinuo.easyjson.core.tree;
 
+import com.github.fangjinuo.easyjson.core.JsonTreeNode;
+import com.github.fangjinuo.easyjson.core.tree.stream.JsonReader;
+import com.github.fangjinuo.easyjson.core.tree.stream.JsonToken;
+import com.github.fangjinuo.easyjson.core.tree.stream.MalformedJsonException;
+
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 
-import com.github.fangjinuo.easyjson.core.tree.stream.JsonReader;
-import com.github.fangjinuo.easyjson.core.tree.stream.JsonToken;
-import com.github.fangjinuo.easyjson.core.tree.stream.MalformedJsonException;
-import com.github.fangjinuo.easyjson.core.JsonTreeNode;
-
 /**
  * A parser to parse Json into a parse tree of {@link JsonTreeNode}s
- *
  */
 public final class JsonTreeDeserializer {
 
@@ -71,7 +70,7 @@ public final class JsonTreeDeserializer {
      * Returns the next value from the JSON stream as a parse tree.
      *
      * @throws JsonParseException if there is an IOException or if the specified
-     *     text is not valid JSON
+     *                            text is not valid JSON
      * @since 1.6
      */
     public JsonTreeNode parse(JsonReader json) throws JsonIOException, JsonSyntaxException {

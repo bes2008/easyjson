@@ -27,6 +27,7 @@ import java.util.List;
 
 public class EasyJsonSerializeConfig extends SerializeConfig {
     private FastJsonJSONBuilder jsonJSONBuilder;
+
     public EasyJsonSerializeConfig(FastJsonJSONBuilder jsonJSONBuilder) {
         super();
         this.jsonJSONBuilder = jsonJSONBuilder;
@@ -38,7 +39,7 @@ public class EasyJsonSerializeConfig extends SerializeConfig {
         SerializeBeanInfoGetter getter = new SerializeBeanInfoGetter(beanInfo);
         Class<?> beanType = getter.getBeanType();
         ExclusionConfiguration exclusionConfiguration = jsonJSONBuilder.getExclusionConfiguration();
-        if(!exclusionConfiguration.isExcludedClass(beanType, true)){
+        if (!exclusionConfiguration.isExcludedClass(beanType, true)) {
             FieldInfo[] fields = getter.getFields();
             FieldInfo[] sortedFields = getter.getSortedFields();
 
@@ -46,14 +47,14 @@ public class EasyJsonSerializeConfig extends SerializeConfig {
             List<FieldInfo> sortedFieldInfoes = new ArrayList<FieldInfo>();
 
             for (FieldInfo fieldInfo : fields) {
-                if(exclusionConfiguration.isExcludedField(fieldInfo.field, true)) {
+                if (exclusionConfiguration.isExcludedField(fieldInfo.field, true)) {
                     continue;
                 }
                 fieldInfoes.add(fieldInfo);
             }
 
             for (FieldInfo fieldInfo : sortedFields) {
-                if(exclusionConfiguration.isExcludedField(fieldInfo.field, true)) {
+                if (exclusionConfiguration.isExcludedField(fieldInfo.field, true)) {
                     continue;
                 }
                 sortedFieldInfoes.add(fieldInfo);
@@ -74,7 +75,7 @@ public class EasyJsonSerializeConfig extends SerializeConfig {
                         sortedFieldInfoes.toArray(new FieldInfo[sortedFieldInfoes.size()]));
                 return super.createJavaBeanSerializer(newBeanInfo);
             }
-        }else{
+        } else {
             String typeName = getter.getTypeName();
             String typeKey = getter.getTypeKey();
             JSONType jsonType = getter.getJsonType();

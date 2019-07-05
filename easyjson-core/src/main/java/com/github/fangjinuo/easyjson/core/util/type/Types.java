@@ -136,7 +136,7 @@ public class Types {
             return (Class<?>) rawType;
 
         } else if (type instanceof GenericArrayType) {
-            Type componentType = ((GenericArrayType)type).getGenericComponentType();
+            Type componentType = ((GenericArrayType) type).getGenericComponentType();
             return Array.newInstance(getRawType(componentType), 0).getClass();
 
         } else if (type instanceof TypeVariable) {
@@ -194,7 +194,7 @@ public class Types {
 
     public static Type checkPrimitiveArray(GenericArrayType genericArrayType) {
         Type clz = genericArrayType;
-        Type genericComponentType  = genericArrayType.getGenericComponentType();
+        Type genericComponentType = genericArrayType.getGenericComponentType();
 
         String prefix = "[";
         while (genericComponentType instanceof GenericArrayType) {

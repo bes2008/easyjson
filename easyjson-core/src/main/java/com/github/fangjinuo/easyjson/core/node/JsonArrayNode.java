@@ -39,6 +39,7 @@ public final class JsonArrayNode extends JsonTreeNode implements Iterable<JsonTr
 
     /**
      * Creates a deep copy of this element and all its children
+     *
      * @since 2.8.2
      */
     @Override
@@ -112,8 +113,9 @@ public final class JsonArrayNode extends JsonTreeNode implements Iterable<JsonTr
 
     /**
      * Replaces the element at the specified position in this array with the specified element.
-     *   Element can be null.
-     * @param index index of the element to replace
+     * Element can be null.
+     *
+     * @param index   index of the element to replace
      * @param element element to be stored at the specified position
      * @return the element previously at the specified position
      * @throws IndexOutOfBoundsException if the specified index is outside the array bounds
@@ -125,6 +127,7 @@ public final class JsonArrayNode extends JsonTreeNode implements Iterable<JsonTr
     /**
      * Removes the first occurrence of the specified element from this array, if it is present.
      * If the array does not contain the element, it is unchanged.
+     *
      * @param element element to be removed from this array, if present
      * @return true if this array contained the specified element, false otherwise
      * @since 2.3
@@ -137,6 +140,7 @@ public final class JsonArrayNode extends JsonTreeNode implements Iterable<JsonTr
      * Removes the element at the specified position in this array. Shifts any subsequent elements
      * to the left (subtracts one from their indices). Returns the element that was removed from
      * the array.
+     *
      * @param index index the index of the element to be removed
      * @return the element previously at the specified position
      * @throws IndexOutOfBoundsException if the specified index is outside the array bounds
@@ -148,8 +152,9 @@ public final class JsonArrayNode extends JsonTreeNode implements Iterable<JsonTr
 
     /**
      * Returns true if this array contains the specified element.
-     * @return true if this array contains the specified element.
+     *
      * @param element whose presence in this array is to be tested
+     * @return true if this array contains the specified element.
      * @since 2.3
      */
     public boolean contains(JsonTreeNode element) {
@@ -181,7 +186,7 @@ public final class JsonArrayNode extends JsonTreeNode implements Iterable<JsonTr
      * @param i the index of the element that is being sought.
      * @return the element present at the ith index.
      * @throws IndexOutOfBoundsException if i is negative or greater than or equal to the
-     * {@link #size()} of the array.
+     *                                   {@link #size()} of the array.
      */
     public JsonTreeNode get(int i) {
         return elements.get(i);
@@ -191,8 +196,8 @@ public final class JsonArrayNode extends JsonTreeNode implements Iterable<JsonTr
      * convenience method to get this array as a {@link Number} if it contains a single element.
      *
      * @return get this element as a number if it is single element array.
-     * @throws ClassCastException if the element in the array is of not a {@link JsonPrimitiveNode} and
-     * is not a valid Number.
+     * @throws ClassCastException    if the element in the array is of not a {@link JsonPrimitiveNode} and
+     *                               is not a valid Number.
      * @throws IllegalStateException if the array has more than one element.
      */
     @Override
@@ -207,8 +212,8 @@ public final class JsonArrayNode extends JsonTreeNode implements Iterable<JsonTr
      * convenience method to get this array as a {@link String} if it contains a single element.
      *
      * @return get this element as a String if it is single element array.
-     * @throws ClassCastException if the element in the array is of not a {@link JsonPrimitiveNode} and
-     * is not a valid String.
+     * @throws ClassCastException    if the element in the array is of not a {@link JsonPrimitiveNode} and
+     *                               is not a valid String.
      * @throws IllegalStateException if the array has more than one element.
      */
     @Override
@@ -223,8 +228,8 @@ public final class JsonArrayNode extends JsonTreeNode implements Iterable<JsonTr
      * convenience method to get this array as a double if it contains a single element.
      *
      * @return get this element as a double if it is single element array.
-     * @throws ClassCastException if the element in the array is of not a {@link JsonPrimitiveNode} and
-     * is not a valid double.
+     * @throws ClassCastException    if the element in the array is of not a {@link JsonPrimitiveNode} and
+     *                               is not a valid double.
      * @throws IllegalStateException if the array has more than one element.
      */
     @Override
@@ -239,7 +244,7 @@ public final class JsonArrayNode extends JsonTreeNode implements Iterable<JsonTr
      * convenience method to get this array as a {@link BigDecimal} if it contains a single element.
      *
      * @return get this element as a {@link BigDecimal} if it is single element array.
-     * @throws ClassCastException if the element in the array is of not a {@link JsonPrimitiveNode}.
+     * @throws ClassCastException    if the element in the array is of not a {@link JsonPrimitiveNode}.
      * @throws NumberFormatException if the element at index 0 is not a valid {@link BigDecimal}.
      * @throws IllegalStateException if the array has more than one element.
      * @since 1.2
@@ -256,7 +261,7 @@ public final class JsonArrayNode extends JsonTreeNode implements Iterable<JsonTr
      * convenience method to get this array as a {@link BigInteger} if it contains a single element.
      *
      * @return get this element as a {@link BigInteger} if it is single element array.
-     * @throws ClassCastException if the element in the array is of not a {@link JsonPrimitiveNode}.
+     * @throws ClassCastException    if the element in the array is of not a {@link JsonPrimitiveNode}.
      * @throws NumberFormatException if the element at index 0 is not a valid {@link BigInteger}.
      * @throws IllegalStateException if the array has more than one element.
      * @since 1.2
@@ -273,8 +278,8 @@ public final class JsonArrayNode extends JsonTreeNode implements Iterable<JsonTr
      * convenience method to get this array as a float if it contains a single element.
      *
      * @return get this element as a float if it is single element array.
-     * @throws ClassCastException if the element in the array is of not a {@link JsonPrimitiveNode} and
-     * is not a valid float.
+     * @throws ClassCastException    if the element in the array is of not a {@link JsonPrimitiveNode} and
+     *                               is not a valid float.
      * @throws IllegalStateException if the array has more than one element.
      */
     @Override
@@ -289,8 +294,8 @@ public final class JsonArrayNode extends JsonTreeNode implements Iterable<JsonTr
      * convenience method to get this array as a long if it contains a single element.
      *
      * @return get this element as a long if it is single element array.
-     * @throws ClassCastException if the element in the array is of not a {@link JsonPrimitiveNode} and
-     * is not a valid long.
+     * @throws ClassCastException    if the element in the array is of not a {@link JsonPrimitiveNode} and
+     *                               is not a valid long.
      * @throws IllegalStateException if the array has more than one element.
      */
     @Override
@@ -305,8 +310,8 @@ public final class JsonArrayNode extends JsonTreeNode implements Iterable<JsonTr
      * convenience method to get this array as an integer if it contains a single element.
      *
      * @return get this element as an integer if it is single element array.
-     * @throws ClassCastException if the element in the array is of not a {@link JsonPrimitiveNode} and
-     * is not a valid integer.
+     * @throws ClassCastException    if the element in the array is of not a {@link JsonPrimitiveNode} and
+     *                               is not a valid integer.
      * @throws IllegalStateException if the array has more than one element.
      */
     @Override
@@ -337,8 +342,8 @@ public final class JsonArrayNode extends JsonTreeNode implements Iterable<JsonTr
      * convenience method to get this array as a primitive short if it contains a single element.
      *
      * @return get this element as a primitive short if it is single element array.
-     * @throws ClassCastException if the element in the array is of not a {@link JsonPrimitiveNode} and
-     * is not a valid short.
+     * @throws ClassCastException    if the element in the array is of not a {@link JsonPrimitiveNode} and
+     *                               is not a valid short.
      * @throws IllegalStateException if the array has more than one element.
      */
     @Override
@@ -353,8 +358,8 @@ public final class JsonArrayNode extends JsonTreeNode implements Iterable<JsonTr
      * convenience method to get this array as a boolean if it contains a single element.
      *
      * @return get this element as a boolean if it is single element array.
-     * @throws ClassCastException if the element in the array is of not a {@link JsonPrimitiveNode} and
-     * is not a valid boolean.
+     * @throws ClassCastException    if the element in the array is of not a {@link JsonPrimitiveNode} and
+     *                               is not a valid boolean.
      * @throws IllegalStateException if the array has more than one element.
      */
     @Override

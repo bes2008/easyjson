@@ -249,7 +249,6 @@ public class JSONObject extends JSON implements Map<String, Object>, Cloneable, 
     }
 
 
-
     public Float getFloat(String key) {
         Object value = get(key);
 

@@ -308,8 +308,8 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
      *             {@link com.alibaba.fastjson.TypeReference} class. For example, to get the type for
      *             {@code Collection<Foo>}, you should use:
      *             <pre>
-     *                                                 Type type = new TypeReference&lt;Collection&lt;Foo&gt;&gt;(){}.getType();
-     *                                                 </pre>
+     *                                                             Type type = new TypeReference&lt;Collection&lt;Foo&gt;&gt;(){}.getType();
+     *                                                             </pre>
      * @return an object of type T from the string
      */
     @SuppressWarnings("unchecked")
@@ -518,7 +518,7 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
         JsonArrayNode arrayNode = null;
         if (node.isJsonArrayNode()) {
             arrayNode = node.getAsJsonArrayNode();
-        }else {
+        } else {
             arrayNode = new JsonArrayNode();
             arrayNode.add(node);
         }
@@ -887,8 +887,8 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
         }
 
         Class<?> clazz = javaObject.getClass();
-        if(JsonTreeNode.class.isAssignableFrom(clazz)){
-            return toJSON(JsonTreeNodes.toJavaObject((JsonTreeNode)javaObject), config);
+        if (JsonTreeNode.class.isAssignableFrom(clazz)) {
+            return toJSON(JsonTreeNodes.toJavaObject((JsonTreeNode) javaObject), config);
         }
 
         if (clazz.isEnum()) {
@@ -912,8 +912,8 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
         if (ParserConfig.isPrimitive2(clazz)) {
             return javaObject;
         }
-        if(Number.class.isAssignableFrom(clazz)){
-            if(javaObject.toString().contains(".")) {
+        if (Number.class.isAssignableFrom(clazz)) {
+            if (javaObject.toString().contains(".")) {
                 return ((Number) javaObject).doubleValue();
             }
             return ((Number) javaObject).longValue();

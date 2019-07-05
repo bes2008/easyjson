@@ -17,6 +17,7 @@ package com.github.fangjinuo.easyjson.core.tree;
 
 
 import com.github.fangjinuo.easyjson.core.tree.stream.JsonReader;
+
 import java.io.IOException;
 
 /**

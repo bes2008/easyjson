@@ -11,13 +11,13 @@ import static references.references.references.*;
 import static strstrings.strings.strings.strSplitByString;
 import static strstrings.strings.strings.strTrim;
 
-public class StringToNumber{
-    public static boolean nCreateNumberFromDecimalStringWithCheck(char [] string, NumberReference decimalReference, StringReference errorMessage){
+public class StringToNumber {
+    public static boolean nCreateNumberFromDecimalStringWithCheck(char[] string, NumberReference decimalReference, StringReference errorMessage) {
 
         return nCreateNumberFromStringWithCheck(string, 10d, decimalReference, errorMessage);
     }
 
-    public static double nCreateNumberFromDecimalString(char [] string){
+    public static double nCreateNumberFromDecimalString(char[] string) {
         NumberReference doubleReference;
         StringReference stringReference;
         double number;
@@ -33,7 +33,7 @@ public class StringToNumber{
         return number;
     }
 
-    public static boolean nCreateNumberFromStringWithCheck(char [] string, double base, NumberReference numberReference, StringReference errorMessage){
+    public static boolean nCreateNumberFromStringWithCheck(char[] string, double base, NumberReference numberReference, StringReference errorMessage) {
         boolean success;
         BooleanReference numberIsPositive, exponentIsPositive;
         NumberArrayReference beforePoint, afterPoint, exponent;
@@ -44,12 +44,12 @@ public class StringToNumber{
         afterPoint = new NumberArrayReference();
         exponent = new NumberArrayReference();
 
-        if(base >= 2d && base <= 36d){
+        if (base >= 2d && base <= 36d) {
             success = nExtractPartsFromNumberString(string, base, numberIsPositive, beforePoint, afterPoint, exponentIsPositive, exponent, errorMessage);
-            if(success){
+            if (success) {
                 numberReference.numberValue = nCreateNumberFromParts(base, numberIsPositive.booleanValue, beforePoint.numberArray, afterPoint.numberArray, exponentIsPositive.booleanValue, exponent.numberArray);
             }
-        }else{
+        } else {
             success = false;
             errorMessage.string = "Base must be from 2 to 36.".toCharArray();
         }
@@ -57,57 +57,57 @@ public class StringToNumber{
         return success;
     }
 
-    public static double nCreateNumberFromParts(double base, boolean numberIsPositive, double [] beforePoint, double [] afterPoint, boolean exponentIsPositive, double [] exponent){
+    public static double nCreateNumberFromParts(double base, boolean numberIsPositive, double[] beforePoint, double[] afterPoint, boolean exponentIsPositive, double[] exponent) {
         double n, i, p, e;
 
         n = 0d;
 
-        for(i = 0d; i < beforePoint.length; i = i + 1d){
-            p = beforePoint[(int)(beforePoint.length - i - 1d)];
-            n = n + p*pow(base, i);
+        for (i = 0d; i < beforePoint.length; i = i + 1d) {
+            p = beforePoint[(int) (beforePoint.length - i - 1d)];
+            n = n + p * pow(base, i);
         }
 
-        for(i = 0d; i < afterPoint.length; i = i + 1d){
-            p = afterPoint[(int)(i)];
-            n = n + p*pow(base, -(i + 1d) );
+        for (i = 0d; i < afterPoint.length; i = i + 1d) {
+            p = afterPoint[(int) (i)];
+            n = n + p * pow(base, -(i + 1d));
         }
 
-        if(exponent.length > 0d){
+        if (exponent.length > 0d) {
             e = 0d;
-            for(i = 0d; i < exponent.length; i = i + 1d){
-                p = exponent[(int)(exponent.length - i - 1d)];
-                e = e + p*pow(base, i);
+            for (i = 0d; i < exponent.length; i = i + 1d) {
+                p = exponent[(int) (exponent.length - i - 1d)];
+                e = e + p * pow(base, i);
             }
-            if(!exponentIsPositive){
-                e = -e ;
+            if (!exponentIsPositive) {
+                e = -e;
             }
-            n = n*pow(base, e);
+            n = n * pow(base, e);
         }
 
-        if(!numberIsPositive){
-            n = -n ;
+        if (!numberIsPositive) {
+            n = -n;
         }
 
         return n;
     }
 
-    public static boolean nExtractPartsFromNumberString(char [] n, double base, BooleanReference numberIsPositive, NumberArrayReference beforePoint, NumberArrayReference afterPoint, BooleanReference exponentIsPositive, NumberArrayReference exponent, StringReference errorMessages){
+    public static boolean nExtractPartsFromNumberString(char[] n, double base, BooleanReference numberIsPositive, NumberArrayReference beforePoint, NumberArrayReference afterPoint, BooleanReference exponentIsPositive, NumberArrayReference exponent, StringReference errorMessages) {
         double i;
         boolean success;
 
         i = 0d;
 
-        if(i < n.length){
-            if(n[(int)(i)] == '-'){
+        if (i < n.length) {
+            if (n[(int) (i)] == '-') {
                 numberIsPositive.booleanValue = false;
                 i = i + 1d;
-            }else if(n[(int)(i)] == '+'){
+            } else if (n[(int) (i)] == '+') {
                 numberIsPositive.booleanValue = true;
                 i = i + 1d;
             }
 
             success = nExtractPartsFromNumberStringFromSign(n, base, i, beforePoint, afterPoint, exponentIsPositive, exponent, errorMessages);
-        }else{
+        } else {
             success = false;
             errorMessages.string = "Number cannot have length zero.".toCharArray();
         }
@@ -115,34 +115,34 @@ public class StringToNumber{
         return success;
     }
 
-    public static boolean nExtractPartsFromNumberStringFromSign(char [] n, double base, double i, NumberArrayReference beforePoint, NumberArrayReference afterPoint, BooleanReference exponentIsPositive, NumberArrayReference exponent, StringReference errorMessages){
+    public static boolean nExtractPartsFromNumberStringFromSign(char[] n, double base, double i, NumberArrayReference beforePoint, NumberArrayReference afterPoint, BooleanReference exponentIsPositive, NumberArrayReference exponent, StringReference errorMessages) {
         boolean success, done;
         double count, j;
 
         done = false;
         count = 0d;
-        for(; i + count < n.length && !done; ){
-            if(nCharacterIsNumberCharacterInBase(n[(int)(i + count)], base)){
+        for (; i + count < n.length && !done; ) {
+            if (nCharacterIsNumberCharacterInBase(n[(int) (i + count)], base)) {
                 count = count + 1d;
-            }else{
+            } else {
                 done = true;
             }
         }
 
-        if(count >= 1d){
-            beforePoint.numberArray = new double [(int)(count)];
-            for(j = 0d; j < count; j = j + 1d){
-                beforePoint.numberArray[(int)(j)] = nGetNumberFromNumberCharacterForBase(n[(int)(i + j)], base);
+        if (count >= 1d) {
+            beforePoint.numberArray = new double[(int) (count)];
+            for (j = 0d; j < count; j = j + 1d) {
+                beforePoint.numberArray[(int) (j)] = nGetNumberFromNumberCharacterForBase(n[(int) (i + j)], base);
             }
             i = i + count;
-            if(i < n.length){
+            if (i < n.length) {
                 success = nExtractPartsFromNumberStringFromPointOrExponent(n, base, i, afterPoint, exponentIsPositive, exponent, errorMessages);
-            }else{
-                afterPoint.numberArray = new double [0];
-                exponent.numberArray = new double [0];
+            } else {
+                afterPoint.numberArray = new double[0];
+                exponent.numberArray = new double[0];
                 success = true;
             }
-        }else{
+        } else {
             success = false;
             errorMessages.string = "Number must have at least one number after the optional sign.".toCharArray();
         }
@@ -150,51 +150,51 @@ public class StringToNumber{
         return success;
     }
 
-    public static boolean nExtractPartsFromNumberStringFromPointOrExponent(char [] n, double base, double i, NumberArrayReference afterPoint, BooleanReference exponentIsPositive, NumberArrayReference exponent, StringReference errorMessages){
+    public static boolean nExtractPartsFromNumberStringFromPointOrExponent(char[] n, double base, double i, NumberArrayReference afterPoint, BooleanReference exponentIsPositive, NumberArrayReference exponent, StringReference errorMessages) {
         boolean success, done;
         double count, j;
 
-        if(n[(int)(i)] == '.'){
+        if (n[(int) (i)] == '.') {
             i = i + 1d;
-            if(i < n.length){
+            if (i < n.length) {
                 done = false;
                 count = 0d;
-                for(; i + count < n.length && !done; ){
-                    if(nCharacterIsNumberCharacterInBase(n[(int)(i + count)], base)){
+                for (; i + count < n.length && !done; ) {
+                    if (nCharacterIsNumberCharacterInBase(n[(int) (i + count)], base)) {
                         count = count + 1d;
-                    }else{
+                    } else {
                         done = true;
                     }
                 }
-                if(count >= 1d){
-                    afterPoint.numberArray = new double [(int)(count)];
-                    for(j = 0d; j < count; j = j + 1d){
-                        afterPoint.numberArray[(int)(j)] = nGetNumberFromNumberCharacterForBase(n[(int)(i + j)], base);
+                if (count >= 1d) {
+                    afterPoint.numberArray = new double[(int) (count)];
+                    for (j = 0d; j < count; j = j + 1d) {
+                        afterPoint.numberArray[(int) (j)] = nGetNumberFromNumberCharacterForBase(n[(int) (i + j)], base);
                     }
                     i = i + count;
-                    if(i < n.length){
+                    if (i < n.length) {
                         success = nExtractPartsFromNumberStringFromExponent(n, base, i, exponentIsPositive, exponent, errorMessages);
-                    }else{
-                        exponent.numberArray = new double [0];
+                    } else {
+                        exponent.numberArray = new double[0];
                         success = true;
                     }
-                }else{
+                } else {
                     success = false;
                     errorMessages.string = "There must be at least one digit after the decimal point.".toCharArray();
                 }
-            }else{
+            } else {
                 success = false;
                 errorMessages.string = "There must be at least one digit after the decimal point.".toCharArray();
             }
-        }else if(base <= 14d && (n[(int)(i)] == 'e' || n[(int)(i)] == 'E')){
-            if(i < n.length){
+        } else if (base <= 14d && (n[(int) (i)] == 'e' || n[(int) (i)] == 'E')) {
+            if (i < n.length) {
                 success = nExtractPartsFromNumberStringFromExponent(n, base, i, exponentIsPositive, exponent, errorMessages);
-                afterPoint.numberArray = new double [0];
-            }else{
+                afterPoint.numberArray = new double[0];
+            } else {
                 success = false;
                 errorMessages.string = "There must be at least one digit after the exponent.".toCharArray();
             }
-        }else{
+        } else {
             success = false;
             errorMessages.string = "Expected decimal point or exponent symbol.".toCharArray();
         }
@@ -203,56 +203,56 @@ public class StringToNumber{
         return success;
     }
 
-    public static boolean nExtractPartsFromNumberStringFromExponent(char [] n, double base, double i, BooleanReference exponentIsPositive, NumberArrayReference exponent, StringReference errorMessages){
+    public static boolean nExtractPartsFromNumberStringFromExponent(char[] n, double base, double i, BooleanReference exponentIsPositive, NumberArrayReference exponent, StringReference errorMessages) {
         boolean success, done;
         double count, j;
 
-        if(base <= 14d && (n[(int)(i)] == 'e' || n[(int)(i)] == 'E')){
+        if (base <= 14d && (n[(int) (i)] == 'e' || n[(int) (i)] == 'E')) {
             i = i + 1d;
-            if(i < n.length){
-                if(n[(int)(i)] == '-'){
+            if (i < n.length) {
+                if (n[(int) (i)] == '-') {
                     exponentIsPositive.booleanValue = false;
                     i = i + 1d;
-                }else if(n[(int)(i)] == '+'){
+                } else if (n[(int) (i)] == '+') {
                     exponentIsPositive.booleanValue = true;
                     i = i + 1d;
                 }
 
-                if(i < n.length){
+                if (i < n.length) {
                     done = false;
                     count = 0d;
-                    for(; i + count < n.length && !done; ){
-                        if(nCharacterIsNumberCharacterInBase(n[(int)(i + count)], base)){
+                    for (; i + count < n.length && !done; ) {
+                        if (nCharacterIsNumberCharacterInBase(n[(int) (i + count)], base)) {
                             count = count + 1d;
-                        }else{
+                        } else {
                             done = true;
                         }
                     }
-                    if(count >= 1d){
-                        exponent.numberArray = new double [(int)(count)];
-                        for(j = 0d; j < count; j = j + 1d){
-                            exponent.numberArray[(int)(j)] = nGetNumberFromNumberCharacterForBase(n[(int)(i + j)], base);
+                    if (count >= 1d) {
+                        exponent.numberArray = new double[(int) (count)];
+                        for (j = 0d; j < count; j = j + 1d) {
+                            exponent.numberArray[(int) (j)] = nGetNumberFromNumberCharacterForBase(n[(int) (i + j)], base);
                         }
                         i = i + count;
-                        if(i == n.length){
+                        if (i == n.length) {
                             success = true;
-                        }else{
+                        } else {
                             success = false;
                             errorMessages.string = "There cannot be any characters past the exponent of the number.".toCharArray();
                         }
-                    }else{
+                    } else {
                         success = false;
                         errorMessages.string = "There must be at least one digit after the decimal point.".toCharArray();
                     }
-                }else{
+                } else {
                     success = false;
                     errorMessages.string = "There must be at least one digit after the exponent symbol.".toCharArray();
                 }
-            }else{
+            } else {
                 success = false;
                 errorMessages.string = "There must be at least one digit after the exponent symbol.".toCharArray();
             }
-        }else{
+        } else {
             success = false;
             errorMessages.string = "Expected exponent symbol.".toCharArray();
         }
@@ -260,16 +260,16 @@ public class StringToNumber{
         return success;
     }
 
-    public static double nGetNumberFromNumberCharacterForBase(char c, double base){
-        char [] numberTable;
+    public static double nGetNumberFromNumberCharacterForBase(char c, double base) {
+        char[] numberTable;
         double i;
         double position;
 
         numberTable = nGetDigitCharacterTable();
         position = 0d;
 
-        for(i = 0d; i < base; i = i + 1d){
-            if(numberTable[(int)(i)] == c){
+        for (i = 0d; i < base; i = i + 1d) {
+            if (numberTable[(int) (i)] == c) {
                 position = i;
             }
         }
@@ -277,16 +277,16 @@ public class StringToNumber{
         return position;
     }
 
-    public static boolean nCharacterIsNumberCharacterInBase(char c, double base){
-        char [] numberTable;
+    public static boolean nCharacterIsNumberCharacterInBase(char c, double base) {
+        char[] numberTable;
         double i;
         boolean found;
 
         numberTable = nGetDigitCharacterTable();
         found = false;
 
-        for(i = 0d; i < base; i = i + 1d){
-            if(numberTable[(int)(i)] == c){
+        for (i = 0d; i < base; i = i + 1d) {
+            if (numberTable[(int) (i)] == c) {
                 found = true;
             }
         }
@@ -294,10 +294,10 @@ public class StringToNumber{
         return found;
     }
 
-    public static double [] nStringToNumberArray(char [] str){
+    public static double[] nStringToNumberArray(char[] str) {
         NumberArrayReference numberArrayReference;
         StringReference stringReference;
-        double [] numbers;
+        double[] numbers;
 
         numberArrayReference = new NumberArrayReference();
         stringReference = new StringReference();
@@ -312,26 +312,26 @@ public class StringToNumber{
         return numbers;
     }
 
-    public static boolean nStringToNumberArrayWithCheck(char [] str, NumberArrayReference numberArrayReference, StringReference errorMessage){
-        StringReference [] numberStrings;
-        double [] numbers;
+    public static boolean nStringToNumberArrayWithCheck(char[] str, NumberArrayReference numberArrayReference, StringReference errorMessage) {
+        StringReference[] numberStrings;
+        double[] numbers;
         double i;
-        char [] numberString, trimmedNumberString;
+        char[] numberString, trimmedNumberString;
         boolean success;
         NumberReference numberReference;
 
         numberStrings = strSplitByString(str, ",".toCharArray());
 
-        numbers = new double [(int)(numberStrings.length)];
+        numbers = new double[(int) (numberStrings.length)];
         success = true;
         numberReference = new NumberReference();
 
-        for(i = 0d; i < numberStrings.length; i = i + 1d){
-            numberString = numberStrings[(int)(i)].string;
+        for (i = 0d; i < numberStrings.length; i = i + 1d) {
+            numberString = numberStrings[(int) (i)].string;
             trimmedNumberString = strTrim(numberString);
             success = nCreateNumberFromDecimalStringWithCheck(trimmedNumberString, numberReference, errorMessage);
-            numbers[(int)(i)] = numberReference.numberValue;
-            FreeStringReference(numberStrings[(int)(i)]);
+            numbers[(int) (i)] = numberReference.numberValue;
+            FreeStringReference(numberStrings[(int) (i)]);
             delete(trimmedNumberString);
         }
 
@@ -343,7 +343,7 @@ public class StringToNumber{
         return success;
     }
 
-    public static void delete(Object object){
+    public static void delete(Object object) {
         // Java has garbage collection.
     }
 }

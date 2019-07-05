@@ -29,7 +29,7 @@ public class EnumSerializer<T extends Enum> extends JsonSerializer<T> {
 
     @Override
     public void serialize(T e, JsonGenerator gen, SerializerProvider sp) throws IOException {
-        if(e==null){
+        if (e == null) {
             gen.writeNull();
             return;
         }

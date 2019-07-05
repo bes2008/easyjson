@@ -78,19 +78,16 @@ public enum Feature {
 
     /**
      * @since 1.1.35
-     *
      */
     SupportArrayToBean,
 
     /**
      * @since 1.2.3
-     *
      */
     OrderedField,
 
     /**
      * @since 1.2.5
-     *
      */
     DisableSpecialKeyDetect,
 
@@ -106,14 +103,14 @@ public enum Feature {
 
     /**
      * @since 1.2.29
-     *
+     * <p>
      * disable autotype key '@type'
      */
     IgnoreAutoType,
 
     /**
      * @since 1.2.30
-     *
+     * <p>
      * disable field smart match, improve performance in some scenarios.
      */
     DisableFieldSmartMatch,
@@ -136,10 +133,9 @@ public enum Feature {
     /**
      * @since 1.2.55
      */
-    ErrorOnEnumNotMatch
-    ;
+    ErrorOnEnumNotMatch;
 
-    Feature(){
+    Feature() {
         mask = (1 << ordinal());
     }
 
@@ -170,7 +166,7 @@ public enum Feature {
 
         int value = 0;
 
-        for (Feature feature: features) {
+        for (Feature feature : features) {
             value |= feature.mask;
         }
 

@@ -1,7 +1,7 @@
 package JSON.structures;
 
 public class ElementType {
-    public char [] name;
+    public char[] name;
 
     /*
     object,

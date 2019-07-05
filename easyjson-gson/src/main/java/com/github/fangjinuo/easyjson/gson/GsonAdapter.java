@@ -31,7 +31,7 @@ public class GsonAdapter implements JsonHandler {
 
     @Override
     public String serialize(Object src, Type typeOfT) throws JsonException {
-        if(src instanceof JsonTreeNode){
+        if (src instanceof JsonTreeNode) {
             JsonElement element = mapper.mapping((JsonTreeNode) src);
             return gson.toJson(element, element.getClass());
         }

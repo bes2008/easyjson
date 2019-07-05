@@ -19,7 +19,10 @@ package com.github.fangjinuo.easyjson.core.node;
  */
 public interface MappingToJavaObject<JSONObject, JSONArray, JSONPrimitive, JSONNull> {
     JSONNull mappingNull(JsonNullNode node);
+
     JSONPrimitive mappingPrimitive(JsonPrimitiveNode node);
+
     JSONArray mappingArray(JsonArrayNode node);
+
     JSONObject mappingObject(JsonObjectNode node);
 }

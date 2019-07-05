@@ -26,7 +26,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.TYPE })
+@Target({ElementType.TYPE})
 public @interface JSONType {
 
     boolean asm() default true;
@@ -41,6 +41,7 @@ public @interface JSONType {
     String[] ignores() default {};
 
     SerializerFeature[] serialzeFeatures() default {};
+
     Feature[] parseFeatures() default {};
 
     boolean alphabetic() default true;
@@ -62,7 +63,7 @@ public @interface JSONType {
     /**
      * @since 1.2.11
      */
-    Class<?>[] seeAlso() default{};
+    Class<?>[] seeAlso() default {};
 
     /**
      * @since 1.2.14

@@ -32,10 +32,10 @@ import java.util.concurrent.ConcurrentMap;
  * represent generic types, so this class does. Forces clients to create a
  * subclass of this class which enables retrieval the type information even at
  * runtime.
- *
+ * <p>
  * <p>For example, to create a type literal for {@code List<String>}, you can
  * create an empty anonymous inner class:
- *
+ * <p>
  * <pre>
  * TypeReference&lt;List&lt;String&gt;&gt; list = new TypeReference&lt;List&lt;String&gt;&gt;() {};
  * </pre>
@@ -51,12 +51,12 @@ public class TypeReference<T> {
     /**
      * Constructs a new type literal. Derives represented class from type
      * parameter.
-     *
+     * <p>
      * <p>Clients create an empty anonymous subclass. Doing so embeds the type
      * parameter in the anonymous class's type hierarchy so we can reconstitute it
      * at runtime despite erasure.
      */
-    protected TypeReference(){
+    protected TypeReference() {
         Type superClass = getClass().getGenericSuperclass();
 
         Type type = ((ParameterizedType) superClass).getActualTypeArguments()[0];
@@ -71,10 +71,10 @@ public class TypeReference<T> {
     }
 
     /**
-     * @since 1.2.9
      * @param actualTypeArguments
+     * @since 1.2.9
      */
-    protected TypeReference(Type... actualTypeArguments){
+    protected TypeReference(Type... actualTypeArguments) {
         Class<?> thisClass = this.getClass();
         Type superClass = thisClass.getGenericSuperclass();
 
@@ -95,7 +95,7 @@ public class TypeReference<T> {
             }
 
             // 如果有多层泛型且该泛型已经注明实现的情况下，判断该泛型下一层是否还有泛型
-            if(argTypes[i] instanceof ParameterizedType) {
+            if (argTypes[i] instanceof ParameterizedType) {
                 argTypes[i] = handlerParameterizedType((ParameterizedType) argTypes[i], actualTypeArguments, actualIndex);
             }
         }
@@ -116,7 +116,7 @@ public class TypeReference<T> {
         Type rawType = type.getRawType();
         Type[] argTypes = type.getActualTypeArguments();
 
-        for(int i = 0; i < argTypes.length; ++i) {
+        for (int i = 0; i < argTypes.length; ++i) {
             if (argTypes[i] instanceof TypeVariable && actualIndex < actualTypeArguments.length) {
                 argTypes[i] = actualTypeArguments[actualIndex++];
             }
@@ -128,7 +128,7 @@ public class TypeReference<T> {
             }
 
             // 如果有多层泛型且该泛型已经注明实现的情况下，判断该泛型下一层是否还有泛型
-            if(argTypes[i] instanceof ParameterizedType) {
+            if (argTypes[i] instanceof ParameterizedType) {
                 return handlerParameterizedType((ParameterizedType) argTypes[i], actualTypeArguments, actualIndex);
             }
         }
@@ -144,5 +144,6 @@ public class TypeReference<T> {
         return type;
     }
 
-    public final static Type LIST_STRING = new TypeReference<List<String>>() {}.getType();
+    public final static Type LIST_STRING = new TypeReference<List<String>>() {
+    }.getType();
 }

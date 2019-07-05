@@ -1,5 +1,5 @@
 package references.references;
 
 public class NumberArrayReference {
-    public double [] numberArray;
+    public double[] numberArray;
 }

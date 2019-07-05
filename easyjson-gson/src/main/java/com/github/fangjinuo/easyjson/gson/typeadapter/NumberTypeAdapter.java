@@ -76,7 +76,7 @@ public class NumberTypeAdapter implements JsonSerializer<Number>, JsonDeserializ
 
     @Override
     public JsonElement serialize(Number src, Type typeOfSrc, JsonSerializationContext context) {
-        if(src==null){
+        if (src == null) {
             return JsonNull.INSTANCE;
         }
         if (longUsingString) {

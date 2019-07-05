@@ -27,13 +27,13 @@ import java.io.*;
 
 /**
  * Converts Java objects to and from JSON.
- *
+ * <p>
  * <h3>Defining a type's JSON form</h3>
  * By default JSON converts application classes to JSON using its built-in type
  * adapters. If JSON's default JSON conversion isn't appropriate for a type,
  * extend this class to customize the conversion. Here's an example of a type
  * adapter for an (X,Y) coordinate point: <pre>   {@code
- *
+ * <p>
  *   public class PointAdapter extends TypeAdapter<Point> {
  *     public Point read(JsonReader reader) throws IOException {
  *       if (reader.peek() == JsonToken.NULL) {
@@ -58,9 +58,9 @@ import java.io.*;
  * With this type adapter installed, JSON will convert {@code Points} to JSON as
  * strings like {@code "5,8"} rather than objects like {@code {"x":5,"y":8}}. In
  * this case the type adapter binds a rich Java class to a compact JSON value.
- *
+ * <p>
  * <p>The {@link #read(JsonReader) read()} method must read exactly one value
- * and {@link #write(JsonWriter,Object) write()} must write exactly one value.
+ * and {@link #write(JsonWriter, Object) write()} must write exactly one value.
  * For primitive types this is means readers should make exactly one call to
  * {@code nextBoolean()}, {@code nextDouble()}, {@code nextInt()}, {@code
  * nextLong()}, {@code nextString()} or {@code nextNull()}. Writers should make
@@ -70,7 +70,7 @@ import java.io.*;
  * objects, they should start with {@code beginObject()}, convert the object,
  * and finish with {@code endObject()}. Failing to convert a value or converting
  * too many values may cause the application to crash.
- *
+ * <p>
  * <p>Type adapters should be prepared to read null from the stream and write it
  * to the stream. Alternatively, they should use {@link #nullSafe()} method while
  * registering the type adapter with JSON. If your {@code JSON} instance
@@ -78,10 +78,10 @@ import java.io.*;
  * written to the final document. Otherwise the value (and the corresponding name
  * when writing to a JSON object) will be omitted automatically. In either case
  * your type adapter must handle null.
- *
+ * <p>
  * <p>To use a custom type adapter with JSON, you must <i>register</i> it with a
  * {@link JSONBuilder}: <pre>   {@code
- *
+ * <p>
  *   JSONBuilder builder = new JSONBuilder();
  *   builder.registerTypeAdapter(Point.class, new PointAdapter());
  *   // if PointAdapter didn't check for nulls in its read/write methods, you should instead use
@@ -182,14 +182,17 @@ public abstract class TypeAdapter<T> {
      */
     public final TypeAdapter<T> nullSafe() {
         return new TypeAdapter<T>() {
-            @Override public void write(JsonWriter out, T value) throws IOException {
+            @Override
+            public void write(JsonWriter out, T value) throws IOException {
                 if (value == null) {
                     out.nullValue();
                 } else {
                     TypeAdapter.this.write(out, value);
                 }
             }
-            @Override public T read(JsonReader reader) throws IOException {
+
+            @Override
+            public T read(JsonReader reader) throws IOException {
                 if (reader.peek() == JsonToken.NULL) {
                     reader.nextNull();
                     return null;

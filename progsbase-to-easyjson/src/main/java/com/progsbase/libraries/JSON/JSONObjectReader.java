@@ -46,7 +46,7 @@ public class JSONObjectReader {
         return errorMessage.toString();
     }
 
-    private static StringArrayReference throwableToStringArrayReference(Throwable ex){
+    private static StringArrayReference throwableToStringArrayReference(Throwable ex) {
         List<StringReference> stringReferences = new ArrayList<StringReference>();
 
         StringReference stringReference = new StringReference();
@@ -55,7 +55,7 @@ public class JSONObjectReader {
 
         Throwable current = ex;
         Throwable cause = ex.getCause();
-        while(cause!=null && cause!=current){
+        while (cause != null && cause != current) {
             stringReference = new StringReference();
             stringReference.string = cause.getMessage().toCharArray();
             stringReferences.add(stringReference);
@@ -64,7 +64,7 @@ public class JSONObjectReader {
         }
 
         StringArrayReference arrayReference = new StringArrayReference();
-        arrayReference.stringArray=stringReferences.toArray(new StringReference[stringReferences.size()]);
+        arrayReference.stringArray = stringReferences.toArray(new StringReference[stringReferences.size()]);
         return arrayReference;
     }
 

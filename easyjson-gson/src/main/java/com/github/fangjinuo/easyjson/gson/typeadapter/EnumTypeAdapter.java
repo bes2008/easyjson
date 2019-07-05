@@ -135,7 +135,7 @@ public class EnumTypeAdapter implements JsonSerializer<Enum>, JsonDeserializer<E
 
     @Override
     public JsonElement serialize(Enum e, Type typeOfSrc, JsonSerializationContext context) {
-        if(e==null){
+        if (e == null) {
             return JsonNull.INSTANCE;
         }
         if (usingValue) {

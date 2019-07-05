@@ -16,37 +16,37 @@ package net.minidev.json.writer;
 
 
 public class FakeMapper extends JsonReaderI<Object> {
-	private FakeMapper() {
-		super(null);
-	}
+    private FakeMapper() {
+        super(null);
+    }
 
-	public static JsonReaderI<Object> DEFAULT = new FakeMapper();
+    public static JsonReaderI<Object> DEFAULT = new FakeMapper();
 
-	@Override
-	public JsonReaderI<?> startObject(String key) {
-		return this;
-	}
+    @Override
+    public JsonReaderI<?> startObject(String key) {
+        return this;
+    }
 
-	@Override
-	public JsonReaderI<?> startArray(String key) {
-		return this;
-	}
+    @Override
+    public JsonReaderI<?> startArray(String key) {
+        return this;
+    }
 
-	@Override
-	public void setValue(Object current, String key, Object value) {
-	}
+    @Override
+    public void setValue(Object current, String key, Object value) {
+    }
 
-	@Override
-	public void addValue(Object current, Object value) {
-	}
+    @Override
+    public void addValue(Object current, Object value) {
+    }
 
-	@Override
-	public Object createObject() {
-		return null;
-	}
+    @Override
+    public Object createObject() {
+        return null;
+    }
 
-	@Override
-	public Object createArray() {
-		return null;
-	}
+    @Override
+    public Object createArray() {
+        return null;
+    }
 }

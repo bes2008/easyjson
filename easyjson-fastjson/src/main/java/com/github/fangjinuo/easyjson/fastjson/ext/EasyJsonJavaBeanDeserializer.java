@@ -31,6 +31,6 @@ public class EasyJsonJavaBeanDeserializer extends JavaBeanDeserializer {
     }
 
     public EasyJsonJavaBeanDeserializer(ParserConfig config, JavaBeanInfo beanInfo) {
-        super(config, config instanceof EasyJsonParserConfig ? ((EasyJsonParserConfig)config).filterFields(beanInfo): beanInfo);
+        super(config, config instanceof EasyJsonParserConfig ? ((EasyJsonParserConfig) config).filterFields(beanInfo) : beanInfo);
     }
 }

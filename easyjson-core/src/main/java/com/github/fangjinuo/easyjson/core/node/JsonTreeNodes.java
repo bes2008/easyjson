@@ -34,7 +34,7 @@ public class JsonTreeNodes {
             return (JsonTreeNode) object;
         }
 
-        if(Primitives.isPrimitive(object.getClass())){
+        if (Primitives.isPrimitive(object.getClass())) {
             return new JsonPrimitiveNode(object);
         }
 
@@ -73,7 +73,7 @@ public class JsonTreeNodes {
         if (mapper != null) {
             node = mapper.mapping(object);
         }
-        if(node!=null){
+        if (node != null) {
             return node;
         }
         JSON json = JSONBuilderProvider.create().build();
@@ -82,24 +82,24 @@ public class JsonTreeNodes {
     }
 
     public static Object toJavaObject(JsonTreeNode node) {
-        return toJavaObject(node,null);
+        return toJavaObject(node, null);
     }
 
     public static Object toJavaObject(JsonTreeNode node, MappingToJavaObject mapping) {
         if (node == null || JsonNullNode.INSTANCE == node) {
-            if(mapping!=null){
+            if (mapping != null) {
                 return mapping.mappingNull(JsonNullNode.INSTANCE);
             }
             return null;
         }
         if (node.isJsonPrimitiveNode()) {
-            if(mapping!=null){
+            if (mapping != null) {
                 return mapping.mappingPrimitive(node.getAsJsonPrimitiveNode());
             }
             return node.getAsJsonPrimitiveNode().getValue();
         }
         if (node.isJsonArrayNode()) {
-            if(mapping!=null){
+            if (mapping != null) {
                 return mapping.mappingArray(node.getAsJsonArrayNode());
             }
             JsonArrayNode arrayNode = node.getAsJsonArrayNode();
@@ -110,7 +110,7 @@ public class JsonTreeNodes {
             return array;
         }
         if (node.isJsonObjectNode()) {
-            if(mapping!=null){
+            if (mapping != null) {
                 return mapping.mappingObject(node.getAsJsonObjectNode());
             }
             JsonObjectNode objectNode = node.getAsJsonObjectNode();
@@ -127,39 +127,38 @@ public class JsonTreeNodes {
 
     /**
      * merge node2 to node1
-     * @param node1
-     * @param node2
-     * @return
+     *
+     * @return an new node
      */
-    public static JsonTreeNode combine(JsonTreeNode node1, JsonTreeNode node2){
-        if(node1.isJsonNullNode()){
+    public static JsonTreeNode combine(JsonTreeNode node1, JsonTreeNode node2) {
+        if (node1.isJsonNullNode()) {
             return node2.deepCopy();
         }
-        if(node2.isJsonNullNode()){
+        if (node2.isJsonNullNode()) {
             return node1.deepCopy();
         }
 
-        if(node1.isJsonPrimitiveNode()){
-            if(node2.isJsonPrimitiveNode() || node2.isJsonObjectNode()){
+        if (node1.isJsonPrimitiveNode()) {
+            if (node2.isJsonPrimitiveNode() || node2.isJsonObjectNode()) {
                 return node1.deepCopy();
             }
         }
 
-        if(node1.isJsonArrayNode() || node2.isJsonArrayNode()){
-            JsonArrayNode arrayNode = node1.isJsonArrayNode() ? (JsonArrayNode)node1.deepCopy() : (JsonArrayNode)node2.deepCopy();
-            node2 =  node1.isJsonArrayNode() ? node2.deepCopy() : node1.deepCopy();
-            if(!node2.isJsonArrayNode()) {
+        if (node1.isJsonArrayNode() || node2.isJsonArrayNode()) {
+            JsonArrayNode arrayNode = node1.isJsonArrayNode() ? (JsonArrayNode) node1.deepCopy() : (JsonArrayNode) node2.deepCopy();
+            node2 = node1.isJsonArrayNode() ? node2.deepCopy() : node1.deepCopy();
+            if (!node2.isJsonArrayNode()) {
                 arrayNode.add(node2);
-            }else{
+            } else {
                 arrayNode.addAll(((JsonArrayNode) node2));
             }
             return node1;
         }
 
-        if(node1.isJsonObjectNode() && node2.isJsonObjectNode()){
-            JsonObjectNode obj1 =(JsonObjectNode) node1.deepCopy();
-            JsonObjectNode obj2 =(JsonObjectNode) node2.deepCopy();
-            for(Map.Entry<String, JsonTreeNode> entry : obj2.propertySet()) {
+        if (node1.isJsonObjectNode() && node2.isJsonObjectNode()) {
+            JsonObjectNode obj1 = (JsonObjectNode) node1.deepCopy();
+            JsonObjectNode obj2 = (JsonObjectNode) node2.deepCopy();
+            for (Map.Entry<String, JsonTreeNode> entry : obj2.propertySet()) {
                 obj1.addProperty(entry.getKey(), entry.getValue());
             }
             return obj1;

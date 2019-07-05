@@ -63,7 +63,7 @@ public class DateCodec implements ObjectSerializer, ObjectDeserializer, Typed {
             if (dateFormat != null) {
                 try {
                     val = dateFormat.parse(strVal);
-                    return (T)val;
+                    return (T) val;
                 } catch (Throwable ex) {
                     val = null;
                 }

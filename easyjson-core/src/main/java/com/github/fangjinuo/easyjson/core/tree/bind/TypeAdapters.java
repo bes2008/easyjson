@@ -37,7 +37,8 @@ public final class TypeAdapters {
     }
 
     public static final TypeAdapter<JsonTreeNode> JSON_ELEMENT = new TypeAdapter<JsonTreeNode>() {
-        @Override public JsonTreeNode read(JsonReader in) throws IOException {
+        @Override
+        public JsonTreeNode read(JsonReader in) throws IOException {
             switch (in.peek()) {
                 case STRING:
                     return new JsonPrimitiveNode(in.nextString());
@@ -74,7 +75,8 @@ public final class TypeAdapters {
             }
         }
 
-        @Override public void write(JsonWriter out, JsonTreeNode value) throws IOException {
+        @Override
+        public void write(JsonWriter out, JsonTreeNode value) throws IOException {
             if (value == null || value.isJsonNullNode()) {
                 out.nullValue();
             } else if (value.isJsonPrimitiveNode()) {

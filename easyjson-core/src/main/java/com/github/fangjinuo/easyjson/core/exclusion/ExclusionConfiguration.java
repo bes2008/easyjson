@@ -58,6 +58,7 @@ public final class ExclusionConfiguration {
 
     /**
      * append modifier
+     *
      * @param modifier
      * @return
      */
@@ -69,6 +70,7 @@ public final class ExclusionConfiguration {
 
     /**
      * override modifiers
+     *
      * @param modifiers
      * @return
      */

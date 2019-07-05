@@ -16,12 +16,13 @@
 package com.github.fangjinuo.easyjson.core.tree.bind;
 
 
-import com.github.fangjinuo.easyjson.core.node.JsonArrayNode;
 import com.github.fangjinuo.easyjson.core.JsonTreeNode;
+import com.github.fangjinuo.easyjson.core.node.JsonArrayNode;
 import com.github.fangjinuo.easyjson.core.node.JsonNullNode;
 import com.github.fangjinuo.easyjson.core.node.JsonObjectNode;
 import com.github.fangjinuo.easyjson.core.node.JsonPrimitiveNode;
 import com.github.fangjinuo.easyjson.core.tree.stream.JsonWriter;
+
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
@@ -32,26 +33,39 @@ import java.util.List;
  */
 public final class JsonTreeWriter extends JsonWriter {
     private static final Writer UNWRITABLE_WRITER = new Writer() {
-        @Override public void write(char[] buffer, int offset, int counter) {
+        @Override
+        public void write(char[] buffer, int offset, int counter) {
             throw new AssertionError();
         }
-        @Override public void flush() throws IOException {
+
+        @Override
+        public void flush() throws IOException {
             throw new AssertionError();
         }
-        @Override public void close() throws IOException {
+
+        @Override
+        public void close() throws IOException {
             throw new AssertionError();
         }
     };
-    /** Added to the top of the stack when this writer is closed to cause following ops to fail. */
+    /**
+     * Added to the top of the stack when this writer is closed to cause following ops to fail.
+     */
     private static final JsonPrimitiveNode SENTINEL_CLOSED = new JsonPrimitiveNode("closed");
 
-    /** The JsonTreeNodes and JsonArrayNodes under modification, outermost to innermost. */
+    /**
+     * The JsonTreeNodes and JsonArrayNodes under modification, outermost to innermost.
+     */
     private final List<JsonTreeNode> stack = new ArrayList<JsonTreeNode>();
 
-    /** The name for the next JSON object value. If non-null, the top of the stack is a JsonObjectNode. */
+    /**
+     * The name for the next JSON object value. If non-null, the top of the stack is a JsonObjectNode.
+     */
     private String pendingName;
 
-    /** the JSON element constructed by this writer. */
+    /**
+     * the JSON element constructed by this writer.
+     */
     private JsonTreeNode product = JsonNullNode.INSTANCE; // TODO: is this really what we want?;
 
     public JsonTreeWriter() {
@@ -91,14 +105,16 @@ public final class JsonTreeWriter extends JsonWriter {
         }
     }
 
-    @Override public JsonWriter beginArray() throws IOException {
+    @Override
+    public JsonWriter beginArray() throws IOException {
         JsonArrayNode array = new JsonArrayNode();
         put(array);
         stack.add(array);
         return this;
     }
 
-    @Override public JsonWriter endArray() throws IOException {
+    @Override
+    public JsonWriter endArray() throws IOException {
         if (stack.isEmpty() || pendingName != null) {
             throw new IllegalStateException();
         }
@@ -110,14 +126,16 @@ public final class JsonTreeWriter extends JsonWriter {
         throw new IllegalStateException();
     }
 
-    @Override public JsonWriter beginObject() throws IOException {
+    @Override
+    public JsonWriter beginObject() throws IOException {
         JsonObjectNode object = new JsonObjectNode();
         put(object);
         stack.add(object);
         return this;
     }
 
-    @Override public JsonWriter endObject() throws IOException {
+    @Override
+    public JsonWriter endObject() throws IOException {
         if (stack.isEmpty() || pendingName != null) {
             throw new IllegalStateException();
         }
@@ -129,7 +147,8 @@ public final class JsonTreeWriter extends JsonWriter {
         throw new IllegalStateException();
     }
 
-    @Override public JsonWriter name(String name) throws IOException {
+    @Override
+    public JsonWriter name(String name) throws IOException {
         if (stack.isEmpty() || pendingName != null) {
             throw new IllegalStateException();
         }
@@ -141,7 +160,8 @@ public final class JsonTreeWriter extends JsonWriter {
         throw new IllegalStateException();
     }
 
-    @Override public JsonWriter value(String value) throws IOException {
+    @Override
+    public JsonWriter value(String value) throws IOException {
         if (value == null) {
             return nullValue();
         }
@@ -149,17 +169,20 @@ public final class JsonTreeWriter extends JsonWriter {
         return this;
     }
 
-    @Override public JsonWriter nullValue() throws IOException {
+    @Override
+    public JsonWriter nullValue() throws IOException {
         put(JsonNullNode.INSTANCE);
         return this;
     }
 
-    @Override public JsonWriter value(boolean value) throws IOException {
+    @Override
+    public JsonWriter value(boolean value) throws IOException {
         put(new JsonPrimitiveNode(value));
         return this;
     }
 
-    @Override public JsonWriter value(Boolean value) throws IOException {
+    @Override
+    public JsonWriter value(Boolean value) throws IOException {
         if (value == null) {
             return nullValue();
         }
@@ -167,7 +190,8 @@ public final class JsonTreeWriter extends JsonWriter {
         return this;
     }
 
-    @Override public JsonWriter value(double value) throws IOException {
+    @Override
+    public JsonWriter value(double value) throws IOException {
         if (!isLenient() && (Double.isNaN(value) || Double.isInfinite(value))) {
             throw new IllegalArgumentException("JSON forbids NaN and infinities: " + value);
         }
@@ -175,12 +199,14 @@ public final class JsonTreeWriter extends JsonWriter {
         return this;
     }
 
-    @Override public JsonWriter value(long value) throws IOException {
+    @Override
+    public JsonWriter value(long value) throws IOException {
         put(new JsonPrimitiveNode(value));
         return this;
     }
 
-    @Override public JsonWriter value(Number value) throws IOException {
+    @Override
+    public JsonWriter value(Number value) throws IOException {
         if (value == null) {
             return nullValue();
         }
@@ -196,10 +222,12 @@ public final class JsonTreeWriter extends JsonWriter {
         return this;
     }
 
-    @Override public void flush() throws IOException {
+    @Override
+    public void flush() throws IOException {
     }
 
-    @Override public void close() throws IOException {
+    @Override
+    public void close() throws IOException {
         if (!stack.isEmpty()) {
             throw new IOException("Incomplete document");
         }

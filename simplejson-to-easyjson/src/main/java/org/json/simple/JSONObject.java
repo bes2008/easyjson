@@ -4,18 +4,15 @@
  */
 package org.json.simple;
 
-import com.github.fangjinuo.easyjson.core.JSONBuilderProvider;
-
 import java.io.IOException;
 import java.io.Writer;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 /**
  * A JSON object. Key value pairs are unordered. JSONObject supports java.util.Map interface.
  *
- * @author FangYidong<fangyidong   @   yahoo.com.cn>
+ * @author FangYidong<fangyidong       @       yahoo.com.cn>
  */
 public class JSONObject extends HashMap implements Map, JSONAware, JSONStreamAware {
 

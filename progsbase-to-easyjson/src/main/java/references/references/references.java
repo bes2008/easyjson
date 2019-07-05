@@ -1,11 +1,8 @@
 package references.references;
 
 
-import static java.lang.Math.*;
-
-
-public class references{
-    public static BooleanReference CreateBooleanReference(boolean value){
+public class references {
+    public static BooleanReference CreateBooleanReference(boolean value) {
         BooleanReference ref;
 
         ref = new BooleanReference();
@@ -14,7 +11,7 @@ public class references{
         return ref;
     }
 
-    public static BooleanArrayReference CreateBooleanArrayReference(boolean [] value){
+    public static BooleanArrayReference CreateBooleanArrayReference(boolean[] value) {
         BooleanArrayReference ref;
 
         ref = new BooleanArrayReference();
@@ -23,27 +20,27 @@ public class references{
         return ref;
     }
 
-    public static BooleanArrayReference CreateBooleanArrayReferenceLengthValue(double length, boolean value){
+    public static BooleanArrayReference CreateBooleanArrayReferenceLengthValue(double length, boolean value) {
         BooleanArrayReference ref;
         double i;
 
         ref = new BooleanArrayReference();
-        ref.booleanArray = new boolean [(int)(length)];
+        ref.booleanArray = new boolean[(int) (length)];
 
-        for(i = 0d; i < length; i = i + 1d){
-            ref.booleanArray[(int)(i)] = value;
+        for (i = 0d; i < length; i = i + 1d) {
+            ref.booleanArray[(int) (i)] = value;
         }
 
         return ref;
     }
 
-    public static void FreeBooleanArrayReference(BooleanArrayReference booleanArrayReference){
+    public static void FreeBooleanArrayReference(BooleanArrayReference booleanArrayReference) {
 
         delete(booleanArrayReference.booleanArray);
         delete(booleanArrayReference);
     }
 
-    public static CharacterReference CreateCharacterReference(char value){
+    public static CharacterReference CreateCharacterReference(char value) {
         CharacterReference ref;
 
         ref = new CharacterReference();
@@ -52,7 +49,7 @@ public class references{
         return ref;
     }
 
-    public static NumberReference CreateNumberReference(double value){
+    public static NumberReference CreateNumberReference(double value) {
         NumberReference ref;
 
         ref = new NumberReference();
@@ -61,7 +58,7 @@ public class references{
         return ref;
     }
 
-    public static NumberArrayReference CreateNumberArrayReference(double [] value){
+    public static NumberArrayReference CreateNumberArrayReference(double[] value) {
         NumberArrayReference ref;
 
         ref = new NumberArrayReference();
@@ -70,27 +67,27 @@ public class references{
         return ref;
     }
 
-    public static NumberArrayReference CreateNumberArrayReferenceLengthValue(double length, double value){
+    public static NumberArrayReference CreateNumberArrayReferenceLengthValue(double length, double value) {
         NumberArrayReference ref;
         double i;
 
         ref = new NumberArrayReference();
-        ref.numberArray = new double [(int)(length)];
+        ref.numberArray = new double[(int) (length)];
 
-        for(i = 0d; i < length; i = i + 1d){
-            ref.numberArray[(int)(i)] = value;
+        for (i = 0d; i < length; i = i + 1d) {
+            ref.numberArray[(int) (i)] = value;
         }
 
         return ref;
     }
 
-    public static void FreeNumberArrayReference(NumberArrayReference numberArrayReference){
+    public static void FreeNumberArrayReference(NumberArrayReference numberArrayReference) {
 
         delete(numberArrayReference.numberArray);
         delete(numberArrayReference);
     }
 
-    public static StringReference CreateStringReference(char [] value){
+    public static StringReference CreateStringReference(char[] value) {
         StringReference ref;
 
         ref = new StringReference();
@@ -99,27 +96,27 @@ public class references{
         return ref;
     }
 
-    public static StringReference CreateStringReferenceLengthValue(double length, char value){
+    public static StringReference CreateStringReferenceLengthValue(double length, char value) {
         StringReference ref;
         double i;
 
         ref = new StringReference();
-        ref.string = new char [(int)(length)];
+        ref.string = new char[(int) (length)];
 
-        for(i = 0d; i < length; i = i + 1d){
-            ref.string[(int)(i)] = value;
+        for (i = 0d; i < length; i = i + 1d) {
+            ref.string[(int) (i)] = value;
         }
 
         return ref;
     }
 
-    public static void FreeStringReference(StringReference stringReference){
+    public static void FreeStringReference(StringReference stringReference) {
 
         delete(stringReference.string);
         delete(stringReference);
     }
 
-    public static StringArrayReference CreateStringArrayReference(StringReference [] strings){
+    public static StringArrayReference CreateStringArrayReference(StringReference[] strings) {
         StringArrayReference ref;
 
         ref = new StringArrayReference();
@@ -128,31 +125,31 @@ public class references{
         return ref;
     }
 
-    public static StringArrayReference CreateStringArrayReferenceLengthValue(double length, char [] value){
+    public static StringArrayReference CreateStringArrayReferenceLengthValue(double length, char[] value) {
         StringArrayReference ref;
         double i;
 
         ref = new StringArrayReference();
-        ref.stringArray = new StringReference [(int)(length)];
+        ref.stringArray = new StringReference[(int) (length)];
 
-        for(i = 0d; i < length; i = i + 1d){
-            ref.stringArray[(int)(i)] = CreateStringReference(value);
+        for (i = 0d; i < length; i = i + 1d) {
+            ref.stringArray[(int) (i)] = CreateStringReference(value);
         }
 
         return ref;
     }
 
-    public static void FreeStringArrayReference(StringArrayReference stringArrayReference){
+    public static void FreeStringArrayReference(StringArrayReference stringArrayReference) {
         double i;
 
-        for(i = 0d; i < stringArrayReference.stringArray.length; i = i + 1d){
-            delete(stringArrayReference.stringArray[(int)(i)]);
+        for (i = 0d; i < stringArrayReference.stringArray.length; i = i + 1d) {
+            delete(stringArrayReference.stringArray[(int) (i)]);
         }
         delete(stringArrayReference.stringArray);
         delete(stringArrayReference);
     }
 
-    public static void delete(Object object){
+    public static void delete(Object object) {
         // Java has garbage collection.
     }
 }

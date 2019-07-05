@@ -28,13 +28,13 @@ public class EasyJsonObjectMapper extends ObjectMapper {
 
     public EasyJsonObjectMapper() {
         super();
-        setDefaultDeserializationContext(new DefaultDeserializationContext.Impl(new EasyJsonBeanDeserializerFactory(new DeserializerFactoryConfig(),this)));
+        setDefaultDeserializationContext(new DefaultDeserializationContext.Impl(new EasyJsonBeanDeserializerFactory(new DeserializerFactoryConfig(), this)));
         setSerializerFactory(new EasyJsonBeanSerializerFactory(null, this));
     }
 
     public EasyJsonObjectMapper(ObjectMapper src) {
         super(src);
-        setDefaultDeserializationContext(new DefaultDeserializationContext.Impl(new EasyJsonBeanDeserializerFactory(new DeserializerFactoryConfig(),this)));
+        setDefaultDeserializationContext(new DefaultDeserializationContext.Impl(new EasyJsonBeanDeserializerFactory(new DeserializerFactoryConfig(), this)));
         setSerializerFactory(new EasyJsonBeanSerializerFactory(null, this));
     }
 

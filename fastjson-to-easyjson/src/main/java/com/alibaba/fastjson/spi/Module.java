@@ -22,5 +22,6 @@ import com.alibaba.fastjson.serializer.SerializeConfig;
 
 public interface Module {
     ObjectDeserializer createDeserializer(ParserConfig config, Class type);
+
     ObjectSerializer createSerializer(SerializeConfig config, Class type);
 }

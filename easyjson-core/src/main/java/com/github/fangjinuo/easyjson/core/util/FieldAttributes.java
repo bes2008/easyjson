@@ -51,13 +51,13 @@ public class FieldAttributes {
      * <p>For example, assume the following class definition:
      * <pre class="code">
      * public class Foo {
-     *   private String bar;
-     *   private List&lt;String&gt; red;
+     * private String bar;
+     * private List&lt;String&gt; red;
      * }
-     *
+     * <p>
      * Type listParameterizedType = new TypeToken&lt;List&lt;String&gt;&gt;() {}.getType();
      * </pre>
-     *
+     * <p>
      * <p>This method would return {@code String.class} for the {@code bar} field and
      * {@code listParameterizedType} for the {@code red} field.
      *
@@ -69,15 +69,15 @@ public class FieldAttributes {
 
     /**
      * Returns the {@code Class} object that was declared for this field.
-     *
+     * <p>
      * <p>For example, assume the following class definition:
      * <pre class="code">
      * public class Foo {
-     *   private String bar;
-     *   private List&lt;String&gt; red;
+     * private String bar;
+     * private List&lt;String&gt; red;
      * }
      * </pre>
-     *
+     * <p>
      * <p>This method would return {@code String.class} for the {@code bar} field and
      * {@code List.class} for the {@code red} field.
      *
@@ -110,7 +110,7 @@ public class FieldAttributes {
 
     /**
      * Returns {@code true} if the field is defined with the {@code modifier}.
-     *
+     * <p>
      * <p>This method is meant to be called as:
      * <pre class="code">
      * boolean hasPublicModifier = fieldAttribute.hasModifier(java.lang.reflect.Modifier.PUBLIC);

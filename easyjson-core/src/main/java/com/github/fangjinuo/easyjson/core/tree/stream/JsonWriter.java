@@ -20,37 +20,31 @@ import java.io.Flushable;
 import java.io.IOException;
 import java.io.Writer;
 
-import static com.github.fangjinuo.easyjson.core.tree.stream.JsonScope.DANGLING_NAME;
-import static com.github.fangjinuo.easyjson.core.tree.stream.JsonScope.EMPTY_ARRAY;
-import static com.github.fangjinuo.easyjson.core.tree.stream.JsonScope.EMPTY_DOCUMENT;
-import static com.github.fangjinuo.easyjson.core.tree.stream.JsonScope.EMPTY_OBJECT;
-import static com.github.fangjinuo.easyjson.core.tree.stream.JsonScope.NONEMPTY_ARRAY;
-import static com.github.fangjinuo.easyjson.core.tree.stream.JsonScope.NONEMPTY_DOCUMENT;
-import static com.github.fangjinuo.easyjson.core.tree.stream.JsonScope.NONEMPTY_OBJECT;
+import static com.github.fangjinuo.easyjson.core.tree.stream.JsonScope.*;
 
 /**
  * Writes a JSON (<a href="http://www.ietf.org/rfc/rfc7159.txt">RFC 7159</a>)
  * encoded value to a stream, one token at a time. The stream includes both
  * literal values (strings, numbers, booleans and nulls) as well as the begin
  * and end delimiters of objects and arrays.
- *
+ * <p>
  * <h3>Encoding JSON</h3>
  * To encode your data as JSON, create a new {@code JsonWriter}. Each JSON
  * document must contain one top-level array or object. Call methods on the
  * writer as you walk the structure's contents, nesting arrays and objects as
  * necessary:
  * <ul>
- *   <li>To write <strong>arrays</strong>, first call {@link #beginArray()}.
- *       Write each of the array's elements with the appropriate {@link #value}
- *       methods or by nesting other arrays and objects. Finally close the array
- *       using {@link #endArray()}.
- *   <li>To write <strong>objects</strong>, first call {@link #beginObject()}.
- *       Write each of the object's properties by alternating calls to
- *       {@link #name} with the property's value. Write property values with the
- *       appropriate {@link #value} method or by nesting other objects or arrays.
- *       Finally close the object using {@link #endObject()}.
+ * <li>To write <strong>arrays</strong>, first call {@link #beginArray()}.
+ * Write each of the array's elements with the appropriate {@link #value}
+ * methods or by nesting other arrays and objects. Finally close the array
+ * using {@link #endArray()}.
+ * <li>To write <strong>objects</strong>, first call {@link #beginObject()}.
+ * Write each of the object's properties by alternating calls to
+ * {@link #name} with the property's value. Write property values with the
+ * appropriate {@link #value} method or by nesting other objects or arrays.
+ * Finally close the object using {@link #endObject()}.
  * </ul>
- *
+ * <p>
  * <h3>Example</h3>
  * Suppose we'd like to encode a stream of messages such as the following: <pre> {@code
  * [
@@ -80,7 +74,7 @@ import static com.github.fangjinuo.easyjson.core.tree.stream.JsonScope.NONEMPTY_
  *     writeMessagesArray(writer, messages);
  *     writer.close();
  *   }
- *
+ * <p>
  *   public void writeMessagesArray(JsonWriter writer, List<Message> messages) throws IOException {
  *     writer.beginArray();
  *     for (Message message : messages) {
@@ -88,7 +82,7 @@ import static com.github.fangjinuo.easyjson.core.tree.stream.JsonScope.NONEMPTY_
  *     }
  *     writer.endArray();
  *   }
- *
+ * <p>
  *   public void writeMessage(JsonWriter writer, Message message) throws IOException {
  *     writer.beginObject();
  *     writer.name("id").value(message.getId());
@@ -103,14 +97,14 @@ import static com.github.fangjinuo.easyjson.core.tree.stream.JsonScope.NONEMPTY_
  *     writeUser(writer, message.getUser());
  *     writer.endObject();
  *   }
- *
+ * <p>
  *   public void writeUser(JsonWriter writer, User user) throws IOException {
  *     writer.beginObject();
  *     writer.name("name").value(user.getName());
  *     writer.name("followers_count").value(user.getFollowersCount());
  *     writer.endObject();
  *   }
- *
+ * <p>
  *   public void writeDoublesArray(JsonWriter writer, List<Double> doubles) throws IOException {
  *     writer.beginArray();
  *     for (Double value : doubles) {
@@ -118,7 +112,7 @@ import static com.github.fangjinuo.easyjson.core.tree.stream.JsonScope.NONEMPTY_
  *     }
  *     writer.endArray();
  *   }}</pre>
- *
+ * <p>
  * <p>Each {@code JsonWriter} may be used to write a single JSON stream.
  * Instances of this class are not thread safe. Calls that would result in a
  * malformed JSON string will fail with an {@link IllegalStateException}.
@@ -139,6 +133,7 @@ public class JsonWriter implements Closeable, Flushable {
      */
     private static final String[] REPLACEMENT_CHARS;
     private static final String[] HTML_SAFE_REPLACEMENT_CHARS;
+
     static {
         REPLACEMENT_CHARS = new String[128];
         for (int i = 0; i <= 0x1f; i++) {
@@ -159,11 +154,14 @@ public class JsonWriter implements Closeable, Flushable {
         HTML_SAFE_REPLACEMENT_CHARS['\''] = "\\u0027";
     }
 
-    /** The output data, containing at most one top-level array or object. */
+    /**
+     * The output data, containing at most one top-level array or object.
+     */
     private final Writer out;
 
     private int[] stack = new int[32];
     private int stackSize = 0;
+
     {
         push(EMPTY_DOCUMENT);
     }
@@ -223,10 +221,10 @@ public class JsonWriter implements Closeable, Flushable {
      * href="http://www.ietf.org/rfc/rfc7159.txt">RFC 7159</a>. Setting the writer
      * to lenient permits the following:
      * <ul>
-     *   <li>Top-level values of any type. With strict writing, the top-level
-     *       value must be an object or an array.
-     *   <li>Numbers may be {@link Double#isNaN() NaNs} or {@link
-     *       Double#isInfinite() infinities}.
+     * <li>Top-level values of any type. With strict writing, the top-level
+     * value must be an object or an array.
+     * <li>Numbers may be {@link Double#isNaN() NaNs} or {@link
+     * Double#isInfinite() infinities}.
      * </ul>
      */
     public final void setLenient(boolean lenient) {
@@ -485,7 +483,7 @@ public class JsonWriter implements Closeable, Flushable {
      * Encodes {@code value}.
      *
      * @param value a finite value. May not be {@link Double#isNaN() NaNs} or
-     *     {@link Double#isInfinite() infinities}.
+     *              {@link Double#isInfinite() infinities}.
      * @return this writer.
      */
     public JsonWriter value(double value) throws IOException {
@@ -514,7 +512,7 @@ public class JsonWriter implements Closeable, Flushable {
      * Encodes {@code value}.
      *
      * @param value a finite value. May not be {@link Double#isNaN() NaNs} or
-     *     {@link Double#isInfinite() infinities}.
+     *              {@link Double#isInfinite() infinities}.
      * @return this writer.
      */
     public JsonWriter value(Number value) throws IOException {

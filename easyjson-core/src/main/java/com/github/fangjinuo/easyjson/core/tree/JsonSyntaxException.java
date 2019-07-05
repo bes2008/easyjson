@@ -18,7 +18,6 @@ package com.github.fangjinuo.easyjson.core.tree;
 /**
  * This exception is raised when JSON attempts to read (or write) a malformed
  * JSON element.
- *
  */
 public final class JsonSyntaxException extends JsonParseException {
 

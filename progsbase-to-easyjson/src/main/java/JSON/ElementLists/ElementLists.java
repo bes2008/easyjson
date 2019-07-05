@@ -8,10 +8,10 @@ public class ElementLists {
         Element newlist[];
         double i;
 
-        newlist = new Element[(int)(list.length + 1d)];
+        newlist = new Element[(int) (list.length + 1d)];
 
-        for(i = 0; i < list.length; i = i + 1d){
-            newlist[(int)i] = list[(int)i];
+        for (i = 0; i < list.length; i = i + 1d) {
+            newlist[(int) i] = list[(int) i];
         }
         newlist[list.length] = a;
 
@@ -24,18 +24,18 @@ public class ElementLists {
         list.array = AddElement(list.array, i);
     }
 
-    public static Element[] RemoveElement(Element[] list, double  n) {
+    public static Element[] RemoveElement(Element[] list, double n) {
         Element newlist[];
         double i;
 
-        newlist = new Element[(int)(list.length - 1d)];
+        newlist = new Element[(int) (list.length - 1d)];
 
-        for(i = 0; i < list.length; i = i + 1d){
-            if(i < n){
-                newlist[(int)i] = list[(int)i];
+        for (i = 0; i < list.length; i = i + 1d) {
+            if (i < n) {
+                newlist[(int) i] = list[(int) i];
             }
-            if(i > n){
-                newlist[(int)(i - 1d)] = list[(int)i];
+            if (i > n) {
+                newlist[(int) (i - 1d)] = list[(int) i];
             }
         }
 
@@ -45,14 +45,14 @@ public class ElementLists {
     }
 
     public static Element GetElementRef(ElementArrayReference list, double i) {
-        return list.array[(int)i];
+        return list.array[(int) i];
     }
 
     public static void RemoveElementRef(ElementArrayReference list, double i) {
         list.array = RemoveElement(list.array, i);
     }
 
-    public static void delete(Object object){
+    public static void delete(Object object) {
         // Java has garbage collection.
     }
 }

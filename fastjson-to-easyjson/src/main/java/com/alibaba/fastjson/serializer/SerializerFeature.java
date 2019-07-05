@@ -151,7 +151,7 @@ public enum SerializerFeature {
      */
     MapSortField;
 
-    SerializerFeature(){
+    SerializerFeature() {
         mask = (1 << ordinal());
     }
 
@@ -188,7 +188,7 @@ public enum SerializerFeature {
 
         int value = 0;
 
-        for (SerializerFeature feature: features) {
+        for (SerializerFeature feature : features) {
             value |= feature.mask;
         }
 
@@ -202,6 +202,5 @@ public enum SerializerFeature {
             | WriteNullBooleanAsFalse.getMask()
             | WriteNullListAsEmpty.getMask()
             | WriteNullNumberAsZero.getMask()
-            | WriteNullStringAsEmpty.getMask()
-            ;
+            | WriteNullStringAsEmpty.getMask();
 }

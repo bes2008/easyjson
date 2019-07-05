@@ -16,9 +16,10 @@
 package com.github.fangjinuo.easyjson.core.tree.bind;
 
 
+import com.github.fangjinuo.easyjson.core.util.Preconditions;
 import com.github.fangjinuo.easyjson.core.util.type.ParameterizedTypeImpl;
 import com.github.fangjinuo.easyjson.core.util.type.Types;
-import com.github.fangjinuo.easyjson.core.util.Preconditions;
+
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -31,16 +32,15 @@ import java.util.Map;
  * represent generic types, so this class does. Forces clients to create a
  * subclass of this class which enables retrieval the type information even at
  * runtime.
- *
+ * <p>
  * <p>For example, to create a type literal for {@code List<String>}, you can
  * create an empty anonymous inner class:
- *
+ * <p>
  * <p>
  * {@code TypeToken<List<String>> list = new TypeToken<List<String>>() {};}
- *
+ * <p>
  * <p>This syntax cannot be used to create type literals that have wildcard
  * parameters, such as {@code Class<?>} or {@code List<? extends CharSequence>}.
- *
  */
 public class TypeToken<T> {
     final Class<? super T> rawType;
@@ -50,7 +50,7 @@ public class TypeToken<T> {
     /**
      * Constructs a new type literal. Derives represented class from type
      * parameter.
-     *
+     * <p>
      * <p>Clients create an empty anonymous subclass. Doing so embeds the type
      * parameter in the anonymous class's type hierarchy so we can reconstitute it
      * at runtime despite erasure.
@@ -103,7 +103,7 @@ public class TypeToken<T> {
      * Check if this type is assignable from the given class object.
      *
      * @deprecated this implementation may be inconsistent with javac for types
-     *     with wildcards.
+     * with wildcards.
      */
     @Deprecated
     public boolean isAssignableFrom(Class<?> cls) {
@@ -114,7 +114,7 @@ public class TypeToken<T> {
      * Check if this type is assignable from the given Type.
      *
      * @deprecated this implementation may be inconsistent with javac for types
-     *     with wildcards.
+     * with wildcards.
      */
     @Deprecated
     public boolean isAssignableFrom(Type from) {
@@ -144,7 +144,7 @@ public class TypeToken<T> {
      * Check if this type is assignable from the given type token.
      *
      * @deprecated this implementation may be inconsistent with javac for types
-     *     with wildcards.
+     * with wildcards.
      */
     @Deprecated
     public boolean isAssignableFrom(TypeToken<?> token) {
@@ -274,16 +274,19 @@ public class TypeToken<T> {
 
     }
 
-    @Override public final int hashCode() {
+    @Override
+    public final int hashCode() {
         return this.hashCode;
     }
 
-    @Override public final boolean equals(Object o) {
+    @Override
+    public final boolean equals(Object o) {
         return o instanceof TypeToken<?>
                 && Types.equals(type, ((TypeToken<?>) o).type);
     }
 
-    @Override public final String toString() {
+    @Override
+    public final String toString() {
         return Types.typeToString(type);
     }
 

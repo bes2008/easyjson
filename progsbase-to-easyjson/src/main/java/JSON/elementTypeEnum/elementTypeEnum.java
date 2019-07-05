@@ -7,7 +7,7 @@ import references.references.BooleanReference;
 import static arrays.arrays.arrays.StringsEqual;
 
 public class elementTypeEnum {
-    public static ElementType GetElementType(char [] elementTypeName){
+    public static ElementType GetElementType(char[] elementTypeName) {
         ElementType et;
 
         et = new ElementType();
@@ -16,17 +16,17 @@ public class elementTypeEnum {
         return et;
     }
 
-    public static ElementType GetAndCheckElementType(char [] elementTypeName, BooleanReference found){
+    public static ElementType GetAndCheckElementType(char[] elementTypeName, BooleanReference found) {
         ElementType[] elementTypes;
         ElementType elementType;
         double i, antall;
 
         antall = 6;
 
-        elementTypes = new ElementType[(int)antall];
+        elementTypes = new ElementType[(int) antall];
 
-        for(i = 0; i < antall; i = i + 1d){
-            elementTypes[(int)i] = new ElementType();
+        for (i = 0; i < antall; i = i + 1d) {
+            elementTypes[(int) i] = new ElementType();
         }
 
         elementTypes[0].name = "object".toCharArray();
@@ -38,9 +38,9 @@ public class elementTypeEnum {
 
         found.booleanValue = false;
         elementType = new ElementType();
-        for(i = 0; i < antall && !found.booleanValue; i = i + 1d){
-            elementType = elementTypes[(int)i];
-            if(StringsEqual(elementType.name, elementTypeName)){
+        for (i = 0; i < antall && !found.booleanValue; i = i + 1d) {
+            elementType = elementTypes[(int) i];
+            if (StringsEqual(elementType.name, elementTypeName)) {
                 found.booleanValue = true;
             }
         }
@@ -48,11 +48,11 @@ public class elementTypeEnum {
         return elementType;
     }
 
-    public static boolean ElementTypeStructureEquals(ElementType a, ElementType b){
+    public static boolean ElementTypeStructureEquals(ElementType a, ElementType b) {
         return StringsEqual(a.name, b.name);
     }
 
-    public static boolean ElementTypeEnumEquals(char [] a, char [] b){
+    public static boolean ElementTypeEnumEquals(char[] a, char[] b) {
         boolean equals;
         ElementType eta, etb;
         BooleanReference founda, foundb;
@@ -63,9 +63,9 @@ public class elementTypeEnum {
         eta = GetAndCheckElementType(a, founda);
         etb = GetAndCheckElementType(b, foundb);
 
-        if(founda.booleanValue && foundb.booleanValue){
+        if (founda.booleanValue && foundb.booleanValue) {
             equals = ElementTypeStructureEquals(eta, etb);
-        }else{
+        } else {
             equals = false;
         }
 

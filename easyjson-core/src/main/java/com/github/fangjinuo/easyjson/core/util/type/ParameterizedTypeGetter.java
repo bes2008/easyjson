@@ -5,7 +5,7 @@ import java.lang.reflect.Type;
 
 /**
  * Usage:
- *
+ * <p>
  * <pre>
  *  List:
  *  ParameterizedType type0 = new ParameterizedTypeGetter<List<Person>>(){}.getType();
@@ -16,11 +16,12 @@ import java.lang.reflect.Type;
  *  type0 equivalent to type2
  *
  * </pre>
+ *
  * @param <T>
  */
-public class ParameterizedTypeGetter <T> {
-    public Type getType(){
-        ParameterizedType genericSuperclass = (ParameterizedType)getClass().getGenericSuperclass();
+public class ParameterizedTypeGetter<T> {
+    public Type getType() {
+        ParameterizedType genericSuperclass = (ParameterizedType) getClass().getGenericSuperclass();
         return genericSuperclass.getActualTypeArguments()[0];
     }
 }

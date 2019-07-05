@@ -27,7 +27,9 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
-import com.progsbase.libraries.JSON.*;
+import com.progsbase.libraries.JSON.GenericTypeGetter;
+import com.progsbase.libraries.JSON.JSONReflectiveReader;
+import com.progsbase.libraries.JSON.JSONReflectiveWriter;
 import org.junit.Test;
 
 import java.text.DateFormat;
@@ -122,7 +124,6 @@ public class JsonLibraryTests extends BaseTests {
         System.out.println(gson.toJson(personMap, TypeToken.getParameterized(Map.class, Integer.class, Person.class).getType()));
 
 
-
         System.out.println("=====================Gson test end =============================");
     }
 
@@ -165,12 +166,14 @@ public class JsonLibraryTests extends BaseTests {
         // test list
         String str2 = JSONReflectiveWriter.writeJSON(persons);
         System.out.println(str2);
-        List<Person> persons2 = JSONReflectiveReader.readJSON(str2, List.class, new GenericTypeGetter<List<Person>>(){}.getType());
+        List<Person> persons2 = JSONReflectiveReader.readJSON(str2, List.class, new GenericTypeGetter<List<Person>>() {
+        }.getType());
         System.out.println(JSONReflectiveWriter.writeJSON(persons2));
         // test map
         String str3 = JSONReflectiveWriter.writeJSON(idToPersonMap);
         System.out.println(str3);
-        Map<Integer, Person> personMap = JSONReflectiveReader.readJSON(str3, Map.class, new GenericTypeGetter<Map<String, Person>>(){}.getType());
+        Map<Integer, Person> personMap = JSONReflectiveReader.readJSON(str3, Map.class, new GenericTypeGetter<Map<String, Person>>() {
+        }.getType());
         System.out.println(JSONReflectiveWriter.writeJSON(personMap));
 
         System.out.println("=====================Progsbase test end =============================");

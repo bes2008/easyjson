@@ -28,29 +28,29 @@ import java.util.List;
  * API. For example:<pre>
  * JSONObject object = ...
  * String json = object.toString();</pre>
- *
+ * <p>
  * <p>Stringers only encode well-formed JSON strings. In particular:
  * <ul>
- *   <li>The stringer must have exactly one top-level array or object.
- *   <li>Lexical scopes must be balanced: every call to {@link #array} must
- *       have a matching call to {@link #endArray} and every call to {@link
- *       #object} must have a matching call to {@link #endObject}.
- *   <li>Arrays may not contain keys (property names).
- *   <li>Objects must alternate keys (property names) and values.
- *   <li>Values are inserted with either literal {@link #value(Object) value}
- *       calls, or by nesting arrays or objects.
+ * <li>The stringer must have exactly one top-level array or object.
+ * <li>Lexical scopes must be balanced: every call to {@link #array} must
+ * have a matching call to {@link #endArray} and every call to {@link
+ * #object} must have a matching call to {@link #endObject}.
+ * <li>Arrays may not contain keys (property names).
+ * <li>Objects must alternate keys (property names) and values.
+ * <li>Values are inserted with either literal {@link #value(Object) value}
+ * calls, or by nesting arrays or objects.
  * </ul>
  * Calls that would result in a malformed JSON string will fail with a
  * {@link JSONException}.
- *
+ * <p>
  * <p>This class provides no facility for pretty-printing (ie. indenting)
  * output. To encode indented output, use {@link JSONObject#toString(int)} or
  * {@link JSONArray#toString(int)}.
- *
+ * <p>
  * <p>Some implementations of the API support at most 20 levels of nesting.
  * Attempts to create more than 20 levels of nesting may fail with a {@link
  * JSONException}.
- *
+ * <p>
  * <p>Each stringer may be used to encode a single top level value. Instances of
  * this class are not thread safe. Although this class is nonfinal, it was not
  * designed for inheritance and should not be subclassed. In particular,
@@ -60,7 +60,9 @@ import java.util.List;
  */
 public class JSONStringer {
 
-    /** The output data, containing at most one top-level array or object. */
+    /**
+     * The output data, containing at most one top-level array or object.
+     */
     final StringBuilder out = new StringBuilder();
 
     /**
@@ -220,8 +222,8 @@ public class JSONStringer {
      * Encodes {@code value}.
      *
      * @param value a {@link JSONObject}, {@link JSONArray}, String, Boolean,
-     *     Integer, Long, Double or null. May not be {@link Double#isNaN() NaNs}
-     *     or {@link Double#isInfinite() infinities}.
+     *              Integer, Long, Double or null. May not be {@link Double#isNaN() NaNs}
+     *              or {@link Double#isInfinite() infinities}.
      * @return this stringer.
      */
     public JSONStringer value(Object value) throws JSONException {
@@ -273,7 +275,7 @@ public class JSONStringer {
      * Encodes {@code value} to this stringer.
      *
      * @param value a finite value. May not be {@link Double#isNaN() NaNs} or
-     *     {@link Double#isInfinite() infinities}.
+     *              {@link Double#isInfinite() infinities}.
      * @return this stringer.
      */
     public JSONStringer value(double value) throws JSONException {
@@ -418,15 +420,16 @@ public class JSONStringer {
 
     /**
      * Returns the encoded JSON string.
-     *
+     * <p>
      * <p>If invoked with unterminated arrays or unclosed objects, this method's
      * return value is undefined.
-     *
+     * <p>
      * <p><strong>Warning:</strong> although it contradicts the general contract
      * of {@link Object#toString}, this method returns null if the stringer
      * contains no data.
      */
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return out.length() == 0 ? null : out.toString();
     }
 }

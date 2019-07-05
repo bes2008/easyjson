@@ -24,7 +24,7 @@ import java.util.Map;
 
 public class JsonMapper {
 
-    public static Object fromJsonTreeNode(JsonObjectNode treeNode){
+    public static Object fromJsonTreeNode(JsonObjectNode treeNode) {
         return JsonTreeNodes.toJavaObject(treeNode, new MappingToJavaObject<JSONObject, JSONArray, Object, Object>() {
             @Override
             public Object mappingNull(JsonNullNode node) {
@@ -33,13 +33,13 @@ public class JsonMapper {
 
             @Override
             public Object mappingPrimitive(JsonPrimitiveNode node) {
-                if(node.isNumber()){
+                if (node.isNumber()) {
                     return node.getAsNumber();
                 }
-                if(node.isString()){
+                if (node.isString()) {
                     return node.getAsString();
                 }
-                if(node.isBoolean()){
+                if (node.isBoolean()) {
                     return node.getAsBoolean();
                 }
                 return node.getValue();
@@ -48,8 +48,8 @@ public class JsonMapper {
             @Override
             public JSONArray mappingArray(JsonArrayNode node) {
                 JSONArray jsonArray = new JSONArray();
-                for(JsonTreeNode item : node){
-                    jsonArray.add(JsonTreeNodes.toJavaObject(item,this));
+                for (JsonTreeNode item : node) {
+                    jsonArray.add(JsonTreeNodes.toJavaObject(item, this));
                 }
                 return jsonArray;
             }
@@ -57,8 +57,8 @@ public class JsonMapper {
             @Override
             public JSONObject mappingObject(JsonObjectNode node) {
                 JSONObject jsonObject = new JSONObject();
-                for(Map.Entry<String, JsonTreeNode> entry: node.propertySet()){
-                    jsonObject.put(entry.getKey(), JsonTreeNodes.toJavaObject(entry.getValue(),this));
+                for (Map.Entry<String, JsonTreeNode> entry : node.propertySet()) {
+                    jsonObject.put(entry.getKey(), JsonTreeNodes.toJavaObject(entry.getValue(), this));
                 }
                 return jsonObject;
             }

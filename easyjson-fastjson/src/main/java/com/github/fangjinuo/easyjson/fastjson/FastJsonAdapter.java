@@ -43,7 +43,7 @@ public class FastJsonAdapter implements JsonHandler {
 
     @Override
     public String serialize(Object src, Type typeOfT) throws JsonException {
-        if(src instanceof JsonTreeNode){
+        if (src instanceof JsonTreeNode) {
             JsonTreeNode element = (JsonTreeNode) src;
             return fastJson.getJsonTreeSerializerBuilder().build().toJson(element);
         }

@@ -18,7 +18,6 @@ package com.github.fangjinuo.easyjson.core.tree;
 /**
  * This exception is raised when JSON was unable to read an input stream
  * or write to one.
- *
  */
 public final class JsonIOException extends JsonParseException {
     private static final long serialVersionUID = 1L;

@@ -29,7 +29,7 @@ public class BooleanSerializer extends JsonSerializer<Boolean> {
 
     @Override
     public void serialize(Boolean value, JsonGenerator gen, SerializerProvider sp) throws IOException {
-        if(value==null){
+        if (value == null) {
             gen.writeNull();
             return;
         }

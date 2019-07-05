@@ -21,25 +21,23 @@ import java.lang.annotation.Target;
 
 /**
  * block access to a field or to a getter or to a setter.
- * 
+ * <p>
  * If field and getter are annotate with @JsonIgnore the field will be Writable
  * only
- * 
- * 
+ * <p>
+ * <p>
  * If field and setter are annotate with @JsonIgnore the field will be Readable
  * only
- * 
- * 
+ * <p>
+ * <p>
  * If getter and setter are annotate with @JsonIgnore the field will be
  * Read/Write using field if the field is public (default )
- * 
- * 
+ *
  * @author uriel
- * 
  */
-@Target({ ElementType.METHOD, ElementType.CONSTRUCTOR, ElementType.FIELD })
+@Target({ElementType.METHOD, ElementType.CONSTRUCTOR, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 @JsonSmartAnnotation
 public @interface JsonIgnore {
-	boolean value() default true;
+    boolean value() default true;
 }

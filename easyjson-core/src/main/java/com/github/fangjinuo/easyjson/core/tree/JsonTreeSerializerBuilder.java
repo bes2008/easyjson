@@ -29,7 +29,7 @@ public class JsonTreeSerializerBuilder {
         return this;
     }
 
-    public JsonTreeSerializer build(){
+    public JsonTreeSerializer build() {
         JsonTreeSerializer writer = new JsonTreeSerializer();
         writer.setPrettyFormat(prettyFormat);
         writer.setSerializeNulls(serializeNulls);

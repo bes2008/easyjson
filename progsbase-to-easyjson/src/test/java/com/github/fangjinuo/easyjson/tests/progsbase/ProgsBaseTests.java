@@ -36,7 +36,7 @@ public class ProgsBaseTests extends BaseTests {
                     }.getType()
             );
             System.out.println(e);
-        }catch (Throwable ex){
+        } catch (Throwable ex) {
             ex.printStackTrace();
         }
     }
@@ -55,12 +55,14 @@ public class ProgsBaseTests extends BaseTests {
         // test list
         String str2 = JSONReflectiveWriter.writeJSON(persons);
         System.out.println(str2);
-        List<Person> persons2 = JSONReflectiveReader.readJSON(str2, List.class, new GenericTypeGetter<List<Person>>(){}.getType());
+        List<Person> persons2 = JSONReflectiveReader.readJSON(str2, List.class, new GenericTypeGetter<List<Person>>() {
+        }.getType());
         System.out.println(JSONReflectiveWriter.writeJSON(persons2));
         // test map
         String str3 = JSONReflectiveWriter.writeJSON(idToPersonMap);
         System.out.println(str3);
-        Map<Integer, Person> personMap = JSONReflectiveReader.readJSON(str3, Map.class, new GenericTypeGetter<Map<String, Person>>(){}.getType());
+        Map<Integer, Person> personMap = JSONReflectiveReader.readJSON(str3, Map.class, new GenericTypeGetter<Map<String, Person>>() {
+        }.getType());
         System.out.println(JSONReflectiveWriter.writeJSON(personMap));
 
         System.out.println("=====================Progsbase test end =============================");

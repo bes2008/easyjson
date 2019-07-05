@@ -22,10 +22,10 @@ import java.util.Arrays;
 public class ParameterizedTypeImpl implements ParameterizedType {
 
     private final Type[] actualTypeArguments;
-    private final Type   ownerType;
-    private final Type   rawType;
+    private final Type ownerType;
+    private final Type rawType;
 
-    public ParameterizedTypeImpl(Type[] actualTypeArguments, Type ownerType, Type rawType){
+    public ParameterizedTypeImpl(Type[] actualTypeArguments, Type ownerType, Type rawType) {
         this.actualTypeArguments = actualTypeArguments;
         this.ownerType = ownerType;
         this.rawType = rawType;
@@ -35,10 +35,12 @@ public class ParameterizedTypeImpl implements ParameterizedType {
     public Type[] getActualTypeArguments() {
         return actualTypeArguments;
     }
+
     @Override
     public Type getOwnerType() {
         return ownerType;
     }
+
     @Override
     public Type getRawType() {
         return rawType;

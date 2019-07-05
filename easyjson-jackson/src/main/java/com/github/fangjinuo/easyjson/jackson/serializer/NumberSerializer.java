@@ -29,7 +29,7 @@ public class NumberSerializer extends JsonSerializer<Number> implements Contextu
 
     @Override
     public void serialize(Number value, JsonGenerator gen, SerializerProvider sp) throws IOException {
-        if(value==null){
+        if (value == null) {
             gen.writeNull();
             return;
         }
@@ -60,7 +60,7 @@ public class NumberSerializer extends JsonSerializer<Number> implements Contextu
         Class<?> rawType = type.getRawClass();
         String clsName = rawType.getName();
         if (Types.isPrimitive(rawType) || clsName.startsWith("java.")) {
-            if(Jacksons.getBoolean(prov.getAttribute(SERIALIZE_NUMBER_USING_STRING_ATTR_KEY)) || Jacksons.getBoolean(prov.getAttribute(SERIALIZE_LONG_USING_STRING_ATTR_KEY))){
+            if (Jacksons.getBoolean(prov.getAttribute(SERIALIZE_NUMBER_USING_STRING_ATTR_KEY)) || Jacksons.getBoolean(prov.getAttribute(SERIALIZE_LONG_USING_STRING_ATTR_KEY))) {
                 return this;
             }
         }

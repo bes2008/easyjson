@@ -31,6 +31,7 @@ import com.github.fangjinuo.easyjson.jackson.deserializer.EnumDeserializer;
 import com.github.fangjinuo.easyjson.jackson.ext.EasyJsonObjectMapper;
 import com.github.fangjinuo.easyjson.jackson.serializer.BooleanSerializer;
 import com.github.fangjinuo.easyjson.jackson.serializer.EnumSerializer;
+
 @Name("jackson")
 @DependOn("com.fasterxml.jackson.databind.ObjectMapper")
 public class JacksonJSONBuilder extends JSONBuilder {

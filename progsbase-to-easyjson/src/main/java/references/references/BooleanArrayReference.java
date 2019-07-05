@@ -1,5 +1,5 @@
 package references.references;
 
-public class BooleanArrayReference{
-    public boolean [] booleanArray;
+public class BooleanArrayReference {
+    public boolean[] booleanArray;
 }
