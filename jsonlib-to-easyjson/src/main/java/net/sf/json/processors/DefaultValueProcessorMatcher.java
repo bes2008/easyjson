@@ -27,25 +27,28 @@ import java.util.Set;
  * @author Andres Almiray <aalmiray@users.sourceforge.net>
  */
 public abstract class DefaultValueProcessorMatcher {
-   /** Matches the target with equals() */
-   public static final DefaultValueProcessorMatcher DEFAULT = new DefaultDefaultValueProcessorMatcher();
+    /**
+     * Matches the target with equals()
+     */
+    public static final DefaultValueProcessorMatcher DEFAULT = new DefaultDefaultValueProcessorMatcher();
 
-   /**
-    * Returns the matching class calculated with the target class and the
-    * provided set.
-    *
-    * @param target the target class to match
-    * @param set a set of possible matches
-    */
-   public abstract Object getMatch( Class target, Set set );
+    /**
+     * Returns the matching class calculated with the target class and the
+     * provided set.
+     *
+     * @param target the target class to match
+     * @param set    a set of possible matches
+     */
+    public abstract Object getMatch(Class target, Set set);
 
-   private static final class DefaultDefaultValueProcessorMatcher extends
-         DefaultValueProcessorMatcher {
-      public Object getMatch( Class target, Set set ) {
-         if( target != null && set != null && set.contains( target ) ){
-            return target;
-         }
-         return null;
-      }
-   }
+    private static final class DefaultDefaultValueProcessorMatcher extends
+            DefaultValueProcessorMatcher {
+        @Override
+        public Object getMatch(Class target, Set set) {
+            if (target != null && set != null && set.contains(target)) {
+                return target;
+            }
+            return null;
+        }
+    }
 }

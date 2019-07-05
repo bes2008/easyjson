@@ -20,11 +20,11 @@ package net.sf.json.processors;
  * @author Andres Almiray <aalmiray@users.sourceforge.net>
  */
 public interface DefaultValueProcessor {
-   /**
-    * Returns an appropriate default value for a type.
-    *
-    * @param type
-    * @return the default value for instances of type
-    */
-   Object getDefaultValue(Class type);
+    /**
+     * Returns an appropriate default value for a type.
+     *
+     * @param type
+     * @return the default value for instances of type
+     */
+    Object getDefaultValue(Class type);
 }

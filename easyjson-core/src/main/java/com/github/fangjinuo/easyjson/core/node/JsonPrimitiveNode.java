@@ -72,7 +72,7 @@ public class JsonPrimitiveNode extends JsonTreeNode {
      *
      * @param primitive the value to create the primitive with.
      */
-    JsonPrimitiveNode(Object primitive) {
+    public JsonPrimitiveNode(Object primitive) {
         setValue(primitive);
     }
 

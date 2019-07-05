@@ -21,12 +21,12 @@ package net.sf.json.processors;
  * @author Andres Almiray <aalmiray@users.sourceforge.net>
  */
 public interface PropertyNameProcessor {
-   /**
-    * Processes the property name.
-    *
-    * @param beanClass the input bean's class
-    * @param name the current property name
-    * @return an updated property name
-    */
-   String processPropertyName(Class beanClass, String name);
+    /**
+     * Processes the property name.
+     *
+     * @param beanClass the input bean's class
+     * @param name      the current property name
+     * @return an updated property name
+     */
+    String processPropertyName(Class beanClass, String name);
 }

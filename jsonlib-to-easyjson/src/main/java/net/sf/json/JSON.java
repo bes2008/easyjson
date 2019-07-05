@@ -15,8 +15,8 @@
 package net.sf.json;
 
 
-import java.io.Writer;
 import java.io.Serializable;
+import java.io.Writer;
 
 /**
  * Marker interface, identifies a valid JSON value.<br>
@@ -52,14 +52,14 @@ public interface JSON extends Serializable {
      * Warning: This method assumes that the data structure is acyclical.
      *
      * @param indentFactor The number of spaces to add to each level of
-     *        indentation.
+     *                     indentation.
      * @return a printable, displayable, portable, transmittable representation
-     *         of the object, beginning with <code>{</code>&nbsp;<small>(left
-     *         brace)</small> and ending with <code>}</code>&nbsp;<small>(right
-     *         brace)</small>.
+     * of the object, beginning with <code>{</code>&nbsp;<small>(left
+     * brace)</small> and ending with <code>}</code>&nbsp;<small>(right
+     * brace)</small>.
      * @throws JSONException If the object contains an invalid number.
      */
-    String toString( int indentFactor );
+    String toString(int indentFactor);
 
     /**
      * Make a prettyprinted JSON text.
@@ -67,14 +67,14 @@ public interface JSON extends Serializable {
      * Warning: This method assumes that the data structure is acyclical.
      *
      * @param indentFactor The number of spaces to add to each level of
-     *        indentation.
-     * @param indent The indentation of the top level.
+     *                     indentation.
+     * @param indent       The indentation of the top level.
      * @return a printable, displayable, transmittable representation of the
-     *         object, beginning with <code>{</code>&nbsp;<small>(left brace)</small>
-     *         and ending with <code>}</code>&nbsp;<small>(right brace)</small>.
+     * object, beginning with <code>{</code>&nbsp;<small>(left brace)</small>
+     * and ending with <code>}</code>&nbsp;<small>(right brace)</small>.
      * @throws JSONException If the object contains an invalid number.
      */
-    String toString( int indentFactor, int indent );
+    String toString(int indentFactor, int indent);
 
     /**
      * Write the contents as JSON text to a writer. For compactness, no
@@ -85,5 +85,5 @@ public interface JSON extends Serializable {
      * @return The writer.
      * @throws JSONException
      */
-    Writer write( Writer writer );
+    Writer write(Writer writer);
 }

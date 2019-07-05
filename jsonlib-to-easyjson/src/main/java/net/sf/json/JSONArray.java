@@ -15,31 +15,17 @@
 package net.sf.json;
 
 
+import com.github.fangjinuo.easyjson.core.JSONBuilderProvider;
+import com.github.fangjinuo.easyjson.core.util.type.Primitives;
+import net.sf.json.util.JSONUtils;
+
 import java.beans.PropertyDescriptor;
 import java.io.IOException;
 import java.io.Writer;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.ConcurrentModificationException;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Set;
-
-import com.github.fangjinuo.easyjson.core.JSONBuilderProvider;
-import com.github.fangjinuo.easyjson.core.node.JsonTreeNodes;
-import com.github.fangjinuo.easyjson.core.util.Strings;
-import com.github.fangjinuo.easyjson.core.util.type.Primitives;
-import net.sf.json.util.JSONTokener;
-import net.sf.json.util.JSONUtils;
+import java.util.*;
 
 
 /**
@@ -98,10 +84,10 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      *
      * @param object
      * @throws JSONException if the object can not be converted to a proper
-     *         JSONArray.
+     *                       JSONArray.
      */
-    public static JSONArray fromObject( Object object ) {
-        return fromObject( object, new JsonConfig() );
+    public static JSONArray fromObject(Object object) {
+        return fromObject(object, new JsonConfig());
     }
 
     /**
@@ -111,40 +97,24 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      *
      * @param object
      * @throws JSONException if the object can not be converted to a proper
-     *         JSONArray.
+     *                       JSONArray.
      */
-    public static JSONArray fromObject( Object object, JsonConfig jsonConfig ) {
-        if(object==null){
-            return null;
-        }
-
-        if(object instanceof JSONArray){
-            return (JSONArray) object;
-        }
-
+    public static JSONArray fromObject(Object object, JsonConfig jsonConfig) {
+        Object jsonobj = JsonMapper.fromJavaObject(object, jsonConfig);
         JSONArray jsonArray = new JSONArray();
-
-        if(object instanceof JSONString){
-            String jsonstring= ((JSONString)object).toJSONString();
-            object = JsonTreeNodes.toJavaObject(JSONBuilderProvider.simplest().fromJson(jsonstring));
-            return fromObject(object);
-        }
-
-        if(Primitives.isPrimitive(object.getClass()) || object instanceof String){
-            jsonArray.element(object);
-            return jsonArray;
-        }
-
-        if(object instanceof Collection){
-            for(Object item : (Collection)object){
-
+        if (jsonobj != JSONNull.getInstance()) {
+            if (Primitives.isPrimitive(jsonobj.getClass())) {
+                jsonArray.element(jsonobj);
+            }
+            if (jsonobj instanceof JSONArray) {
+                return (JSONArray) jsonobj;
+            }
+            if (jsonobj instanceof JSONObject) {
+                jsonArray.element(jsonobj);
             }
         }
 
-        if(object instanceof JSONTokener){
-
-        }
-        throw new JSONException( "Unsupported type" );
+        return jsonArray;
     }
 
     /**
@@ -152,24 +122,24 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      * found.<br/>
      * Contributed by [Matt Small @ WaveMaker].
      */
-    public static Class[] getCollectionType( PropertyDescriptor pd, boolean useGetter )
+    public static Class[] getCollectionType(PropertyDescriptor pd, boolean useGetter)
             throws JSONException {
 
         Type type;
-        if( useGetter ){
+        if (useGetter) {
             Method m = pd.getReadMethod();
             type = m.getGenericReturnType();
-        }else{
+        } else {
             Method m = pd.getWriteMethod();
             Type[] gpts = m.getGenericParameterTypes();
 
-            if( 1 != gpts.length ){
-                throw new JSONException( "method " + m + " is not a standard setter" );
+            if (1 != gpts.length) {
+                throw new JSONException("method " + m + " is not a standard setter");
             }
             type = gpts[0];
         }
 
-        if( !(type instanceof ParameterizedType) ){
+        if (!(type instanceof ParameterizedType)) {
             return null;
             // throw new JSONException("type not instanceof ParameterizedType:
             // "+type.getClass());
@@ -179,7 +149,7 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
         Type[] actualTypes = pType.getActualTypeArguments();
 
         Class[] ret = new Class[actualTypes.length];
-        for( int i = 0; i < ret.length; i++ ){
+        for (int i = 0; i < ret.length; i++) {
             ret[i] = (Class) actualTypes[i];
         }
 
@@ -189,17 +159,17 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
     /**
      * Returns the number of dimensions suited for a java array.
      */
-    public static int[] getDimensions( JSONArray jsonArray ) {
+    public static int[] getDimensions(JSONArray jsonArray) {
         // short circuit for empty arrays
-        if( jsonArray == null || jsonArray.isEmpty() ){
-            return new int[] { 0 };
+        if (jsonArray == null || jsonArray.isEmpty()) {
+            return new int[]{0};
         }
 
         List dims = new ArrayList();
-        processArrayDimensions( jsonArray, dims, 0 );
+        processArrayDimensions(jsonArray, dims, 0);
         int[] dimensions = new int[dims.size()];
         int j = 0;
-        for( Iterator i = dims.iterator(); i.hasNext(); ){
+        for (Iterator i = dims.iterator(); i.hasNext(); ) {
             dimensions[j++] = ((Integer) i.next()).intValue();
         }
         return dimensions;
@@ -208,17 +178,17 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
     /**
      * Creates a java array from a JSONArray.
      */
-    public static Object toArray( JSONArray jsonArray ) {
-        return toArray( jsonArray, new JsonConfig() );
+    public static Object toArray(JSONArray jsonArray) {
+        return toArray(jsonArray, new JsonConfig());
     }
 
     /**
      * Creates a java array from a JSONArray.
      */
-    public static Object toArray( JSONArray jsonArray, Class objectClass ) {
+    public static Object toArray(JSONArray jsonArray, Class objectClass) {
         JsonConfig jsonConfig = new JsonConfig();
-        jsonConfig.setRootClass( objectClass );
-        return toArray( jsonArray, jsonConfig );
+        jsonConfig.setRootClass(objectClass);
+        return toArray(jsonArray, jsonConfig);
     }
 
     /**
@@ -232,48 +202,48 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      * <li>A key may be a regular expression.</li>
      * </ul>
      */
-    public static Object toArray( JSONArray jsonArray, Class objectClass, Map classMap ) {
+    public static Object toArray(JSONArray jsonArray, Class objectClass, Map classMap) {
         JsonConfig jsonConfig = new JsonConfig();
-        jsonConfig.setRootClass( objectClass );
-        jsonConfig.setClassMap( classMap );
-        return toArray( jsonArray, jsonConfig );
+        jsonConfig.setRootClass(objectClass);
+        jsonConfig.setClassMap(classMap);
+        return toArray(jsonArray, jsonConfig);
     }
 
     /**
      * Creates a java array from a JSONArray.<br>
      */
-    public static Object toArray( JSONArray jsonArray, JsonConfig jsonConfig ) {
+    public static Object toArray(JSONArray jsonArray, JsonConfig jsonConfig) {
         return null;
     }
 
     /**
      * Creates a java array from a JSONArray.<br>
      */
-    public static Object toArray( JSONArray jsonArray, Object root, JsonConfig jsonConfig ) {
+    public static Object toArray(JSONArray jsonArray, Object root, JsonConfig jsonConfig) {
         return null;
     }
 
     /**
      * Returns a List or a Set taking generics into account.<br/>
      */
-    public static Collection toCollection( JSONArray jsonArray ) {
-        return toCollection( jsonArray, new JsonConfig() );
+    public static Collection toCollection(JSONArray jsonArray) {
+        return toCollection(jsonArray, new JsonConfig());
     }
 
     /**
      * Returns a List or a Set taking generics into account.<br/>
      */
-    public static Collection toCollection( JSONArray jsonArray, Class objectClass ) {
+    public static Collection toCollection(JSONArray jsonArray, Class objectClass) {
         JsonConfig jsonConfig = new JsonConfig();
-        jsonConfig.setRootClass( objectClass );
-        return toCollection( jsonArray, jsonConfig );
+        jsonConfig.setRootClass(objectClass);
+        return toCollection(jsonArray, jsonConfig);
     }
 
     /**
      * Returns a List or a Set taking generics into account.<br/>
      * Contributed by [Matt Small @ WaveMaker].
      */
-    public static Collection toCollection( JSONArray jsonArray, JsonConfig jsonConfig ) {
+    public static Collection toCollection(JSONArray jsonArray, JsonConfig jsonConfig) {
         return null;
     }
    /*
@@ -362,23 +332,23 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
     /**
      * Creates a List from a JSONArray.<br>
      *
-     * @deprecated replaced by toCollection
      * @see #toCollection(JSONArray)
+     * @deprecated replaced by toCollection
      */
-    public static List toList( JSONArray jsonArray ) {
-        return toList( jsonArray, new JsonConfig() );
+    public static List toList(JSONArray jsonArray) {
+        return toList(jsonArray, new JsonConfig());
     }
 
     /**
      * Creates a List from a JSONArray.
      *
+     * @see #toCollection(JSONArray, Class)
      * @deprecated replaced by toCollection
-     * @see #toCollection(JSONArray,Class)
      */
-    public static List toList( JSONArray jsonArray, Class objectClass ) {
+    public static List toList(JSONArray jsonArray, Class objectClass) {
         JsonConfig jsonConfig = new JsonConfig();
-        jsonConfig.setRootClass( objectClass );
-        return toList( jsonArray, jsonConfig );
+        jsonConfig.setRootClass(objectClass);
+        return toList(jsonArray, jsonConfig);
     }
 
     /**
@@ -394,55 +364,55 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      *
      * @deprecated replaced by toCollection
      */
-    public static List toList( JSONArray jsonArray, Class objectClass, Map classMap ) {
+    public static List toList(JSONArray jsonArray, Class objectClass, Map classMap) {
         JsonConfig jsonConfig = new JsonConfig();
-        jsonConfig.setRootClass( objectClass );
-        jsonConfig.setClassMap( classMap );
-        return toList( jsonArray, jsonConfig );
+        jsonConfig.setRootClass(objectClass);
+        jsonConfig.setClassMap(classMap);
+        return toList(jsonArray, jsonConfig);
     }
 
     /**
      * Creates a List from a JSONArray.<br>
      *
+     * @see #toCollection(JSONArray, JsonConfig)
      * @deprecated replaced by toCollection
-     * @see #toCollection(JSONArray,JsonConfig)
      */
-    public static List toList( JSONArray jsonArray, JsonConfig jsonConfig ) {
+    public static List toList(JSONArray jsonArray, JsonConfig jsonConfig) {
         return null;
     }
 
     /**
      * Creates a List from a JSONArray.<br>
      */
-    public static List toList( JSONArray jsonArray, Object root, JsonConfig jsonConfig ) {
-        if( jsonArray.size() == 0 || root == null ){
+    public static List toList(JSONArray jsonArray, Object root, JsonConfig jsonConfig) {
+        if (jsonArray.size() == 0 || root == null) {
             return new ArrayList();
         }
 
         List list = new ArrayList();
         int size = jsonArray.size();
-        for( int i = 0; i < size; i++ ){
-            Object value = jsonArray.get( i );
-            if( JSONUtils.isNull( value ) ){
-                list.add( null );
-            }else{
+        for (int i = 0; i < size; i++) {
+            Object value = jsonArray.get(i);
+            if (JSONUtils.isNull(value)) {
+                list.add(null);
+            } else {
                 Class type = value.getClass();
-                if( JSONArray.class.isAssignableFrom( type ) ){
-                    list.add( toList( (JSONArray) value, root, jsonConfig ) );
-                }else if( String.class.isAssignableFrom( type )
-                        || Boolean.class.isAssignableFrom( type ) || JSONUtils.isNumber( type )
-                        || Character.class.isAssignableFrom( type )
-                        || JSONFunction.class.isAssignableFrom( type ) ){
-                    list.add( value );
-                }else{
-                    try{
+                if (JSONArray.class.isAssignableFrom(type)) {
+                    list.add(toList((JSONArray) value, root, jsonConfig));
+                } else if (String.class.isAssignableFrom(type)
+                        || Boolean.class.isAssignableFrom(type) || JSONUtils.isNumber(type)
+                        || Character.class.isAssignableFrom(type)
+                        || JSONFunction.class.isAssignableFrom(type)) {
+                    list.add(value);
+                } else {
+                    try {
                         Object newRoot = jsonConfig.getNewBeanInstanceStrategy()
-                                .newInstance( root.getClass(), null );
-                        list.add( JSONObject.toBean( (JSONObject) value, newRoot, jsonConfig ) );
-                    }catch( JSONException jsone ){
+                                .newInstance(root.getClass(), null);
+                        list.add(JSONObject.toBean((JSONObject) value, newRoot, jsonConfig));
+                    } catch (JSONException jsone) {
                         throw jsone;
-                    }catch( Exception e ){
-                        throw new JSONException( e );
+                    } catch (Exception e) {
+                        throw new JSONException(e);
                     }
                 }
             }
@@ -451,19 +421,19 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
     }
 
 
-    private static void processArrayDimensions( JSONArray jsonArray, List dims, int index ) {
-        if( dims.size() <= index ){
-            dims.add( new Integer( jsonArray.size() ) );
-        }else{
-            int i = ((Integer) dims.get( index )).intValue();
-            if( jsonArray.size() > i ){
-                dims.set( index, new Integer( jsonArray.size() ) );
+    private static void processArrayDimensions(JSONArray jsonArray, List dims, int index) {
+        if (dims.size() <= index) {
+            dims.add(new Integer(jsonArray.size()));
+        } else {
+            int i = ((Integer) dims.get(index)).intValue();
+            if (jsonArray.size() > i) {
+                dims.set(index, new Integer(jsonArray.size()));
             }
         }
-        for( Iterator i = jsonArray.iterator(); i.hasNext(); ){
+        for (Iterator i = jsonArray.iterator(); i.hasNext(); ) {
             Object item = i.next();
-            if( item instanceof JSONArray ){
-                processArrayDimensions( (JSONArray) item, dims, index + 1 );
+            if (item instanceof JSONArray) {
+                processArrayDimensions((JSONArray) item, dims, index + 1);
             }
         }
     }
@@ -487,87 +457,94 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
         this.elements = new ArrayList();
     }
 
-    public void add( int index, Object value ) {
-        add( index, value, new JsonConfig() );
+    @Override
+    public void add(int index, Object value) {
+        add(index, value, new JsonConfig());
     }
 
-    public void add( int index, Object value, JsonConfig jsonConfig ) {
-        this.elements.add( index, processValue( value, jsonConfig ) );
+    public void add(int index, Object value, JsonConfig jsonConfig) {
+        this.elements.add(index, processValue(value, jsonConfig));
     }
 
-    public boolean add( Object value ) {
-        return add( value, new JsonConfig() );
+    @Override
+    public boolean add(Object value) {
+        return add(value, new JsonConfig());
     }
 
-    public boolean add( Object value, JsonConfig jsonConfig ) {
-        element( value, jsonConfig );
+    public boolean add(Object value, JsonConfig jsonConfig) {
+        element(value, jsonConfig);
         return true;
     }
 
-    public boolean addAll( Collection collection ) {
-        return addAll( collection, new JsonConfig() );
+    @Override
+    public boolean addAll(Collection collection) {
+        return addAll(collection, new JsonConfig());
     }
 
-    public boolean addAll( Collection collection, JsonConfig jsonConfig ) {
-        if( collection == null || collection.size() == 0 ){
+    public boolean addAll(Collection collection, JsonConfig jsonConfig) {
+        if (collection == null || collection.size() == 0) {
             return false;
         }
-        for( Iterator i = collection.iterator(); i.hasNext(); ){
-            element( i.next(), jsonConfig );
+        for (Iterator i = collection.iterator(); i.hasNext(); ) {
+            element(i.next(), jsonConfig);
         }
         return true;
     }
 
-    public boolean addAll( int index, Collection collection ) {
-        return addAll( index, collection, new JsonConfig() );
+    @Override
+    public boolean addAll(int index, Collection collection) {
+        return addAll(index, collection, new JsonConfig());
     }
 
-    public boolean addAll( int index, Collection collection, JsonConfig jsonConfig ) {
-        if( collection == null || collection.size() == 0 ){
+    public boolean addAll(int index, Collection collection, JsonConfig jsonConfig) {
+        if (collection == null || collection.size() == 0) {
             return false;
         }
         int offset = 0;
-        for( Iterator i = collection.iterator(); i.hasNext(); ){
-            this.elements.add( index + (offset++), processValue( i.next(), jsonConfig ) );
+        for (Iterator i = collection.iterator(); i.hasNext(); ) {
+            this.elements.add(index + (offset++), processValue(i.next(), jsonConfig));
         }
         return true;
     }
 
+    @Override
     public void clear() {
         elements.clear();
     }
 
-    public int compareTo( Object obj ) {
-        if( obj != null && (obj instanceof JSONArray) ){
+    @Override
+    public int compareTo(Object obj) {
+        if (obj != null && (obj instanceof JSONArray)) {
             JSONArray other = (JSONArray) obj;
             int size1 = size();
             int size2 = other.size();
-            if( size1 < size2 ){
+            if (size1 < size2) {
                 return -1;
-            }else if( size1 > size2 ){
+            } else if (size1 > size2) {
                 return 1;
-            }else if( this.equals( other ) ){
+            } else if (this.equals(other)) {
                 return 0;
             }
         }
         return -1;
     }
-    @Override
-    public boolean contains( Object o ) {
-        return contains( o, new JsonConfig() );
-    }
-
-    public boolean contains( Object o, JsonConfig jsonConfig ) {
-        return elements.contains( processValue( o, jsonConfig ) );
-    }
 
     @Override
-    public boolean containsAll( Collection collection ) {
-        return containsAll( collection, new JsonConfig() );
+    public boolean contains(Object o) {
+        return contains(o, new JsonConfig());
     }
 
-    public boolean containsAll( Collection collection, JsonConfig jsonConfig ) {
-        return elements.containsAll( fromObject( collection, jsonConfig ) );
+    public boolean contains(Object o, JsonConfig jsonConfig) {
+        return elements.contains(processValue(o, jsonConfig));
+    }
+
+    @Override
+    public boolean containsAll(Collection collection) {
+        return containsAll(collection, new JsonConfig());
+    }
+
+    public boolean containsAll(Collection collection, JsonConfig jsonConfig) {
+        return elements.containsAll(fromObject(collection, jsonConfig));
     }
 
     /**
@@ -576,8 +553,8 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      * @param index the index of the element.
      * @return this.
      */
-    public JSONArray discard( int index ) {
-        elements.remove( index );
+    public JSONArray discard(int index) {
+        elements.remove(index);
         return this;
     }
 
@@ -586,8 +563,8 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      *
      * @return this.
      */
-    public JSONArray discard( Object o ) {
-        elements.remove( o );
+    public JSONArray discard(Object o) {
+        elements.remove(o);
         return this;
     }
 
@@ -597,8 +574,8 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      * @param value A boolean value.
      * @return this.
      */
-    public JSONArray element( boolean value ) {
-        return element( value ? Boolean.TRUE : Boolean.FALSE );
+    public JSONArray element(boolean value) {
+        return element(value ? Boolean.TRUE : Boolean.FALSE);
     }
 
     /**
@@ -608,8 +585,8 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      * @param value A Collection value.
      * @return this.
      */
-    public JSONArray element( Collection value ) {
-        return element( value, new JsonConfig() );
+    public JSONArray element(Collection value) {
+        return element(value, new JsonConfig());
     }
 
     /**
@@ -619,12 +596,12 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      * @param value A Collection value.
      * @return this.
      */
-    public JSONArray element( Collection value, JsonConfig jsonConfig ) {
-        if( value instanceof JSONArray ){
-            elements.add( value );
+    public JSONArray element(Collection value, JsonConfig jsonConfig) {
+        if (value instanceof JSONArray) {
+            elements.add(value);
             return this;
-        }else{
-            return element( _fromCollection( value, jsonConfig ) );
+        } else {
+            return element(JsonMapper.fromJavaObject(value));
         }
     }
 
@@ -632,13 +609,13 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      * Append a double value. This increases the array's length by one.
      *
      * @param value A double value.
-     * @throws JSONException if the value is not finite.
      * @return this.
+     * @throws JSONException if the value is not finite.
      */
-    public JSONArray element( double value ) {
-        Double d = new Double( value );
-        JSONUtils.testValidity( d );
-        return element( d );
+    public JSONArray element(double value) {
+        Double d = new Double(value);
+        JSONUtils.testValidity(d);
+        return element(d);
     }
 
     /**
@@ -647,8 +624,8 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      * @param value An int value.
      * @return this.
      */
-    public JSONArray element( int value ) {
-        return element( new Integer( value ) );
+    public JSONArray element(int value) {
+        return element(new Integer(value));
     }
 
     /**
@@ -661,8 +638,8 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      * @return this.
      * @throws JSONException If the index is negative.
      */
-    public JSONArray element( int index, boolean value ) {
-        return element( index, value ? Boolean.TRUE : Boolean.FALSE );
+    public JSONArray element(int index, boolean value) {
+        return element(index, value ? Boolean.TRUE : Boolean.FALSE);
     }
 
     /**
@@ -673,10 +650,10 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      * @param value A Collection value.
      * @return this.
      * @throws JSONException If the index is negative or if the value is not
-     *         finite.
+     *                       finite.
      */
-    public JSONArray element( int index, Collection value ) {
-        return element( index, value, new JsonConfig() );
+    public JSONArray element(int index, Collection value) {
+        return element(index, value, new JsonConfig());
     }
 
     /**
@@ -687,24 +664,24 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      * @param value A Collection value.
      * @return this.
      * @throws JSONException If the index is negative or if the value is not
-     *         finite.
+     *                       finite.
      */
-    public JSONArray element( int index, Collection value, JsonConfig jsonConfig ) {
-        if( value instanceof JSONArray ){
-            if( index < 0 ){
-                throw new JSONException( "JSONArray[" + index + "] not found." );
+    public JSONArray element(int index, Collection value, JsonConfig jsonConfig) {
+        if (value instanceof JSONArray) {
+            if (index < 0) {
+                throw new JSONException("JSONArray[" + index + "] not found.");
             }
-            if( index < size() ){
-                elements.set( index, value );
-            }else{
-                while( index != size() ){
-                    element( JSONNull.getInstance() );
+            if (index < size()) {
+                elements.set(index, value);
+            } else {
+                while (index != size()) {
+                    element(JSONNull.getInstance());
                 }
-                element( value, jsonConfig );
+                element(value, jsonConfig);
             }
             return this;
-        }else{
-            return element( index, _fromCollection( value, jsonConfig ) );
+        } else {
+            return element(index, JsonMapper.fromJavaObject(value, jsonConfig));
         }
     }
 
@@ -717,10 +694,10 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      * @param value A double value.
      * @return this.
      * @throws JSONException If the index is negative or if the value is not
-     *         finite.
+     *                       finite.
      */
-    public JSONArray element( int index, double value ) {
-        return element( index, new Double( value ) );
+    public JSONArray element(int index, double value) {
+        return element(index, new Double(value));
     }
 
     /**
@@ -733,8 +710,8 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      * @return this.
      * @throws JSONException If the index is negative.
      */
-    public JSONArray element( int index, int value ) {
-        return element( index, new Integer( value ) );
+    public JSONArray element(int index, int value) {
+        return element(index, new Integer(value));
     }
 
     /**
@@ -747,8 +724,8 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      * @return this.
      * @throws JSONException If the index is negative.
      */
-    public JSONArray element( int index, long value ) {
-        return element( index, new Long( value ) );
+    public JSONArray element(int index, long value) {
+        return element(index, new Long(value));
     }
 
     /**
@@ -759,10 +736,10 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      * @param value The Map value.
      * @return this.
      * @throws JSONException If the index is negative or if the the value is an
-     *         invalid number.
+     *                       invalid number.
      */
-    public JSONArray element( int index, Map value ) {
-        return element( index, value, new JsonConfig() );
+    public JSONArray element(int index, Map value) {
+        return element(index, value, new JsonConfig());
     }
 
     /**
@@ -773,24 +750,24 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      * @param value The Map value.
      * @return this.
      * @throws JSONException If the index is negative or if the the value is an
-     *         invalid number.
+     *                       invalid number.
      */
-    public JSONArray element( int index, Map value, JsonConfig jsonConfig ) {
-        if( value instanceof JSONObject ){
-            if( index < 0 ){
-                throw new JSONException( "JSONArray[" + index + "] not found." );
+    public JSONArray element(int index, Map value, JsonConfig jsonConfig) {
+        if (value instanceof JSONObject) {
+            if (index < 0) {
+                throw new JSONException("JSONArray[" + index + "] not found.");
             }
-            if( index < size() ){
-                elements.set( index, value );
-            }else{
-                while( index != size() ){
-                    element( JSONNull.getInstance() );
+            if (index < size()) {
+                elements.set(index, value);
+            } else {
+                while (index != size()) {
+                    element(JSONNull.getInstance());
                 }
-                element( value, jsonConfig );
+                element(value, jsonConfig);
             }
             return this;
-        }else{
-            return element( index, JSONObject.fromObject( value, jsonConfig ) );
+        } else {
+            return element(index, JSONObject.fromObject(value, jsonConfig));
         }
     }
 
@@ -801,14 +778,14 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      *
      * @param index The subscript.
      * @param value An object value. The value should be a Boolean, Double,
-     *        Integer, JSONArray, JSONObject, JSONFunction, Long, String,
-     *        JSONString or the JSONNull object.
+     *              Integer, JSONArray, JSONObject, JSONFunction, Long, String,
+     *              JSONString or the JSONNull object.
      * @return this.
      * @throws JSONException If the index is negative or if the the value is an
-     *         invalid number.
+     *                       invalid number.
      */
-    public JSONArray element( int index, Object value ) {
-        return element( index, value, new JsonConfig() );
+    public JSONArray element(int index, Object value) {
+        return element(index, value, new JsonConfig());
     }
 
     /**
@@ -818,24 +795,24 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      *
      * @param index The subscript.
      * @param value An object value. The value should be a Boolean, Double,
-     *        Integer, JSONArray, JSONObject, JSONFunction, Long, String,
-     *        JSONString or the JSONNull object.
+     *              Integer, JSONArray, JSONObject, JSONFunction, Long, String,
+     *              JSONString or the JSONNull object.
      * @return this.
      * @throws JSONException If the index is negative or if the the value is an
-     *         invalid number.
+     *                       invalid number.
      */
-    public JSONArray element( int index, Object value, JsonConfig jsonConfig ) {
-        JSONUtils.testValidity( value );
-        if( index < 0 ){
-            throw new JSONException( "JSONArray[" + index + "] not found." );
+    public JSONArray element(int index, Object value, JsonConfig jsonConfig) {
+        JSONUtils.testValidity(value);
+        if (index < 0) {
+            throw new JSONException("JSONArray[" + index + "] not found.");
         }
-        if( index < size() ){
-            this.elements.set( index, processValue( value, jsonConfig ) );
-        }else{
-            while( index != size() ){
-                element( JSONNull.getInstance() );
+        if (index < size()) {
+            this.elements.set(index, processValue(value, jsonConfig));
+        } else {
+            while (index != size()) {
+                element(JSONNull.getInstance());
             }
-            element( value, jsonConfig );
+            element(value, jsonConfig);
         }
         return this;
     }
@@ -851,10 +828,10 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      * @param value A String value.
      * @return this.
      * @throws JSONException If the index is negative or if the the value is an
-     *         invalid number.
+     *                       invalid number.
      */
-    public JSONArray element( int index, String value ) {
-        return element( index, value, new JsonConfig() );
+    public JSONArray element(int index, String value) {
+        return element(index, value, new JsonConfig());
     }
 
     /**
@@ -868,29 +845,29 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      * @param value A String value.
      * @return this.
      * @throws JSONException If the index is negative or if the the value is an
-     *         invalid number.
+     *                       invalid number.
      */
-    public JSONArray element( int index, String value, JsonConfig jsonConfig ) {
-        if( index < 0 ){
-            throw new JSONException( "JSONArray[" + index + "] not found." );
+    public JSONArray element(int index, String value, JsonConfig jsonConfig) {
+        if (index < 0) {
+            throw new JSONException("JSONArray[" + index + "] not found.");
         }
-        if( index < size() ){
-            if( value == null ){
-                this.elements.set( index, "" );
-            }else if( JSONUtils.mayBeJSON( value ) ){
-                try{
-                    this.elements.set( index, JSONSerializer.toJSON( value, jsonConfig ) );
-                }catch( JSONException jsone ){
-                    this.elements.set( index, JSONUtils.stripQuotes( value ) );
+        if (index < size()) {
+            if (value == null) {
+                this.elements.set(index, "");
+            } else if (JSONUtils.mayBeJSON(value)) {
+                try {
+                    this.elements.set(index, JSONSerializer.toJSON(value, jsonConfig));
+                } catch (JSONException jsone) {
+                    this.elements.set(index, JSONUtils.stripQuotes(value));
                 }
-            }else{
-                this.elements.set( index, JSONUtils.stripQuotes( value ) );
+            } else {
+                this.elements.set(index, JSONUtils.stripQuotes(value));
             }
-        }else{
-            while( index != size() ){
-                element( JSONNull.getInstance() );
+        } else {
+            while (index != size()) {
+                element(JSONNull.getInstance());
             }
-            element( value, jsonConfig );
+            element(value, jsonConfig);
         }
         return this;
     }
@@ -901,8 +878,8 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      * @param value An JSON value.
      * @return this.
      */
-    public JSONArray element( JSONNull value ) {
-        this.elements.add( value );
+    public JSONArray element(JSONNull value) {
+        this.elements.add(value);
         return this;
     }
 
@@ -912,8 +889,8 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      * @param value An JSON value.
      * @return this.
      */
-    public JSONArray element( JSONObject value ) {
-        this.elements.add( value );
+    public JSONArray element(JSONObject value) {
+        this.elements.add(value);
         return this;
     }
 
@@ -923,8 +900,8 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      * @param value A long value.
      * @return this.
      */
-    public JSONArray element( long value ) {
-        return element( JSONUtils.transformNumber( new Long( value ) ) );
+    public JSONArray element(long value) {
+        return element(JSONUtils.transformNumber(new Long(value)));
     }
 
     /**
@@ -934,8 +911,8 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      * @param value A Map value.
      * @return this.
      */
-    public JSONArray element( Map value ) {
-        return element( value, new JsonConfig() );
+    public JSONArray element(Map value) {
+        return element(value, new JsonConfig());
     }
 
     /**
@@ -945,12 +922,12 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      * @param value A Map value.
      * @return this.
      */
-    public JSONArray element( Map value, JsonConfig jsonConfig ) {
-        if( value instanceof JSONObject ){
-            elements.add( value );
+    public JSONArray element(Map value, JsonConfig jsonConfig) {
+        if (value instanceof JSONObject) {
+            elements.add(value);
             return this;
-        }else{
-            return element( JSONObject.fromObject( value, jsonConfig ) );
+        } else {
+            return element(JSONObject.fromObject(value, jsonConfig));
         }
     }
 
@@ -958,24 +935,24 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      * Append an object value. This increases the array's length by one.
      *
      * @param value An object value. The value should be a Boolean, Double,
-     *        Integer, JSONArray, JSONObject, JSONFunction, Long, String,
-     *        JSONString or the JSONNull object.
+     *              Integer, JSONArray, JSONObject, JSONFunction, Long, String,
+     *              JSONString or the JSONNull object.
      * @return this.
      */
-    public JSONArray element( Object value ) {
-        return element( value, new JsonConfig() );
+    public JSONArray element(Object value) {
+        return element(value, new JsonConfig());
     }
 
     /**
      * Append an object value. This increases the array's length by one.
      *
      * @param value An object value. The value should be a Boolean, Double,
-     *        Integer, JSONArray, JSONObject, JSONFunction, Long, String,
-     *        JSONString or the JSONNull object.
+     *              Integer, JSONArray, JSONObject, JSONFunction, Long, String,
+     *              JSONString or the JSONNull object.
      * @return this.
      */
-    public JSONArray element( Object value, JsonConfig jsonConfig ) {
-        return addValue( value, jsonConfig );
+    public JSONArray element(Object value, JsonConfig jsonConfig) {
+        return addValue(value, jsonConfig);
     }
 
     /**
@@ -986,8 +963,8 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      * @param value A String value.
      * @return this.
      */
-    public JSONArray element( String value ) {
-        return element( value, new JsonConfig() );
+    public JSONArray element(String value) {
+        return element(value, new JsonConfig());
     }
 
     /**
@@ -998,24 +975,24 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      * @param value A String value.
      * @return this.
      */
-    public JSONArray element( String value, JsonConfig jsonConfig ) {
-        if( value == null ) {
+    public JSONArray element(String value, JsonConfig jsonConfig) {
+        if (value == null) {
             this.elements.add("");
-        } else if( JSONUtils.hasQuotes( value )) {
+        } else if (JSONUtils.hasQuotes(value)) {
             this.elements.add(value);
-        } else if( JSONNull.getInstance().equals( value )) {
-            this.elements.add( JSONNull.getInstance() );
-        } else if( JSONUtils.isJsonKeyword(value,jsonConfig)) {
-            if( jsonConfig.isJavascriptCompliant() && "undefined".equals( value )){
-                this.elements.add( JSONNull.getInstance() );
-            }else{
+        } else if (JSONNull.getInstance().equals(value)) {
+            this.elements.add(JSONNull.getInstance());
+        } else if (JSONUtils.isJsonKeyword(value, jsonConfig)) {
+            if (jsonConfig.isJavascriptCompliant() && "undefined".equals(value)) {
+                this.elements.add(JSONNull.getInstance());
+            } else {
                 this.elements.add(value);
             }
-        } else if( JSONUtils.mayBeJSON( value ) ){
-            try{
-                this.elements.add( JSONSerializer.toJSON( value, jsonConfig ) );
-            }catch( JSONException jsone ){
-                this.elements.add( value );
+        } else if (JSONUtils.mayBeJSON(value)) {
+            try {
+                this.elements.add(JSONSerializer.toJSON(value, jsonConfig));
+            } catch (JSONException jsone) {
+                this.elements.add(value);
             }
         } else {
             this.elements.add(value);
@@ -1024,7 +1001,7 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
     }
 
     @Override
-    public boolean equals( Object obj ) {
+    public boolean equals(Object obj) {
         return true;
     }
 
@@ -1035,12 +1012,12 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      * @return An object value.
      */
     @Override
-    public Object get( int index ) {
+    public Object get(int index) {
         /*
          * Object o = opt( index ); if( o == null ){ throw new JSONException(
          * "JSONArray[" + index + "] not found." ); } return o;
          */
-        return this.elements.get( index );
+        return this.elements.get(index);
     }
 
     /**
@@ -1050,20 +1027,20 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      * @param index The index must be between 0 and size() - 1.
      * @return The truth.
      * @throws JSONException If there is no value for the index or if the value
-     *         is not convertable to boolean.
+     *                       is not convertable to boolean.
      */
-    public boolean getBoolean( int index ) {
-        Object o = get( index );
-        if( o != null ){
-            if( o.equals( Boolean.FALSE )
-                    || (o instanceof String && ((String) o).equalsIgnoreCase( "false" )) ){
+    public boolean getBoolean(int index) {
+        Object o = get(index);
+        if (o != null) {
+            if (o.equals(Boolean.FALSE)
+                    || (o instanceof String && ((String) o).equalsIgnoreCase("false"))) {
                 return false;
-            }else if( o.equals( Boolean.TRUE )
-                    || (o instanceof String && ((String) o).equalsIgnoreCase( "true" )) ){
+            } else if (o.equals(Boolean.TRUE)
+                    || (o instanceof String && ((String) o).equalsIgnoreCase("true"))) {
                 return true;
             }
         }
-        throw new JSONException( "JSONArray[" + index + "] is not a Boolean." );
+        throw new JSONException("JSONArray[" + index + "] is not a Boolean.");
     }
 
     /**
@@ -1072,19 +1049,19 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      * @param index The index must be between 0 and size() - 1.
      * @return The value.
      * @throws JSONException If the key is not found or if the value cannot be
-     *         converted to a number.
+     *                       converted to a number.
      */
-    public double getDouble( int index ) {
-        Object o = get( index );
-        if( o != null ){
-            try{
+    public double getDouble(int index) {
+        Object o = get(index);
+        if (o != null) {
+            try {
                 return o instanceof Number ? ((Number) o).doubleValue()
-                        : Double.parseDouble( (String) o );
-            }catch( Exception e ){
-                throw new JSONException( "JSONArray[" + index + "] is not a number." );
+                        : Double.parseDouble((String) o);
+            } catch (Exception e) {
+                throw new JSONException("JSONArray[" + index + "] is not a number.");
             }
         }
-        throw new JSONException( "JSONArray[" + index + "] is not a number." );
+        throw new JSONException("JSONArray[" + index + "] is not a number.");
     }
 
     /**
@@ -1093,15 +1070,15 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      * @param index The index must be between 0 and size() - 1.
      * @return The value.
      * @throws JSONException If the key is not found or if the value cannot be
-     *         converted to a number. if the value cannot be converted to a
-     *         number.
+     *                       converted to a number. if the value cannot be converted to a
+     *                       number.
      */
-    public int getInt( int index ) {
-        Object o = get( index );
-        if( o != null ){
-            return o instanceof Number ? ((Number) o).intValue() : (int) getDouble( index );
+    public int getInt(int index) {
+        Object o = get(index);
+        if (o != null) {
+            return o instanceof Number ? ((Number) o).intValue() : (int) getDouble(index);
         }
-        throw new JSONException( "JSONArray[" + index + "] is not a number." );
+        throw new JSONException("JSONArray[" + index + "] is not a number.");
     }
 
     /**
@@ -1110,14 +1087,14 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      * @param index The index must be between 0 and size() - 1.
      * @return A JSONArray value.
      * @throws JSONException If there is no value for the index. or if the value
-     *         is not a JSONArray
+     *                       is not a JSONArray
      */
-    public JSONArray getJSONArray( int index ) {
-        Object o = get( index );
-        if( o != null && o instanceof JSONArray ){
+    public JSONArray getJSONArray(int index) {
+        Object o = get(index);
+        if (o != null && o instanceof JSONArray) {
             return (JSONArray) o;
         }
-        throw new JSONException( "JSONArray[" + index + "] is not a JSONArray." );
+        throw new JSONException("JSONArray[" + index + "] is not a JSONArray.");
     }
 
     /**
@@ -1126,17 +1103,17 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      * @param index subscript
      * @return A JSONObject value.
      * @throws JSONException If there is no value for the index or if the value
-     *         is not a JSONObject
+     *                       is not a JSONObject
      */
-    public JSONObject getJSONObject( int index ) {
-        Object o = get( index );
-        if( JSONNull.getInstance()
-                .equals( o ) ){
-            return new JSONObject( true );
-        }else if( o instanceof JSONObject ){
+    public JSONObject getJSONObject(int index) {
+        Object o = get(index);
+        if (JSONNull.getInstance()
+                .equals(o)) {
+            return new JSONObject(true);
+        } else if (o instanceof JSONObject) {
             return (JSONObject) o;
         }
-        throw new JSONException( "JSONArray[" + index + "] is not a JSONObject." );
+        throw new JSONException("JSONArray[" + index + "] is not a JSONObject.");
     }
 
     /**
@@ -1145,14 +1122,14 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      * @param index The index must be between 0 and size() - 1.
      * @return The value.
      * @throws JSONException If the key is not found or if the value cannot be
-     *         converted to a number.
+     *                       converted to a number.
      */
-    public long getLong( int index ) {
-        Object o = get( index );
-        if( o != null ){
-            return o instanceof Number ? ((Number) o).longValue() : (long) getDouble( index );
+    public long getLong(int index) {
+        Object o = get(index);
+        if (o != null) {
+            return o instanceof Number ? ((Number) o).longValue() : (long) getDouble(index);
         }
-        throw new JSONException( "JSONArray[" + index + "] is not a number." );
+        throw new JSONException("JSONArray[" + index + "] is not a number.");
     }
 
     /**
@@ -1162,32 +1139,36 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      * @return A string value.
      * @throws JSONException If there is no value for the index.
      */
-    public String getString( int index ) {
-        Object o = get( index );
-        if( o != null ){
+    public String getString(int index) {
+        Object o = get(index);
+        if (o != null) {
             return o.toString();
         }
-        throw new JSONException( "JSONArray[" + index + "] not found." );
+        throw new JSONException("JSONArray[" + index + "] not found.");
     }
 
+    @Override
     public int hashCode() {
         int hashcode = 29;
 
-        for( Iterator e = elements.iterator(); e.hasNext(); ){
+        for (Iterator e = elements.iterator(); e.hasNext(); ) {
             Object element = e.next();
-            hashcode += JSONUtils.hashCode( element );
+            hashcode += JSONUtils.hashCode(element);
         }
         return hashcode;
     }
 
-    public int indexOf( Object o ) {
-        return elements.indexOf( o );
+    @Override
+    public int indexOf(Object o) {
+        return elements.indexOf(o);
     }
 
+    @Override
     public boolean isArray() {
         return true;
     }
 
+    @Override
     public boolean isEmpty() {
         return this.elements.isEmpty();
     }
@@ -1199,59 +1180,27 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
     /**
      * Returns an Iterator for this JSONArray
      */
+    @Override
     public Iterator iterator() {
         return new JSONArrayListIterator();
     }
 
-    /**
-     * Make a string from the contents of this JSONArray. The
-     * <code>separator</code> string is inserted between each element. Warning:
-     * This method assumes that the data structure is acyclical.
-     *
-     * @param separator A string that will be inserted between the elements.
-     * @return a string.
-     * @throws JSONException If the array contains an invalid number.
-     */
-    public String join( String separator ) {
-        return join( separator, false );
-    }
-
-    /**
-     * Make a string from the contents of this JSONArray. The
-     * <code>separator</code> string is inserted between each element. Warning:
-     * This method assumes that the data structure is acyclical.
-     *
-     * @param separator A string that will be inserted between the elements.
-     * @return a string.
-     * @throws JSONException If the array contains an invalid number.
-     */
-    public String join( String separator, boolean stripQuotes ) {
-        int len = size();
-        StringBuffer sb = new StringBuffer();
-
-        for( int i = 0; i < len; i += 1 ){
-            if( i > 0 ){
-                sb.append( separator );
-            }
-            String value = JSONUtils.valueToString( this.elements.get( i ) );
-            sb.append( stripQuotes ? JSONUtils.stripQuotes( value ) : value );
-        }
-        return sb.toString();
-    }
     @Override
-    public int lastIndexOf( Object o ) {
-        return elements.lastIndexOf( o );
+    public int lastIndexOf(Object o) {
+        return elements.lastIndexOf(o);
     }
+
     @Override
     public ListIterator listIterator() {
-        return listIterator( 0 );
+        return listIterator(0);
     }
+
     @Override
-    public ListIterator listIterator( int index ) {
-        if( index < 0 || index > size() ) {
+    public ListIterator listIterator(int index) {
+        if (index < 0 || index > size()) {
             throw new IndexOutOfBoundsException("Index: " + index);
         }
-        return new JSONArrayListIterator( index );
+        return new JSONArrayListIterator(index);
     }
 
     /**
@@ -1260,8 +1209,8 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      * @param index The index must be between 0 and size() - 1.
      * @return An object value, or null if there is no object at that index.
      */
-    public Object opt( int index ) {
-        return (index < 0 || index >= size()) ? null : this.elements.get( index );
+    public Object opt(int index) {
+        return (index < 0 || index >= size()) ? null : this.elements.get(index);
     }
 
     /**
@@ -1272,8 +1221,8 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      * @param index The index must be between 0 and size() - 1.
      * @return The truth.
      */
-    public boolean optBoolean( int index ) {
-        return optBoolean( index, false );
+    public boolean optBoolean(int index) {
+        return optBoolean(index, false);
     }
 
     /**
@@ -1281,14 +1230,14 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      * defaultValue if there is no value at that index or if it is not a Boolean
      * or the String "true" or "false" (case insensitive).
      *
-     * @param index The index must be between 0 and size() - 1.
+     * @param index        The index must be between 0 and size() - 1.
      * @param defaultValue A boolean default.
      * @return The truth.
      */
-    public boolean optBoolean( int index, boolean defaultValue ) {
-        try{
-            return getBoolean( index );
-        }catch( Exception e ){
+    public boolean optBoolean(int index, boolean defaultValue) {
+        try {
+            return getBoolean(index);
+        } catch (Exception e) {
             return defaultValue;
         }
     }
@@ -1301,8 +1250,8 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      * @param index The index must be between 0 and size() - 1.
      * @return The value.
      */
-    public double optDouble( int index ) {
-        return optDouble( index, Double.NaN );
+    public double optDouble(int index) {
+        return optDouble(index, Double.NaN);
     }
 
     /**
@@ -1310,14 +1259,14 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      * is returned if there is no value for the index, or if the value is not a
      * number and cannot be converted to a number.
      *
-     * @param index subscript
+     * @param index        subscript
      * @param defaultValue The default value.
      * @return The value.
      */
-    public double optDouble( int index, double defaultValue ) {
-        try{
-            return getDouble( index );
-        }catch( Exception e ){
+    public double optDouble(int index, double defaultValue) {
+        try {
+            return getDouble(index);
+        } catch (Exception e) {
             return defaultValue;
         }
     }
@@ -1330,8 +1279,8 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      * @param index The index must be between 0 and size() - 1.
      * @return The value.
      */
-    public int optInt( int index ) {
-        return optInt( index, 0 );
+    public int optInt(int index) {
+        return optInt(index, 0);
     }
 
     /**
@@ -1339,14 +1288,14 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      * returned if there is no value for the index, or if the value is not a
      * number and cannot be converted to a number.
      *
-     * @param index The index must be between 0 and size() - 1.
+     * @param index        The index must be between 0 and size() - 1.
      * @param defaultValue The default value.
      * @return The value.
      */
-    public int optInt( int index, int defaultValue ) {
-        try{
-            return getInt( index );
-        }catch( Exception e ){
+    public int optInt(int index, int defaultValue) {
+        try {
+            return getInt(index);
+        } catch (Exception e) {
             return defaultValue;
         }
     }
@@ -1356,10 +1305,10 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      *
      * @param index subscript
      * @return A JSONArray value, or null if the index has no value, or if the
-     *         value is not a JSONArray.
+     * value is not a JSONArray.
      */
-    public JSONArray optJSONArray( int index ) {
-        Object o = opt( index );
+    public JSONArray optJSONArray(int index) {
+        Object o = opt(index);
         return o instanceof JSONArray ? (JSONArray) o : null;
     }
 
@@ -1371,8 +1320,8 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      * @param index The index must be between 0 and size() - 1.
      * @return A JSONObject value.
      */
-    public JSONObject optJSONObject( int index ) {
-        Object o = opt( index );
+    public JSONObject optJSONObject(int index) {
+        Object o = opt(index);
         return o instanceof JSONObject ? (JSONObject) o : null;
     }
 
@@ -1384,8 +1333,8 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      * @param index The index must be between 0 and size() - 1.
      * @return The value.
      */
-    public long optLong( int index ) {
-        return optLong( index, 0 );
+    public long optLong(int index) {
+        return optLong(index, 0);
     }
 
     /**
@@ -1393,14 +1342,14 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      * returned if there is no value for the index, or if the value is not a
      * number and cannot be converted to a number.
      *
-     * @param index The index must be between 0 and size() - 1.
+     * @param index        The index must be between 0 and size() - 1.
      * @param defaultValue The default value.
      * @return The value.
      */
-    public long optLong( int index, long defaultValue ) {
-        try{
-            return getLong( index );
-        }catch( Exception e ){
+    public long optLong(int index, long defaultValue) {
+        try {
+            return getLong(index);
+        } catch (Exception e) {
             return defaultValue;
         }
     }
@@ -1413,59 +1362,63 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      * @param index The index must be between 0 and size() - 1.
      * @return A String value.
      */
-    public String optString( int index ) {
-        return optString( index, "" );
+    public String optString(int index) {
+        return optString(index, "");
     }
 
     /**
      * Get the optional string associated with an index. The defaultValue is
      * returned if the key is not found.
      *
-     * @param index The index must be between 0 and size() - 1.
+     * @param index        The index must be between 0 and size() - 1.
      * @param defaultValue The default value.
      * @return A String value.
      */
-    public String optString( int index, String defaultValue ) {
-        Object o = opt( index );
+    public String optString(int index, String defaultValue) {
+        Object o = opt(index);
         return o != null ? o.toString() : defaultValue;
     }
-    @Override
-    public Object remove( int index ) {
-        return elements.remove( index );
-    }
-    @Override
-    public boolean remove( Object o ) {
-        return elements.remove( o );
-    }
-    @Override
-    public boolean removeAll( Collection collection ) {
-        return removeAll( collection, new JsonConfig() );
-    }
 
-    public boolean removeAll( Collection collection, JsonConfig jsonConfig ) {
-        return elements.removeAll( fromObject( collection, jsonConfig ) );
+    @Override
+    public Object remove(int index) {
+        return elements.remove(index);
     }
 
     @Override
-    public boolean retainAll( Collection collection ) {
-        return retainAll( collection, new JsonConfig() );
+    public boolean remove(Object o) {
+        return elements.remove(o);
     }
 
-    public boolean retainAll( Collection collection, JsonConfig jsonConfig ) {
-        return elements.retainAll( fromObject( collection, jsonConfig ) );
-    }
     @Override
-    public Object set( int index, Object value ) {
-        return set( index, value, new JsonConfig() );
+    public boolean removeAll(Collection collection) {
+        return removeAll(collection, new JsonConfig());
     }
 
-    public Object set( int index, Object value, JsonConfig jsonConfig ) {
-        Object previous = get( index );
-        element( index, value, jsonConfig );
+    public boolean removeAll(Collection collection, JsonConfig jsonConfig) {
+        return elements.removeAll(fromObject(collection, jsonConfig));
+    }
+
+    @Override
+    public boolean retainAll(Collection collection) {
+        return retainAll(collection, new JsonConfig());
+    }
+
+    public boolean retainAll(Collection collection, JsonConfig jsonConfig) {
+        return elements.retainAll(fromObject(collection, jsonConfig));
+    }
+
+    @Override
+    public Object set(int index, Object value) {
+        return set(index, value, new JsonConfig());
+    }
+
+    public Object set(int index, Object value, JsonConfig jsonConfig) {
+        Object previous = get(index);
+        element(index, value, jsonConfig);
         return previous;
     }
 
-    public void setExpandElements( boolean expandElements ) {
+    public void setExpandElements(boolean expandElements) {
         this.expandElements = expandElements;
     }
 
@@ -1478,9 +1431,10 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
     public int size() {
         return this.elements.size();
     }
+
     @Override
-    public List subList( int fromIndex, int toIndex ) {
-        return elements.subList( fromIndex, toIndex );
+    public List subList(int fromIndex, int toIndex) {
+        return elements.subList(fromIndex, toIndex);
     }
 
     /**
@@ -1490,9 +1444,10 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
     public Object[] toArray() {
         return this.elements.toArray();
     }
+
     @Override
-    public Object[] toArray( Object[] array ) {
-        return elements.toArray( array );
+    public Object[] toArray(Object[] array) {
+        return elements.toArray(array);
     }
 
     /**
@@ -1500,18 +1455,18 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      * this JSONArray.
      *
      * @param names A JSONArray containing a list of key strings. These will be
-     *        paired with the values.
+     *              paired with the values.
      * @return A JSONObject, or null if there are no names or if this JSONArray
-     *         has no values.
+     * has no values.
      * @throws JSONException If any of the names are null.
      */
-    public JSONObject toJSONObject( JSONArray names ) {
-        if( names == null || names.size() == 0 || size() == 0 ){
+    public JSONObject toJSONObject(JSONArray names) {
+        if (names == null || names.size() == 0 || size() == 0) {
             return null;
         }
         JSONObject jo = new JSONObject();
-        for( int i = 0; i < names.size(); i++ ){
-            jo.element( names.getString( i ), this.opt( i ) );
+        for (int i = 0; i < names.size(); i++) {
+            jo.element(names.getString(i), this.opt(i));
         }
         return jo;
     }
@@ -1525,15 +1480,11 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      * Warning: This method assumes that the data structure is acyclical.
      *
      * @return a printable, displayable, transmittable representation of the
-     *         array.
+     * array.
      */
     @Override
     public String toString() {
-        try{
-            return '[' + join( "," ) + ']';
-        }catch( Exception e ){
-            return null;
-        }
+        return JSONBuilderProvider.simplest().toJson(JsonMapper.toJsonTreeNode(this));
     }
 
     /**
@@ -1541,19 +1492,16 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      * assumes that the data structure is acyclical.
      *
      * @param indentFactor The number of spaces to add to each level of
-     *        indentation.
+     *                     indentation.
      * @return a printable, displayable, transmittable representation of the
-     *         object, beginning with <code>[</code>&nbsp;<small>(left
-     *         bracket)</small> and ending with <code>]</code>&nbsp;<small>(right
-     *         bracket)</small>.
+     * object, beginning with <code>[</code>&nbsp;<small>(left
+     * bracket)</small> and ending with <code>]</code>&nbsp;<small>(right
+     * bracket)</small>.
      * @throws JSONException
      */
     @Override
-    public String toString( int indentFactor ) {
-        if( indentFactor == 0 ){
-            return this.toString();
-        }
-        return toString( indentFactor, 0 );
+    public String toString(int indentFactor) {
+        return JSONBuilderProvider.create().prettyFormat(indentFactor > 0).build().toJson(JsonMapper.toJsonTreeNode(this));
     }
 
     /**
@@ -1561,47 +1509,15 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      * assumes that the data structure is acyclical.
      *
      * @param indentFactor The number of spaces to add to each level of
-     *        indentation.
-     * @param indent The indention of the top level.
+     *                     indentation.
+     * @param indent       The indention of the top level.
      * @return a printable, displayable, transmittable representation of the
-     *         array.
+     * array.
      * @throws JSONException
      */
     @Override
-    public String toString( int indentFactor, int indent ) {
-        int len = size();
-        if( len == 0 ){
-            return "[]";
-        }
-        if( indentFactor == 0 ){
-            return this.toString();
-        }
-        int i;
-        StringBuffer sb = new StringBuffer( "[" );
-        if( len == 1 ){
-            sb.append( JSONUtils.valueToString( this.elements.get( 0 ), indentFactor, indent ) );
-        }else{
-            int newindent = indent + indentFactor;
-            sb.append( '\n' );
-            for( i = 0; i < len; i += 1 ){
-                if( i > 0 ){
-                    sb.append( ",\n" );
-                }
-                for( int j = 0; j < newindent; j += 1 ){
-                    sb.append( ' ' );
-                }
-                sb.append( JSONUtils.valueToString( this.elements.get( i ), indentFactor, newindent ) );
-            }
-            sb.append( '\n' );
-            for( i = 0; i < indent; i += 1 ){
-                sb.append( ' ' );
-            }
-            for( i = 0; i < indent; i += 1 ){
-                sb.insert( 0, ' ' );
-            }
-        }
-        sb.append( ']' );
-        return sb.toString();
+    public String toString(int indentFactor, int indent) {
+        return JSONBuilderProvider.create().prettyFormat(indentFactor > 0 || indent > 0).build().toJson(JsonMapper.toJsonTreeNode(this));
     }
 
     /**
@@ -1614,40 +1530,22 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      * @throws JSONException
      */
     @Override
-    public Writer write( Writer writer ) {
-        try{
-            boolean b = false;
-            int len = size();
-
-            writer.write( '[' );
-
-            for( int i = 0; i < len; i += 1 ){
-                if( b ){
-                    writer.write( ',' );
-                }
-                Object v = this.elements.get( i );
-                if( v instanceof JSONObject ){
-                    ((JSONObject) v).write( writer );
-                }else if( v instanceof JSONArray ){
-                    ((JSONArray) v).write( writer );
-                }else{
-                    writer.write( JSONUtils.valueToString( v ) );
-                }
-                b = true;
-            }
-            writer.write( ']' );
-            return writer;
-        }catch( IOException e ){
-            throw new JSONException( e );
+    public Writer write(Writer writer) {
+        String str = toString();
+        try {
+            writer.write(str);
+        } catch (IOException e) {
+            throw new JSONException(e);
         }
+        return writer;
     }
 
     /**
      * Adds a String without performing any conversion on it.
      */
-    protected JSONArray addString( String str ) {
-        if( str != null ){
-            elements.add( str );
+    protected JSONArray addString(String str) {
+        if (str != null) {
+            elements.add(str);
         }
         return this;
     }
@@ -1656,51 +1554,29 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      * Append an object value. This increases the array's length by one.
      *
      * @param value An object value. The value should be a Boolean, Double,
-     *        Integer, JSONArray, JSONObject, JSONFunction, Long, String,
-     *        JSONString or the JSONNull object.
+     *              Integer, JSONArray, JSONObject, JSONFunction, Long, String,
+     *              JSONString or the JSONNull object.
      * @return this.
      */
-    private JSONArray _addValue( Object value, JsonConfig jsonConfig ) {
+    private JSONArray _addValue(Object value, JsonConfig jsonConfig) {
         this.elements.add(value);
         return this;
     }
 
-    @Override
-    protected Object _processValue( Object value, JsonConfig jsonConfig ) {
-        if( value instanceof JSONTokener ) {
-            return _fromJSONTokener( (JSONTokener) value, jsonConfig );
-        }else if( value != null && Enum.class.isAssignableFrom( value.getClass() ) ){
-            return ((Enum) value).name();
-        }else if( value instanceof Annotation || (value != null && value.getClass()
-                .isAnnotation()) ){
-            throw new JSONException( "Unsupported type" );
-        }
-        return super._processValue( value, jsonConfig );
-    }
-
     /**
      * Append an object value. This increases the array's length by one.
      *
      * @param value An object value. The value should be a Boolean, Double,
-     *        Integer, JSONArray, JSONObject, JSONFunction, Long, String,
-     *        JSONString or the JSONNull object.
+     *              Integer, JSONArray, JSONObject, JSONFunction, Long, String,
+     *              JSONString or the JSONNull object.
      * @return this.
      */
-    private JSONArray addValue( Object value, JsonConfig jsonConfig ) {
-        return _addValue( processValue( value, jsonConfig ), jsonConfig );
+    private JSONArray addValue(Object value, JsonConfig jsonConfig) {
+        return _addValue(processValue(value, jsonConfig), jsonConfig);
     }
 
-    private Object processValue( Object value, JsonConfig jsonConfig ) {
-        if( value != null ){
-            JsonValueProcessor jsonValueProcessor = jsonConfig.findJsonValueProcessor( value.getClass() );
-            if( jsonValueProcessor != null ){
-                value = jsonValueProcessor.processArrayValue( value, jsonConfig );
-                if( !JsonVerifier.isValidJsonValue( value ) ){
-                    throw new JSONException( "Value is not a valid JSON value. " + value );
-                }
-            }
-        }
-        return _processValue( value, jsonConfig );
+    private Object processValue(Object value, JsonConfig jsonConfig) {
+        return JsonMapper.fromJavaObject(value, jsonConfig);
     }
 
     private class JSONArrayListIterator implements ListIterator {
@@ -1711,78 +1587,87 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
 
         }
 
-        JSONArrayListIterator( int index ) {
+        JSONArrayListIterator(int index) {
             currentIndex = index;
         }
+
         @Override
         public boolean hasNext() {
             return currentIndex != size();
         }
+
         @Override
         public Object next() {
             try {
-                Object next = get( currentIndex );
+                Object next = get(currentIndex);
                 lastIndex = currentIndex++;
                 return next;
-            } catch( IndexOutOfBoundsException e ) {
+            } catch (IndexOutOfBoundsException e) {
                 throw new NoSuchElementException();
             }
         }
+
         @Override
         public void remove() {
-            if( lastIndex == -1 )
+            if (lastIndex == -1)
                 throw new IllegalStateException();
             try {
-                JSONArray.this.remove( lastIndex );
-                if( lastIndex < currentIndex ){
+                JSONArray.this.remove(lastIndex);
+                if (lastIndex < currentIndex) {
                     currentIndex--;
                 }
                 lastIndex = -1;
-            } catch( IndexOutOfBoundsException e ) {
+            } catch (IndexOutOfBoundsException e) {
                 throw new ConcurrentModificationException();
             }
         }
+
         @Override
         public boolean hasPrevious() {
             return currentIndex != 0;
         }
+
         @Override
         public Object previous() {
             try {
                 int index = currentIndex - 1;
-                Object previous = get( index );
+                Object previous = get(index);
                 lastIndex = currentIndex = index;
                 return previous;
-            } catch( IndexOutOfBoundsException e ) {
+            } catch (IndexOutOfBoundsException e) {
                 throw new NoSuchElementException();
             }
         }
+
         @Override
         public int nextIndex() {
             return currentIndex;
         }
+
         @Override
         public int previousIndex() {
             return currentIndex - 1;
         }
+
         @Override
-        public void set( Object obj ) {
-            if( lastIndex == -1 ){
+        public void set(Object obj) {
+            if (lastIndex == -1) {
                 throw new IllegalStateException();
             }
 
             try {
-                JSONArray.this.set( lastIndex, obj );
-            } catch( IndexOutOfBoundsException ex ) {
+                JSONArray.this.set(lastIndex, obj);
+            } catch (IndexOutOfBoundsException ex) {
                 throw new ConcurrentModificationException();
             }
         }
+
         @Override
-        public void add( Object obj ) {
+        public void add(Object obj) {
             try {
-                JSONArray.this.add( currentIndex++, obj );
+                JSONArray.this.add(currentIndex++, obj);
                 lastIndex = -1;
-            } catch( IndexOutOfBoundsException ex ) {
+            } catch (IndexOutOfBoundsException ex) {
                 throw new ConcurrentModificationException();
             }
         }

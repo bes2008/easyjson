@@ -24,21 +24,21 @@ import net.sf.json.util.JSONUtils;
  * @author Andres Almiray <aalmiray@users.sourceforge.net>
  */
 public class DefaultDefaultValueProcessor implements DefaultValueProcessor {
-   @Override
-   public Object getDefaultValue( Class type ) {
-      if( JSONUtils.isArray( type ) ){
-         return new JSONArray();
-      }else if( JSONUtils.isNumber( type ) ){
-         if( JSONUtils.isDouble( type ) ){
-            return new Double( 0 );
-         }else{
-            return new Integer( 0 );
-         }
-      }else if( JSONUtils.isBoolean( type ) ){
-         return Boolean.FALSE;
-      }else if( JSONUtils.isString( type ) ){
-         return "";
-      }
-      return JSONNull.getInstance();
-   }
+    @Override
+    public Object getDefaultValue(Class type) {
+        if (JSONUtils.isArray(type)) {
+            return new JSONArray();
+        } else if (JSONUtils.isNumber(type)) {
+            if (JSONUtils.isDouble(type)) {
+                return new Double(0);
+            } else {
+                return new Integer(0);
+            }
+        } else if (JSONUtils.isBoolean(type)) {
+            return Boolean.FALSE;
+        } else if (JSONUtils.isString(type)) {
+            return "";
+        }
+        return JSONNull.getInstance();
+    }
 }

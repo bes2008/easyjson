@@ -33,7 +33,7 @@ public final class IDKey {
         if (!(other instanceof IDKey)) {
             return false;
         } else {
-            IDKey idKey = (IDKey)other;
+            IDKey idKey = (IDKey) other;
             if (this.id != idKey.id) {
                 return false;
             } else {

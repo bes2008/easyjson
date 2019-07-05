@@ -15,25 +15,12 @@
 package net.sf.json.util;
 
 
+import net.sf.json.*;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-import net.sf.json.JSON;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONException;
-import net.sf.json.JSONFunction;
-import net.sf.json.JSONNull;
-import net.sf.json.JSONObject;
-import net.sf.json.JSONString;
-import net.sf.json.JsonConfig;
-import net.sf.json.regexp.RegexpUtils;
-
-import org.apache.commons.beanutils.DynaBean;
 
 /**
  * Provides useful methods on java objects and JSON values.
@@ -42,9 +29,13 @@ import org.apache.commons.beanutils.DynaBean;
  * @version 7
  */
 public final class JSONUtils {
-    /** Constant for char " */
+    /**
+     * Constant for char "
+     */
     public static final String DOUBLE_QUOTE = "\"";
-    /** Constant for char ' */
+    /**
+     * Constant for char '
+     */
     public static final String SINGLE_QUOTE = "'";
 
     private static final String FUNCTION_BODY_PATTERN = "^function[ ]?\\(.*?\\)[ \n\t]*\\{(.*?)\\}$";
@@ -60,8 +51,8 @@ public final class JSONUtils {
      *
      * @throws JSONException if the string can not be transformed.
      */
-    public static String convertToJavaIdentifier( String key ) {
-        return convertToJavaIdentifier( key, new JsonConfig() );
+    public static String convertToJavaIdentifier(String key) {
+        return convertToJavaIdentifier(key, new JsonConfig());
     }
 
     /**
@@ -70,14 +61,14 @@ public final class JSONUtils {
      *
      * @throws JSONException if the string can not be transformed.
      */
-    public static String convertToJavaIdentifier( String key, JsonConfig jsonConfig ) {
-        try{
+    public static String convertToJavaIdentifier(String key, JsonConfig jsonConfig) {
+        try {
             return jsonConfig.getJavaIdentifierTransformer()
-                    .transformToJavaIdentifier( key );
-        }catch( JSONException jsone ){
+                    .transformToJavaIdentifier(key);
+        } catch (JSONException jsone) {
             throw jsone;
-        }catch( Exception e ){
-            throw new JSONException( e );
+        } catch (Exception e) {
+            throw new JSONException(e);
         }
     }
 
@@ -88,68 +79,48 @@ public final class JSONUtils {
      * @param d A double.
      * @return A String.
      */
-    public static String doubleToString( double d ) {
-        if( Double.isInfinite( d ) || Double.isNaN( d ) ){
+    public static String doubleToString(double d) {
+        if (Double.isInfinite(d) || Double.isNaN(d)) {
             return "null";
         }
 
         // Shave off trailing zeros and decimal point, if possible.
 
-        String s = Double.toString( d );
-        if( s.indexOf( '.' ) > 0 && s.indexOf( 'e' ) < 0 && s.indexOf( 'E' ) < 0 ){
-            while( s.endsWith( "0" ) ){
-                s = s.substring( 0, s.length() - 1 );
+        String s = Double.toString(d);
+        if (s.indexOf('.') > 0 && s.indexOf('e') < 0 && s.indexOf('E') < 0) {
+            while (s.endsWith("0")) {
+                s = s.substring(0, s.length() - 1);
             }
-            if( s.endsWith( "." ) ){
-                s = s.substring( 0, s.length() - 1 );
+            if (s.endsWith(".")) {
+                s = s.substring(0, s.length() - 1);
             }
         }
         return s;
     }
 
-    /**
-     * Returns the body of a function literal.
-     */
-    public static String getFunctionBody( String function ) {
-        return RegexpUtils.getMatcher( FUNCTION_BODY_PATTERN, true ).getGroupIfMatches( function, 1 );
-    }
-
-    /**
-     * Returns the params of a function literal.
-     */
-    public static String getFunctionParams( String function ) {
-        return RegexpUtils.getMatcher( FUNCTION_PARAMS_PATTERN, true ).getGroupIfMatches( function, 1 );
-    }
 
     /**
      * Returns the inner-most component type of an Array.
      */
-    public static Class getInnerComponentType( Class type ) {
-        if( !type.isArray() ){
+    public static Class getInnerComponentType(Class type) {
+        if (!type.isArray()) {
             return type;
         }
-        return getInnerComponentType( type.getComponentType() );
-    }
-
-    /**
-     * Returns the singleton MorpherRegistry.
-     */
-    public static MorpherRegistry getMorpherRegistry() {
-        return morpherRegistry;
+        return getInnerComponentType(type.getComponentType());
     }
 
     /**
      * Creates a Map with all the properties of the JSONObject.
      */
-    public static Map getProperties( JSONObject jsonObject ) {
+    public static Map getProperties(JSONObject jsonObject) {
         Map properties = new HashMap();
-        for( Iterator keys = jsonObject.keys(); keys.hasNext(); ){
+        for (Iterator keys = jsonObject.keys(); keys.hasNext(); ) {
             String key = (String) keys.next();
             /*
              * String parsedKey = key; if( !JSONUtils.isJavaIdentifier( parsedKey ) ){
              * parsedKey = JSONUtils.convertToJavaIdentifier( key ); }
              */
-            properties.put( key, getTypeClass( jsonObject.get( key ) ) );
+            properties.put(key, getTypeClass(jsonObject.get(key)));
         }
         return properties;
     }
@@ -158,38 +129,38 @@ public final class JSONUtils {
      * Returns the JSON type.<br>
      * Values are Object, String, Boolean, Number(subclasses) &amp; JSONFunction.
      */
-    public static Class getTypeClass( Object obj ) {
-        if( isNull( obj ) ){
+    public static Class getTypeClass(Object obj) {
+        if (isNull(obj)) {
             return Object.class;
-        }else if( isArray( obj ) ){
+        } else if (isArray(obj)) {
             return List.class;
-        }else if( isFunction( obj ) ){
+        } else if (isFunction(obj)) {
             return JSONFunction.class;
-        }else if( isBoolean( obj ) ){
+        } else if (isBoolean(obj)) {
             return Boolean.class;
-        }else if( isNumber( obj ) ){
+        } else if (isNumber(obj)) {
             Number n = (Number) obj;
-            if( isInteger( n ) ){
+            if (isInteger(n)) {
                 return Integer.class;
-            }else if( isLong( n ) ){
+            } else if (isLong(n)) {
                 return Long.class;
-            }else if( isFloat( n ) ){
+            } else if (isFloat(n)) {
                 return Float.class;
-            }else if( isBigInteger( n ) ){
+            } else if (isBigInteger(n)) {
                 return BigInteger.class;
-            }else if( isBigDecimal( n ) ){
+            } else if (isBigDecimal(n)) {
                 return BigDecimal.class;
-            }else if( isDouble( n ) ){
+            } else if (isDouble(n)) {
                 return Double.class;
-            }else{
-                throw new JSONException( "Unsupported type" );
+            } else {
+                throw new JSONException("Unsupported type");
             }
-        }else if( isString( obj ) ){
+        } else if (isString(obj)) {
             return String.class;
-        }else if( isObject( obj ) ){
+        } else if (isObject(obj)) {
             return Object.class;
-        }else{
-            throw new JSONException( "Unsupported type" );
+        } else {
+            throw new JSONException("Unsupported type");
         }
     }
 
@@ -200,14 +171,14 @@ public final class JSONUtils {
      * otherwise the value is transformed to a String an its hashcode is
      * returned.
      */
-    public static int hashCode( Object value ) {
-        if( value == null ){
+    public static int hashCode(Object value) {
+        if (value == null) {
             return JSONNull.getInstance()
                     .hashCode();
-        }else if( value instanceof JSON || value instanceof String || value instanceof JSONFunction ){
+        } else if (value instanceof JSON || value instanceof String || value instanceof JSONFunction) {
             return value.hashCode();
-        }else{
-            return String.valueOf( value )
+        } else {
+            return String.valueOf(value)
                     .hashCode();
         }
     }
@@ -215,17 +186,17 @@ public final class JSONUtils {
     /**
      * Tests if a Class represents an array or Collection.
      */
-    public static boolean isArray( Class clazz ) {
+    public static boolean isArray(Class clazz) {
         return clazz != null
-                && (clazz.isArray() || Collection.class.isAssignableFrom( clazz ) || (JSONArray.class.isAssignableFrom( clazz )));
+                && (clazz.isArray() || Collection.class.isAssignableFrom(clazz) || (JSONArray.class.isAssignableFrom(clazz)));
     }
 
     /**
      * Tests if obj is an array or Collection.
      */
-    public static boolean isArray( Object obj ) {
-        if( (obj != null && obj.getClass()
-                .isArray()) || (obj instanceof Collection) || (obj instanceof JSONArray) ){
+    public static boolean isArray(Object obj) {
+        if ((obj != null && obj.getClass()
+                .isArray()) || (obj instanceof Collection) || (obj instanceof JSONArray)) {
             return true;
         }
         return false;
@@ -234,16 +205,16 @@ public final class JSONUtils {
     /**
      * Tests if Class represents a Boolean or primitive boolean
      */
-    public static boolean isBoolean( Class clazz ) {
+    public static boolean isBoolean(Class clazz) {
         return clazz != null
-                && (Boolean.TYPE.isAssignableFrom( clazz ) || Boolean.class.isAssignableFrom( clazz ));
+                && (Boolean.TYPE.isAssignableFrom(clazz) || Boolean.class.isAssignableFrom(clazz));
     }
 
     /**
      * Tests if obj is a Boolean or primitive boolean
      */
-    public static boolean isBoolean( Object obj ) {
-        if( (obj instanceof Boolean) || (obj != null && obj.getClass() == Boolean.TYPE) ){
+    public static boolean isBoolean(Object obj) {
+        if ((obj instanceof Boolean) || (obj != null && obj.getClass() == Boolean.TYPE)) {
             return true;
         }
         return false;
@@ -252,9 +223,9 @@ public final class JSONUtils {
     /**
      * Tests if Class represents a primitive double or wrapper.<br>
      */
-    public static boolean isDouble( Class clazz ) {
+    public static boolean isDouble(Class clazz) {
         return clazz != null
-                && (Double.TYPE.isAssignableFrom( clazz ) || Double.class.isAssignableFrom( clazz ));
+                && (Double.TYPE.isAssignableFrom(clazz) || Double.class.isAssignableFrom(clazz));
     }
 
     /**
@@ -262,14 +233,7 @@ public final class JSONUtils {
      * Obj must be a non-null String and match <nowrap>"^function[ ]?\\(.*\\)[
      * ]?\\{.*\\}$"</nowrap>
      */
-    public static boolean isFunction( Object obj ) {
-        if( obj instanceof String ){
-            String str = (String) obj;
-            return str.startsWith( FUNCTION_PREFIX ) && RegexpUtils.getMatcher( FUNCTION_PATTERN, true ).matches( str );
-        }
-        if( obj instanceof JSONFunction ){
-            return true;
-        }
+    public static boolean isFunction(Object obj) {
         return false;
     }
 
@@ -277,23 +241,19 @@ public final class JSONUtils {
      * Tests if obj is javaScript function header.<br>
      * Obj must be a non-null String and match "^function[ ]?\\(.*\\)$"
      */
-    public static boolean isFunctionHeader( Object obj ) {
-        if( obj instanceof String ){
-            String str = (String) obj;
-            return str.startsWith( FUNCTION_PREFIX ) && RegexpUtils.getMatcher( FUNCTION_HEADER_PATTERN, true ).matches( str );
-        }
+    public static boolean isFunctionHeader(Object obj) {
         return false;
     }
 
     /**
      * Returns trus if str represents a valid Java identifier.
      */
-    public static boolean isJavaIdentifier( String str ) {
-        if( str.length() == 0 || !Character.isJavaIdentifierStart( str.charAt( 0 ) ) ){
+    public static boolean isJavaIdentifier(String str) {
+        if (str.length() == 0 || !Character.isJavaIdentifierStart(str.charAt(0))) {
             return false;
         }
-        for( int i = 1; i < str.length(); i++ ){
-            if( !Character.isJavaIdentifierPart( str.charAt( i ) ) ){
+        for (int i = 1; i < str.length(); i++) {
+            if (!Character.isJavaIdentifierPart(str.charAt(i))) {
                 return false;
             }
         }
@@ -303,34 +263,34 @@ public final class JSONUtils {
     /**
      * Tests if the obj is a javaScript null.
      */
-    public static boolean isNull( Object obj ) {
-        if( obj instanceof JSONObject ){
+    public static boolean isNull(Object obj) {
+        if (obj instanceof JSONObject) {
             return ((JSONObject) obj).isNullObject();
         }
         return JSONNull.getInstance()
-                .equals( obj );
+                .equals(obj);
     }
 
     /**
      * Tests if Class represents a primitive number or wrapper.<br>
      */
-    public static boolean isNumber( Class clazz ) {
+    public static boolean isNumber(Class clazz) {
         return clazz != null
-                && (Byte.TYPE.isAssignableFrom( clazz ) || Short.TYPE.isAssignableFrom( clazz )
-                || Integer.TYPE.isAssignableFrom( clazz ) || Long.TYPE.isAssignableFrom( clazz )
-                || Float.TYPE.isAssignableFrom( clazz ) || Double.TYPE.isAssignableFrom( clazz ) || Number.class.isAssignableFrom( clazz ));
+                && (Byte.TYPE.isAssignableFrom(clazz) || Short.TYPE.isAssignableFrom(clazz)
+                || Integer.TYPE.isAssignableFrom(clazz) || Long.TYPE.isAssignableFrom(clazz)
+                || Float.TYPE.isAssignableFrom(clazz) || Double.TYPE.isAssignableFrom(clazz) || Number.class.isAssignableFrom(clazz));
     }
 
     /**
      * Tests if obj is a primitive number or wrapper.<br>
      */
-    public static boolean isNumber( Object obj ) {
-        if( (obj != null && obj.getClass() == Byte.TYPE)
+    public static boolean isNumber(Object obj) {
+        if ((obj != null && obj.getClass() == Byte.TYPE)
                 || (obj != null && obj.getClass() == Short.TYPE)
                 || (obj != null && obj.getClass() == Integer.TYPE)
                 || (obj != null && obj.getClass() == Long.TYPE)
                 || (obj != null && obj.getClass() == Float.TYPE)
-                || (obj != null && obj.getClass() == Double.TYPE) ){
+                || (obj != null && obj.getClass() == Double.TYPE)) {
             return true;
         }
 
@@ -340,26 +300,26 @@ public final class JSONUtils {
     /**
      * Tests if obj is not a boolean, number, string or array.
      */
-    public static boolean isObject( Object obj ) {
-        return !isNumber( obj ) && !isString( obj ) && !isBoolean( obj ) && !isArray( obj )
-                && !isFunction( obj ) || isNull( obj );
+    public static boolean isObject(Object obj) {
+        return !isNumber(obj) && !isString(obj) && !isBoolean(obj) && !isArray(obj)
+                && !isFunction(obj) || isNull(obj);
     }
 
     /**
      * Tests if Class represents a String or a char
      */
-    public static boolean isString( Class clazz ) {
+    public static boolean isString(Class clazz) {
         return clazz != null
-                && (String.class.isAssignableFrom( clazz ) || (Character.TYPE.isAssignableFrom( clazz ) || Character.class.isAssignableFrom( clazz )));
+                && (String.class.isAssignableFrom(clazz) || (Character.TYPE.isAssignableFrom(clazz) || Character.class.isAssignableFrom(clazz)));
     }
 
     /**
      * Tests if obj is a String or a char
      */
-    public static boolean isString( Object obj ) {
-        if( (obj instanceof String)
+    public static boolean isString(Object obj) {
+        if ((obj instanceof String)
                 || (obj instanceof Character)
-                || (obj != null && (obj.getClass() == Character.TYPE || String.class.isAssignableFrom( obj.getClass() ))) ){
+                || (obj != null && (obj.getClass() == Character.TYPE || String.class.isAssignableFrom(obj.getClass())))) {
             return true;
         }
         return false;
@@ -374,48 +334,10 @@ public final class JSONUtils {
      * <li>starts with "{" and ends with "}"</li>
      * </ul>
      */
-    public static boolean mayBeJSON( String string ) {
+    public static boolean mayBeJSON(String string) {
         return string != null
-                && ("null".equals( string )
-                || (string.startsWith( "[" ) && string.endsWith( "]" )) || (string.startsWith( "{" ) && string.endsWith( "}" )));
-    }
-
-    /**
-     * Creates a new MorphDynaBean from a JSONObject. The MorphDynaBean will have
-     * all the properties of the original JSONObject with the most accurate type.
-     * Values of properties are not copied.
-     */
-    public static DynaBean newDynaBean( JSONObject jsonObject ) {
-        return newDynaBean( jsonObject, new JsonConfig() );
-    }
-
-    /**
-     * Creates a new MorphDynaBean from a JSONObject. The MorphDynaBean will have
-     * all the properties of the original JSONObject with the most accurate type.
-     * Values of properties are not copied.
-     */
-    public static DynaBean newDynaBean( JSONObject jsonObject, JsonConfig jsonConfig ) {
-        Map props = getProperties( jsonObject );
-        for( Iterator entries = props.entrySet()
-                .iterator(); entries.hasNext(); ){
-            Map.Entry entry = (Map.Entry) entries.next();
-            String key = (String) entry.getKey();
-            if( !JSONUtils.isJavaIdentifier( key ) ){
-                String parsedKey = JSONUtils.convertToJavaIdentifier( key, jsonConfig );
-                if( parsedKey.compareTo( key ) != 0 ){
-                    props.put( parsedKey, props.remove( key ) );
-                }
-            }
-        }
-        MorphDynaClass dynaClass = new MorphDynaClass( props );
-        MorphDynaBean dynaBean = null;
-        try{
-            dynaBean = (MorphDynaBean) dynaClass.newInstance();
-            dynaBean.setDynaBeanClass( dynaClass );
-        }catch( Exception e ){
-            throw new JSONException( e );
-        }
-        return dynaBean;
+                && ("null".equals(string)
+                || (string.startsWith("[") && string.endsWith("]")) || (string.startsWith("{") && string.endsWith("}")));
     }
 
     /**
@@ -425,21 +347,21 @@ public final class JSONUtils {
      * @return A String.
      * @throws JSONException If n is a non-finite number.
      */
-    public static String numberToString( Number n ) {
-        if( n == null ){
-            throw new JSONException( "Null pointer" );
+    public static String numberToString(Number n) {
+        if (n == null) {
+            throw new JSONException("Null pointer");
         }
-        testValidity( n );
+        testValidity(n);
 
         // Shave off trailing zeros and decimal point, if possible.
 
         String s = n.toString();
-        if( s.indexOf( '.' ) > 0 && s.indexOf( 'e' ) < 0 && s.indexOf( 'E' ) < 0 ){
-            while( s.endsWith( "0" ) ){
-                s = s.substring( 0, s.length() - 1 );
+        if (s.indexOf('.') > 0 && s.indexOf('e') < 0 && s.indexOf('E') < 0) {
+            while (s.endsWith("0")) {
+                s = s.substring(0, s.length() - 1);
             }
-            if( s.endsWith( "." ) ){
-                s = s.substring( 0, s.length() - 1 );
+            if (s.endsWith(".")) {
+                s = s.substring(0, s.length() - 1);
             }
         }
         return s;
@@ -457,11 +379,11 @@ public final class JSONUtils {
      * @param string A String
      * @return A String correctly formatted for insertion in a JSON text.
      */
-    public static String quote( String string ) {
-        if( isFunction( string ) ) {
+    public static String quote(String string) {
+        if (isFunction(string)) {
             return string;
         }
-        if( string == null || string.length() == 0 ) {
+        if (string == null || string.length() == 0) {
             return "\"\"";
         }
 
@@ -469,34 +391,34 @@ public final class JSONUtils {
         char c = 0;
         int i;
         int len = string.length();
-        StringBuffer sb = new StringBuffer( len * 2 );
+        StringBuffer sb = new StringBuffer(len * 2);
         String t;
         char[] chars = string.toCharArray();
         char[] buffer = new char[1030];
         int bufferIndex = 0;
-        sb.append( '"' );
-        for( i = 0; i < len; i += 1 ) {
-            if( bufferIndex > 1024 ) {
-                sb.append( buffer, 0, bufferIndex );
+        sb.append('"');
+        for (i = 0; i < len; i += 1) {
+            if (bufferIndex > 1024) {
+                sb.append(buffer, 0, bufferIndex);
                 bufferIndex = 0;
             }
             b = c;
             c = chars[i];
-            switch( c ) {
+            switch (c) {
                 case '\\':
                 case '"':
                     buffer[bufferIndex++] = '\\';
                     buffer[bufferIndex++] = c;
                     break;
                 case '/':
-                    if( b == '<' ) {
+                    if (b == '<') {
                         buffer[bufferIndex++] = '\\';
                     }
                     buffer[bufferIndex++] = c;
                     break;
                 default:
-                    if( c < ' ' ) {
-                        switch( c ) {
+                    if (c < ' ') {
+                        switch (c) {
                             case '\b':
                                 buffer[bufferIndex++] = '\\';
                                 buffer[bufferIndex++] = 'b';
@@ -518,36 +440,36 @@ public final class JSONUtils {
                                 buffer[bufferIndex++] = 'r';
                                 break;
                             default:
-                                t = "000" + Integer.toHexString( c );
+                                t = "000" + Integer.toHexString(c);
                                 int tLength = t.length();
                                 buffer[bufferIndex++] = '\\';
                                 buffer[bufferIndex++] = 'u';
-                                buffer[bufferIndex++] = t.charAt( tLength - 4 );
-                                buffer[bufferIndex++] = t.charAt( tLength - 3 );
-                                buffer[bufferIndex++] = t.charAt( tLength - 2 );
-                                buffer[bufferIndex++] = t.charAt( tLength - 1 );
+                                buffer[bufferIndex++] = t.charAt(tLength - 4);
+                                buffer[bufferIndex++] = t.charAt(tLength - 3);
+                                buffer[bufferIndex++] = t.charAt(tLength - 2);
+                                buffer[bufferIndex++] = t.charAt(tLength - 1);
                         }
                     } else {
                         buffer[bufferIndex++] = c;
                     }
             }
         }
-        sb.append( buffer, 0, bufferIndex );
-        sb.append( '"' );
+        sb.append(buffer, 0, bufferIndex);
+        sb.append('"');
         return sb.toString();
     }
 
     /**
      * Strips any single-quotes or double-quotes from both sides of the string.
      */
-    public static String stripQuotes( String input ) {
-        if( input.length() < 2 ){
+    public static String stripQuotes(String input) {
+        if (input.length() < 2) {
             return input;
-        }else if( input.startsWith( SINGLE_QUOTE ) && input.endsWith( SINGLE_QUOTE ) ){
-            return input.substring( 1, input.length() - 1 );
-        }else if( input.startsWith( DOUBLE_QUOTE ) && input.endsWith( DOUBLE_QUOTE ) ){
-            return input.substring( 1, input.length() - 1 );
-        }else{
+        } else if (input.startsWith(SINGLE_QUOTE) && input.endsWith(SINGLE_QUOTE)) {
+            return input.substring(1, input.length() - 1);
+        } else if (input.startsWith(DOUBLE_QUOTE) && input.endsWith(DOUBLE_QUOTE)) {
+            return input.substring(1, input.length() - 1);
+        } else {
             return input;
         }
     }
@@ -555,22 +477,22 @@ public final class JSONUtils {
     /**
      * Returns true if the input has single-quotes or double-quotes at both sides.
      */
-    public static boolean hasQuotes( String input ) {
-        if( input == null || input.length() < 2 ){
+    public static boolean hasQuotes(String input) {
+        if (input == null || input.length() < 2) {
             return false;
         }
-        return input.startsWith( SINGLE_QUOTE ) && input.endsWith( SINGLE_QUOTE ) ||
-                input.startsWith( DOUBLE_QUOTE ) && input.endsWith( DOUBLE_QUOTE );
+        return input.startsWith(SINGLE_QUOTE) && input.endsWith(SINGLE_QUOTE) ||
+                input.startsWith(DOUBLE_QUOTE) && input.endsWith(DOUBLE_QUOTE);
     }
 
-    public static boolean isJsonKeyword( String input, JsonConfig jsonConfig ) {
-        if( input == null ){
+    public static boolean isJsonKeyword(String input, JsonConfig jsonConfig) {
+        if (input == null) {
             return false;
         }
-        return "null".equals( input ) ||
-                "true".equals( input ) ||
-                "false".equals( input ) ||
-                (jsonConfig.isJavascriptCompliant() && "undefined".equals( input ));
+        return "null".equals(input) ||
+                "true".equals(input) ||
+                "false".equals(input) ||
+                (jsonConfig.isJavascriptCompliant() && "undefined".equals(input));
     }
 
     /**
@@ -579,17 +501,17 @@ public final class JSONUtils {
      * @param o The object to test.
      * @throws JSONException If o is a non-finite number.
      */
-    public static void testValidity( Object o ) {
-        if( o != null ){
-            if( o instanceof Double ){
-                if( ((Double) o).isInfinite() || ((Double) o).isNaN() ){
-                    throw new JSONException( "JSON does not allow non-finite numbers" );
+    public static void testValidity(Object o) {
+        if (o != null) {
+            if (o instanceof Double) {
+                if (((Double) o).isInfinite() || ((Double) o).isNaN()) {
+                    throw new JSONException("JSON does not allow non-finite numbers");
                 }
-            }else if( o instanceof Float ){
-                if( ((Float) o).isInfinite() || ((Float) o).isNaN() ){
-                    throw new JSONException( "JSON does not allow non-finite numbers." );
+            } else if (o instanceof Float) {
+                if (((Float) o).isInfinite() || ((Float) o).isNaN()) {
+                    throw new JSONException("JSON does not allow non-finite numbers.");
                 }
-            }else if( o instanceof BigDecimal || o instanceof BigInteger ){
+            } else if (o instanceof BigDecimal || o instanceof BigInteger) {
                 // ok
                 return;
             }
@@ -602,17 +524,17 @@ public final class JSONUtils {
      * Byte and Short get promoted to Integer.<br>
      * Long gets downgraded to Integer if possible.<br>
      */
-    public static Number transformNumber( Number input ) {
-        if( input instanceof Float ){
-            return new Double( input.toString() );
-        }else if( input instanceof Short ){
-            return new Integer( input.intValue() );
-        }else if( input instanceof Byte ){
-            return new Integer( input.intValue() );
-        }else if( input instanceof Long ){
-            Long max = new Long( Integer.MAX_VALUE );
-            if( input.longValue() <= max.longValue() && input.longValue() >= Integer.MIN_VALUE ){
-                return new Integer( input.intValue() );
+    public static Number transformNumber(Number input) {
+        if (input instanceof Float) {
+            return new Double(input.toString());
+        } else if (input instanceof Short) {
+            return new Integer(input.intValue());
+        } else if (input instanceof Byte) {
+            return new Integer(input.intValue());
+        } else if (input instanceof Long) {
+            Long max = new Long(Integer.MAX_VALUE);
+            if (input.longValue() <= max.longValue() && input.longValue() >= Integer.MIN_VALUE) {
+                return new Integer(input.intValue());
             }
         }
 
@@ -630,36 +552,36 @@ public final class JSONUtils {
      *
      * @param value The value to be serialized.
      * @return a printable, displayable, transmittable representation of the
-     *         object, beginning with <code>{</code>&nbsp;<small>(left brace)</small>
-     *         and ending with <code>}</code>&nbsp;<small>(right brace)</small>.
+     * object, beginning with <code>{</code>&nbsp;<small>(left brace)</small>
+     * and ending with <code>}</code>&nbsp;<small>(right brace)</small>.
      * @throws JSONException If the value is or contains an invalid number.
      */
-    public static String valueToString( Object value ) {
-        if( value == null || isNull( value ) ){
+    public static String valueToString(Object value) {
+        if (value == null || isNull(value)) {
             return "null";
         }
-        if( value instanceof JSONFunction ){
+        if (value instanceof JSONFunction) {
             return ((JSONFunction) value).toString();
         }
-        if( value instanceof JSONString ){
+        if (value instanceof JSONString) {
             Object o;
-            try{
+            try {
                 o = ((JSONString) value).toJSONString();
-            }catch( Exception e ){
-                throw new JSONException( e );
+            } catch (Exception e) {
+                throw new JSONException(e);
             }
-            if( o instanceof String ){
+            if (o instanceof String) {
                 return (String) o;
             }
-            throw new JSONException( "Bad value from toJSONString: " + o );
+            throw new JSONException("Bad value from toJSONString: " + o);
         }
-        if( value instanceof Number ){
-            return numberToString( (Number) value );
+        if (value instanceof Number) {
+            return numberToString((Number) value);
         }
-        if( value instanceof Boolean || value instanceof JSONObject || value instanceof JSONArray ){
+        if (value instanceof Boolean || value instanceof JSONObject || value instanceof JSONArray) {
             return value.toString();
         }
-        return quote( value.toString() );
+        return quote(value.toString());
     }
 
     /**
@@ -667,54 +589,54 @@ public final class JSONUtils {
      * <p>
      * Warning: This method assumes that the data structure is acyclical.
      *
-     * @param value The value to be serialized.
+     * @param value        The value to be serialized.
      * @param indentFactor The number of spaces to add to each level of
-     *        indentation.
-     * @param indent The indentation of the top level.
+     *                     indentation.
+     * @param indent       The indentation of the top level.
      * @return a printable, displayable, transmittable representation of the
-     *         object, beginning with <code>{</code>&nbsp;<small>(left brace)</small>
-     *         and ending with <code>}</code>&nbsp;<small>(right brace)</small>.
+     * object, beginning with <code>{</code>&nbsp;<small>(left brace)</small>
+     * and ending with <code>}</code>&nbsp;<small>(right brace)</small>.
      * @throws JSONException If the object contains an invalid number.
      */
-    public static String valueToString( Object value, int indentFactor, int indent ) {
-        if( value == null || isNull( value ) ){
+    public static String valueToString(Object value, int indentFactor, int indent) {
+        if (value == null || isNull(value)) {
             return "null";
         }
-        if( value instanceof JSONFunction ){
+        if (value instanceof JSONFunction) {
             return ((JSONFunction) value).toString();
         }
-        if( value instanceof JSONString ){
+        if (value instanceof JSONString) {
             return ((JSONString) value).toJSONString();
         }
-        if( value instanceof Number ){
-            return numberToString( (Number) value );
+        if (value instanceof Number) {
+            return numberToString((Number) value);
         }
-        if( value instanceof Boolean ){
+        if (value instanceof Boolean) {
             return value.toString();
         }
-        if( value instanceof JSONObject ){
-            return ((JSONObject) value).toString( indentFactor, indent );
+        if (value instanceof JSONObject) {
+            return ((JSONObject) value).toString(indentFactor, indent);
         }
-        if( value instanceof JSONArray ){
-            return ((JSONArray) value).toString( indentFactor, indent );
+        if (value instanceof JSONArray) {
+            return ((JSONArray) value).toString(indentFactor, indent);
         }
-        return quote( value.toString() );
+        return quote(value.toString());
     }
 
     /**
      * Finds out if n represents a BigInteger
      *
      * @return true if n is instanceOf BigInteger or the literal value can be
-     *         evaluated as a BigInteger
+     * evaluated as a BigInteger
      */
-    private static boolean isBigDecimal( Number n ) {
-        if( n instanceof BigDecimal ){
+    private static boolean isBigDecimal(Number n) {
+        if (n instanceof BigDecimal) {
             return true;
         }
-        try{
-            new BigDecimal( String.valueOf( n ) );
+        try {
+            new BigDecimal(String.valueOf(n));
             return true;
-        }catch( NumberFormatException e ){
+        } catch (NumberFormatException e) {
             return false;
         }
     }
@@ -723,16 +645,16 @@ public final class JSONUtils {
      * Finds out if n represents a BigInteger
      *
      * @return true if n is instanceOf BigInteger or the literal value can be
-     *         evaluated as a BigInteger
+     * evaluated as a BigInteger
      */
-    private static boolean isBigInteger( Number n ) {
-        if( n instanceof BigInteger ){
+    private static boolean isBigInteger(Number n) {
+        if (n instanceof BigInteger) {
             return true;
         }
-        try{
-            new BigInteger( String.valueOf( n ) );
+        try {
+            new BigInteger(String.valueOf(n));
             return true;
-        }catch( NumberFormatException e ){
+        } catch (NumberFormatException e) {
             return false;
         }
     }
@@ -741,16 +663,16 @@ public final class JSONUtils {
      * Finds out if n represents a Double.
      *
      * @return true if n is instanceOf Double or the literal value can be
-     *         evaluated as a Double.
+     * evaluated as a Double.
      */
-    private static boolean isDouble( Number n ) {
-        if( n instanceof Double ){
+    private static boolean isDouble(Number n) {
+        if (n instanceof Double) {
             return true;
         }
-        try{
-            double d = Double.parseDouble( String.valueOf( n ) );
-            return !Double.isInfinite( d );
-        }catch( NumberFormatException e ){
+        try {
+            double d = Double.parseDouble(String.valueOf(n));
+            return !Double.isInfinite(d);
+        } catch (NumberFormatException e) {
             return false;
         }
     }
@@ -759,16 +681,16 @@ public final class JSONUtils {
      * Finds out if n represents a Float.
      *
      * @return true if n is instanceOf Float or the literal value can be
-     *         evaluated as a Float.
+     * evaluated as a Float.
      */
-    private static boolean isFloat( Number n ) {
-        if( n instanceof Float ){
+    private static boolean isFloat(Number n) {
+        if (n instanceof Float) {
             return true;
         }
-        try{
-            float f = Float.parseFloat( String.valueOf( n ) );
-            return !Float.isInfinite( f );
-        }catch( NumberFormatException e ){
+        try {
+            float f = Float.parseFloat(String.valueOf(n));
+            return !Float.isInfinite(f);
+        } catch (NumberFormatException e) {
             return false;
         }
     }
@@ -777,16 +699,16 @@ public final class JSONUtils {
      * Finds out if n represents an Integer.
      *
      * @return true if n is instanceOf Integer or the literal value can be
-     *         evaluated as an Integer.
+     * evaluated as an Integer.
      */
-    private static boolean isInteger( Number n ) {
-        if( n instanceof Integer ){
+    private static boolean isInteger(Number n) {
+        if (n instanceof Integer) {
             return true;
         }
-        try{
-            Integer.parseInt( String.valueOf( n ) );
+        try {
+            Integer.parseInt(String.valueOf(n));
             return true;
-        }catch( NumberFormatException e ){
+        } catch (NumberFormatException e) {
             return false;
         }
     }
@@ -795,16 +717,16 @@ public final class JSONUtils {
      * Finds out if n represents a Long.
      *
      * @return true if n is instanceOf Long or the literal value can be evaluated
-     *         as a Long.
+     * as a Long.
      */
-    private static boolean isLong( Number n ) {
-        if( n instanceof Long ){
+    private static boolean isLong(Number n) {
+        if (n instanceof Long) {
             return true;
         }
-        try{
-            Long.parseLong( String.valueOf( n ) );
+        try {
+            Long.parseLong(String.valueOf(n));
             return true;
-        }catch( NumberFormatException e ){
+        } catch (NumberFormatException e) {
             return false;
         }
     }

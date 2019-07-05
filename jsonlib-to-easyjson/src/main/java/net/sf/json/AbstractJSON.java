@@ -15,7 +15,6 @@
 package net.sf.json;
 
 
-import net.sf.json.util.JSONUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -132,61 +131,7 @@ abstract class AbstractJSON {
     }
 
     protected Object _processValue(Object value, JsonConfig jsonConfig) {
-        if (JSONNull.getInstance().equals(value)) {
-            return JSONNull.getInstance();
-        } else if (Class.class.isAssignableFrom(value.getClass()) || value instanceof Class) {
-            return ((Class) value).getName();
-        } else if (JSONUtils.isFunction(value)) {
-            if (value instanceof String) {
-                value = JSONFunction.parse((String) value);
-            }
-            return value;
-        } else if (value instanceof JSONString) {
-            return JSONSerializer.toJSON((JSONString) value, jsonConfig);
-        } else if (value instanceof JSON) {
-            return JSONSerializer.toJSON(value, jsonConfig);
-        } else if (JSONUtils.isArray(value)) {
-            return JSONArray.fromObject(value, jsonConfig);
-        } else if (JSONUtils.isString(value)) {
-            String str = String.valueOf(value);
-            if (JSONUtils.hasQuotes(str)) {
-                String stripped = JSONUtils.stripQuotes(str);
-                if (JSONUtils.isFunction(stripped)) {
-                    return JSONUtils.DOUBLE_QUOTE + stripped + JSONUtils.DOUBLE_QUOTE;
-                }
-                if (stripped.startsWith("[") && stripped.endsWith("]")) {
-                    return stripped;
-                }
-                if (stripped.startsWith("{") && stripped.endsWith("}")) {
-                    return stripped;
-                }
-                return str;
-            } else if (JSONUtils.isJsonKeyword(str, jsonConfig)) {
-                if (jsonConfig.isJavascriptCompliant() && "undefined".equals(str)) {
-                    return JSONNull.getInstance();
-                }
-                return str;
-            } else if (JSONUtils.mayBeJSON(str)) {
-                try {
-                    return JSONSerializer.toJSON(str, jsonConfig);
-                } catch (JSONException jsone) {
-                    return str;
-                }
-            }
-            return str;
-        } else if (JSONUtils.isNumber(value)) {
-            JSONUtils.testValidity(value);
-            return JSONUtils.transformNumber((Number) value);
-        } else if (JSONUtils.isBoolean(value)) {
-            return value;
-        } else {
-            JSONObject jsonObject = JSONObject.fromObject(value, jsonConfig);
-            if (jsonObject.isNullObject()) {
-                return JSONNull.getInstance();
-            } else {
-                return jsonObject;
-            }
-        }
+        return JsonMapper.fromJavaObject(value, jsonConfig);
     }
 
     private static Set getCycleSet() {

@@ -15,10 +15,8 @@
 package net.sf.json;
 
 
-import com.github.fangjinuo.easyjson.core.util.Strings;
 import net.sf.json.util.EqualsBuilder;
 import net.sf.json.util.HashCodeBuilder;
-import net.sf.json.util.JSONUtils;
 
 import java.io.Serializable;
 
@@ -38,13 +36,7 @@ public class JSONFunction implements Serializable {
      * Constructs a JSONFunction from a text representation
      */
     public static JSONFunction parse(String str) {
-        if (!JSONUtils.isFunction(str)) {
-            throw new JSONException("String is not a function. " + str);
-        } else {
-            String params = JSONUtils.getFunctionParams(str);
-            String text = JSONUtils.getFunctionBody(str);
-            return new JSONFunction((params != null) ? Strings.split(params, ",") : null, text != null ? text : "");
-        }
+        return null;
     }
 
     /**

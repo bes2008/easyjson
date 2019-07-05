@@ -14,12 +14,13 @@
 
 package net.sf.json.util;
 
-public class Entry<K,V> {
+public class Entry<K, V> {
     private K key;
     private V value;
-    public Entry(K k, V v){
+
+    public Entry(K k, V v) {
         this.key = k;
-        this.value= v;
+        this.value = v;
     }
 
     @Override

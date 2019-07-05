@@ -21,15 +21,15 @@ public class JSONException extends RuntimeException {
         super();
     }
 
-    public JSONException( String msg ) {
-        super( msg, null );
+    public JSONException(String msg) {
+        super(msg, null);
     }
 
-    public JSONException( String msg, Throwable cause ) {
-        super( msg, cause );
+    public JSONException(String msg, Throwable cause) {
+        super(msg, cause);
     }
 
-    public JSONException( Throwable cause ) {
-        super( (cause == null ? null : cause.toString()), cause );
+    public JSONException(Throwable cause) {
+        super((cause == null ? null : cause.toString()), cause);
     }
 }

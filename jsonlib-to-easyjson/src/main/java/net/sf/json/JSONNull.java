@@ -24,10 +24,12 @@ import java.io.Writer;
  * @author JSON.org
  */
 public final class JSONNull implements JSON {
-    /** singleton instance */
+    /**
+     * singleton instance
+     */
     private static JSONNull instance;
 
-    static{
+    static {
         instance = new JSONNull();
     }
 
@@ -47,14 +49,15 @@ public final class JSONNull implements JSON {
      *
      * @param object An object to test for nullness.
      * @return true if the object parameter is the JSONObject.NULL object or
-     *         null.
+     * null.
      */
     @Override
-    public boolean equals( Object object ) {
+    public boolean equals(Object object) {
         return object == null || object == this || object == instance
                 || (object instanceof JSONObject && ((JSONObject) object).isNullObject())
-                || "null".equals( object );
+                || "null".equals(object);
     }
+
     @Override
     public int hashCode() {
         return 37 + "null".hashCode();
@@ -67,12 +70,12 @@ public final class JSONNull implements JSON {
 
     @Override
     public boolean isEmpty() {
-        throw new JSONException( "Object is null" );
+        throw new JSONException("Object is null");
     }
 
     @Override
     public int size() {
-        throw new JSONException( "Object is null" );
+        throw new JSONException("Object is null");
     }
 
     /**
@@ -86,27 +89,27 @@ public final class JSONNull implements JSON {
     }
 
     @Override
-    public String toString( int indentFactor ) {
+    public String toString(int indentFactor) {
         return toString();
     }
 
     @Override
-    public String toString( int indentFactor, int indent ) {
+    public String toString(int indentFactor, int indent) {
         StringBuffer sb = new StringBuffer();
-        for( int i = 0; i < indent; i += 1 ){
-            sb.append( ' ' );
+        for (int i = 0; i < indent; i += 1) {
+            sb.append(' ');
         }
-        sb.append( toString() );
+        sb.append(toString());
         return sb.toString();
     }
 
     @Override
-    public Writer write( Writer writer ) {
-        try{
-            writer.write( toString() );
+    public Writer write(Writer writer) {
+        try {
+            writer.write(toString());
             return writer;
-        }catch( IOException e ){
-            throw new JSONException( e );
+        } catch (IOException e) {
+            throw new JSONException(e);
         }
     }
 }

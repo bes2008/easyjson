@@ -103,4 +103,48 @@ public class JsonTreeNodes {
         }
         return null;
     }
+
+    /**
+     * merge node2 to node1
+     * @param node1
+     * @param node2
+     * @return
+     */
+    public static JsonTreeNode combine(JsonTreeNode node1, JsonTreeNode node2){
+        if(node1.isJsonNullNode()){
+            return node2.deepCopy();
+        }
+        if(node2.isJsonNullNode()){
+            return node1.deepCopy();
+        }
+
+        if(node1.isJsonPrimitiveNode()){
+            if(node2.isJsonPrimitiveNode() || node2.isJsonObjectNode()){
+                return node1.deepCopy();
+            }
+        }
+
+        if(node1.isJsonArrayNode() || node2.isJsonArrayNode()){
+            JsonArrayNode arrayNode = node1.isJsonArrayNode() ? (JsonArrayNode)node1.deepCopy() : (JsonArrayNode)node2.deepCopy();
+            node2 =  node1.isJsonArrayNode() ? node2.deepCopy() : node1.deepCopy();
+            if(!node2.isJsonArrayNode()) {
+                arrayNode.add(node2);
+            }else{
+                arrayNode.addAll(((JsonArrayNode) node2));
+            }
+            return node1;
+        }
+
+        if(node1.isJsonObjectNode() && node2.isJsonObjectNode()){
+            JsonObjectNode obj1 =(JsonObjectNode) node1.deepCopy();
+            JsonObjectNode obj2 =(JsonObjectNode) node2.deepCopy();
+            for(Map.Entry<String, JsonTreeNode> entry : obj2.propertySet()) {
+                obj1.addProperty(entry.getKey(), entry.getValue());
+            }
+            return obj1;
+        }
+
+        return node1.deepCopy();
+
+    }
 }

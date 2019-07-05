@@ -24,13 +24,13 @@ import net.sf.json.JsonConfig;
  * @author Andres Almiray <aalmiray@users.sourceforge.net>
  */
 public interface JsonBeanProcessor {
-   /**
-    * Processes the bean an returns a suitable JSONObject representation.
-    *
-    * @param bean the input bean
-    * @param jsonConfig the current configuration environment
-    * @return a JSONObject that represents the input bean
-    * @throws JSONException if an error occurs during transformation
-    */
-   JSONObject processBean(Object bean, JsonConfig jsonConfig);
+    /**
+     * Processes the bean an returns a suitable JSONObject representation.
+     *
+     * @param bean       the input bean
+     * @param jsonConfig the current configuration environment
+     * @return a JSONObject that represents the input bean
+     * @throws JSONException if an error occurs during transformation
+     */
+    JSONObject processBean(Object bean, JsonConfig jsonConfig);
 }
