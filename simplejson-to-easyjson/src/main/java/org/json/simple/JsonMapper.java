@@ -39,6 +39,9 @@ public class JsonMapper {
                 if(node.isString()){
                     return node.getAsString();
                 }
+                if(node.isBoolean()){
+                    return node.getAsBoolean();
+                }
                 return node.getValue();
             }
 
