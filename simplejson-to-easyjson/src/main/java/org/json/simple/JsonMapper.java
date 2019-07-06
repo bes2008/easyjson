@@ -25,7 +25,7 @@ import java.util.Map;
 public class JsonMapper {
 
     public static Object fromJsonTreeNode(JsonObjectNode treeNode) {
-        return JsonTreeNodes.toJavaObject(treeNode, new MappingToJavaObject<JSONObject, JSONArray, Object, Object>() {
+        return JsonTreeNodes.toJavaObject(treeNode, new ToJavaObjectMapper<JSONObject, JSONArray, Object, Object>() {
             @Override
             public Object mappingNull(JsonNullNode node) {
                 return null;
@@ -33,16 +33,7 @@ public class JsonMapper {
 
             @Override
             public Object mappingPrimitive(JsonPrimitiveNode node) {
-                if (node.isNumber()) {
-                    return node.getAsNumber();
-                }
-                if (node.isString()) {
-                    return node.getAsString();
-                }
-                if (node.isBoolean()) {
-                    return node.getAsBoolean();
-                }
-                return node.getValue();
+                return null;
             }
 
             @Override
@@ -66,7 +57,7 @@ public class JsonMapper {
     }
 
     public static JsonTreeNode toJsonTreeNode(Object object) {
-        return JsonTreeNodes.fromJavaObject(object, new MappingToJsonTreeNode() {
+        return JsonTreeNodes.fromJavaObject(object, new ToJsonTreeNodeMapper() {
             @Override
             public JsonTreeNode mapping(Object object) {
                 if (object instanceof JSONArray) {

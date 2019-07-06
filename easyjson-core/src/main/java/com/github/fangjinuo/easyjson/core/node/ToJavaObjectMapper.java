@@ -17,7 +17,7 @@ package com.github.fangjinuo.easyjson.core.node;
 /**
  * mapping a tree node to any Java Object, or Custom JSONObject, JSONArray, JSONNull etc...
  */
-public interface MappingToJavaObject<JSONObject, JSONArray, JSONPrimitive, JSONNull> {
+public interface ToJavaObjectMapper<JSONObject, JSONArray, JSONPrimitive, JSONNull> {
     JSONNull mappingNull(JsonNullNode node);
 
     JSONPrimitive mappingPrimitive(JsonPrimitiveNode node);

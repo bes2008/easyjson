@@ -25,7 +25,7 @@ import java.util.Map;
 public class JsonMapper {
 
     public static JsonTreeNode toJsonTreeNode(Object object) {
-        return JsonTreeNodes.fromJavaObject(object, new MappingToJsonTreeNode() {
+        return JsonTreeNodes.fromJavaObject(object, new ToJsonTreeNodeMapper() {
             @Override
             public JsonTreeNode mapping(Object object) {
                 if (object instanceof JSONSerializable) {
@@ -65,7 +65,7 @@ public class JsonMapper {
     }
 
     public static Object fromJsonTreeNode(JsonTreeNode treeNode) {
-        return JsonTreeNodes.toJavaObject(treeNode, new MappingToJavaObject<JSONObject, JSONArray, Object, JSON>() {
+        return JsonTreeNodes.toJavaObject(treeNode, new ToJavaObjectMapper<JSONObject, JSONArray, Object, JSON>() {
             @Override
             public JSON mappingNull(JsonNullNode node) {
                 return null;
