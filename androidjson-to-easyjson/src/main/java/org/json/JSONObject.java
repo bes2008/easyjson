@@ -17,8 +17,6 @@
 package org.json;
 
 import com.github.fangjinuo.easyjson.core.JSONBuilderProvider;
-import com.github.fangjinuo.easyjson.core.JsonTreeNode;
-import com.github.fangjinuo.easyjson.core.node.JsonTreeNodes;
 
 import java.util.*;
 
@@ -152,11 +150,14 @@ public class JSONObject {
      */
     public JSONObject(JSONTokener readFrom) throws JSONException {
         this();
-        JsonTreeNode treeNode = JSONBuilderProvider.simplest().fromJson(JsonTokeners.readToString(readFrom));
-        if (treeNode.isJsonObjectNode()) {
-            Object object = JsonTreeNodes.toJavaObject(treeNode);
-            Map<String, Object> m = (Map<String, Object>) object;
-            this.nameValuePairs.putAll(m);
+        Object obj = JsonMapper.toJSON(readFrom);
+        if (obj instanceof JSONObject) {
+            JSONObject o2 = (JSONObject) obj;
+            this.nameValuePairs.putAll(o2.nameValuePairs);
+        }
+        if (obj instanceof Map) {
+            Map map = (Map) obj;
+            this.nameValuePairs.putAll(map);
         }
     }
 

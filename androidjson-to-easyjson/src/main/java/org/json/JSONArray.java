@@ -17,8 +17,6 @@
 package org.json;
 
 import com.github.fangjinuo.easyjson.core.JSONBuilderProvider;
-import com.github.fangjinuo.easyjson.core.JsonTreeNode;
-import com.github.fangjinuo.easyjson.core.node.JsonTreeNodes;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -91,16 +89,14 @@ public class JSONArray {
     public JSONArray(JSONTokener readFrom) throws JSONException {
         this();
         if (readFrom != null) {
-            JsonTreeNode treeNode = JSONBuilderProvider.simplest().fromJson(JsonTokeners.readToString(readFrom));
-            Object object = JsonTreeNodes.toJavaObject(treeNode);
-            if (object == null) {
-                // ignore
+            Object obj = JsonMapper.toJSON(readFrom);
+
+            if (obj instanceof JSONArray) {
+                JSONArray o2 = (JSONArray) obj;
+                this.values.addAll(o2.values);
             }
-            if (treeNode.isJsonPrimitiveNode() || treeNode.isJsonObjectNode()) {
-                this.values.add(object);
-            }
-            if (treeNode.isJsonArrayNode()) {
-                List<Object> list = (List) object;
+            if (obj instanceof Collection) {
+                Collection list = (Collection) obj;
                 this.values.addAll(list);
             }
         }
@@ -604,12 +600,19 @@ public class JSONArray {
         return JSONBuilderProvider.create().prettyFormat(indentSpaces > 0).build().toJson(this.values);
     }
 
+    public List<Object> values() {
+        return this.values;
+    }
+
     void writeTo(JSONStringer stringer) throws JSONException {
         stringer.value(JSONBuilderProvider.create().build().toJson(this.values));
     }
 
     @Override
     public boolean equals(Object o) {
+        if (o == null) {
+            return false;
+        }
         return o instanceof JSONArray && ((JSONArray) o).values.equals(values);
     }
 
