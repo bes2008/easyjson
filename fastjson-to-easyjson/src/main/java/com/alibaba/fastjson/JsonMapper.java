@@ -65,7 +65,7 @@ public class JsonMapper {
     }
 
     public static Object fromJsonTreeNode(JsonTreeNode treeNode) {
-        return JsonTreeNodes.toJavaObject(treeNode, new ToJavaObjectMapper<JSONObject, JSONArray, Object, JSON>() {
+        return JsonTreeNodes.toJavaObject(treeNode, new ToJSONMapper<JSONObject, JSONArray, Object, JSON>() {
             @Override
             public JSON mappingNull(JsonNullNode node) {
                 return null;
