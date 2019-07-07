@@ -25,7 +25,7 @@ import java.util.Map;
 public class JsonMapper {
 
     public static Object fromJsonTreeNode(JsonObjectNode treeNode) {
-        return JsonTreeNodes.toJavaObject(treeNode, new ToJSONMapper<JSONObject, JSONArray, Object, Object>() {
+        return JsonTreeNodes.toJSON(treeNode, new ToJSONMapper<JSONObject, JSONArray, Object, Object>() {
             @Override
             public Object mappingNull(JsonNullNode node) {
                 return null;
@@ -40,7 +40,7 @@ public class JsonMapper {
             public JSONArray mappingArray(JsonArrayNode node) {
                 JSONArray jsonArray = new JSONArray();
                 for (JsonTreeNode item : node) {
-                    jsonArray.add(JsonTreeNodes.toJavaObject(item, this));
+                    jsonArray.add(JsonTreeNodes.toJSON(item, this));
                 }
                 return jsonArray;
             }
@@ -49,7 +49,7 @@ public class JsonMapper {
             public JSONObject mappingObject(JsonObjectNode node) {
                 JSONObject jsonObject = new JSONObject();
                 for (Map.Entry<String, JsonTreeNode> entry : node.propertySet()) {
-                    jsonObject.put(entry.getKey(), JsonTreeNodes.toJavaObject(entry.getValue(), this));
+                    jsonObject.put(entry.getKey(), JsonTreeNodes.toJSON(entry.getValue(), this));
                 }
                 return jsonObject;
             }

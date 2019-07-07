@@ -84,10 +84,10 @@ public class JsonTreeNodes {
     }
 
     public static Object toJavaObject(JsonTreeNode node) {
-        return toJavaObject(node, null);
+        return toJSON(node, null);
     }
 
-    public static Object toJavaObject(JsonTreeNode node, ToJSONMapper mapping) {
+    public static Object toJSON(JsonTreeNode node, ToJSONMapper mapping) {
         if (node == null || JsonNullNode.INSTANCE == node) {
             if (mapping != null) {
                 return mapping.mappingNull(JsonNullNode.INSTANCE);
