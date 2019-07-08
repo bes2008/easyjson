@@ -5,19 +5,18 @@
 package org.json.simple;
 
 import com.github.fangjinuo.easyjson.core.JSONBuilderProvider;
-import org.json.simple.parser.JSONParser;
+import com.github.fangjinuo.easyjson.core.util.IOs;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.io.StringReader;
 import java.io.Writer;
 import java.util.List;
 import java.util.Map;
 
 
 /**
- * @author FangYidong<fangyidong       @       yahoo.com.cn>
+ * @author FangYidong<fangyidong               @               yahoo.com.cn>
  */
 public class JSONValue {
     /**
@@ -36,17 +35,17 @@ public class JSONValue {
      * @see #parseWithException(Reader)
      */
     public static Object parse(Reader in) {
+        String string = null;
         try {
-            JSONParser parser = new JSONParser();
-            return parser.parse(in);
-        } catch (Exception e) {
-            return null;
+            string = IOs.readAsString(in);
+        } catch (IOException ex) {
+
         }
+        return parse(string);
     }
 
     public static Object parse(String s) {
-        StringReader in = new StringReader(s);
-        return parse(in);
+        return JsonMapper.fromJsonTreeNode(JSONBuilderProvider.simplest().fromJson(s));
     }
 
     /**
@@ -65,13 +64,11 @@ public class JSONValue {
      * @see org.json.simple.parser.JSONParser
      */
     public static Object parseWithException(Reader in) throws IOException, ParseException {
-        JSONParser parser = new JSONParser();
-        return parser.parse(in);
+        return parseWithException(IOs.readAsString(in));
     }
 
     public static Object parseWithException(String s) throws ParseException {
-        JSONParser parser = new JSONParser();
-        return parser.parse(s);
+        return JsonMapper.fromJsonTreeNode(JSONBuilderProvider.simplest().fromJson(s));
     }
 
     /**

@@ -14,17 +14,18 @@
 
 package org.json.simple;
 
-import com.github.fangjinuo.easyjson.core.JSON;
 import com.github.fangjinuo.easyjson.core.JSONBuilderProvider;
 import com.github.fangjinuo.easyjson.core.JsonTreeNode;
 import com.github.fangjinuo.easyjson.core.node.*;
 
+import java.io.IOException;
+import java.io.StringWriter;
 import java.util.Iterator;
 import java.util.Map;
 
 public class JsonMapper {
 
-    public static Object fromJsonTreeNode(JsonObjectNode treeNode) {
+    public static Object fromJsonTreeNode(JsonTreeNode treeNode) {
         return JsonTreeNodes.toJSON(treeNode, new ToJSONMapper<JSONObject, JSONArray, Object, Object>() {
             @Override
             public Object mappingNull(JsonNullNode node) {
@@ -33,7 +34,16 @@ public class JsonMapper {
 
             @Override
             public Object mappingPrimitive(JsonPrimitiveNode node) {
-                return null;
+                if (node.isBoolean()) {
+                    return node.getAsBoolean();
+                }
+                if (node.isString()) {
+                    return node.getAsString();
+                }
+                if (node.isNumber()) {
+                    return node.getAsNumber();
+                }
+                return node.getValue();
             }
 
             @Override
@@ -78,10 +88,24 @@ public class JsonMapper {
                     return objectNode;
                 }
 
+                String jsonString = null;
+
                 if (object instanceof JSONAware) {
-                    JSON json = JSONBuilderProvider.simplest();
-                    String jsonString = ((JSONAware) object).toJSONString();
-                    return json.fromJson(jsonString);
+                    jsonString = ((JSONAware) object).toJSONString();
+                }
+
+                if (object instanceof JSONStreamAware) {
+                    StringWriter stringWriter = new StringWriter();
+                    try {
+                        ((JSONStreamAware) object).writeJSONString(stringWriter);
+                    } catch (IOException e) {
+                        // TODO log
+                    }
+                    jsonString = stringWriter.toString();
+                }
+
+                if (jsonString != null) {
+                    return JSONBuilderProvider.simplest().fromJson(jsonString);
                 }
 
                 return null;
