@@ -35,14 +35,6 @@ public class JSONObject extends HashMap<String, Object> implements JSONAware, JS
         super();
     }
 
-    // /**
-    // * Allow simply casting to Map<String, XXX>
-    // */
-    // @SuppressWarnings("unchecked")
-    // public <T> T cast() {
-    // return (T) this;
-    // }
-
     /**
      * Escape quotes, \, /, \r, \n, \b, \f, \t and other control characters
      * (U+0000 through U+001F). It's the same as JSONValue.escape() only for
@@ -187,7 +179,7 @@ public class JSONObject extends HashMap<String, Object> implements JSONAware, JS
             return;
         }
         JSON json = JSONBuilderProvider.create().serializeNulls(!compression.ignoreNull()).prettyFormat(compression.indent()).build();
-        out.append(json.toJson(map));
+        out.append(json.toJson(JsonMapper.toJsonTreeNode(map)));
     }
 
     /**

@@ -68,7 +68,7 @@ public class JSONArray extends ArrayList<Object> implements List<Object>, JSONAw
             return;
         }
         JSON json = JSONBuilderProvider.create().serializeNulls(!compression.ignoreNull()).prettyFormat(compression.indent()).build();
-        out.append(json.toJson(list));
+        out.append(json.toJson(JsonMapper.toJsonTreeNode(list)));
     }
 
     public static void writeJSONString(List<? extends Object> list, Appendable out) throws IOException {

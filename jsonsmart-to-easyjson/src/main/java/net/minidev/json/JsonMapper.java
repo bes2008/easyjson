@@ -14,9 +14,11 @@
 
 package net.minidev.json;
 
+import com.github.fangjinuo.easyjson.core.JSONBuilderProvider;
 import com.github.fangjinuo.easyjson.core.JsonTreeNode;
 import com.github.fangjinuo.easyjson.core.node.*;
 
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -63,7 +65,48 @@ public class JsonMapper {
                 return map;
             }
         });
+    }
 
+    public static JsonTreeNode toJsonTreeNode(Object object) {
+        return JsonTreeNodes.fromJavaObject(object, new ToJsonTreeNodeMapper() {
+            @Override
+            public JsonTreeNode mapping(Object object) {
+                if (object instanceof JSONArray) {
+                    JsonArrayNode array = new JsonArrayNode();
+                    JSONArray jsonArray = (JSONArray) object;
+                    for (Object item : jsonArray) {
+                        array.add(JsonTreeNodes.fromJavaObject(item, this));
+                    }
+                    return array;
+                }
 
+                if (object instanceof JSONObject) {
+                    JsonObjectNode objectNode = new JsonObjectNode();
+                    JSONObject obj = (JSONObject) object;
+                    for (String key : obj.keySet()) {
+                        objectNode.addProperty(key, JsonTreeNodes.fromJavaObject(obj.get(key), this));
+                    }
+                    return objectNode;
+                }
+
+                String jsonString = null;
+                if (object instanceof JSONAware) {
+                    jsonString = ((JSONAware) object).toJSONString();
+                }
+                if (object instanceof JSONStreamAware) {
+                    StringBuilder stringBuilder = new StringBuilder();
+                    try {
+                        ((JSONStreamAware) object).writeJSONString(stringBuilder);
+                    } catch (IOException e) {
+                        // TODO log
+                    }
+                    jsonString = stringBuilder.toString();
+                }
+                if (jsonString != null) {
+                    return JSONBuilderProvider.simplest().fromJson(jsonString);
+                }
+                return null;
+            }
+        });
     }
 }
