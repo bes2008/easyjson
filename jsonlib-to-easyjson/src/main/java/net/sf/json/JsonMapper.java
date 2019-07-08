@@ -4,7 +4,6 @@ import com.github.fangjinuo.easyjson.core.JSONBuilder;
 import com.github.fangjinuo.easyjson.core.JSONBuilderProvider;
 import com.github.fangjinuo.easyjson.core.JsonTreeNode;
 import com.github.fangjinuo.easyjson.core.node.*;
-import com.github.fangjinuo.easyjson.core.util.type.Primitives;
 import net.sf.json.util.JSONTokener;
 
 import java.lang.reflect.Modifier;
@@ -15,58 +14,13 @@ public class JsonMapper {
 
     /**
      * from java object to JSON-lib JSONObject, JSONArray, JSONNull, primitive
-     *
-     * @param object
-     * @return
      */
     public static Object fromJavaObject(Object object) {
         return fromJavaObject(object, null);
     }
 
     public static Object fromJavaObject(Object object, JsonConfig jsonConfig) {
-        if (object == null) {
-            return JSONNull.getInstance();
-        }
-
-        if (object instanceof JSONArray) {
-            return (JSONArray) object;
-        }
-
-        if (object instanceof JSONObject) {
-            return (JSONObject) object;
-        }
-
-        if (Primitives.isPrimitive(object.getClass()) || object instanceof String) {
-            return object;
-        }
-
-        com.github.fangjinuo.easyjson.core.JSON json = buildJSON(jsonConfig);
-
-        if (object instanceof JSONString) {
-            String jsonString = ((JSONString) object).toJSONString();
-            JsonTreeNode jsonTreeNode = json.fromJson(jsonString);
-            return fromJsonTreeNode(jsonTreeNode);
-        }
-
-        if (object instanceof JSON) {
-            String jsonString = ((JSON) object).toString(0);
-            JsonTreeNode jsonTreeNode = json.fromJson(jsonString);
-            return fromJsonTreeNode(jsonTreeNode);
-        }
-
-        if (object instanceof JSONTokener) {
-            StringBuilder stringBuilder = new StringBuilder();
-            JSONTokener tokener = (JSONTokener) object;
-            while (tokener.more()) {
-                stringBuilder.append(tokener.next());
-            }
-
-            JsonTreeNode jsonTreeNode = json.fromJson(stringBuilder.toString());
-            return fromJavaObject(jsonTreeNode);
-        }
-
-        JsonTreeNode jsonTreeNode = json.fromJson(json.toJson(object));
-        return fromJsonTreeNode(jsonTreeNode);
+        return fromJsonTreeNode(toJsonTreeNode(object, jsonConfig));
     }
 
     public static com.github.fangjinuo.easyjson.core.JSON buildJSON(JsonConfig config) {
@@ -85,9 +39,6 @@ public class JsonMapper {
 
     /**
      * from json tree node to JSON-lib JSON object
-     *
-     * @param treeNode
-     * @return
      */
     public static Object fromJsonTreeNode(JsonTreeNode treeNode) {
         return JsonTreeNodes.toJSON(treeNode, new ToJSONMapper<JSONObject, JSONArray, Object, JSONNull>() {
@@ -133,9 +84,6 @@ public class JsonMapper {
 
     /**
      * from JSONObject, JSONArray, JSONNull, primitive to Java Object
-     *
-     * @param jsonObj
-     * @return
      */
     public static Object toJavaObject(Object jsonObj) {
         return JsonTreeNodes.toJavaObject(toJsonTreeNode(jsonObj, null));
@@ -149,58 +97,64 @@ public class JsonMapper {
         return toJsonTreeNode(jsonObj, null);
     }
 
-    public static JsonTreeNode toJsonTreeNode(Object jsonObj, JsonConfig jsonConfig) {
-        if (jsonObj == null || jsonObj == JSONNull.getInstance() || jsonObj instanceof JSONNull) {
-            return JsonNullNode.INSTANCE;
-        }
-        if (Primitives.isPrimitive(jsonObj.getClass())) {
-            return new JsonPrimitiveNode(jsonObj);
-        }
+    private static class JsonTreeNodeMapper implements ToJsonTreeNodeMapper {
+        private JsonConfig jsonConfig;
 
-        if (jsonObj instanceof JSONArray) {
-            JsonArrayNode arrayNode = new JsonArrayNode();
-            JSONArray jsonArray = (JSONArray) jsonObj;
-            for (Object object : jsonArray) {
-                arrayNode.add(toJsonTreeNode(object, jsonConfig));
-            }
-            return arrayNode;
+        private JsonTreeNodeMapper(JsonConfig jsonConfig) {
+            this.jsonConfig = jsonConfig;
         }
 
-        if (jsonObj instanceof JSONObject) {
-            JSONObject jsonObject = (JSONObject) jsonObj;
-            JsonObjectNode objectNode = new JsonObjectNode();
-            Iterator<Map.Entry<Object, Object>> iter = jsonObject.entrySet().iterator();
-            while (iter.hasNext()) {
-                Map.Entry<Object, Object> entry = iter.next();
-                objectNode.addProperty(entry.getKey().toString(), toJsonTreeNode(entry.getValue(), jsonConfig));
-            }
-            return objectNode;
-        }
-
-
-        com.github.fangjinuo.easyjson.core.JSON json = buildJSON(jsonConfig);
-
-        if (jsonObj instanceof JSONString) {
-            String jsonString = ((JSONString) jsonObj).toJSONString();
-            return json.fromJson(jsonString);
-        }
-
-        if (jsonObj instanceof JSON) {
-            String jsonString = ((JSON) jsonObj).toString(0);
-            return json.fromJson(jsonString);
-        }
-
-        if (jsonObj instanceof JSONTokener) {
-            StringBuilder stringBuilder = new StringBuilder();
-            JSONTokener tokener = (JSONTokener) jsonObj;
-            while (tokener.more()) {
-                stringBuilder.append(tokener.next());
+        @Override
+        public JsonTreeNode mapping(Object jsonObj) {
+            if (jsonObj == JSONNull.getInstance() || jsonObj instanceof JSONNull) {
+                return JsonNullNode.INSTANCE;
             }
 
-            return json.fromJson(stringBuilder.toString());
-        }
+            if (jsonObj instanceof JSONArray) {
+                JsonArrayNode arrayNode = new JsonArrayNode();
+                JSONArray jsonArray = (JSONArray) jsonObj;
+                for (Object item : jsonArray) {
+                    arrayNode.add(JsonTreeNodes.fromJavaObject(item, this));
+                }
+                return arrayNode;
+            }
 
-        return JsonTreeNodes.fromJavaObject(jsonObj);
+            if (jsonObj instanceof JSONObject) {
+                JSONObject jsonObject = (JSONObject) jsonObj;
+                JsonObjectNode objectNode = new JsonObjectNode();
+                Iterator<Map.Entry<Object, Object>> iter = jsonObject.entrySet().iterator();
+                while (iter.hasNext()) {
+                    Map.Entry<Object, Object> entry = iter.next();
+                    objectNode.addProperty(entry.getKey().toString(), JsonTreeNodes.fromJavaObject(entry.getValue(), this));
+                }
+                return objectNode;
+            }
+
+
+            com.github.fangjinuo.easyjson.core.JSON json = buildJSON(jsonConfig);
+
+            if (jsonObj instanceof JSONString) {
+                String jsonString = ((JSONString) jsonObj).toJSONString();
+                return json.fromJson(jsonString);
+            }
+
+            if (jsonObj instanceof JSON) {
+                String jsonString = ((JSON) jsonObj).toString(0);
+                return json.fromJson(jsonString);
+            }
+
+            if (jsonObj instanceof JSONTokener) {
+                JSONTokener tokener = (JSONTokener) jsonObj;
+                return json.fromJson(JsonTokeners.readToString(tokener));
+            }
+
+            return null;
+
+        }
+    }
+
+    public static JsonTreeNode toJsonTreeNode(Object object, JsonConfig jsonConfig) {
+        return JsonTreeNodes.fromJavaObject(object, new JsonTreeNodeMapper(jsonConfig));
     }
 
 }
