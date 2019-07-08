@@ -242,16 +242,7 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
     }
 
     public static JSONObject parseObject(String text) {
-        Object obj = parse(text);
-        if (obj instanceof JSONObject) {
-            return (JSONObject) obj;
-        }
-
-        try {
-            return (JSONObject) JSON.toJSON(obj);
-        } catch (RuntimeException e) {
-            throw new JSONException("can not cast to JSONObject.", e);
-        }
+        return (JSONObject) JsonMapper.fromJsonTreeNode(JSONBuilderProvider.simplest().fromJson(text));
     }
 
     /**
@@ -309,8 +300,8 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
      *             {@link com.alibaba.fastjson.TypeReference} class. For example, to get the type for
      *             {@code Collection<Foo>}, you should use:
      *             <pre>
-     *                                                                         Type type = new TypeReference&lt;Collection&lt;Foo&gt;&gt;(){}.getType();
-     *                                                                         </pre>
+     *                                                                                     Type type = new TypeReference&lt;Collection&lt;Foo&gt;&gt;(){}.getType();
+     *                                                                                     </pre>
      * @return an object of type T from the string
      */
     @SuppressWarnings("unchecked")

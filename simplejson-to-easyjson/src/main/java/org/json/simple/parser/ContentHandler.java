@@ -5,7 +5,7 @@ import java.io.IOException;
 /**
  * A simplified and stoppable SAX-like content handler for stream processing of JSON text.
  *
- * @author FangYidong<fangyidong   @   yahoo.com.cn>
+ * @author FangYidong<fangyidong       @       yahoo.com.cn>
  * @see org.xml.sax.ContentHandler
  * @see org.json.simple.parser.JSONParser#parse(java.io.Reader, ContentHandler, boolean)
  */

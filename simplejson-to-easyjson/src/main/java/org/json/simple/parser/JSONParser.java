@@ -18,7 +18,7 @@ import java.util.Map;
 /**
  * Parser for JSON text. Please note that JSONParser is NOT thread-safe.
  *
- * @author FangYidong<fangyidong   @   yahoo.com.cn>
+ * @author FangYidong<fangyidong       @       yahoo.com.cn>
  */
 public class JSONParser {
     public static final int S_INIT = 0;

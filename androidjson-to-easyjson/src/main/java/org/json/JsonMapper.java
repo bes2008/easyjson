@@ -22,11 +22,11 @@ import java.util.Iterator;
 import java.util.Map;
 
 public class JsonMapper {
-    public static Object toJSON(Object object){
+    public static Object toJSON(Object object) {
         return fromJsonTreeNode(toJsonTreeNode(object));
     }
 
-    public static Object fromJsonTreeNode(JsonTreeNode treeNode){
+    public static Object fromJsonTreeNode(JsonTreeNode treeNode) {
         return JsonTreeNodes.toJSON(treeNode, new ToJSONMapper() {
             @Override
             public Object mappingNull(JsonNullNode node) {
@@ -62,7 +62,7 @@ public class JsonMapper {
                 for (Map.Entry<String, JsonTreeNode> entry : objectNode.propertySet()) {
                     try {
                         jsonObject.put(entry.getKey(), JsonTreeNodes.toJSON(entry.getValue(), this));
-                    }catch (JSONException ex){
+                    } catch (JSONException ex) {
                         // TODO log
                     }
                 }
@@ -71,36 +71,36 @@ public class JsonMapper {
         });
     }
 
-    public static JsonTreeNode toJsonTreeNode(Object object){
+    public static JsonTreeNode toJsonTreeNode(Object object) {
         return JsonTreeNodes.fromJavaObject(object, new ToJsonTreeNodeMapper() {
             @Override
             public JsonTreeNode mapping(Object object) {
-                if (object instanceof JSONArray){
-                    JSONArray jsonArray = (JSONArray)object;
+                if (object instanceof JSONArray) {
+                    JSONArray jsonArray = (JSONArray) object;
                     JsonArrayNode arrayNode = new JsonArrayNode();
-                    for (Object item : jsonArray.values()){
+                    for (Object item : jsonArray.values()) {
                         arrayNode.add(JsonTreeNodes.fromJavaObject(item, this));
                     }
                     return arrayNode;
                 }
 
-                if (object instanceof JSONObject){
-                    JSONObject jsonObject = (JSONObject)object;
+                if (object instanceof JSONObject) {
+                    JSONObject jsonObject = (JSONObject) object;
                     Iterator<String> iter = jsonObject.keys();
                     JsonObjectNode objectNode = new JsonObjectNode();
-                    while (iter.hasNext()){
+                    while (iter.hasNext()) {
                         String key = iter.next();
                         try {
-                            objectNode.addProperty(key,JsonTreeNodes.fromJavaObject(jsonObject.get(key), this));
-                        }catch (Throwable ex){
+                            objectNode.addProperty(key, JsonTreeNodes.fromJavaObject(jsonObject.get(key), this));
+                        } catch (Throwable ex) {
 
                         }
                         return objectNode;
                     }
                 }
 
-                if (object instanceof JSONTokener){
-                    JSONTokener jsonTokener = (JSONTokener)object;
+                if (object instanceof JSONTokener) {
+                    JSONTokener jsonTokener = (JSONTokener) object;
                     return JSONBuilderProvider.simplest().fromJson(JsonTokeners.readToString(jsonTokener));
                 }
                 return null;

@@ -77,8 +77,8 @@ public class JsonTreeNodes {
             return objectNode;
         }
 
-        if(object instanceof Enum){
-            return new JsonPrimitiveNode(((Enum)object).name());
+        if (object instanceof Enum) {
+            return new JsonPrimitiveNode(((Enum) object).name());
         }
 
         JSON json = JSONBuilderProvider.create().build();
@@ -100,7 +100,7 @@ public class JsonTreeNodes {
         if (node.isJsonPrimitiveNode()) {
             if (mapping != null) {
                 Object obj = mapping.mappingPrimitive(node.getAsJsonPrimitiveNode());
-                if(obj!=null){
+                if (obj != null) {
                     return obj;
                 }
             }
@@ -118,8 +118,8 @@ public class JsonTreeNodes {
         }
         if (node.isJsonArrayNode()) {
             if (mapping != null) {
-                Object obj= mapping.mappingArray(node.getAsJsonArrayNode());
-                if(obj!=null){
+                Object obj = mapping.mappingArray(node.getAsJsonArrayNode());
+                if (obj != null) {
                     return obj;
                 }
             }
@@ -133,7 +133,7 @@ public class JsonTreeNodes {
         if (node.isJsonObjectNode()) {
             if (mapping != null) {
                 Object obj = mapping.mappingObject(node.getAsJsonObjectNode());
-                if(obj!=null){
+                if (obj != null) {
                     return obj;
                 }
             }

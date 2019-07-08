@@ -17,7 +17,7 @@ import java.util.Map;
 
 
 /**
- * @author FangYidong<fangyidong   @   yahoo.com.cn>
+ * @author FangYidong<fangyidong       @       yahoo.com.cn>
  */
 public class JSONValue {
     /**
