@@ -1318,7 +1318,7 @@ public class JSONArray implements Iterable<Object> {
      */
     public Writer write(Writer writer, int indentFactor, int indent)
             throws JSONException {
-        String jsonstring = JSONBuilderProvider.create().prettyFormat(indent > 0).build().toJson(this.myArrayList);
+        String jsonstring = JSONBuilderProvider.create().prettyFormat(indent > 0).build().toJson(JsonMapper.toJsonTreeNode(this));
         try {
             writer.write(jsonstring);
         } catch (IOException e) {
