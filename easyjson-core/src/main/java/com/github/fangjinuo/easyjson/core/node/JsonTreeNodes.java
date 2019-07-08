@@ -77,6 +77,9 @@ public class JsonTreeNodes {
             return objectNode;
         }
 
+        if(object instanceof Enum){
+            return new JsonPrimitiveNode(((Enum)object).name());
+        }
 
         JSON json = JSONBuilderProvider.create().build();
         String jsonString = json.toJson(object);
