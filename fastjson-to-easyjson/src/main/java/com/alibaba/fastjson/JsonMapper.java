@@ -59,6 +59,10 @@ public class JsonMapper {
                     return JSONBuilderProvider.simplest().fromJson(jsonAware.toJSONString());
                 }
 
+                if (object instanceof JSONSerializable) {
+                    String json = JSON.toJSONString(object);
+                    return JSONBuilderProvider.simplest().fromJson(json);
+                }
                 return null;
             }
         });

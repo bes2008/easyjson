@@ -20,7 +20,6 @@ import com.alibaba.fastjson.parser.DefaultJSONParser;
 import com.alibaba.fastjson.parser.Feature;
 import com.alibaba.fastjson.parser.ParserConfig;
 import com.alibaba.fastjson.parser.deserializer.ParseProcess;
-import com.alibaba.fastjson.serializer.JSONSerializable;
 import com.alibaba.fastjson.serializer.SerializeConfig;
 import com.alibaba.fastjson.serializer.SerializeFilter;
 import com.alibaba.fastjson.serializer.SerializerFeature;
@@ -37,14 +36,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Writer;
-import java.lang.reflect.Array;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
-import java.util.*;
+import java.util.List;
+import java.util.Locale;
+import java.util.Properties;
+import java.util.TimeZone;
 
 /**
  * This is the main class for using Fastjson. You usually call these two methods {@link #toJSONString(Object)} and {@link #parseObject(String, Class)}.
@@ -308,8 +309,8 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
      *             {@link com.alibaba.fastjson.TypeReference} class. For example, to get the type for
      *             {@code Collection<Foo>}, you should use:
      *             <pre>
-     *                                                             Type type = new TypeReference&lt;Collection&lt;Foo&gt;&gt;(){}.getType();
-     *                                                             </pre>
+     *                                                                         Type type = new TypeReference&lt;Collection&lt;Foo&gt;&gt;(){}.getType();
+     *                                                                         </pre>
      * @return an object of type T from the string
      */
     @SuppressWarnings("unchecked")
@@ -834,92 +835,7 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
 
     @SuppressWarnings("unchecked")
     public static Object toJSON(Object javaObject, SerializeConfig config) {
-        if (javaObject == null) {
-            return null;
-        }
-
-        if (javaObject instanceof JSON) {
-            return javaObject;
-        }
-
-        if (javaObject instanceof Map) {
-            Map<Object, Object> map = (Map<Object, Object>) javaObject;
-
-            int size = map.size();
-
-            Map innerMap;
-            if (map instanceof LinkedHashMap) {
-                innerMap = new LinkedHashMap(size);
-            } else if (map instanceof TreeMap) {
-                innerMap = new TreeMap();
-            } else {
-                innerMap = new HashMap(size);
-            }
-
-            JSONObject json = new JSONObject(innerMap);
-
-            for (Map.Entry<Object, Object> entry : map.entrySet()) {
-                Object key = entry.getKey();
-                String jsonKey = TypeUtils.castToString(key);
-                Object jsonValue = toJSON(entry.getValue(), config);
-                json.put(jsonKey, jsonValue);
-            }
-
-            return json;
-        }
-
-        if (javaObject instanceof Collection) {
-            Collection<Object> collection = (Collection<Object>) javaObject;
-
-            JSONArray array = new JSONArray(collection.size());
-
-            for (Object item : collection) {
-                Object jsonValue = toJSON(item, config);
-                array.add(jsonValue);
-            }
-
-            return array;
-        }
-
-        if (javaObject instanceof JSONSerializable) {
-            String json = JSON.toJSONString(javaObject);
-            return JSON.parse(json);
-        }
-
-        Class<?> clazz = javaObject.getClass();
-        if (JsonTreeNode.class.isAssignableFrom(clazz)) {
-            return toJSON(JsonTreeNodes.toJavaObject((JsonTreeNode) javaObject), config);
-        }
-
-        if (clazz.isEnum()) {
-            return ((Enum<?>) javaObject).name();
-        }
-
-        if (clazz.isArray()) {
-            int len = Array.getLength(javaObject);
-
-            JSONArray array = new JSONArray(len);
-
-            for (int i = 0; i < len; ++i) {
-                Object item = Array.get(javaObject, i);
-                Object jsonValue = toJSON(item);
-                array.add(jsonValue);
-            }
-
-            return array;
-        }
-
-        if (ParserConfig.isPrimitive2(clazz)) {
-            return javaObject;
-        }
-        if (Number.class.isAssignableFrom(clazz)) {
-            if (javaObject.toString().contains(".")) {
-                return ((Number) javaObject).doubleValue();
-            }
-            return ((Number) javaObject).longValue();
-        }
-
-        return toJSON(parse(toJSONString(javaObject)));
+        return JsonMapper.fromJsonTreeNode(JsonMapper.toJsonTreeNode(javaObject));
     }
 
     public static <T> T toJavaObject(JSON json, Class<T> clazz) {
