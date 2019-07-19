@@ -14,10 +14,6 @@ import java.io.Writer;
 import java.util.List;
 import java.util.Map;
 
-
-/**
- * @author FangYidong<fangyidong               @               yahoo.com.cn>
- */
 public class JSONValue {
     /**
      * Parse JSON text into java object from the input source.
