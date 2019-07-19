@@ -42,6 +42,52 @@ Provides a unified JSON access API, you can adapter any JSON library to Gson, Ja
 ### Quick Start
 #### installation
 
+
+<table style="border:1px solid #ACE;">
+    <thead style="border:1px solid #ACE;">
+        <tr>
+            <th>easyjson facade</th>
+            <th>JSON Implementation</th>
+        </tr>
+    </thead>
+    <tbody style="border:1px solid #ACE;">
+        <tr>
+           <td>
+                <pre>
+&lt;dependency>
+    &lt;groupId>com.gith.fangjinuo.easyjson&lt;/groupId>
+    &lt;artifactId>easyjson-core&lt;/artifactId>
+    &lt;version>${version}/version>
+&lt;/dependency>
+                </pre>            
+            </td>
+            <td>
+                <pre>
+&lt;dependency>
+    &lt;groupId>com.gith.fangjinuo.easyjson&lt;/groupId>
+    &lt;artifactId>easyjson-gson&lt;/artifactId>
+    &lt;version>${version}/version>
+&lt;/dependency>
+                </pre>     
+                <pre>
+&lt;dependency>
+    &lt;groupId>com.gith.fangjinuo.easyjson&lt;/groupId>
+    &lt;artifactId>easyjson-jackson&lt;/artifactId>
+    &lt;version>${version}/version>
+&lt;/dependency>
+                </pre>     
+                <pre>
+&lt;dependency>
+    &lt;groupId>com.gith.fangjinuo.easyjson&lt;/groupId>
+    &lt;artifactId>easyjson-fastjson&lt;/artifactId>
+    &lt;version>${version}/version>
+&lt;/dependency>
+                </pre>                                                 
+            </td>
+        </tr>
+    </tbody>
+</table>
+
 <table style="border:1px solid #ACE;">
     <thead style="border:1px solid #ACE;">
         <tr>
@@ -49,8 +95,6 @@ Provides a unified JSON access API, you can adapter any JSON library to Gson, Ja
             <th>Maven</th>
             <th>version</th>
             <th>Adapter</th>
-            <th>easyjson facade</th>
-            <th>JSON Implementation</th>
         </tr>
     </thead>
     <tbody style="border:1px solid #ACE;">
@@ -75,38 +119,6 @@ Provides a unified JSON access API, you can adapter any JSON library to Gson, Ja
 &lt;/dependency>
                 </pre>
             </td>            
-            <td rowspan="2">
-                <pre>
-&lt;dependency>
-    &lt;groupId>com.gith.fangjinuo.easyjson&lt;/groupId>
-    &lt;artifactId>easyjson-core&lt;/artifactId>
-    &lt;version>${version}/version>
-&lt;/dependency>
-                </pre>            
-            </td>
-            <td rowspan="2">
-                <pre>
-&lt;dependency>
-    &lt;groupId>com.gith.fangjinuo.easyjson&lt;/groupId>
-    &lt;artifactId>easyjson-gson&lt;/artifactId>
-    &lt;version>${version}/version>
-&lt;/dependency>
-                </pre>     
-                <pre>
-&lt;dependency>
-    &lt;groupId>com.gith.fangjinuo.easyjson&lt;/groupId>
-    &lt;artifactId>easyjson-jackson&lt;/artifactId>
-    &lt;version>${version}/version>
-&lt;/dependency>
-                </pre>     
-                <pre>
-&lt;dependency>
-    &lt;groupId>com.gith.fangjinuo.easyjson&lt;/groupId>
-    &lt;artifactId>easyjson-fastjson&lt;/artifactId>
-    &lt;version>${version}/version>
-&lt;/dependency>
-                </pre>                                                 
-            </td>
         </tr>
         <tr>
             <td>fastjson</td>
@@ -129,7 +141,6 @@ Provides a unified JSON access API, you can adapter any JSON library to Gson, Ja
 &lt;/dependency>
                 </pre>
             </td> 
-            <td></td><td></td>           
         </tr>
         <tr>
             <td>json-lib</td>
@@ -152,7 +163,6 @@ Provides a unified JSON access API, you can adapter any JSON library to Gson, Ja
 &lt;/dependency>
                 </pre>
             </td>          
-            <td></td><td></td>  
         </tr>
         <tr>
             <td>json-smart</td>
@@ -175,7 +185,6 @@ Provides a unified JSON access API, you can adapter any JSON library to Gson, Ja
 &lt;/dependency>
                 </pre>
             </td>          
-            <td></td><td></td>  
         </tr> 
         <tr>
             <td>Eclipse minimal-json</td>
@@ -198,7 +207,6 @@ Provides a unified JSON access API, you can adapter any JSON library to Gson, Ja
 &lt;/dependency>
                 </pre>
             </td>          
-            <td></td><td></td>  
         </tr>    
         <tr>
             <td>org.json</td>
@@ -221,7 +229,6 @@ Provides a unified JSON access API, you can adapter any JSON library to Gson, Ja
 &lt;/dependency>
                 </pre>
             </td>          
-            <td></td><td></td>  
         </tr>           
         <tr>
             <td>Progsbase JSON</td>
@@ -244,7 +251,6 @@ Provides a unified JSON access API, you can adapter any JSON library to Gson, Ja
 &lt;/dependency>
                 </pre>
             </td>          
-            <td></td><td></td>  
         </tr> 
         <tr>
             <td>json-simple</td>
@@ -267,52 +273,10 @@ Provides a unified JSON access API, you can adapter any JSON library to Gson, Ja
 &lt;/dependency>
                 </pre>
             </td>          
-            <td></td><td></td>  
         </tr>                       
     </tbody>
 </table>
 
-
-if you want use gson:
-```xml
-<dependency>
-    <groupId>com.github.fangjinuo.easyjson</groupId>
-    <artifactId>easyjson-gson</artifactId>
-    <version>${easyjson.version}</version>
-</dependency>
-```
-if you want use jackson:
-```xml
-<dependency>
-    <groupId>com.github.fangjinuo.easyjson</groupId>
-    <artifactId>easyjson-jackson</artifactId>
-    <version>${easyjson.version}</version>
-</dependency>
-```
-if you want use fastjson:
-```xml
-<dependency>
-    <groupId>com.github.fangjinuo.easyjson</groupId>
-    <artifactId>easyjson-fastjson</artifactId>
-    <version>${easyjson.version}</version>
-</dependency>
-```
-if you want adapter fastjson to easyjson:
-```xml
-<dependency>
-    <groupId>com.github.fangjinuo.easyjson</groupId>
-    <artifactId>fastjson-to-easyjson</artifactId>
-    <version>${easyjson.version}</version>
-</dependency>
-```
-if you want adapter progsbase to easyjson:
-```xml
-<dependency>
-    <groupId>com.github.fangjinuo.easyjson</groupId>
-    <artifactId>progsbase-to-easyjson</artifactId>
-    <version>${easyjson.version}</version>
-</dependency>
-```
 
 #### How to:
    ***@see*** easyjson-examples testcases
