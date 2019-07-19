@@ -25,6 +25,10 @@
 
     <artifactId>orgjson-to-easyjson</artifactId>
 
+    <description>
+        Adapter org.json:json:jar to easyjson
+    </description>
+
     <dependencies>
         <dependency>
             <groupId>com.github.fangjinuo.easyjson</groupId>

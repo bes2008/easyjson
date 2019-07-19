@@ -12,6 +12,10 @@
 
     <artifactId>fastjson-to-easyjson</artifactId>
 
+    <description>
+        Adapter alibaba fastjson to easyjson
+    </description>
+
     <dependencies>
         <dependency>
             <groupId>com.github.fangjinuo.easyjson</groupId>

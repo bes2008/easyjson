@@ -25,6 +25,10 @@
 
     <artifactId>jsonsmart-to-easyjson</artifactId>
 
+    <description>
+        Adapter net.minidev:json-smart:jar to easyjson
+    </description>
+
     <dependencies>
         <dependency>
             <groupId>com.github.fangjinuo.easyjson</groupId>

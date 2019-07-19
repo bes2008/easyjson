@@ -10,5 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>easyjson-core</artifactId>
-
+    <description>
+        the easyjson core
+    </description>
 </project>

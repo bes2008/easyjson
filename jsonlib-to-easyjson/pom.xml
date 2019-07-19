@@ -24,6 +24,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>jsonlib-to-easyjson</artifactId>
+
+    <description>
+        Adapter json-lib com.hynnet:json-lib:jar to easyjson
+    </description>
+
     <dependencies>
         <dependency>
             <groupId>com.github.fangjinuo.easyjson</groupId>

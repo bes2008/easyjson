@@ -10,7 +10,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>androidjson-to-easyjson</artifactId>
-
+    <description>
+        Adapter android json library to easyjson
+    </description>
     <dependencies>
         <dependency>
             <groupId>com.github.fangjinuo.easyjson</groupId>

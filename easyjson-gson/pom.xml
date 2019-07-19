@@ -12,6 +12,10 @@
 
     <artifactId>easyjson-gson</artifactId>
 
+    <description>
+        Adapter easyjson to Google Gson
+    </description>
+
     <dependencies>
         <dependency>
             <groupId>com.github.fangjinuo.easyjson</groupId>

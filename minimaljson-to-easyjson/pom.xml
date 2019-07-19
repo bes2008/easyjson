@@ -25,6 +25,10 @@
 
     <artifactId>minimaljson-to-easyjson</artifactId>
 
+    <description>
+        Adapter Eclipse JSON library com.eclipsesource.minimal-json:minimal-json:jar to easyjson
+    </description>
+
     <dependencies>
         <dependency>
             <groupId>com.github.fangjinuo.easyjson</groupId>
