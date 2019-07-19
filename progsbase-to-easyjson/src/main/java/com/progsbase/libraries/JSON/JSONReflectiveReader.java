@@ -5,8 +5,7 @@ import JSON.structures.Element;
 import com.github.fangjinuo.easyjson.core.JSONBuilderProvider;
 
 import java.lang.reflect.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static JSON.StringElementMaps.StringElementMaps.GetStringElementMapNumberOfKeys;
 
@@ -114,10 +113,19 @@ public class JSONReflectiveReader {
     }
 
     public static <T> T javaifyJSONObject(StringElementMap object, Class<T> clazz) throws JSONException {
-        T t;
-
+        T t = null;
+        if(clazz.isInterface()){
+            if(clazz == Map.class){
+                t = (T)new HashMap();
+            }
+            else if(clazz == Collection.class || clazz == List.class){
+                t = (T)new ArrayList();
+            }
+        }
         try {
-            t = clazz.newInstance();
+            if(t == null) {
+                t = clazz.newInstance();
+            }
         } catch (Throwable e) {
             throw new JSONException(e);
         }

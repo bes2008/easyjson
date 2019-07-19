@@ -21,6 +21,8 @@ import com.progsbase.libraries.JSON.JSONReflectiveReader;
 import com.progsbase.libraries.JSON.JSONReflectiveWriter;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -39,13 +41,13 @@ public class TestProgsbase extends BaseTests {
         // test list
         String str2 = JSONReflectiveWriter.writeJSON(persons);
         System.out.println(str2);
-        List<Person> persons2 = JSONReflectiveReader.readJSON(str2, List.class, new GenericTypeGetter<List<Person>>() {
+        List<Person> persons2 = JSONReflectiveReader.readJSON(str2, ArrayList.class, new GenericTypeGetter<List<Person>>() {
         }.getType());
         System.out.println(JSONReflectiveWriter.writeJSON(persons2));
         // test map
         String str3 = JSONReflectiveWriter.writeJSON(idToPersonMap);
         System.out.println(str3);
-        Map<Integer, Person> personMap = JSONReflectiveReader.readJSON(str3, Map.class, new GenericTypeGetter<Map<String, Person>>() {
+        Map<Integer, Person> personMap = JSONReflectiveReader.readJSON(str3, HashMap.class, new GenericTypeGetter<Map<String, Person>>() {
         }.getType());
         System.out.println(JSONReflectiveWriter.writeJSON(personMap));
 
