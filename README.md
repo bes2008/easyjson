@@ -42,6 +42,237 @@ Provides a unified JSON access API, you can adapter any JSON library to Gson, Ja
 ### Quick Start
 #### installation
 
+<table style="border:1px solid #ACE;">
+    <thead style="border:1px solid #ACE;">
+        <tr>
+            <th>JSON Library</th>
+            <th>Maven</th>
+            <th>version</th>
+            <th>Adapter</th>
+            <th>easyjson facade</th>
+            <th>JSON Implementation</th>
+        </tr>
+    </thead>
+    <tbody style="border:1px solid #ACE;">
+        <tr>
+            <td>Android json</td>
+            <td>
+                <pre>
+&lt;dependency>
+    &lt;groupId>com.vaadin.external.google&lt;/groupId>
+    &lt;artifactId>android-json&lt;/artifactId>
+    &lt;version>0.0.20131108.vaadin1&lt;/version>
+&lt;/dependency>
+                </pre>
+            </td>
+            <td>0.0.20131108.vaadin</td>
+            <td>
+                <pre>
+&lt;dependency>
+    &lt;groupId>com.github.fangjinuo.easyjson&lt;/groupId>
+    &lt;artifactId>android-to-easyjson&lt;/artifactId>
+    &lt;version>${version}&lt;/version>
+&lt;/dependency>
+                </pre>
+            </td>            
+            <td rowspan="2">
+                <pre>
+&lt;dependency>
+    &lt;groupId>com.gith.fangjinuo.easyjson&lt;/groupId>
+    &lt;artifactId>easyjson-core&lt;/artifactId>
+    &lt;version>${version}/version>
+&lt;/dependency>
+                </pre>            
+            </td>
+            <td rowspan="2">
+                <pre>
+&lt;dependency>
+    &lt;groupId>com.gith.fangjinuo.easyjson&lt;/groupId>
+    &lt;artifactId>easyjson-gson&lt;/artifactId>
+    &lt;version>${version}/version>
+&lt;/dependency>
+                </pre>     
+                <pre>
+&lt;dependency>
+    &lt;groupId>com.gith.fangjinuo.easyjson&lt;/groupId>
+    &lt;artifactId>easyjson-jackson&lt;/artifactId>
+    &lt;version>${version}/version>
+&lt;/dependency>
+                </pre>     
+                <pre>
+&lt;dependency>
+    &lt;groupId>com.gith.fangjinuo.easyjson&lt;/groupId>
+    &lt;artifactId>easyjson-fastjson&lt;/artifactId>
+    &lt;version>${version}/version>
+&lt;/dependency>
+                </pre>                                                 
+            </td>
+        </tr>
+        <tr>
+            <td>fastjson</td>
+            <td>
+                <pre>
+&lt;dependency>
+    &lt;groupId>com.alibaba&lt;/groupId>
+    &lt;artifactId>fastjson&lt;/artifactId>
+    &lt;version>1.2.58&lt;/version>
+&lt;/dependency>
+                </pre>
+            </td>
+            <td>1.2.58</td>
+            <td>
+                <pre>
+&lt;dependency>
+    &lt;groupId>com.github.fangjinuo.easyjson&lt;/groupId>
+    &lt;artifactId>fastjson-to-easyjson&lt;/artifactId>
+    &lt;version>${version}&lt;/version>
+&lt;/dependency>
+                </pre>
+            </td> 
+            <td></td><td></td>           
+        </tr>
+        <tr>
+            <td>json-lib</td>
+            <td>
+                <pre>
+&lt;dependency>
+    &lt;groupId>com.hynnet&lt;/groupId>
+    &lt;artifactId>json-lib&lt;/artifactId>
+    &lt;version>2.4&lt;/version>
+&lt;/dependency>
+                </pre>
+            </td>
+            <td>2.4</td>
+            <td>
+                <pre>
+&lt;dependency>
+    &lt;groupId>com.github.fangjinuo.easyjson&lt;/groupId>
+    &lt;artifactId>jsonlib-to-easyjson&lt;/artifactId>
+    &lt;version>${version}&lt;/version>
+&lt;/dependency>
+                </pre>
+            </td>          
+            <td></td><td></td>  
+        </tr>
+        <tr>
+            <td>json-smart</td>
+            <td>
+                <pre>
+&lt;dependency>
+    &lt;groupId>net.minidev&lt;/groupId>
+    &lt;artifactId>json-smart&lt;/artifactId>
+    &lt;version>2.3&lt;/version>
+&lt;/dependency>
+                </pre>
+            </td>
+            <td>2.3</td>
+            <td>
+                <pre>
+&lt;dependency>
+    &lt;groupId>com.github.fangjinuo.easyjson&lt;/groupId>
+    &lt;artifactId>jsonsmart-to-easyjson&lt;/artifactId>
+    &lt;version>${version}&lt;/version>
+&lt;/dependency>
+                </pre>
+            </td>          
+            <td></td><td></td>  
+        </tr> 
+        <tr>
+            <td>Eclipse minimal-json</td>
+            <td>
+                <pre>
+&lt;dependency>
+    &lt;groupId>com.eclipsesource.minimal-json&lt;/groupId>
+    &lt;artifactId>minimal-json&lt;/artifactId>
+    &lt;version>0.9.5&lt;/version>
+&lt;/dependency>
+                </pre>
+            </td>
+            <td>0.9.5</td>
+            <td>
+                <pre>
+&lt;dependency>
+    &lt;groupId>com.github.fangjinuo.easyjson&lt;/groupId>
+    &lt;artifactId>minimaljson-to-easyjson&lt;/artifactId>
+    &lt;version>${version}&lt;/version>
+&lt;/dependency>
+                </pre>
+            </td>          
+            <td></td><td></td>  
+        </tr>    
+        <tr>
+            <td>org.json</td>
+            <td>
+                <pre>
+&lt;dependency>
+    &lt;groupId>org.json&lt;/groupId>
+    &lt;artifactId>json&lt;/artifactId>
+    &lt;version>20180813&lt;/version>
+&lt;/dependency>
+                </pre>
+            </td>
+            <td>20180813</td>
+            <td>
+                <pre>
+&lt;dependency>
+    &lt;groupId>com.github.fangjinuo.easyjson&lt;/groupId>
+    &lt;artifactId>orgjson-to-easyjson&lt;/artifactId>
+    &lt;version>${version}&lt;/version>
+&lt;/dependency>
+                </pre>
+            </td>          
+            <td></td><td></td>  
+        </tr>           
+        <tr>
+            <td>Progsbase JSON</td>
+            <td>
+                <pre>
+&lt;dependency>
+    &lt;groupId>com.progsbase.libraries&lt;/groupId>
+    &lt;artifactId>JSON&lt;/artifactId>
+    &lt;version>0.3.9&lt;/version>
+&lt;/dependency>
+                </pre>
+            </td>
+            <td>0.3.9</td>
+            <td>
+                <pre>
+&lt;dependency>
+    &lt;groupId>com.github.fangjinuo.easyjson&lt;/groupId>
+    &lt;artifactId>progsbase-to-easyjson&lt;/artifactId>
+    &lt;version>${version}&lt;/version>
+&lt;/dependency>
+                </pre>
+            </td>          
+            <td></td><td></td>  
+        </tr> 
+        <tr>
+            <td>json-simple</td>
+            <td>
+                <pre>
+&lt;dependency>
+    &lt;groupId>com.googlecode.json-simple&lt;/groupId>
+    &lt;artifactId>json-simple&lt;/artifactId>
+    &lt;version>1.1.1&lt;/version>
+&lt;/dependency>
+                </pre>
+            </td>
+            <td>1.1.1</td>
+            <td>
+                <pre>
+&lt;dependency>
+    &lt;groupId>com.github.fangjinuo.easyjson&lt;/groupId>
+    &lt;artifactId>simplejson-to-easyjson&lt;/artifactId>
+    &lt;version>${version}&lt;/version>
+&lt;/dependency>
+                </pre>
+            </td>          
+            <td></td><td></td>  
+        </tr>                       
+    </tbody>
+</table>
+
+
 if you want use gson:
 ```xml
 <dependency>
