@@ -9,7 +9,6 @@
 [![gson](https://img.shields.io/badge/gson-2.x-green.svg)](https://github.com/google/gson)
 [![fastjson](https://img.shields.io/badge/fastjson-1.2.x-green.svg)](https://github.com/alibaba/fastjson)
 [![jackson](https://img.shields.io/badge/jackson-2.x-green.svg)](https://github.com/FasterXML/jackson)
-[![progsbase](https://img.shields.io/badge/progsbase-0.3.x-green.svg)](https://repo.progsbase.com/repoviewer/no.inductive.idea10.programs/JSON/latest/)
 
 [![JDK](https://img.shields.io/badge/JDK-1.6+-green.svg)](https://www.oracle.com/technetwork/java/javase/downloads/index.html)
 
@@ -22,8 +21,7 @@ Provides a unified JSON access API, you can adapter any JSON library to Gson, Ja
 2. **easyjson-jackson**: use it, you can adapter any json library to jackson. If you working in a spring application, this is recommend.
 3. **easyjson-fastjson**: use it, you can adapter any json library to Alibaba fastjson.
 4. **easyjson-core**: the core module. use it you can adapter any json library to easyjson,the other wary round, you can adapter any a json library to any json library.
-5. **fastjson-to-easyjson**: adapter fastjosn to easyjson (gson, jackson)
-6. **progsbase-to-easyjson**: adapter progsbase to easyjson (gson, jackson)
+5. **XXXX-to-easyjson**: adapter some JSON library (android-json, json-simple, json-lib, ... etc) to easyjson (gson, jackson)
 7. **easyjson-examples**: test cases
 
 ## Usage
