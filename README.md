@@ -26,7 +26,7 @@ Provides a unified JSON access API, you can adapter any JSON library to Gson, Ja
 
 ## Usage
 ### Key Features
-1. Supports **gson**, **fastjson**, **jackson**, **Progsbase**
+1. Supports **gson**, **fastjson**, **jackson**, **Progsbase** **...**
 2. Supports tree model, stream model
 3. Control whether serialize null
 4. Convert ON|OFF, 1|0 to Boolean
