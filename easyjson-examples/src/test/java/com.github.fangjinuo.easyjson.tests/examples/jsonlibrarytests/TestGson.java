@@ -27,7 +27,7 @@ import java.text.DateFormat;
 import java.util.List;
 import java.util.Map;
 
-public class TestGson  extends BaseTests {
+public class TestGson extends BaseTests {
     @Test
     public void testGson() {
         System.out.println("=====================Gson test start =============================");

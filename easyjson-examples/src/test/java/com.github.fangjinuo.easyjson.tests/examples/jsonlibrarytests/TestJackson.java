@@ -22,7 +22,7 @@ import org.junit.Test;
 import java.util.List;
 import java.util.Map;
 
-public class TestJackson  extends BaseTests {
+public class TestJackson extends BaseTests {
     @Test
     public void testJackson() throws Exception {
         System.out.println("=====================Jackson test start =============================");
