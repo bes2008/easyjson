@@ -39,6 +39,13 @@
             <optional>true</optional>
         </dependency>
         <dependency>
+            <groupId>com.squareup.moshi</groupId>
+            <artifactId>moshi-adapters</artifactId>
+            <version>1.8.0</version>
+            <scope>test</scope>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
             <groupId>com.vaadin.external.google</groupId>
             <artifactId>android-json</artifactId>
             <version>0.0.20131108.vaadin1</version>
