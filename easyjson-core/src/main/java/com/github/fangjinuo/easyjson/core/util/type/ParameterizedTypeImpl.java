@@ -77,7 +77,7 @@ public class ParameterizedTypeImpl implements ParameterizedType {
 
     static final Type[] EMPTY_TYPE_ARRAY = new Type[]{};
 
-    private static final class WildcardTypeImpl implements WildcardType, Serializable {
+    public static final class WildcardTypeImpl implements WildcardType, Serializable {
         private final Type upperBound;
         private final Type lowerBound;
 
@@ -100,10 +100,12 @@ public class ParameterizedTypeImpl implements ParameterizedType {
             }
         }
 
+        @Override
         public Type[] getUpperBounds() {
             return new Type[]{upperBound};
         }
 
+        @Override
         public Type[] getLowerBounds() {
             return lowerBound != null ? new Type[]{lowerBound} : EMPTY_TYPE_ARRAY;
         }
@@ -168,6 +170,7 @@ public class ParameterizedTypeImpl implements ParameterizedType {
             this.componentType = canonicalize(componentType);
         }
 
+        @Override
         public Type getGenericComponentType() {
             return componentType;
         }
@@ -191,14 +194,17 @@ public class ParameterizedTypeImpl implements ParameterizedType {
         private static final long serialVersionUID = 0;
     }
 
+    @Override
     public Type[] getActualTypeArguments() {
         return typeArguments.clone();
     }
 
+    @Override
     public Type getRawType() {
         return rawType;
     }
 
+    @Override
     public Type getOwnerType() {
         return ownerType;
     }
