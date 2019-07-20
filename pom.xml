@@ -28,6 +28,7 @@
 
     <description>
         A JSON Facade: Supports adapter any json library to gson, jackson, fastjson etc.
+        Provides a unified JSON access API, you can adapter any JSON library to Gson, Jackson, FastJson with easyjson.
     </description>
     <url>https://github.com/fangjinuo/easyjson</url>
     <developers>
