@@ -29,6 +29,22 @@
             <groupId>com.github.fangjinuo.easyjson</groupId>
             <artifactId>easyjson-core</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.github.fangjinuo.easyjson</groupId>
+            <artifactId>easyjson-examples</artifactId>
+            <optional>true</optional>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+            <version>3.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.okio</groupId>
+            <artifactId>okio</artifactId>
+            <version>1.16.0</version>
+        </dependency>
     </dependencies>
 
 </project>
