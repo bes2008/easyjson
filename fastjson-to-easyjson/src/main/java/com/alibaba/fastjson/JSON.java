@@ -29,7 +29,6 @@ import com.github.fangjinuo.easyjson.core.JSONBuilder;
 import com.github.fangjinuo.easyjson.core.JSONBuilderProvider;
 import com.github.fangjinuo.easyjson.core.JsonTreeNode;
 import com.github.fangjinuo.easyjson.core.node.JsonArrayNode;
-import com.github.fangjinuo.easyjson.core.node.JsonTreeNodes;
 import com.github.fangjinuo.easyjson.core.util.type.Types;
 
 import java.io.IOException;
@@ -164,7 +163,7 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
         if (text == null) {
             return null;
         }
-        return JsonTreeNodes.toJavaObject(getJsonBuilder(DEFAULT_GENERATE_FEATURE).build().fromJson(text));
+        return JsonMapper.fromJsonTreeNode(getJsonBuilder(DEFAULT_GENERATE_FEATURE).build().fromJson(text));
     }
 
     private static JSONBuilder getJsonBuilder(int features, SerializerFeature... features2) {
@@ -514,7 +513,7 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
             arrayNode = new JsonArrayNode();
             arrayNode.add(node);
         }
-        return (JSONArray) toJSON(JsonTreeNodes.toJavaObject(arrayNode));
+        return (JSONArray) JsonMapper.fromJsonTreeNode(node);
     }
 
     public static <T> List<T> parseArray(String text, Class<T> clazz) {
