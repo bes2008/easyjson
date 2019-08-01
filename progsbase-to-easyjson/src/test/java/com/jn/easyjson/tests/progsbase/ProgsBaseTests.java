@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.github.fangjinuo.easyjson.tests.progsbase;
+package com.jn.easyjson.tests.progsbase;
 
 import com.jn.easyjson.tests.examples.BaseTests;
 import com.jn.easyjson.tests.examples.struct.Person;

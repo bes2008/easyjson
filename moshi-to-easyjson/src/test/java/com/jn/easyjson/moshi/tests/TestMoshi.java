@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.github.fangjinuo.easyjson.moshi.tests;
+package com.jn.easyjson.moshi.tests;
 
 import com.jn.easyjson.tests.examples.BaseTests;
 import com.jn.easyjson.tests.examples.struct.Gender;
