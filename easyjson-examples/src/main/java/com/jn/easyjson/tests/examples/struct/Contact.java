@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.github.fangjinuo.easyjson.tests.examples.struct;
+package com.jn.easyjson.tests.examples.struct;
 
 import com.jn.easyjson.core.annotation.Ignore;
 

@@ -21,8 +21,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.parser.Feature;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.util.ParameterizedTypeImpl;
-import com.github.fangjinuo.easyjson.tests.examples.BaseTests;
-import com.github.fangjinuo.easyjson.tests.examples.struct.Person;
+import com.jn.easyjson.tests.examples.BaseTests;
+import com.jn.easyjson.tests.examples.struct.Person;
 import org.junit.Test;
 
 import java.util.ArrayList;

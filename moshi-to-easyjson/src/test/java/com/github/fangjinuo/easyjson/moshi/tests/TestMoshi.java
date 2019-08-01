@@ -14,9 +14,9 @@
 
 package com.github.fangjinuo.easyjson.moshi.tests;
 
-import com.github.fangjinuo.easyjson.tests.examples.BaseTests;
-import com.github.fangjinuo.easyjson.tests.examples.struct.Gender;
-import com.github.fangjinuo.easyjson.tests.examples.struct.Person;
+import com.jn.easyjson.tests.examples.BaseTests;
+import com.jn.easyjson.tests.examples.struct.Gender;
+import com.jn.easyjson.tests.examples.struct.Person;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 import com.squareup.moshi.Types;

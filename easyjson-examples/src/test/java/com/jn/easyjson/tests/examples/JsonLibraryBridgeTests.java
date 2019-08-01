@@ -12,9 +12,8 @@
  * limitations under the License.
  */
 
-package com.github.fangjinuo.easyjson.tests.examples.struct;
+package com.jn.easyjson.tests.examples;
 
-public enum Gender {
-    man,
-    woman
+public class JsonLibraryBridgeTests extends BaseTests {
+
 }

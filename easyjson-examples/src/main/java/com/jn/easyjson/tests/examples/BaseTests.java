@@ -12,11 +12,11 @@
  * limitations under the License.
  */
 
-package com.github.fangjinuo.easyjson.tests.examples;
+package com.jn.easyjson.tests.examples;
 
-import com.github.fangjinuo.easyjson.tests.examples.struct.Contact;
-import com.github.fangjinuo.easyjson.tests.examples.struct.Gender;
-import com.github.fangjinuo.easyjson.tests.examples.struct.Person;
+import com.jn.easyjson.tests.examples.struct.Contact;
+import com.jn.easyjson.tests.examples.struct.Gender;
+import com.jn.easyjson.tests.examples.struct.Person;
 
 import java.util.*;
 

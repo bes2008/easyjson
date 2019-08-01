@@ -14,8 +14,8 @@
 
 package com.github.fangjinuo.easyjson.tests.progsbase;
 
-import com.github.fangjinuo.easyjson.tests.examples.BaseTests;
-import com.github.fangjinuo.easyjson.tests.examples.struct.Person;
+import com.jn.easyjson.tests.examples.BaseTests;
+import com.jn.easyjson.tests.examples.struct.Person;
 import com.progsbase.libraries.JSON.GenericTypeGetter;
 import com.progsbase.libraries.JSON.JSONReflectiveReader;
 import com.progsbase.libraries.JSON.JSONReflectiveWriter;

@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.github.fangjinuo.easyjson.tests.examples.jsonlibrarytests;
+package com.jn.easyjson.tests.examples.jsonlibrarytests;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -20,8 +20,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.parser.Feature;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.util.ParameterizedTypeImpl;
-import com.github.fangjinuo.easyjson.tests.examples.BaseTests;
-import com.github.fangjinuo.easyjson.tests.examples.struct.Person;
+import com.jn.easyjson.tests.examples.BaseTests;
+import com.jn.easyjson.tests.examples.struct.Person;
 import org.junit.Test;
 
 import java.util.List;

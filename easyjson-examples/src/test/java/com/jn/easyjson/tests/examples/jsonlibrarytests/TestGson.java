@@ -12,10 +12,10 @@
  * limitations under the License.
  */
 
-package com.github.fangjinuo.easyjson.tests.examples.jsonlibrarytests;
+package com.jn.easyjson.tests.examples.jsonlibrarytests;
 
-import com.github.fangjinuo.easyjson.tests.examples.BaseTests;
-import com.github.fangjinuo.easyjson.tests.examples.struct.Person;
+import com.jn.easyjson.tests.examples.BaseTests;
+import com.jn.easyjson.tests.examples.struct.Person;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
