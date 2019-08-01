@@ -15,6 +15,8 @@
  */
 package com.squareup.moshi;
 
+import com.jn.easyjson.core.JSONBuilderProvider;
+
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -54,10 +56,14 @@ final class JsonValueReader extends JsonReader {
 
     private Object[] stack;
 
+    private String sourceJsonString;
+
     JsonValueReader(Object root) {
         scopes[stackSize] = JsonScope.NONEMPTY_DOCUMENT;
         stack = new Object[32];
         stack[stackSize++] = root;
+
+        sourceJsonString = JSONBuilderProvider.simplest().toJson(root);
     }
 
     /**
@@ -72,6 +78,8 @@ final class JsonValueReader extends JsonReader {
                 stack[i] = ((JsonIterator) stack[i]).clone();
             }
         }
+
+        sourceJsonString = copyFrom.sourceJsonString;
     }
 
     @Override
@@ -166,7 +174,9 @@ final class JsonValueReader extends JsonReader {
         if (peeked == null) {
             return Token.NULL;
         }
-        if (peeked == JSON_READER_CLOSED) throw new IllegalStateException("JsonReader is closed");
+        if (peeked == JSON_READER_CLOSED) {
+            throw new IllegalStateException("JsonReader is closed");
+        }
 
         throw typeMismatch(peeked, "a JSON value");
     }
@@ -473,5 +483,10 @@ final class JsonValueReader extends JsonReader {
             // No need to copy the array; it's read-only.
             return new JsonIterator(endToken, array, next);
         }
+    }
+
+    @Override
+    public String getJsonString() throws IOException {
+        return sourceJsonString;
     }
 }

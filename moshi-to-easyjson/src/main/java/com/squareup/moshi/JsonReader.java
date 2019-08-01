@@ -626,4 +626,6 @@ public abstract class JsonReader implements Closeable {
          */
         END_DOCUMENT
     }
+
+    public abstract String getJsonString()throws IOException;
 }

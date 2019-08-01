@@ -15,6 +15,7 @@
  */
 package com.squareup.moshi;
 
+import com.jn.easyjson.core.util.IOs;
 import okio.Buffer;
 import okio.BufferedSource;
 import okio.ByteString;
@@ -22,6 +23,7 @@ import okio.ByteString;
 import javax.annotation.Nullable;
 import java.io.EOFException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 
 final class JsonUtf8Reader extends JsonReader {
@@ -1194,5 +1196,11 @@ final class JsonUtf8Reader extends JsonReader {
             peekedString = nextName();
             peeked = PEEKED_BUFFERED;
         }
+    }
+
+    @Override
+    public String getJsonString() throws IOException {
+        InputStream inputStream = this.source.inputStream();
+        return IOs.readAsString(inputStream);
     }
 }

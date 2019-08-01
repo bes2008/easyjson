@@ -46,8 +46,8 @@ import static com.squareup.moshi.internal.Util.typeAnnotatedWithAnnotations;
 final class ClassJsonAdapter<T> extends JsonAdapter<T> {
     public static final JsonAdapter.Factory FACTORY = new JsonAdapter.Factory() {
         @Override
-        public @Nullable
-        JsonAdapter<?> create(
+        @Nullable
+        public JsonAdapter<?> create(
                 Type type, Set<? extends Annotation> annotations, Moshi moshi) {
             if (!(type instanceof Class) && !(type instanceof ParameterizedType)) {
                 return null;
