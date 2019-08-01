@@ -20,7 +20,7 @@ import com.jn.easyjson.core.exclusion.IgnoreAnnotationExclusion;
 
 import java.text.DateFormat;
 
-public abstract class JSONBuilder {
+public abstract class JSONBuilder implements Cloneable {
     // null
     private boolean serializeNulls = false;
 
@@ -45,9 +45,24 @@ public abstract class JSONBuilder {
     // print format
     private boolean prettyFormat = false;
 
-    private final ExclusionConfiguration exclusionConfiguration = new ExclusionConfiguration();
+    private final ExclusionConfiguration exclusionConfiguration;
+
+    private boolean isLenient;
 
     public JSONBuilder() {
+        exclusionConfiguration = new ExclusionConfiguration();
+    }
+
+    public JSONBuilder(ExclusionConfiguration exclusionConfiguration) {
+        this.exclusionConfiguration = exclusionConfiguration;
+    }
+
+    public boolean isLenient() {
+        return isLenient;
+    }
+
+    public void setLenient(boolean lenient) {
+        isLenient = lenient;
     }
 
     public JSONBuilder serializeNulls(boolean serializeNulls) {
@@ -216,4 +231,29 @@ public abstract class JSONBuilder {
     }
 
     public abstract JSON build();
+
+    protected <E extends JSONBuilder> void copyTo(E builder) {
+        builder.setLenient(this.isLenient);
+        builder.serializeNulls(this.serializeNulls);
+        builder.prettyFormat(this.prettyFormat);
+        builder.serializeEnumUsingToString(this.serializeEnumUsingToString);
+        builder.serializeEnumUsingValue(this.serializeEnumUsingValue);
+        builder.serializeEnumUsingField(this.serializeEnumUsingField);
+        builder.serializeLongAsString(this.serializeLongAsString);
+        builder.serializeNumberAsString(this.serializeNumberAsString);
+        builder.serializeUseDateFormat(this.dateFormat);
+        builder.serializeDateUsingPattern(this.serializeDateUsingPattern);
+        builder.serializeDateUsingToString(this.serializeDateUsingToString);
+        builder.serializeBooleanUsingOnOff(this.serializeBooleanUsingOnOff);
+        builder.serializeBooleanUsing1_0(this.serializeBooleanUsing1_0);
+    }
+
+    public static JSONBuilder clone(JSONBuilder builder) {
+        try {
+            Object jsonBuilder = builder.clone();
+            return (JSONBuilder) jsonBuilder;
+        } catch (CloneNotSupportedException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 }

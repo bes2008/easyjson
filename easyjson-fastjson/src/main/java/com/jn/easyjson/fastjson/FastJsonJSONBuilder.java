@@ -22,6 +22,7 @@ import com.jn.easyjson.core.JSON;
 import com.jn.easyjson.core.JSONBuilder;
 import com.jn.easyjson.core.annotation.DependOn;
 import com.jn.easyjson.core.annotation.Name;
+import com.jn.easyjson.core.exclusion.ExclusionConfiguration;
 import com.jn.easyjson.core.tree.JsonTreeSerializerBuilder;
 import com.jn.easyjson.fastjson.codec.BooleanCodec;
 import com.jn.easyjson.fastjson.codec.DateCodec;
@@ -32,6 +33,15 @@ import com.jn.easyjson.fastjson.ext.EasyJsonSerializeConfig;
 @Name("fastjson")
 @DependOn("com.alibaba.fastjson.JSON")
 public class FastJsonJSONBuilder extends JSONBuilder {
+
+    public FastJsonJSONBuilder() {
+        super();
+    }
+
+    public FastJsonJSONBuilder(ExclusionConfiguration exclusionConfiguration) {
+        super(exclusionConfiguration);
+    }
+
     @Override
     public JSON build() {
         FastJsonSerializerBuilder serializerBuilder = buildSerializer();
@@ -101,5 +111,12 @@ public class FastJsonJSONBuilder extends JSONBuilder {
         FastJsonParserBuilder builder = new FastJsonParserBuilder().config(config).defaultFeatureValues(featureValues);
         builder.addFeature(Feature.DisableCircularReferenceDetect);
         return builder;
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        FastJsonJSONBuilder result = new FastJsonJSONBuilder(this.getExclusionConfiguration());
+        this.copyTo(result);
+        return result;
     }
 }

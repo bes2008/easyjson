@@ -14,18 +14,19 @@
 
 package com.jn.easyjson.gson;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.jn.easyjson.core.JSON;
 import com.jn.easyjson.core.JSONBuilder;
 import com.jn.easyjson.core.annotation.DependOn;
 import com.jn.easyjson.core.annotation.Name;
 import com.jn.easyjson.core.exclusion.Exclusion;
+import com.jn.easyjson.core.exclusion.ExclusionConfiguration;
 import com.jn.easyjson.gson.exclusion.DelegateExclusionStrategy;
 import com.jn.easyjson.gson.typeadapter.BooleanTypeAdapter;
 import com.jn.easyjson.gson.typeadapter.DateTypeAdapter;
 import com.jn.easyjson.gson.typeadapter.EnumTypeAdapter;
 import com.jn.easyjson.gson.typeadapter.NumberTypeAdapter;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import java.util.Date;
 import java.util.List;
@@ -33,6 +34,15 @@ import java.util.List;
 @Name("gson")
 @DependOn("com.google.gson.Gson")
 public class GsonJSONBuilder extends JSONBuilder {
+
+    public GsonJSONBuilder() {
+        super();
+    }
+
+    public GsonJSONBuilder(ExclusionConfiguration exclusionConfiguration) {
+        super(exclusionConfiguration);
+    }
+
     @Override
     public JSON build() {
         GsonBuilder gsonBuilder = new GsonBuilder();
@@ -95,5 +105,12 @@ public class GsonJSONBuilder extends JSONBuilder {
         gsonAdapter.setGson(gson);
         json.setJsonHandler(gsonAdapter);
         return json;
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        GsonJSONBuilder result = new GsonJSONBuilder(this.getExclusionConfiguration());
+        this.copyTo(result);
+        return result;
     }
 }

@@ -24,6 +24,7 @@ import com.jn.easyjson.core.JSON;
 import com.jn.easyjson.core.JSONBuilder;
 import com.jn.easyjson.core.annotation.DependOn;
 import com.jn.easyjson.core.annotation.Name;
+import com.jn.easyjson.core.exclusion.ExclusionConfiguration;
 import com.jn.easyjson.jackson.deserializer.BooleanDeserializer;
 import com.jn.easyjson.jackson.deserializer.Deserializers;
 import com.jn.easyjson.jackson.deserializer.EnumDeserializer;
@@ -39,6 +40,14 @@ public class JacksonJSONBuilder extends JSONBuilder {
 
     static {
         makesureModuleRegister();
+    }
+
+    public JacksonJSONBuilder() {
+        super();
+    }
+
+    public JacksonJSONBuilder(ExclusionConfiguration exclusionConfiguration) {
+        super(exclusionConfiguration);
     }
 
     private static void makesureModuleRegister() {
@@ -158,5 +167,12 @@ public class JacksonJSONBuilder extends JSONBuilder {
         JSON json = new JSON();
         json.setJsonHandler(jsonHandler);
         return json;
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        JacksonJSONBuilder result = new JacksonJSONBuilder(this.getExclusionConfiguration());
+        this.copyTo(result);
+        return result;
     }
 }
