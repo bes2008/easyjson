@@ -17,7 +17,7 @@ package com.alibaba.fastjson;
 
 
 import com.alibaba.fastjson.util.ParameterizedTypeImpl;
-import com.github.fangjinuo.easyjson.core.util.type.Types;
+import com.jn.easyjson.core.util.type.Types;
 
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.ParameterizedType;

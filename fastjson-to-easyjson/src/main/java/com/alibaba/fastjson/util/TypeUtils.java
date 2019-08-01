@@ -21,7 +21,7 @@ import com.alibaba.fastjson.annotation.JSONType;
 import com.alibaba.fastjson.parser.Feature;
 import com.alibaba.fastjson.parser.ParserConfig;
 import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.github.fangjinuo.easyjson.core.util.type.Types;
+import com.jn.easyjson.core.util.type.Types;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.*;

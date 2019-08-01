@@ -24,9 +24,9 @@ package org.json;
  SOFTWARE.
  */
 
-import com.github.fangjinuo.easyjson.core.JSONBuilderProvider;
-import com.github.fangjinuo.easyjson.core.JsonTreeNode;
-import com.github.fangjinuo.easyjson.core.node.JsonTreeNodes;
+import com.jn.easyjson.core.JSONBuilderProvider;
+import com.jn.easyjson.core.JsonTreeNode;
+import com.jn.easyjson.core.node.JsonTreeNodes;
 
 import java.io.IOException;
 import java.io.StringWriter;

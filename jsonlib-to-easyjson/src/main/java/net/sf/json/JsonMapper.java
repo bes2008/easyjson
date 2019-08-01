@@ -1,9 +1,9 @@
 package net.sf.json;
 
-import com.github.fangjinuo.easyjson.core.JSONBuilder;
-import com.github.fangjinuo.easyjson.core.JSONBuilderProvider;
-import com.github.fangjinuo.easyjson.core.JsonTreeNode;
-import com.github.fangjinuo.easyjson.core.node.*;
+import com.jn.easyjson.core.JSONBuilder;
+import com.jn.easyjson.core.JSONBuilderProvider;
+import com.jn.easyjson.core.JsonTreeNode;
+import com.jn.easyjson.core.node.*;
 import net.sf.json.util.JSONTokener;
 
 import java.lang.reflect.Modifier;
@@ -23,7 +23,7 @@ public class JsonMapper {
         return fromJsonTreeNode(toJsonTreeNode(object, jsonConfig));
     }
 
-    public static com.github.fangjinuo.easyjson.core.JSON buildJSON(JsonConfig config) {
+    public static com.jn.easyjson.core.JSON buildJSON(JsonConfig config) {
         if (config != null) {
             JSONBuilder jsonBuilder = JSONBuilderProvider.create();
 
@@ -131,7 +131,7 @@ public class JsonMapper {
             }
 
 
-            com.github.fangjinuo.easyjson.core.JSON json = buildJSON(jsonConfig);
+            com.jn.easyjson.core.JSON json = buildJSON(jsonConfig);
 
             if (jsonObj instanceof JSONString) {
                 String jsonString = ((JSONString) jsonObj).toJSONString();

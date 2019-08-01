@@ -14,14 +14,15 @@
 
 package com.github.fangjinuo.easyjson.tests.examples;
 
-import com.github.fangjinuo.easyjson.core.JSONBuilder;
-import com.github.fangjinuo.easyjson.core.JSONBuilderProvider;
-import com.github.fangjinuo.easyjson.core.JsonTreeNode;
-import com.github.fangjinuo.easyjson.core.exclusion.IgnoreAnnotationExclusion;
-import com.github.fangjinuo.easyjson.core.util.type.Types;
-import com.github.fangjinuo.easyjson.fastjson.FastJsonJSONBuilder;
-import com.github.fangjinuo.easyjson.gson.GsonJSONBuilder;
-import com.github.fangjinuo.easyjson.jackson.JacksonJSONBuilder;
+import com.jn.easyjson.core.JSONBuilder;
+import com.jn.easyjson.core.JSONBuilderProvider;
+import com.jn.easyjson.core.JsonTreeNode;
+import com.jn.easyjson.core.JSON;
+import com.jn.easyjson.core.exclusion.IgnoreAnnotationExclusion;
+import com.jn.easyjson.core.util.type.Types;
+import com.jn.easyjson.fastjson.FastJsonJSONBuilder;
+import com.jn.easyjson.gson.GsonJSONBuilder;
+import com.jn.easyjson.jackson.JacksonJSONBuilder;
 import com.github.fangjinuo.easyjson.tests.examples.struct.Gender;
 import com.github.fangjinuo.easyjson.tests.examples.struct.Person;
 import org.junit.Test;
@@ -44,7 +45,7 @@ public class EasyJsonTests extends BaseTests {
             String jsonLibraryName = entry.getKey();
             System.out.println("=====================EasyJson test [" + jsonLibraryName + "] start =============================");
             JSONBuilder jsonBuilder = entry.getValue();
-            com.github.fangjinuo.easyjson.core.JSON gson = jsonBuilder.serializeNulls(false).serializeNumberAsString(true).serializeEnumUsingValue(true).addDeserializationExclusion(new IgnoreAnnotationExclusion()).build();
+            JSON gson = jsonBuilder.serializeNulls(false).serializeNumberAsString(true).serializeEnumUsingValue(true).addDeserializationExclusion(new IgnoreAnnotationExclusion()).build();
 
             // test simple object
             String str1 = gson.toJson(person, person.getClass());
@@ -84,7 +85,7 @@ public class EasyJsonTests extends BaseTests {
             genders.add(Gender.woman);
             genders.add(Gender.man);
 
-            com.github.fangjinuo.easyjson.core.JSON json = new JacksonJSONBuilder().serializeEnumUsingValue(true).build();
+            JSON json = new JacksonJSONBuilder().serializeEnumUsingValue(true).build();
             String jsonString = json.toJson(genders);
             System.out.println(jsonString);
             List<Gender> a = json.fromJson(jsonString, Types.getListParameterizedType(Gender.class));
@@ -106,7 +107,7 @@ public class EasyJsonTests extends BaseTests {
 
             System.out.println("=====================EasyJson tree [" + jsonLibraryName + "] test start =============================");
             JSONBuilder jsonBuilder = JSONBuilderProvider.create();
-            com.github.fangjinuo.easyjson.core.JSON gson = jsonBuilder.serializeNulls(true).serializeNumberAsString(true).serializeEnumUsingValue(true).build();
+            JSON gson = jsonBuilder.serializeNulls(true).serializeNumberAsString(true).serializeEnumUsingValue(true).build();
 
             // test simple object
             String str1 = gson.toJson(person, person.getClass());

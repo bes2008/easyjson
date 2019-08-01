@@ -15,10 +15,10 @@
 package net.sf.json;
 
 
-import com.github.fangjinuo.easyjson.core.JSONBuilderProvider;
-import com.github.fangjinuo.easyjson.core.JsonTreeNode;
-import com.github.fangjinuo.easyjson.core.node.JsonTreeNodes;
-import com.github.fangjinuo.easyjson.core.util.type.Primitives;
+import com.jn.easyjson.core.JSONBuilderProvider;
+import com.jn.easyjson.core.JsonTreeNode;
+import com.jn.easyjson.core.node.JsonTreeNodes;
+import com.jn.easyjson.core.util.type.Primitives;
 import net.sf.json.processors.JsonVerifier;
 import net.sf.json.util.JSONUtils;
 import net.sf.json.util.PropertySetStrategy;
@@ -181,7 +181,7 @@ public final class JSONObject extends AbstractJSON implements JSON, Map, Compara
         if (clazz == null) {
             clazz = jsonConfig.getRootClass();
         }
-        com.github.fangjinuo.easyjson.core.JSON json = JsonMapper.buildJSON(jsonConfig);
+        com.jn.easyjson.core.JSON json = JsonMapper.buildJSON(jsonConfig);
         JsonTreeNode node1 = json.fromJson(json.toJson(root));
         JsonTreeNode node2 = JsonMapper.toJsonTreeNode(jsonObject);
 

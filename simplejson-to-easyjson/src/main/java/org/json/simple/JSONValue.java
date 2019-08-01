@@ -4,8 +4,8 @@
  */
 package org.json.simple;
 
-import com.github.fangjinuo.easyjson.core.JSONBuilderProvider;
-import com.github.fangjinuo.easyjson.core.util.IOs;
+import com.jn.easyjson.core.JSONBuilderProvider;
+import com.jn.easyjson.core.util.IOs;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;

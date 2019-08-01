@@ -1,7 +1,7 @@
 package arrays.arrays;
 
 
-import com.github.fangjinuo.easyjson.core.util.type.PrimitiveArrays;
+import com.jn.easyjson.core.util.type.PrimitiveArrays;
 import references.references.BooleanArrayReference;
 import references.references.NumberArrayReference;
 import references.references.StringReference;

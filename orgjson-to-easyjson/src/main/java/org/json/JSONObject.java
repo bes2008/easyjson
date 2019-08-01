@@ -1,9 +1,9 @@
 package org.json;
 
-import com.github.fangjinuo.easyjson.core.JSONBuilderProvider;
-import com.github.fangjinuo.easyjson.core.JsonTreeNode;
-import com.github.fangjinuo.easyjson.core.node.JsonTreeNodes;
-import com.github.fangjinuo.easyjson.core.util.type.Primitives;
+import com.jn.easyjson.core.JSONBuilderProvider;
+import com.jn.easyjson.core.JsonTreeNode;
+import com.jn.easyjson.core.node.JsonTreeNodes;
+import com.jn.easyjson.core.util.type.Primitives;
 
 import java.io.Closeable;
 import java.io.IOException;

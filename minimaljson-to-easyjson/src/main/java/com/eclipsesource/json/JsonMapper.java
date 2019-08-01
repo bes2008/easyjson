@@ -14,8 +14,8 @@
 
 package com.eclipsesource.json;
 
-import com.github.fangjinuo.easyjson.core.JsonTreeNode;
-import com.github.fangjinuo.easyjson.core.node.*;
+import com.jn.easyjson.core.JsonTreeNode;
+import com.jn.easyjson.core.node.*;
 
 import java.util.Map;
 

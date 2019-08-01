@@ -16,7 +16,7 @@
 
 package net.sf.json.util;
 
-import com.github.fangjinuo.easyjson.core.util.Strings;
+import com.jn.easyjson.core.util.Strings;
 import net.sf.json.JSONException;
 
 

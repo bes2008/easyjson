@@ -15,8 +15,8 @@
 package net.sf.json;
 
 
-import com.github.fangjinuo.easyjson.core.JSONBuilderProvider;
-import com.github.fangjinuo.easyjson.core.util.type.Primitives;
+import com.jn.easyjson.core.JSONBuilderProvider;
+import com.jn.easyjson.core.util.type.Primitives;
 import net.sf.json.util.JSONUtils;
 
 import java.beans.PropertyDescriptor;
@@ -249,7 +249,7 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      * Contributed by [Matt Small @ WaveMaker].
      */
     public static Collection toCollection(JSONArray jsonArray, JsonConfig jsonConfig) {
-        com.github.fangjinuo.easyjson.core.JSON json = JsonMapper.buildJSON(jsonConfig);
+        com.jn.easyjson.core.JSON json = JsonMapper.buildJSON(jsonConfig);
         if (jsonConfig.getRootClass() != null) {
             return json.fromJsonTreeNode(JsonMapper.toJsonTreeNode(jsonArray), jsonConfig.getRootClass());
         } else {

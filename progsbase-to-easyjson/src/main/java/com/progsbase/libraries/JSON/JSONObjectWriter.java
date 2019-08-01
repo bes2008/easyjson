@@ -2,9 +2,9 @@ package com.progsbase.libraries.JSON;
 
 
 import JSON.structures.Element;
-import com.github.fangjinuo.easyjson.core.JSONBuilderProvider;
-import com.github.fangjinuo.easyjson.core.JsonTreeNode;
-import com.github.fangjinuo.easyjson.core.node.*;
+import com.jn.easyjson.core.JSONBuilderProvider;
+import com.jn.easyjson.core.JsonTreeNode;
+import com.jn.easyjson.core.node.*;
 import references.references.NumberReference;
 import references.references.StringArrayReference;
 import references.references.StringReference;

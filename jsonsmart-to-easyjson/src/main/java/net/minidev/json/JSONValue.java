@@ -14,11 +14,11 @@
 
 package net.minidev.json;
 
-import com.github.fangjinuo.easyjson.core.JSON;
-import com.github.fangjinuo.easyjson.core.JSONBuilderProvider;
-import com.github.fangjinuo.easyjson.core.JsonTreeNode;
-import com.github.fangjinuo.easyjson.core.node.JsonArrayNode;
-import com.github.fangjinuo.easyjson.core.node.JsonObjectNode;
+import com.jn.easyjson.core.JSON;
+import com.jn.easyjson.core.JSONBuilderProvider;
+import com.jn.easyjson.core.JsonTreeNode;
+import com.jn.easyjson.core.node.JsonArrayNode;
+import com.jn.easyjson.core.node.JsonObjectNode;
 import net.minidev.json.parser.ParseException;
 import net.minidev.json.reader.JsonWriterI;
 import net.minidev.json.writer.JsonReaderI;

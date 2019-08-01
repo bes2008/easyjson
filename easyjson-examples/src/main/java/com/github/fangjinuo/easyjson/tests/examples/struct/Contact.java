@@ -14,7 +14,7 @@
 
 package com.github.fangjinuo.easyjson.tests.examples.struct;
 
-import com.github.fangjinuo.easyjson.core.annotation.Ignore;
+import com.jn.easyjson.core.annotation.Ignore;
 
 public class Contact {
     private String email;

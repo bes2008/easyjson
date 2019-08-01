@@ -2,7 +2,7 @@ package com.progsbase.libraries.JSON;
 
 import JSON.StringElementMaps.StringElementMap;
 import JSON.structures.Element;
-import com.github.fangjinuo.easyjson.core.JSONBuilderProvider;
+import com.jn.easyjson.core.JSONBuilderProvider;
 
 import java.lang.reflect.*;
 import java.util.*;

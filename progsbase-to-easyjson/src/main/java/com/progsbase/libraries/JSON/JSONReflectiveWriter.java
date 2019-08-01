@@ -15,7 +15,7 @@
 package com.progsbase.libraries.JSON;
 
 import JSON.structures.Element;
-import com.github.fangjinuo.easyjson.core.JSONBuilderProvider;
+import com.jn.easyjson.core.JSONBuilderProvider;
 
 import java.lang.reflect.Field;
 import java.util.List;

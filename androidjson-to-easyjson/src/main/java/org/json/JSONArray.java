@@ -16,7 +16,7 @@
 
 package org.json;
 
-import com.github.fangjinuo.easyjson.core.JSONBuilderProvider;
+import com.jn.easyjson.core.JSONBuilderProvider;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;

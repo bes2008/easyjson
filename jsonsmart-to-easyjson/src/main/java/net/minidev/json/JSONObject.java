@@ -14,8 +14,8 @@
 
 package net.minidev.json;
 
-import com.github.fangjinuo.easyjson.core.JSON;
-import com.github.fangjinuo.easyjson.core.JSONBuilderProvider;
+import com.jn.easyjson.core.JSON;
+import com.jn.easyjson.core.JSONBuilderProvider;
 
 import java.io.IOException;
 import java.util.HashMap;
