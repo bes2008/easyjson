@@ -39,7 +39,7 @@ public class JacksonJSONBuilder extends JSONBuilder {
     private static EasyJsonObjectMapper objectMapper = new EasyJsonObjectMapper();
 
     static {
-        makesureModuleRegister();
+        makesureEasyJsonBaseModuleRegisted();
     }
 
     public JacksonJSONBuilder() {
@@ -50,7 +50,7 @@ public class JacksonJSONBuilder extends JSONBuilder {
         super(exclusionConfiguration);
     }
 
-    private static void makesureModuleRegister() {
+    private static void makesureEasyJsonBaseModuleRegisted() {
         if (!moduleRegistered) {
             synchronized (JacksonJSONBuilder.class) {
                 if (!moduleRegistered) {
@@ -147,7 +147,7 @@ public class JacksonJSONBuilder extends JSONBuilder {
 
     @Override
     public JSON build() {
-        makesureModuleRegister();
+        makesureEasyJsonBaseModuleRegisted();
         EasyJsonObjectMapper mapper = new EasyJsonObjectMapper(objectMapper);
         mapper.setJsonBuilder(this);
 
