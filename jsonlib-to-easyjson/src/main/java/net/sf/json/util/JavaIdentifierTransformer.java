@@ -16,7 +16,7 @@
 
 package net.sf.json.util;
 
-import com.jn.easyjson.core.util.Strings;
+import com.jn.easyjson.core.util.StringsUtil;
 import net.sf.json.JSONException;
 
 
@@ -165,7 +165,7 @@ public abstract class JavaIdentifierTransformer {
                 return null;
             }
             String str2 = shaveOffNonJavaIdentifierStartChars(str);
-            str2 = Strings.deleteWhitespace(str2);
+            str2 = StringsUtil.deleteWhitespace(str2);
             char[] chars = str2.toCharArray();
             int pos = 0;
             StringBuffer buf = new StringBuffer();

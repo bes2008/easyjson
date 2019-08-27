@@ -13,4 +13,11 @@
     <description>
         the easyjson core
     </description>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.github.fangjinuo.langx</groupId>
+            <artifactId>langx-java</artifactId>
+        </dependency>
+    </dependencies>
 </project>

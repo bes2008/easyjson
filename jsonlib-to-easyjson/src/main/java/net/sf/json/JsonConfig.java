@@ -16,7 +16,7 @@
 
 package net.sf.json;
 
-import com.jn.easyjson.core.util.Strings;
+import com.jn.langx.util.Strings;
 import net.sf.json.processors.*;
 import net.sf.json.util.*;
 

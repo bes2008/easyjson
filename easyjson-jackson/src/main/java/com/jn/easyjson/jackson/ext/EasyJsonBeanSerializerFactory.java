@@ -26,9 +26,9 @@ import com.fasterxml.jackson.databind.util.BeanUtil;
 import com.fasterxml.jackson.databind.util.ClassUtil;
 import com.fasterxml.jackson.databind.util.NameTransformer;
 import com.jn.easyjson.core.exclusion.ExclusionConfiguration;
-import com.jn.easyjson.core.util.type.Types;
 import com.jn.easyjson.jackson.serializer.DateSerializer;
 import com.jn.easyjson.jackson.serializer.NumberSerializer;
+import com.jn.langx.util.reflect.type.Types;
 
 import java.lang.reflect.Field;
 import java.util.Date;

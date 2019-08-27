@@ -17,7 +17,7 @@ package com.jn.easyjson.core.node;
 import com.jn.easyjson.core.JSON;
 import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.easyjson.core.JsonTreeNode;
-import com.jn.easyjson.core.util.type.Primitives;
+import com.jn.langx.util.reflect.type.Primitives;
 
 import java.util.*;
 

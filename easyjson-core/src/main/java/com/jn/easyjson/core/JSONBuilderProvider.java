@@ -16,7 +16,7 @@ package com.jn.easyjson.core;
 
 import com.jn.easyjson.core.annotation.DependOn;
 import com.jn.easyjson.core.annotation.Name;
-import com.jn.easyjson.core.util.Reflects;
+import com.jn.langx.util.reflect.Reflects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -90,7 +90,7 @@ public class JSONBuilderProvider {
     }
 
     private static String parseDependencyClass(Class<? extends JSONBuilder> jsonBuilderClass) {
-        DependOn dependOn = (DependOn) Reflects.getDeclaredAnnotation(jsonBuilderClass, DependOn.class);
+        DependOn dependOn = (DependOn) Reflects.getAnnotation(jsonBuilderClass, DependOn.class);
         String dependency = null;
         if (dependOn != null && dependOn.value() != null && !dependOn.value().trim().isEmpty()) {
             return dependOn.value().trim();
@@ -99,7 +99,7 @@ public class JSONBuilderProvider {
     }
 
     private static String parseName(Class<? extends JSONBuilder> clazz) {
-        Name nameAnno = (Name) Reflects.getDeclaredAnnotation(clazz, Name.class);
+        Name nameAnno = (Name) Reflects.getAnnotation(clazz, Name.class);
         String name = null;
         if (nameAnno != null && nameAnno.value() != null && !nameAnno.value().trim().isEmpty()) {
             return nameAnno.value().trim();

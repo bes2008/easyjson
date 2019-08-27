@@ -20,8 +20,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jn.easyjson.core.JsonException;
 import com.jn.easyjson.core.JsonHandler;
 import com.jn.easyjson.core.JsonTreeNode;
-import com.jn.easyjson.core.util.type.Types;
 import com.jn.easyjson.jackson.node.JacksonBasedJsonTreeNodeMapper;
+import com.jn.langx.util.reflect.type.Types;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;

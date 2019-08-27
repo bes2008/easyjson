@@ -22,9 +22,9 @@ import com.fasterxml.jackson.databind.deser.DeserializerFactory;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 import com.fasterxml.jackson.databind.util.ClassUtil;
 import com.jn.easyjson.core.exclusion.ExclusionConfiguration;
-import com.jn.easyjson.core.util.type.Types;
 import com.jn.easyjson.jackson.deserializer.DateDeserializer;
 import com.jn.easyjson.jackson.deserializer.NumberDeserializer;
+import com.jn.langx.util.reflect.type.Types;
 
 import java.lang.reflect.Field;
 import java.util.Date;

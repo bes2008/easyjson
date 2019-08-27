@@ -14,17 +14,17 @@
 
 package com.jn.easyjson.tests.examples;
 
+import com.jn.easyjson.core.JSON;
 import com.jn.easyjson.core.JSONBuilder;
 import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.easyjson.core.JsonTreeNode;
-import com.jn.easyjson.core.JSON;
 import com.jn.easyjson.core.exclusion.IgnoreAnnotationExclusion;
-import com.jn.easyjson.core.util.type.Types;
 import com.jn.easyjson.fastjson.FastJsonJSONBuilder;
 import com.jn.easyjson.gson.GsonJSONBuilder;
 import com.jn.easyjson.jackson.JacksonJSONBuilder;
 import com.jn.easyjson.tests.examples.struct.Gender;
 import com.jn.easyjson.tests.examples.struct.Person;
+import com.jn.langx.util.reflect.type.Types;
 import org.junit.Test;
 
 import java.util.ArrayList;

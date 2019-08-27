@@ -16,8 +16,8 @@ package com.jn.easyjson.jackson.serializer;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.*;
-import com.jn.easyjson.core.util.type.Types;
 import com.jn.easyjson.jackson.Jacksons;
+import com.jn.langx.util.reflect.type.Types;
 
 import java.io.IOException;
 

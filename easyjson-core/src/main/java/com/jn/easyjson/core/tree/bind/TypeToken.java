@@ -15,9 +15,9 @@
 package com.jn.easyjson.core.tree.bind;
 
 
-import com.jn.easyjson.core.util.Preconditions;
-import com.jn.easyjson.core.util.type.ParameterizedTypeImpl;
-import com.jn.easyjson.core.util.type.Types;
+import com.jn.langx.util.Preconditions;
+import com.jn.langx.util.reflect.type.ParameterizedTypeImpl;
+import com.jn.langx.util.reflect.type.Types;
 
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.ParameterizedType;

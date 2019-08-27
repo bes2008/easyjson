@@ -16,7 +16,7 @@ package com.jn.easyjson.core.node;
 
 import com.jn.easyjson.core.JsonTreeNode;
 import com.jn.easyjson.core.util.LazilyParsedNumber;
-import com.jn.easyjson.core.util.Preconditions;
+import com.jn.langx.util.Preconditions;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -92,8 +92,7 @@ public class JsonPrimitiveNode extends JsonTreeNode {
             char c = ((Character) primitive).charValue();
             this.value = String.valueOf(c);
         } else {
-            Preconditions.checkArgument(primitive instanceof Number
-                    || isPrimitiveOrString(primitive));
+            Preconditions.checkTrue(primitive instanceof Number || isPrimitiveOrString(primitive));
             this.value = primitive;
         }
     }

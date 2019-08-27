@@ -17,7 +17,7 @@ package com.jn.easyjson.fastjson.ext;
 import com.alibaba.fastjson.annotation.JSONType;
 import com.alibaba.fastjson.serializer.SerializeBeanInfo;
 import com.alibaba.fastjson.util.FieldInfo;
-import com.jn.easyjson.core.util.Reflects;
+import com.jn.langx.util.reflect.Reflects;
 
 import java.lang.reflect.Field;
 
@@ -42,27 +42,69 @@ public class SerializeBeanInfoGetter {
     }
 
     public String getTypeName() {
-        return Reflects.getDeclaredFieldValue(beanInfo, "typeName");
+        try {
+            return Reflects.getDeclaredFieldValue(beanInfo, "typeName", true, true);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public String getTypeKey() {
-        return Reflects.getDeclaredFieldValue(beanInfo, "typeKey");
+        try {
+            return Reflects.getDeclaredFieldValue(beanInfo, "typeKey", true, true);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public JSONType getJsonType() {
-        return Reflects.getDeclaredFieldValue(beanInfo, "jsonType");
+        try {
+            return Reflects.getDeclaredFieldValue(beanInfo, "jsonType", true, true);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public FieldInfo[] getFields() {
-        return Reflects.getDeclaredFieldValue(beanInfo, "fields");
+        try {
+            return Reflects.getDeclaredFieldValue(beanInfo, "fields", true, true);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public FieldInfo[] getSortedFields() {
-        return Reflects.getDeclaredFieldValue(beanInfo, "sortedFields");
+        try {
+            return Reflects.getDeclaredFieldValue(beanInfo, "sortedFields", true, true);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public Integer getFeatures() {
-        return Reflects.getDeclaredFieldValue(beanInfo, "features");
+        try {
+            return Reflects.getDeclaredFieldValue(beanInfo, "features", true, true);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }

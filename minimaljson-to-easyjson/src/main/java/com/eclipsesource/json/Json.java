@@ -22,7 +22,7 @@
 package com.eclipsesource.json;
 
 import com.jn.easyjson.core.JSONBuilderProvider;
-import com.jn.easyjson.core.util.IOs;
+import com.jn.langx.util.io.IOs;
 
 import java.io.IOException;
 import java.io.Reader;

@@ -14,7 +14,7 @@
 
 package net.sf.json.util;
 
-import com.jn.easyjson.core.util.Numbers;
+import com.jn.langx.util.Numbers;
 import net.sf.json.*;
 
 import java.util.regex.Pattern;

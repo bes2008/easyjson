@@ -15,7 +15,7 @@
 package com.jn.easyjson.core;
 
 import com.jn.easyjson.core.node.JsonNullNode;
-import com.jn.easyjson.core.util.type.Primitives;
+import com.jn.langx.util.reflect.type.Primitives;
 
 import java.lang.reflect.Type;
 
@@ -84,8 +84,8 @@ public class JSON {
      *                {com.google.gson.reflect.TypeToken} class. For example, to get the type for
      *                {@code Collection<Foo>}, you should use:
      *                <pre>
-     *                                                             Type typeOfT = new TypeToken&lt;Collection&lt;Foo&gt;&gt;(){}.getType();
-     *                                                             </pre>
+     *                                                                            Type typeOfT = new TypeToken&lt;Collection&lt;Foo&gt;&gt;(){}.getType();
+     *                                                                            </pre>
      * @return an object of type T from the string. Returns {@code null} if {@code json} is {@code null}.
      * @throws JsonException if json is not a valid representation for an object of type
      */

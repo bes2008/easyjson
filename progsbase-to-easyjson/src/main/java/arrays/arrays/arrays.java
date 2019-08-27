@@ -1,7 +1,7 @@
 package arrays.arrays;
 
 
-import com.jn.easyjson.core.util.type.PrimitiveArrays;
+import com.jn.langx.util.collection.PrimitiveArrays;
 import references.references.BooleanArrayReference;
 import references.references.NumberArrayReference;
 import references.references.StringReference;
@@ -32,11 +32,11 @@ public class arrays {
     }
 
     public static boolean NumberArraysEqual(double[] a, double[] b) {
-        return primitiveEquels(PrimitiveArrays.wrap(a), PrimitiveArrays.wrap(b));
+        return primitiveEquels(PrimitiveArrays.wrap(a, false), PrimitiveArrays.wrap(b, false));
     }
 
     public static boolean BooleanArraysEqual(boolean[] a, boolean[] b) {
-        return primitiveEquels(PrimitiveArrays.wrap(a), PrimitiveArrays.wrap(b));
+        return primitiveEquels(PrimitiveArrays.wrap(a, false), PrimitiveArrays.wrap(b, false));
     }
 
     private static <T> boolean primitiveEquels(T[] a, T[] b) {

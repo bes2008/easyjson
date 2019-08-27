@@ -15,7 +15,7 @@
  */
 package com.squareup.moshi;
 
-import com.jn.easyjson.core.util.IOs;
+import com.jn.langx.util.io.IOs;
 import okio.Buffer;
 import okio.BufferedSource;
 import okio.ByteString;

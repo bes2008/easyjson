@@ -16,7 +16,7 @@ package net.sf.json;
 
 
 import com.jn.easyjson.core.JSONBuilderProvider;
-import com.jn.easyjson.core.util.type.Primitives;
+import com.jn.langx.util.reflect.type.Primitives;
 import net.sf.json.util.JSONUtils;
 
 import java.beans.PropertyDescriptor;

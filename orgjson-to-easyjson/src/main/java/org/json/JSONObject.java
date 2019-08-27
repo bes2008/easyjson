@@ -3,7 +3,7 @@ package org.json;
 import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.easyjson.core.JsonTreeNode;
 import com.jn.easyjson.core.node.JsonTreeNodes;
-import com.jn.easyjson.core.util.type.Primitives;
+import com.jn.langx.util.reflect.type.Primitives;
 
 import java.io.Closeable;
 import java.io.IOException;

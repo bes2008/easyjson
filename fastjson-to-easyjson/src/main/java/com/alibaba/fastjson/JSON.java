@@ -29,7 +29,7 @@ import com.jn.easyjson.core.JSONBuilder;
 import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.easyjson.core.JsonTreeNode;
 import com.jn.easyjson.core.node.JsonArrayNode;
-import com.jn.easyjson.core.util.type.Types;
+import com.jn.langx.util.reflect.type.Types;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -299,8 +299,8 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
      *             {@link com.alibaba.fastjson.TypeReference} class. For example, to get the type for
      *             {@code Collection<Foo>}, you should use:
      *             <pre>
-     *                                                                                     Type type = new TypeReference&lt;Collection&lt;Foo&gt;&gt;(){}.getType();
-     *                                                                                     </pre>
+     *                                                                                                 Type type = new TypeReference&lt;Collection&lt;Foo&gt;&gt;(){}.getType();
+     *                                                                                                 </pre>
      * @return an object of type T from the string
      */
     @SuppressWarnings("unchecked")
