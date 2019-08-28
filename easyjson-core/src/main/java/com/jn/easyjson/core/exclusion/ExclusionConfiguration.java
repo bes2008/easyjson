@@ -14,7 +14,7 @@
 
 package com.jn.easyjson.core.exclusion;
 
-import com.jn.easyjson.core.util.FieldAttributes;
+import com.jn.langx.util.reflect.FieldAttributes;
 import com.jn.langx.util.reflect.Reflects;
 
 import java.lang.reflect.Field;

@@ -15,7 +15,7 @@
 package com.jn.easyjson.core.exclusion;
 
 import com.jn.easyjson.core.annotation.Ignore;
-import com.jn.easyjson.core.util.FieldAttributes;
+import com.jn.langx.util.reflect.FieldAttributes;
 
 public class IgnoreAnnotationExclusion implements Exclusion {
     @Override

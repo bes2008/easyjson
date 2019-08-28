@@ -15,7 +15,7 @@
 package com.jn.easyjson.core.node;
 
 import com.jn.easyjson.core.JsonTreeNode;
-import com.jn.easyjson.core.util.LinkedTreeMap;
+import com.jn.langx.util.collection.LinkedTreeMap;
 
 import java.util.Map;
 import java.util.Set;
