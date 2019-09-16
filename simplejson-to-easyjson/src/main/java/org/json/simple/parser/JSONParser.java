@@ -36,8 +36,9 @@ public class JSONParser {
     private int status = S_INIT;
 
     private int peekStatus(LinkedList statusStack) {
-        if (statusStack.size() == 0)
+        if (statusStack.size() == 0) {
             return -1;
+        }
         Integer status = (Integer) statusStack.getFirst();
         return status.intValue();
     }
@@ -137,10 +138,12 @@ public class JSONParser {
                         break;
 
                     case S_IN_FINISHED_VALUE:
-                        if (token.type == Yytoken.TYPE_EOF)
+                        if (token.type == Yytoken.TYPE_EOF) {
                             return valueStack.removeFirst();
-                        else
+                        }
+                        else {
                             throw new ParseException(getPosition(), ParseException.ERROR_UNEXPECTED_TOKEN, token);
+                        }
 
                     case S_IN_OBJECT:
                         switch (token.type) {
@@ -260,27 +263,32 @@ public class JSONParser {
 
     private void nextToken() throws ParseException, IOException {
         token = lexer.yylex();
-        if (token == null)
+        if (token == null) {
             token = new Yytoken(Yytoken.TYPE_EOF, null);
+        }
     }
 
     private Map createObjectContainer(ContainerFactory containerFactory) {
-        if (containerFactory == null)
+        if (containerFactory == null) {
             return new JSONObject();
+        }
         Map m = containerFactory.createObjectContainer();
 
-        if (m == null)
+        if (m == null) {
             return new JSONObject();
+        }
         return m;
     }
 
     private List createArrayContainer(ContainerFactory containerFactory) {
-        if (containerFactory == null)
+        if (containerFactory == null) {
             return new JSONArray();
+        }
         List l = containerFactory.creatArrayContainer();
 
-        if (l == null)
+        if (l == null) {
             return new JSONArray();
+        }
         return l;
     }
 

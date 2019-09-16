@@ -15,51 +15,41 @@
 package com.alibaba.fastjson.util;
 
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Array;
-import java.lang.reflect.Field;
-import java.lang.reflect.GenericArrayType;
-import java.lang.reflect.GenericDeclaration;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Member;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
-
 import com.alibaba.fastjson.annotation.JSONField;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.*;
 
 public class FieldInfo implements Comparable<FieldInfo> {
 
-    public final String     name;
-    public final Method     method;
-    public final Field      field;
+    public final String name;
+    public final Method method;
+    public final Field field;
 
-    private int             ordinal = 0;
-    public final Class<?>   fieldClass;
-    public final Type       fieldType;
-    public final Class<?>   declaringClass;
-    public final boolean    getOnly;
-    public final int        serialzeFeatures;
-    public final int        parserFeatures;
-    public final String     label;
+    private int ordinal = 0;
+    public final Class<?> fieldClass;
+    public final Type fieldType;
+    public final Class<?> declaringClass;
+    public final boolean getOnly;
+    public final int serialzeFeatures;
+    public final int parserFeatures;
+    public final String label;
 
     private final JSONField fieldAnnotation;
     private final JSONField methodAnnotation;
 
-    public final boolean    fieldAccess;
-    public final boolean    fieldTransient;
+    public final boolean fieldAccess;
+    public final boolean fieldTransient;
 
-    public final char[]     name_chars;
+    public final char[] name_chars;
 
-    public final boolean    isEnum;
-    public final boolean    jsonDirect;
-    public final boolean    unwrapped;
+    public final boolean isEnum;
+    public final boolean jsonDirect;
+    public final boolean unwrapped;
 
-    public final String     format;
+    public final String format;
 
-    public final String[]  alternateNames;
+    public final String[] alternateNames;
 
     public FieldInfo(String name, //
                      Class<?> declaringClass, //
@@ -68,7 +58,7 @@ public class FieldInfo implements Comparable<FieldInfo> {
                      Field field, //
                      int ordinal, //
                      int serialzeFeatures, //
-                     int parserFeatures){
+                     int parserFeatures) {
         if (ordinal < 0) {
             ordinal = 0;
         }
@@ -120,7 +110,7 @@ public class FieldInfo implements Comparable<FieldInfo> {
                      int parserFeatures, //
                      JSONField fieldAnnotation, //
                      JSONField methodAnnotation, //
-                     String label){
+                     String label) {
         if (field != null) {
             String fieldName = field.getName();
             if (fieldName.equals(name)) {
@@ -316,7 +306,7 @@ public class FieldInfo implements Comparable<FieldInfo> {
             if (type instanceof ParameterizedType) {
                 paramType = (ParameterizedType) type;
                 typeVariables = clazz.getTypeParameters();
-            } else if(clazz.getGenericSuperclass() instanceof ParameterizedType) {
+            } else if (clazz.getGenericSuperclass() instanceof ParameterizedType) {
                 paramType = (ParameterizedType) clazz.getGenericSuperclass();
                 typeVariables = clazz.getSuperclass().getTypeParameters();
             } else {
@@ -510,7 +500,7 @@ public class FieldInfo implements Comparable<FieldInfo> {
 
     public void set(Object javaObject, Object value) throws IllegalAccessException, InvocationTargetException {
         if (method != null) {
-            method.invoke(javaObject, new Object[] { value });
+            method.invoke(javaObject, new Object[]{value});
             return;
         }
 

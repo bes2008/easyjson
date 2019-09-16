@@ -1,20 +1,21 @@
 /*
- *  Copyright 2019 the original author or authors.
+ * Copyright 2019 the original author or authors.
  *
- *  Licensed under the LGPL, Version 3.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at  http://www.gnu.org/licenses/lgpl-3.0.html
+ * Licensed under the LGPL, Version 3.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at  http://www.gnu.org/licenses/lgpl-3.0.html
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
-
 package com.alibaba.fastjson.serializer;
 
+/**
+ * @author wenshao[szujobs@hotmail.com]
+ */
 public enum SerializerFeature {
     QuoteFieldNames,
     /**
@@ -151,14 +152,17 @@ public enum SerializerFeature {
      */
     MapSortField;
 
-    SerializerFeature() {
-        mask = (1 << ordinal());
-    }
-
+    public final static SerializerFeature[] EMPTY = new SerializerFeature[0];
+    public static final int WRITE_MAP_NULL_FEATURES
+            = WriteMapNullValue.getMask()
+            | WriteNullBooleanAsFalse.getMask()
+            | WriteNullListAsEmpty.getMask()
+            | WriteNullNumberAsZero.getMask()
+            | WriteNullStringAsEmpty.getMask();
     public final int mask;
 
-    public final int getMask() {
-        return mask;
+    SerializerFeature() {
+        mask = (1 << ordinal());
     }
 
     public static boolean isEnabled(int features, SerializerFeature feature) {
@@ -195,12 +199,7 @@ public enum SerializerFeature {
         return value;
     }
 
-    public final static SerializerFeature[] EMPTY = new SerializerFeature[0];
-
-    public static final int WRITE_MAP_NULL_FEATURES
-            = WriteMapNullValue.getMask()
-            | WriteNullBooleanAsFalse.getMask()
-            | WriteNullListAsEmpty.getMask()
-            | WriteNullNumberAsZero.getMask()
-            | WriteNullStringAsEmpty.getMask();
+    public final int getMask() {
+        return mask;
+    }
 }
