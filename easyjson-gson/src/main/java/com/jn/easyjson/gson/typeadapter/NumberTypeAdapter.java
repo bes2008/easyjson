@@ -95,6 +95,7 @@ public class NumberTypeAdapter implements JsonSerializer<Number>, JsonDeserializ
             if (typeOfT == BigInteger.class) {
                 return new BigInteger(number.toString());
             }
+            return number;
         }
         return 0;
     }
