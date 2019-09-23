@@ -12,6 +12,8 @@
 
 [![JDK](https://img.shields.io/badge/JDK-1.6+-green.svg)](https://www.oracle.com/technetwork/java/javase/downloads/index.html)
 
+[![maven](https://img.shields.io/badge/maven-2.0.alpha4.0-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.easyjson)
+[![maven](https://img.shields.io/badge/maven-2.0.alpha3.0-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.easyjson)
 [![maven](https://img.shields.io/badge/maven-2.0.alpha2.0-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.easyjson)
 [![maven](https://img.shields.io/badge/maven-2.0.alpha1.0-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.easyjson)
 [![maven](https://img.shields.io/badge/maven-1.0.1-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.easyjson)
@@ -59,7 +61,7 @@ Provides a unified JSON access API, you can adapter any JSON library to Gson, Ja
            <td>
                 <pre>
 &lt;dependency>
-    &lt;groupId>com.gith.fangjinuo.easyjson&lt;/groupId>
+    &lt;groupId>com.github.fangjinuo.easyjson&lt;/groupId>
     &lt;artifactId>easyjson-core&lt;/artifactId>
     &lt;version>${version}/version>
 &lt;/dependency>
@@ -68,21 +70,21 @@ Provides a unified JSON access API, you can adapter any JSON library to Gson, Ja
             <td>
                 <pre>
 &lt;dependency>
-    &lt;groupId>com.gith.fangjinuo.easyjson&lt;/groupId>
+    &lt;groupId>com.github.fangjinuo.easyjson&lt;/groupId>
     &lt;artifactId>easyjson-gson&lt;/artifactId>
     &lt;version>${version}/version>
 &lt;/dependency>
                 </pre>     
                 <pre>
 &lt;dependency>
-    &lt;groupId>com.gith.fangjinuo.easyjson&lt;/groupId>
+    &lt;groupId>com.github.fangjinuo.easyjson&lt;/groupId>
     &lt;artifactId>easyjson-jackson&lt;/artifactId>
     &lt;version>${version}/version>
 &lt;/dependency>
                 </pre>     
                 <pre>
 &lt;dependency>
-    &lt;groupId>com.gith.fangjinuo.easyjson&lt;/groupId>
+    &lt;groupId>com.github.fangjinuo.easyjson&lt;/groupId>
     &lt;artifactId>easyjson-fastjson&lt;/artifactId>
     &lt;version>${version}/version>
 &lt;/dependency>
