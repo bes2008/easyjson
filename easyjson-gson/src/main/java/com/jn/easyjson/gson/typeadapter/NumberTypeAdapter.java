@@ -15,6 +15,7 @@
 package com.jn.easyjson.gson.typeadapter;
 
 import com.google.gson.*;
+import com.jn.langx.util.reflect.type.Primitives;
 
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
@@ -68,7 +69,32 @@ public class NumberTypeAdapter implements JsonSerializer<Number>, JsonDeserializ
             }
         }
         if (jsonPrimitive.isNumber()) {
-            return jsonPrimitive.getAsNumber();
+            Number number = jsonPrimitive.getAsNumber();
+            typeOfT = Primitives.wrap(typeOfT);
+            if (typeOfT == Byte.class) {
+                return number.byteValue();
+            }
+            if (typeOfT == Short.class) {
+                return number.shortValue();
+            }
+            if (typeOfT == Integer.class) {
+                return number.intValue();
+            }
+            if (typeOfT == Float.class) {
+                return number.floatValue();
+            }
+            if (typeOfT == Double.class) {
+                return number.doubleValue();
+            }
+            if (typeOfT == Long.class) {
+                return number.longValue();
+            }
+            if(typeOfT == BigDecimal.class){
+                return new BigDecimal(number.toString());
+            }
+            if (typeOfT == BigInteger.class) {
+                return new BigInteger(number.toString());
+            }
         }
         return 0;
     }
