@@ -15,6 +15,7 @@
 package com.jn.easyjson.gson.typeadapter;
 
 import com.google.gson.*;
+import com.jn.easyjson.core.util.LazilyParsedNumber;
 import com.jn.langx.util.reflect.type.Primitives;
 
 import java.lang.reflect.Type;
@@ -95,7 +96,10 @@ public class NumberTypeAdapter implements JsonSerializer<Number>, JsonDeserializ
             if (typeOfT == BigInteger.class) {
                 return new BigInteger(number.toString());
             }
-            return number;
+            if(typeOfT== LazilyParsedNumber.class) {
+                return number;
+            }
+            return 0;
         }
         return 0;
     }
