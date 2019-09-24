@@ -45,22 +45,22 @@ public class NumberTypeAdapter implements JsonSerializer<Number>, JsonDeserializ
         JsonPrimitive jsonPrimitive = json.getAsJsonPrimitive();
         if (jsonPrimitive.isString()) {
             if (typeOfT == long.class || typeOfT == Long.class) {
-                return Long.parseLong(jsonPrimitive.getAsString());
+                return jsonPrimitive.getAsNumber().longValue();
             }
             if (typeOfT == double.class || typeOfT == Double.class) {
-                return Double.parseDouble(jsonPrimitive.getAsString());
+                return jsonPrimitive.getAsNumber().doubleValue();
             }
             if (typeOfT == int.class || typeOfT == Integer.class) {
-                return Integer.parseInt(jsonPrimitive.getAsString());
+                return jsonPrimitive.getAsNumber().intValue();
             }
             if (typeOfT == float.class || typeOfT == Float.class) {
-                return Float.parseFloat(jsonPrimitive.getAsString());
+                return jsonPrimitive.getAsNumber().floatValue();
             }
             if (typeOfT == short.class || typeOfT == Short.class) {
-                return Short.parseShort(jsonPrimitive.getAsString());
+                return jsonPrimitive.getAsNumber().shortValue();
             }
             if (typeOfT == byte.class || typeOfT == Byte.class) {
-                return Byte.parseByte(jsonPrimitive.getAsString());
+                return jsonPrimitive.getAsNumber().byteValue();
             }
             if (typeOfT == BigDecimal.class) {
                 return new BigDecimal(jsonPrimitive.getAsString());

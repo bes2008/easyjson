@@ -23,10 +23,7 @@ import com.jn.easyjson.core.annotation.Name;
 import com.jn.easyjson.core.exclusion.Exclusion;
 import com.jn.easyjson.core.exclusion.ExclusionConfiguration;
 import com.jn.easyjson.gson.exclusion.DelegateExclusionStrategy;
-import com.jn.easyjson.gson.typeadapter.BooleanTypeAdapter;
-import com.jn.easyjson.gson.typeadapter.DateTypeAdapter;
-import com.jn.easyjson.gson.typeadapter.EnumTypeAdapter;
-import com.jn.easyjson.gson.typeadapter.NumberTypeAdapter;
+import com.jn.easyjson.gson.typeadapter.*;
 
 import java.util.Date;
 import java.util.List;
