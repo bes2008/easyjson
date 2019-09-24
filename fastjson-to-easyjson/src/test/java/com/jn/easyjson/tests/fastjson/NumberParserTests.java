@@ -15,6 +15,7 @@
 package com.jn.easyjson.tests.fastjson;
 
 import com.alibaba.fastjson.JSON;
+import com.jn.langx.util.Numbers;
 import com.jn.langx.util.reflect.type.Types;
 import org.junit.Test;
 
@@ -27,13 +28,29 @@ public class NumberParserTests {
         User u = JSON.parseObject(json, User.class);
         System.out.println(u);
 
-        Map map = JSON.parseObject(json, Map.class);
+        Map<String, Object> map = JSON.parseObject(json, Map.class);
         System.out.println(map.size());
 
         String json2 = "{\"id\":\"e42a8c\",\"username\":\"wyb1\",\"roleId\":\"4602e671\",\"serverAuthType\":1.0}";
 
-        String jsonXxx = "{\"id\":\"1.0\",\"username\":2.0,\"roleId\":\"3.0\",\"serverAuthType\":1}";
-        Map<String,Integer> j = JSON.parseObject(jsonXxx, Types.getMapParameterizedType(String.class, Integer.class));
+        String jsonXxx = "{\"id\":\"1.0\",\"id2\":\"128.0\",\"id3\":\"10000.0\",\"id4\":\"10000.03\",\"id5\":\"1423232322323534.0\",\"id6\":\"1.0\",\"username\":2.0,\"roleId\":\"3.0\",\"serverAuthType\":1}";
+        Map<String, Integer> j = JSON.parseObject(jsonXxx, Types.getMapParameterizedType(String.class, Integer.class));
         System.out.println(j.size());
+
+        String jsonYyy = "{\"id\":1.0,\"id2\":128.0,\"id3\":10000.0,\"id4\":10000.03,\"id5\":1423232322323534.0,\"id6\":\"1.0\",\"id7\":1234567.0,\"username\":1231243234235423542345234.0,\"roleId\":\"3.0\",\"serverAuthType\":1}";
+        Map<String, Object> k = JSON.parseObject(jsonYyy, Types.getMapParameterizedType(String.class, Object.class));
+        System.out.println(k.size());
+
+        Map m = JSON.parseObject(jsonYyy, Map.class);
+
+        int id= Numbers.createNumber(m.get("id").toString()).intValue();
+        int id2= Numbers.createNumber(m.get("id2").toString()).intValue();
+        int id3= Numbers.createNumber(m.get("id3").toString()).intValue();
+        int id7= Numbers.createNumber(m.get("id7").toString()).intValue();
+        System.out.println(id);
+        System.out.println(id2);
+        System.out.println(id3);
+        System.out.println(id7);
+        System.out.println(m.size());
     }
 }
