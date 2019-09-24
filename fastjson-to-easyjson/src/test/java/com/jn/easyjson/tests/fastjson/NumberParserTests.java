@@ -32,7 +32,7 @@ public class NumberParserTests {
 
         String json2 = "{\"id\":\"e42a8c\",\"username\":\"wyb1\",\"roleId\":\"4602e671\",\"serverAuthType\":1.0}";
 
-        String jsonXxx = "{\"id\":\"1.0\",\"username\":\"2.0\",\"roleId\":\"3.0\",\"serverAuthType\":1}";
+        String jsonXxx = "{\"id\":\"1.0\",\"username\":2.0,\"roleId\":\"3.0\",\"serverAuthType\":1}";
         Map<String,Integer> j = JSON.parseObject(jsonXxx, Types.getMapParameterizedType(String.class, Integer.class));
         System.out.println(j.size());
     }
