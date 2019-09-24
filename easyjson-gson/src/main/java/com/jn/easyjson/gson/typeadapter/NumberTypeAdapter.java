@@ -90,16 +90,16 @@ public class NumberTypeAdapter implements JsonSerializer<Number>, JsonDeserializ
             if (typeOfT == Long.class) {
                 return number.longValue();
             }
-            if(typeOfT == BigDecimal.class){
+            if (typeOfT == BigDecimal.class) {
                 return new BigDecimal(number.toString());
             }
             if (typeOfT == BigInteger.class) {
                 return new BigInteger(number.toString());
             }
-            if(typeOfT== LazilyParsedNumber.class) {
+            if (typeOfT == LazilyParsedNumber.class) {
                 return number;
             }
-            if(typeOfT ==Number.class){
+            if (typeOfT == Number.class) {
                 return number;
             }
             return 0;
