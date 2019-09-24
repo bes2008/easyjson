@@ -99,6 +99,9 @@ public class NumberTypeAdapter implements JsonSerializer<Number>, JsonDeserializ
             if(typeOfT== LazilyParsedNumber.class) {
                 return number;
             }
+            if(typeOfT ==Number.class){
+                return number;
+            }
             return 0;
         }
         return 0;
