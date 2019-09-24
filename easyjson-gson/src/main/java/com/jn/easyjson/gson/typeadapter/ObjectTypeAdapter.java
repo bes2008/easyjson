@@ -86,17 +86,6 @@ public final class ObjectTypeAdapter extends TypeAdapter<Object> {
 
             case NUMBER:
                 Double dValue = in.nextDouble();
-
-                byte bValue = dValue.byteValue();
-                if(bValue == dValue){
-                    return bValue;
-                }
-
-                short sValue = dValue.shortValue();
-                if(sValue == dValue){
-                    return sValue;
-                }
-
                 int iValue = dValue.intValue();
                 if(iValue == dValue){
                     return iValue;
