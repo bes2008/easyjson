@@ -21,7 +21,6 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.jn.easyjson.core.JSON;
 import com.jn.easyjson.core.JSONBuilder;
 import com.jn.easyjson.core.annotation.DependOn;
-import com.jn.easyjson.core.annotation.Name;
 import com.jn.easyjson.core.exclusion.ExclusionConfiguration;
 import com.jn.easyjson.core.tree.JsonTreeSerializerBuilder;
 import com.jn.easyjson.fastjson.codec.BooleanCodec;
@@ -29,6 +28,7 @@ import com.jn.easyjson.fastjson.codec.DateCodec;
 import com.jn.easyjson.fastjson.codec.NumberCodec;
 import com.jn.easyjson.fastjson.ext.EasyJsonParserConfig;
 import com.jn.easyjson.fastjson.ext.EasyJsonSerializeConfig;
+import com.jn.langx.annotation.Name;
 
 @Name("fastjson")
 @DependOn("com.alibaba.fastjson.JSON")

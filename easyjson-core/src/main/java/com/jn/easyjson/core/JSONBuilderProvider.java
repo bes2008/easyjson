@@ -15,7 +15,7 @@
 package com.jn.easyjson.core;
 
 import com.jn.easyjson.core.annotation.DependOn;
-import com.jn.easyjson.core.annotation.Name;
+import com.jn.langx.annotation.Name;
 import com.jn.langx.util.reflect.Reflects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

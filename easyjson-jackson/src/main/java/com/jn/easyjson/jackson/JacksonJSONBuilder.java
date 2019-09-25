@@ -23,7 +23,6 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.jn.easyjson.core.JSON;
 import com.jn.easyjson.core.JSONBuilder;
 import com.jn.easyjson.core.annotation.DependOn;
-import com.jn.easyjson.core.annotation.Name;
 import com.jn.easyjson.core.exclusion.ExclusionConfiguration;
 import com.jn.easyjson.jackson.deserializer.BooleanDeserializer;
 import com.jn.easyjson.jackson.deserializer.Deserializers;
@@ -31,6 +30,7 @@ import com.jn.easyjson.jackson.deserializer.EnumDeserializer;
 import com.jn.easyjson.jackson.ext.EasyJsonObjectMapper;
 import com.jn.easyjson.jackson.serializer.BooleanSerializer;
 import com.jn.easyjson.jackson.serializer.EnumSerializer;
+import com.jn.langx.annotation.Name;
 
 @Name("jackson")
 @DependOn("com.fasterxml.jackson.databind.ObjectMapper")
