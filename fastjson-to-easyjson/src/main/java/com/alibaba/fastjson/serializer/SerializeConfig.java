@@ -160,7 +160,7 @@ public class SerializeConfig {
                 }
             }
 
-            if (jsonType.asm() == false) {
+            if (!jsonType.asm()) {
                 asm = false;
             }
 
@@ -226,7 +226,7 @@ public class SerializeConfig {
                 String format = annotation.format();
                 if (format.length() != 0) {
                     if (fieldInfo.fieldClass == String.class && "trim".equals(format)) {
-
+                        // Ignore it
                     } else {
                         asm = false;
                         break;
