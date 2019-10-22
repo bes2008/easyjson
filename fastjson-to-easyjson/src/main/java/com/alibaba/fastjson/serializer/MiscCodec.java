@@ -182,7 +182,6 @@ public class MiscCodec implements ObjectSerializer, ObjectDeserializer {
             ++i;
         }
         out.write(']');
-        return;
     }
 
     @SuppressWarnings("unchecked")

@@ -661,8 +661,6 @@ public class JSONPath implements JSONAware {
             }
             return;
         }
-
-        return;
     }
 
     public String getPath() {

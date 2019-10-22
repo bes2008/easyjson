@@ -15,9 +15,6 @@
 package net.sf.json;
 
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.lang.ref.SoftReference;
 import java.util.HashSet;
 import java.util.Set;
@@ -46,7 +43,6 @@ abstract class AbstractJSON {
 
     private static CycleSet cycleSet = new CycleSet();
 
-    private static final Logger log = LoggerFactory.getLogger(AbstractJSON.class);
 
     /**
      * Adds a reference for cycle detection check.
