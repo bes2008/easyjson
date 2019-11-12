@@ -99,7 +99,7 @@
             <dependency>
                 <groupId>com.github.fangjinuo.langx</groupId>
                 <artifactId>langx-java</artifactId>
-                <version>0.0.8</version>
+                <version>1.1.0</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -121,7 +121,6 @@
         <dependency>
             <groupId>com.github.fangjinuo.langx</groupId>
             <artifactId>langx-java</artifactId>
-            <scope>provided</scope>
         </dependency>
     </dependencies>
 
@@ -261,6 +260,10 @@
                             <serverId>sonatype_oss</serverId>
                             <nexusUrl>https://oss.sonatype.org</nexusUrl>
                             <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                            <sslAllowAll>true</sslAllowAll>
+                            <stagingProgressPauseDurationSeconds>20</stagingProgressPauseDurationSeconds>
+                            <stagingProgressTimeoutMinutes>30</stagingProgressTimeoutMinutes>
+                            <detectBuildFailures>false</detectBuildFailures>
                         </configuration>
                     </plugin>
                     <plugin>

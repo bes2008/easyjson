@@ -18,10 +18,13 @@ import com.alibaba.fastjson.annotation.JSONType;
 import com.alibaba.fastjson.serializer.SerializeBeanInfo;
 import com.alibaba.fastjson.util.FieldInfo;
 import com.jn.langx.util.reflect.Reflects;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 
 public class SerializeBeanInfoGetter {
+    private static final Logger logger = LoggerFactory.getLogger(SerializeBeanInfoGetter.class);
     private SerializeBeanInfo beanInfo;
 
     public SerializeBeanInfoGetter(SerializeBeanInfo beanInfo) {
@@ -44,9 +47,7 @@ public class SerializeBeanInfoGetter {
     public String getTypeName() {
         try {
             return Reflects.getDeclaredFieldValue(beanInfo, "typeName", true, true);
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
+        } catch (Throwable e) {
             e.printStackTrace();
         }
         return null;
@@ -55,10 +56,8 @@ public class SerializeBeanInfoGetter {
     public String getTypeKey() {
         try {
             return Reflects.getDeclaredFieldValue(beanInfo, "typeKey", true, true);
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+        } catch (Throwable e) {
+            logger.error(e.getMessage(), e);
         }
         return null;
     }
@@ -66,10 +65,8 @@ public class SerializeBeanInfoGetter {
     public JSONType getJsonType() {
         try {
             return Reflects.getDeclaredFieldValue(beanInfo, "jsonType", true, true);
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+        } catch (Throwable e) {
+            logger.error(e.getMessage(), e);
         }
         return null;
     }
@@ -77,10 +74,8 @@ public class SerializeBeanInfoGetter {
     public FieldInfo[] getFields() {
         try {
             return Reflects.getDeclaredFieldValue(beanInfo, "fields", true, true);
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+        } catch (Throwable e) {
+            logger.error(e.getMessage(), e);
         }
         return null;
     }
@@ -88,10 +83,8 @@ public class SerializeBeanInfoGetter {
     public FieldInfo[] getSortedFields() {
         try {
             return Reflects.getDeclaredFieldValue(beanInfo, "sortedFields", true, true);
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+        } catch (Throwable e) {
+            logger.error(e.getMessage(), e);
         }
         return null;
     }
@@ -99,10 +92,8 @@ public class SerializeBeanInfoGetter {
     public Integer getFeatures() {
         try {
             return Reflects.getDeclaredFieldValue(beanInfo, "features", true, true);
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+        } catch (Throwable e) {
+            logger.error(e.getMessage(), e);
         }
         return null;
     }
