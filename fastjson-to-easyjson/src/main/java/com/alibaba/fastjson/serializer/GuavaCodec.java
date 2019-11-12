@@ -19,7 +19,6 @@ public class GuavaCodec implements ObjectSerializer, ObjectDeserializer {
     public static GuavaCodec instance = new GuavaCodec();
 
     public void write(JSONSerializer serializer, Object object, Object fieldName, Type fieldType, int features) throws IOException {
-        SerializeWriter out = serializer.out;
         if (object instanceof Multimap) {
             Multimap multimap = (Multimap) object;
             serializer.write(multimap.asMap());

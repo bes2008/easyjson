@@ -57,8 +57,6 @@ public class EnumDeserializer<T extends Enum> extends JsonDeserializer<T> implem
                 } catch (NoSuchFieldException e) {
                     e.printStackTrace();
                 }
-            } else {
-
             }
         }
 

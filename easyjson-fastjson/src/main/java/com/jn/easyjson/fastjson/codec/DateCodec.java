@@ -94,7 +94,6 @@ public class DateCodec implements ObjectSerializer, ObjectDeserializer, Typed {
         if (clazz == java.sql.Date.class) {
             long millis = ((java.sql.Date) object).getTime();
             TimeZone timeZone = JSON.defaultTimeZone;
-            ;
             int offset = timeZone.getOffset(millis);
             if (millis % offset == 0) {
                 out.writeString(object.toString());

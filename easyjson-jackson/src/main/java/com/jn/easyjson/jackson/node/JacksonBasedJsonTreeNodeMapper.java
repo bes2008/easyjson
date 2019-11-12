@@ -131,7 +131,6 @@ public class JacksonBasedJsonTreeNodeMapper implements JsonTreeNodeFactory<JsonN
         if (jsonNode.isJsonPrimitiveNode()) {
             JsonPrimitiveNode jsonPrimitiveNode = jsonNode.getAsJsonPrimitiveNode();
             if (jsonPrimitiveNode.isNumber()) {
-                Number n = jsonPrimitiveNode.getAsNumber();
                 if (jsonPrimitiveNode.isDouble()) {
                     return jsonNodeFactory.numberNode(jsonPrimitiveNode.getAsDouble());
                 }

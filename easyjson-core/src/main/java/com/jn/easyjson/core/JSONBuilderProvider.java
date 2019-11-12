@@ -91,7 +91,6 @@ public class JSONBuilderProvider {
 
     private static String parseDependencyClass(Class<? extends JSONBuilder> jsonBuilderClass) {
         DependOn dependOn = (DependOn) Reflects.getAnnotation(jsonBuilderClass, DependOn.class);
-        String dependency = null;
         if (dependOn != null && dependOn.value() != null && !dependOn.value().trim().isEmpty()) {
             return dependOn.value().trim();
         }

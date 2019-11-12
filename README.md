@@ -3,8 +3,7 @@
 [![License](https://img.shields.io/badge/license-LGPL3.0-green.svg)](https://github.com/fangjinuo/sqlhelper/blob/master/LICENSE)
 
 [![Build Status](https://www.travis-ci.com/fangjinuo/easyjson.svg?branch=master)](https://travis-ci.com/fangjinuo/easyjson)
-[![code quality](https://codebeat.co/badges/37791135-62dd-4d5e-800f-35668895324a)](https://codebeat.co/projects/github-com-fangjinuo-easyjson-master)
-[![CodeFactor](https://www.codefactor.io/repository/github/fangjinuo/easyjson/badge/master)](https://www.codefactor.io/repository/github/fangjinuo/easyjson/overview/master)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/dbf315b97bf443f8815c8dbaf6bbf358)](https://www.codacy.com/manual/fs1194361820/easyjson?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=fangjinuo/easyjson&amp;utm_campaign=Badge_Grade)
 
 [![gson](https://img.shields.io/badge/gson-2.x-green.svg)](https://github.com/google/gson)
 [![fastjson](https://img.shields.io/badge/fastjson-1.2.x-green.svg)](https://github.com/alibaba/fastjson)
@@ -12,6 +11,7 @@
 
 [![JDK](https://img.shields.io/badge/JDK-1.6+-green.svg)](https://www.oracle.com/technetwork/java/javase/downloads/index.html)
 
+[![maven](https://img.shields.io/badge/maven-2.0.5-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.easyjson)
 [![maven](https://img.shields.io/badge/maven-2.0.alpha4.0-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.easyjson)
 [![maven](https://img.shields.io/badge/maven-2.0.alpha3.0-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.easyjson)
 [![maven](https://img.shields.io/badge/maven-2.0.alpha2.0-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.easyjson)

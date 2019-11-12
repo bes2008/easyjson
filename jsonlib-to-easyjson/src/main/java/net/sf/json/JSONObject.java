@@ -22,8 +22,6 @@ import com.jn.langx.util.reflect.type.Primitives;
 import net.sf.json.processors.JsonVerifier;
 import net.sf.json.util.JSONUtils;
 import net.sf.json.util.PropertySetStrategy;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -86,7 +84,6 @@ import java.util.*;
  * @author JSON.org
  */
 public final class JSONObject extends AbstractJSON implements JSON, Map, Comparable {
-    private static final Logger log = LoggerFactory.getLogger(JSONObject.class);
 
     /**
      * identifies this object as null
