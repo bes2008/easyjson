@@ -39,7 +39,7 @@ public class ObjectSerializationData {
     public final Class<?> type;
     public final CharBuf output;
 
-    public ObjectSerializationData ( Object instance, Class<?> type, CharBuf output ) {
+    public ObjectSerializationData(Object instance, Class<?> type, CharBuf output) {
         this.instance = instance;
         this.type = type;
         this.output = output;

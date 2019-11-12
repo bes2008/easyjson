@@ -35,5 +35,5 @@ import io.advantageous.boon.primitive.CharBuf;
  */
 public interface UnknownSerializer {
 
-     void serializeUnknown ( JsonSerializerInternal serializer, Object unknown, CharBuf builder );
+    void serializeUnknown(JsonSerializerInternal serializer, Object unknown, CharBuf builder);
 }

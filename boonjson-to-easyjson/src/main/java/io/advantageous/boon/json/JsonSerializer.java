@@ -36,8 +36,8 @@ import io.advantageous.boon.primitive.CharBuf;
  */
 public interface JsonSerializer {
 
-    CharBuf serialize( Object obj );
+    CharBuf serialize(Object obj);
 
 
-    void serialize(CharBuf charBuf,  Object obj );
+    void serialize(CharBuf charBuf, Object obj);
 }

@@ -32,7 +32,8 @@ import io.advantageous.boon.core.reflection.fields.*;
 import io.advantageous.boon.json.serializers.*;
 import io.advantageous.boon.json.serializers.impl.*;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -64,12 +65,12 @@ public class JsonSerializerFactory {
 
     public JsonSerializer create() {
 
-        if ( !outputType && !includeEmpty && !includeNulls && !useAnnotations &&
+        if (!outputType && !includeEmpty && !includeNulls && !useAnnotations &&
                 !jsonFormatForDates && handleSimpleBackReference &&
                 !handleComplexBackReference && !includeDefault && filterProperties == null
                 && customFieldSerializers == null && customObjectSerializers == null &&
                 fieldAccessType == FieldAccessMode.FIELD) {
-            return new JsonSimpleSerializerImpl (view, encodeStrings, serializeAsSupport, asciiOnly);
+            return new JsonSimpleSerializerImpl(view, encodeStrings, serializeAsSupport, asciiOnly);
         } else {
 
             InstanceSerializer instanceSerializer;
@@ -87,7 +88,7 @@ public class JsonSerializerFactory {
 
             instanceSerializer = new InstanceSerializerImpl();
 
-            if (customObjectSerializers != null ) {
+            if (customObjectSerializers != null) {
 
                 objectSerializer = new CustomObjectSerializerImpl(outputType, customObjectSerializers, includeNulls);
             } else {
@@ -95,11 +96,11 @@ public class JsonSerializerFactory {
             }
 
 
-            stringSerializer = new StringSerializerImpl (encodeStrings, asciiOnly);
-            mapSerializer = new MapSerializerImpl (includeNulls);
+            stringSerializer = new StringSerializerImpl(encodeStrings, asciiOnly);
+            mapSerializer = new MapSerializerImpl(includeNulls);
 
-            if ( useAnnotations || includeNulls || includeEmpty || handleComplexBackReference
-                    || !includeDefault || view!=null) {
+            if (useAnnotations || includeNulls || includeEmpty || handleComplexBackReference
+                    || !includeDefault || view != null) {
                 fieldSerializer = new FieldSerializerUseAnnotationsImpl(
                         includeNulls,
                         includeDefault, useAnnotations,
@@ -114,8 +115,8 @@ public class JsonSerializerFactory {
                 fieldSerializer = new FieldSerializerImpl();
             }
             collectionSerializer = new CollectionSerializerImpl();
-            arraySerializer = ( ArraySerializer ) collectionSerializer;
-            unknownSerializer = new UnknownSerializerImpl ();
+            arraySerializer = (ArraySerializer) collectionSerializer;
+            unknownSerializer = new UnknownSerializerImpl();
 
             if (jsonFormatForDates) {
                 dateSerializer = new JsonDateSerializer();
@@ -124,26 +125,25 @@ public class JsonSerializerFactory {
             }
 
 
-
-            switch ( fieldAccessType )  {
+            switch (fieldAccessType) {
                 case FIELD:
-                    fieldsAccessor = new FieldFieldsAccessor( useAnnotations );
+                    fieldsAccessor = new FieldFieldsAccessor(useAnnotations);
                     break;
                 case PROPERTY:
-                    fieldsAccessor = new PropertyFieldAccessor( useAnnotations );
+                    fieldsAccessor = new PropertyFieldAccessor(useAnnotations);
                     break;
                 case FIELD_THEN_PROPERTY:
-                    fieldsAccessor = new FieldsAccessorFieldThenProp( useAnnotations );
+                    fieldsAccessor = new FieldsAccessorFieldThenProp(useAnnotations);
                     break;
                 case PROPERTY_THEN_FIELD:
-                    fieldsAccessor = new FieldsAccessorsPropertyThenField( useAnnotations );
+                    fieldsAccessor = new FieldsAccessorsPropertyThenField(useAnnotations);
                     break;
                 default:
-                    fieldsAccessor = new FieldFieldsAccessor( useAnnotations );
+                    fieldsAccessor = new FieldFieldsAccessor(useAnnotations);
 
             }
 
-            return new JsonSerializerImpl (
+            return new JsonSerializerImpl(
                     objectSerializer,
                     stringSerializer,
                     mapSerializer,
@@ -161,210 +161,208 @@ public class JsonSerializerFactory {
     }
 
 
-    public JsonSerializerFactory addFilter ( FieldFilter filter ) {
-        if ( filterProperties == null ) {
-            filterProperties = new CopyOnWriteArrayList<> ();
+    public JsonSerializerFactory addFilter(FieldFilter filter) {
+        if (filterProperties == null) {
+            filterProperties = new CopyOnWriteArrayList<>();
         }
-        filterProperties.add ( filter );
+        filterProperties.add(filter);
         return this;
     }
 
-    public JsonSerializerFactory addPropertySerializer ( CustomFieldSerializer serializer ) {
-        if ( customFieldSerializers == null ) {
-            customFieldSerializers = new CopyOnWriteArrayList<> ();
+    public JsonSerializerFactory addPropertySerializer(CustomFieldSerializer serializer) {
+        if (customFieldSerializers == null) {
+            customFieldSerializers = new CopyOnWriteArrayList<>();
         }
-        customFieldSerializers.add ( serializer );
+        customFieldSerializers.add(serializer);
         return this;
     }
 
-    public JsonSerializerFactory addTypeSerializer ( Class<?> type, CustomObjectSerializer serializer ) {
+    public JsonSerializerFactory addTypeSerializer(Class<?> type, CustomObjectSerializer serializer) {
 
-        if ( customObjectSerializers == null ) {
-            customObjectSerializers = new ConcurrentHashMap<> ();
+        if (customObjectSerializers == null) {
+            customObjectSerializers = new ConcurrentHashMap<>();
         }
-        customObjectSerializers.put ( type, serializer );
+        customObjectSerializers.put(type, serializer);
         return this;
     }
 
-    public boolean isOutputType () {
+    public boolean isOutputType() {
         return outputType;
     }
 
-    public JsonSerializerFactory setOutputType ( boolean outputType ) {
+    public JsonSerializerFactory setOutputType(boolean outputType) {
         this.outputType = outputType;
         return this;
     }
 
 
-
-    public JsonSerializerFactory outputType (  ) {
+    public JsonSerializerFactory outputType() {
         this.outputType = true;
         return this;
     }
 
-    public boolean isUsePropertiesFirst () {
+    public boolean isUsePropertiesFirst() {
         return fieldAccessType == FieldAccessMode.PROPERTY_THEN_FIELD;
     }
 
 
-    public JsonSerializerFactory usePropertiesFirst () {
+    public JsonSerializerFactory usePropertiesFirst() {
         fieldAccessType = FieldAccessMode.PROPERTY_THEN_FIELD;
         return this;
     }
 
-    public boolean isUseFieldsFirst () {
+    public boolean isUseFieldsFirst() {
         return this.fieldAccessType == FieldAccessMode.FIELD_THEN_PROPERTY;
 
     }
 
 
-    public JsonSerializerFactory useFieldsFirst () {
-        this.fieldAccessType  = FieldAccessMode.FIELD_THEN_PROPERTY;
+    public JsonSerializerFactory useFieldsFirst() {
+        this.fieldAccessType = FieldAccessMode.FIELD_THEN_PROPERTY;
         return this;
     }
 
 
-    public JsonSerializerFactory useFieldsOnly () {
-        this.fieldAccessType  = FieldAccessMode.FIELD;
+    public JsonSerializerFactory useFieldsOnly() {
+        this.fieldAccessType = FieldAccessMode.FIELD;
         return this;
     }
 
 
-
-    public JsonSerializerFactory usePropertyOnly () {
-        this.fieldAccessType  = FieldAccessMode.PROPERTY;
+    public JsonSerializerFactory usePropertyOnly() {
+        this.fieldAccessType = FieldAccessMode.PROPERTY;
         return this;
     }
 
-    public boolean isIncludeNulls () {
+    public boolean isIncludeNulls() {
         return includeNulls;
     }
 
-    public JsonSerializerFactory setIncludeNulls ( boolean includeNulls ) {
+    public JsonSerializerFactory setIncludeNulls(boolean includeNulls) {
         this.includeNulls = includeNulls;
         return this;
     }
 
 
-    public boolean isAsciiOnly () {
+    public boolean isAsciiOnly() {
         return asciiOnly;
     }
 
 
-    public JsonSerializerFactory setAsciiOnly ( boolean asciiOnly ) {
+    public JsonSerializerFactory setAsciiOnly(boolean asciiOnly) {
         this.asciiOnly = asciiOnly;
         return this;
     }
 
-    public JsonSerializerFactory asciiOnly (  ) {
+    public JsonSerializerFactory asciiOnly() {
         this.asciiOnly = true;
         return this;
     }
 
-    public JsonSerializerFactory includeNulls () {
+    public JsonSerializerFactory includeNulls() {
         this.includeNulls = true;
         return this;
     }
 
-    public boolean isUseAnnotations () {
+    public boolean isUseAnnotations() {
         return useAnnotations;
     }
 
-    public JsonSerializerFactory setUseAnnotations ( boolean useAnnotations ) {
+    public JsonSerializerFactory setUseAnnotations(boolean useAnnotations) {
         this.useAnnotations = useAnnotations;
         return this;
     }
 
 
-    public JsonSerializerFactory useAnnotations () {
+    public JsonSerializerFactory useAnnotations() {
         this.useAnnotations = true;
         return this;
     }
 
 
-    public boolean isIncludeEmpty () {
+    public boolean isIncludeEmpty() {
         return includeEmpty;
     }
 
-    public JsonSerializerFactory setIncludeEmpty ( boolean includeEmpty ) {
+    public JsonSerializerFactory setIncludeEmpty(boolean includeEmpty) {
         this.includeEmpty = includeEmpty;
         return this;
     }
 
 
-    public JsonSerializerFactory includeEmpty () {
+    public JsonSerializerFactory includeEmpty() {
         this.includeEmpty = true;
         return this;
     }
 
-    public boolean isHandleSimpleBackReference () {
+    public boolean isHandleSimpleBackReference() {
         return handleSimpleBackReference;
     }
 
-    public JsonSerializerFactory setHandleSimpleBackReference ( boolean handleSimpleBackReference ) {
+    public JsonSerializerFactory setHandleSimpleBackReference(boolean handleSimpleBackReference) {
         this.handleSimpleBackReference = handleSimpleBackReference;
         return this;
     }
 
-    public boolean isHandleComplexBackReference () {
+    public boolean isHandleComplexBackReference() {
         return handleComplexBackReference;
     }
 
-    public JsonSerializerFactory setHandleComplexBackReference ( boolean handleComplexBackReference ) {
+    public JsonSerializerFactory setHandleComplexBackReference(boolean handleComplexBackReference) {
         this.handleComplexBackReference = handleComplexBackReference;
         return this;
     }
 
 
-    public JsonSerializerFactory handleComplexBackReference () {
+    public JsonSerializerFactory handleComplexBackReference() {
         this.handleComplexBackReference = true;
         return this;
     }
 
 
-    public boolean isJsonFormatForDates () {
+    public boolean isJsonFormatForDates() {
         return jsonFormatForDates;
     }
 
-    public JsonSerializerFactory setJsonFormatForDates ( boolean jsonFormatForDates ) {
+    public JsonSerializerFactory setJsonFormatForDates(boolean jsonFormatForDates) {
         this.jsonFormatForDates = jsonFormatForDates;
         return this;
     }
 
 
-    public JsonSerializerFactory useJsonFormatForDates () {
+    public JsonSerializerFactory useJsonFormatForDates() {
         this.jsonFormatForDates = true;
         return this;
     }
 
 
-    public boolean isIncludeDefault () {
+    public boolean isIncludeDefault() {
         return includeDefault;
     }
 
-    public JsonSerializerFactory setIncludeDefault ( boolean includeDefault ) {
+    public JsonSerializerFactory setIncludeDefault(boolean includeDefault) {
         this.includeDefault = includeDefault;
         return this;
     }
 
 
-    public JsonSerializerFactory includeDefaultValues () {
+    public JsonSerializerFactory includeDefaultValues() {
         this.includeDefault = true;
         return this;
     }
 
 
-    public boolean isCacheInstances () {
+    public boolean isCacheInstances() {
         return cacheInstances;
     }
 
-    public JsonSerializerFactory setCacheInstances ( boolean cacheInstances ) {
+    public JsonSerializerFactory setCacheInstances(boolean cacheInstances) {
         this.cacheInstances = cacheInstances;
         return this;
     }
 
 
-    public JsonSerializerFactory usedCacheInstances () {
+    public JsonSerializerFactory usedCacheInstances() {
         this.cacheInstances = true;
         return this;
     }
@@ -373,7 +371,7 @@ public class JsonSerializerFactory {
         return view;
     }
 
-    public JsonSerializerFactory setView( String view ) {
+    public JsonSerializerFactory setView(String view) {
         this.view = view;
         return this;
     }

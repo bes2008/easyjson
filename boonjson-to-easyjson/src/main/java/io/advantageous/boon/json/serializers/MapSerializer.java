@@ -36,6 +36,6 @@ import java.util.Map;
  * Created by rick on 1/1/14.
  */
 public interface MapSerializer {
-    void serializeMap ( JsonSerializerInternal serializer, Map<Object, Object> map, CharBuf builder );
+    void serializeMap(JsonSerializerInternal serializer, Map<Object, Object> map, CharBuf builder);
 
 }

@@ -28,36 +28,31 @@
 
 package io.advantageous.boon.json.implementation;
 
-import io.advantageous.boon.primitive.Chr;
 import io.advantageous.boon.primitive.CharBuf;
+import io.advantageous.boon.primitive.Chr;
 
 public class JsonStringDecoder {
 
 
+    public static String decode(char[] chars, int start, int to) {
 
-
-
-
-    public static String decode( char[] chars, int start, int to ) {
-
-        if ( !Chr.contains(chars, '\\', start, to - start) ) {
-            return new String( chars, start, to - start );
+        if (!Chr.contains(chars, '\\', start, to - start)) {
+            return new String(chars, start, to - start);
         }
-        return decodeForSure( chars, start, to );
+        return decodeForSure(chars, start, to);
     }
 
 
+    public static String decodeForSure(char[] chars, int start, int to) {
 
-    public static String decodeForSure( char[] chars, int start, int to ) {
-
-        CharBuf builder = CharBuf.create( to - start );
+        CharBuf builder = CharBuf.create(to - start);
         builder.decodeJsonString(chars, start, to);
         return builder.toString();
 
     }
 
 
-    public static String decodeForSure( CharBuf charBuf, char[] chars, int start, int to ) {
+    public static String decodeForSure(CharBuf charBuf, char[] chars, int start, int to) {
 
         charBuf.recycle();
 

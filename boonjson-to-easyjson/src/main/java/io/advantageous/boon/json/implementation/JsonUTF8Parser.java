@@ -37,7 +37,7 @@ public class JsonUTF8Parser extends JsonBaseByteArrayParser {
         int index = __index;
         int currentChar = array[index];
 
-        if ( index < array.length && currentChar == DOUBLE_QUOTE ) {
+        if (index < array.length && currentChar == DOUBLE_QUOTE) {
             index++;
         }
 
@@ -48,17 +48,16 @@ public class JsonUTF8Parser extends JsonBaseByteArrayParser {
         index = indexHolder[0];
 
 
-
         String value = null;
-        if ( encoded ) {
-            index = ByteScanner.findEndQuoteUTF8( array,  index);
-            value = builder.decodeJsonString ( array, startIndex, index ).toString ();
-            builder.recycle ();
+        if (encoded) {
+            index = ByteScanner.findEndQuoteUTF8(array, index);
+            value = builder.decodeJsonString(array, startIndex, index).toString();
+            builder.recycle();
         } else {
-            value = new String( array, startIndex, ( index - startIndex ) );
+            value = new String(array, startIndex, (index - startIndex));
         }
 
-        if ( index < charArray.length ) {
+        if (index < charArray.length) {
             index++;
         }
         __index = index;

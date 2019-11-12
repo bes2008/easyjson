@@ -41,32 +41,32 @@ import java.util.Map;
  */
 public interface JsonSerializerInternal extends JsonSerializer {
 
-    CharBuf serialize ( Object obj );
+    CharBuf serialize(Object obj);
 
-    void serializeDate ( Date date, CharBuf builder );
-
-
-    void serializeString ( String obj, CharBuf builder );
-
-    void serializeCollection ( Collection<?> collection, CharBuf builder );
-
-    void serializeMap ( Map<Object, Object> map, CharBuf builder );
-
-    void serializeArray ( Object array, CharBuf builder );
-
-    void serializeInstance ( Object obj, CharBuf builder );
-
-    void serializeInstance ( Object obj, CharBuf builder, boolean includeTypeInfo );
-
-    void serializeSubtypeInstance( Object obj, CharBuf builder );
+    void serializeDate(Date date, CharBuf builder);
 
 
-    void serializeUnknown ( Object obj, CharBuf builder );
+    void serializeString(String obj, CharBuf builder);
 
-    void serializeObject ( Object value, CharBuf builder );
+    void serializeCollection(Collection<?> collection, CharBuf builder);
 
-    Map<String, FieldAccess> getFields ( Class<? extends Object> aClass );
+    void serializeMap(Map<Object, Object> map, CharBuf builder);
 
-    boolean serializeField ( Object instance, FieldAccess fieldAccess, CharBuf builder );
+    void serializeArray(Object array, CharBuf builder);
+
+    void serializeInstance(Object obj, CharBuf builder);
+
+    void serializeInstance(Object obj, CharBuf builder, boolean includeTypeInfo);
+
+    void serializeSubtypeInstance(Object obj, CharBuf builder);
+
+
+    void serializeUnknown(Object obj, CharBuf builder);
+
+    void serializeObject(Object value, CharBuf builder);
+
+    Map<String, FieldAccess> getFields(Class<? extends Object> aClass);
+
+    boolean serializeField(Object instance, FieldAccess fieldAccess, CharBuf builder);
 
 }

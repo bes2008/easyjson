@@ -1,9 +1,9 @@
 package io.advantageous.boon.json.serializers.impl;
 
-import io.advantageous.boon.core.reflection.ClassMeta;
-import io.advantageous.boon.json.serializers.JsonSerializerInternal;
 import io.advantageous.boon.core.TypeType;
+import io.advantageous.boon.core.reflection.ClassMeta;
 import io.advantageous.boon.json.serializers.CustomObjectSerializer;
+import io.advantageous.boon.json.serializers.JsonSerializerInternal;
 import io.advantageous.boon.primitive.CharBuf;
 
 import java.util.Collection;
@@ -16,12 +16,12 @@ import java.util.Set;
 public class SerializeUtils {
 
 
-    public static void  handleInstance(JsonSerializerInternal jsonSerializer,
-                                        Object obj, CharBuf builder,
-                                        Map<Class, CustomObjectSerializer> overrideMap,
-                                        Set<Class> noHandle, boolean typeInfo,
-                                        TypeType type) {
-        if (overrideMap!=null) {
+    public static void handleInstance(JsonSerializerInternal jsonSerializer,
+                                      Object obj, CharBuf builder,
+                                      Map<Class, CustomObjectSerializer> overrideMap,
+                                      Set<Class> noHandle, boolean typeInfo,
+                                      TypeType type) {
+        if (overrideMap != null) {
             Class<?> cls = ClassMeta.cls(obj);
             if (cls != null && !cls.isPrimitive() && !noHandle.contains(cls)) {
                 CustomObjectSerializer customObjectSerializer = overrideMap.get(cls);
@@ -61,7 +61,7 @@ public class SerializeUtils {
             case COLLECTION:
             case LIST:
             case SET:
-                jsonSerializer.serializeCollection((Collection)obj, builder);
+                jsonSerializer.serializeCollection((Collection) obj, builder);
                 return;
             case INSTANCE:
                 jsonSerializer.serializeInstance(obj, builder, typeInfo);

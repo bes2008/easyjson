@@ -39,12 +39,12 @@ import java.lang.annotation.Target;
  * Does not stop field from being populated.
  *
  * @author Rick Hightower
- *
  */
-@Target({ ElementType.METHOD, ElementType.FIELD })
-@Retention( RetentionPolicy.RUNTIME)
+@Target({ElementType.METHOD, ElementType.FIELD})
+@Retention(RetentionPolicy.RUNTIME)
 public @interface Expose {
 
     boolean deserialize() default true;
+
     boolean serialize();
 }

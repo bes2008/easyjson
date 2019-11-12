@@ -35,9 +35,9 @@ import io.advantageous.boon.primitive.CharBuf;
 /**
  * Created by rick on 1/1/14.
  */
-public class UnknownSerializerImpl implements UnknownSerializer{
+public class UnknownSerializerImpl implements UnknownSerializer {
     @Override
-    public final void serializeUnknown ( JsonSerializerInternal serializer, Object unknown, CharBuf builder ) {
-        builder.addQuoted ( unknown.toString () );
+    public final void serializeUnknown(JsonSerializerInternal serializer, Object unknown, CharBuf builder) {
+        builder.addQuoted(unknown.toString());
     }
 }

@@ -29,7 +29,6 @@
 package io.advantageous.boon.json.implementation;
 
 import com.jn.easyjson.core.JSON;
-import com.jn.easyjson.core.JSONBuilder;
 import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.PrimitiveArrays;
@@ -210,6 +209,7 @@ public class BaseJsonParserAndMapper implements JsonParserAndMapper {
     public <T> List<T> parseList(Class<T> componentType, CharSequence jsonSeq) {
         return parseList(componentType, jsonSeq.toString());
     }
+
     public <T> T parseClassFromFile(Class<T> clazz, String fileName) {
         try {
             InputStream stream = new FileInputStream(fileName);
@@ -424,7 +424,7 @@ public class BaseJsonParserAndMapper implements JsonParserAndMapper {
 
     @Override
     public long parseLong(byte[] jsonBytes) {
-        return  parse(Long.class, jsonBytes);
+        return parse(Long.class, jsonBytes);
     }
 
     @Override
@@ -464,12 +464,12 @@ public class BaseJsonParserAndMapper implements JsonParserAndMapper {
 
     @Override
     public String parseString(byte[] value) {
-        return  parse(String.class, value);
+        return parse(String.class, value);
     }
 
     @Override
     public String parseString(byte[] value, Charset charset) {
-        return  parse(String.class, value, charset);
+        return parse(String.class, value, charset);
     }
 
     @Override

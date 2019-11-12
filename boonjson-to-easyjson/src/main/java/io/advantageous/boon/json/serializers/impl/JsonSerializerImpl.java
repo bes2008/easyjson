@@ -30,9 +30,9 @@ package io.advantageous.boon.json.serializers.impl;
 
 import io.advantageous.boon.core.Exceptions;
 import io.advantageous.boon.core.reflection.fields.FieldAccess;
+import io.advantageous.boon.core.reflection.fields.FieldsAccessor;
 import io.advantageous.boon.core.reflection.fields.FieldsAccessorFieldThenProp;
 import io.advantageous.boon.json.serializers.*;
-import io.advantageous.boon.core.reflection.fields.FieldsAccessor;
 import io.advantageous.boon.primitive.CharBuf;
 
 import java.util.Collection;
@@ -59,49 +59,47 @@ public class JsonSerializerImpl implements JsonSerializerInternal {
     private final FieldsAccessor fieldsAccessor;
 
 
-    private CharBuf builder = CharBuf.create( 4000 );
+    private CharBuf builder = CharBuf.create(4000);
 
-    public JsonSerializerImpl ()  {
+    public JsonSerializerImpl() {
 
-        instanceSerializer = new InstanceSerializerImpl ();
-        objectSerializer = new BasicObjectSerializerImpl (false, true);
-        stringSerializer = new StringSerializerImpl (true, false);
-        mapSerializer = new MapSerializerImpl (false);
-        fieldSerializer = new FieldSerializerImpl ();
-        collectionSerializer = new CollectionSerializerImpl ();
+        instanceSerializer = new InstanceSerializerImpl();
+        objectSerializer = new BasicObjectSerializerImpl(false, true);
+        stringSerializer = new StringSerializerImpl(true, false);
+        mapSerializer = new MapSerializerImpl(false);
+        fieldSerializer = new FieldSerializerImpl();
+        collectionSerializer = new CollectionSerializerImpl();
         arraySerializer = (ArraySerializer) collectionSerializer;
-        unknownSerializer = new UnknownSerializerImpl ();
-        dateSerializer = new DateSerializerImpl ();
+        unknownSerializer = new UnknownSerializerImpl();
+        dateSerializer = new DateSerializerImpl();
         fieldsAccessor = new FieldsAccessorFieldThenProp(true);
 
     }
 
-    public JsonSerializerImpl ( final ObjectSerializer objectSerializer,
-                                final StringSerializer stringSerializer,
-                                final MapSerializer mapSerializer,
-                                final FieldSerializer fieldSerializer,
-                                final InstanceSerializer instanceSerializer,
-                                final CollectionSerializer collectionSerializer,
-                                final ArraySerializer arraySerializer,
-                                final UnknownSerializer unknownSerializer,
-                                final DateSerializer dateSerializer,
-                                final FieldsAccessor fieldsAccessor,
-                                final boolean asAscii
+    public JsonSerializerImpl(final ObjectSerializer objectSerializer,
+                              final StringSerializer stringSerializer,
+                              final MapSerializer mapSerializer,
+                              final FieldSerializer fieldSerializer,
+                              final InstanceSerializer instanceSerializer,
+                              final CollectionSerializer collectionSerializer,
+                              final ArraySerializer arraySerializer,
+                              final UnknownSerializer unknownSerializer,
+                              final DateSerializer dateSerializer,
+                              final FieldsAccessor fieldsAccessor,
+                              final boolean asAscii
 
     ) {
 
 
-
-
         if (fieldsAccessor == null) {
-            this.fieldsAccessor = new FieldsAccessorFieldThenProp (true);
+            this.fieldsAccessor = new FieldsAccessorFieldThenProp(true);
         } else {
             this.fieldsAccessor = fieldsAccessor;
         }
 
 
         if (dateSerializer == null) {
-            this.dateSerializer = new DateSerializerImpl ();
+            this.dateSerializer = new DateSerializerImpl();
         } else {
             this.dateSerializer = dateSerializer;
         }
@@ -114,32 +112,32 @@ public class JsonSerializerImpl implements JsonSerializerInternal {
 
 
         if (arraySerializer == null) {
-            this.arraySerializer = new CollectionSerializerImpl ();
+            this.arraySerializer = new CollectionSerializerImpl();
         } else {
             this.arraySerializer = arraySerializer;
         }
 
         if (collectionSerializer == null) {
-            this.collectionSerializer = new CollectionSerializerImpl ();
+            this.collectionSerializer = new CollectionSerializerImpl();
         } else {
             this.collectionSerializer = collectionSerializer;
         }
 
 
         if (instanceSerializer == null) {
-            this.instanceSerializer = new InstanceSerializerImpl ();
+            this.instanceSerializer = new InstanceSerializerImpl();
         } else {
             this.instanceSerializer = instanceSerializer;
         }
 
         if (objectSerializer == null) {
-            this.objectSerializer = new BasicObjectSerializerImpl (false, true);
+            this.objectSerializer = new BasicObjectSerializerImpl(false, true);
         } else {
             this.objectSerializer = objectSerializer;
         }
 
         if (stringSerializer == null) {
-            this.stringSerializer = new StringSerializerImpl (true, asAscii);
+            this.stringSerializer = new StringSerializerImpl(true, asAscii);
         } else {
             this.stringSerializer = stringSerializer;
         }
@@ -159,89 +157,79 @@ public class JsonSerializerImpl implements JsonSerializerInternal {
     }
 
 
+    public final CharBuf serialize(Object obj) {
 
-
-
-
-
-    public final CharBuf serialize( Object obj ) {
-
-        builder.readForRecycle ();
+        builder.readForRecycle();
         try {
-            serializeObject( obj, builder );
-        } catch ( Exception ex ) {
+            serializeObject(obj, builder);
+        } catch (Exception ex) {
             return Exceptions.handle(CharBuf.class, "unable to serializeObject", ex);
         }
         return builder;
     }
 
 
-    public final boolean serializeField ( Object parent, FieldAccess fieldAccess, CharBuf builder )  {
+    public final boolean serializeField(Object parent, FieldAccess fieldAccess, CharBuf builder) {
 
-        return fieldSerializer.serializeField ( this, parent, fieldAccess, builder );
+        return fieldSerializer.serializeField(this, parent, fieldAccess, builder);
     }
 
-    public  final void serializeObject( Object obj, CharBuf builder )  {
+    public final void serializeObject(Object obj, CharBuf builder) {
 
-        objectSerializer.serializeObject ( this, obj, builder );
-
-    }
-
-    public final  void serializeString( String str, CharBuf builder ) {
-        this.stringSerializer.serializeString ( this, str, builder );
-    }
-
-
-    public final void serializeMap( Map<Object, Object> map, CharBuf builder )  {
-        this.mapSerializer.serializeMap ( this, map, builder );
+        objectSerializer.serializeObject(this, obj, builder);
 
     }
 
-    public final void serializeCollection( Collection<?> collection, CharBuf builder )  {
-
-        this.collectionSerializer.serializeCollection ( this, collection, builder );
+    public final void serializeString(String str, CharBuf builder) {
+        this.stringSerializer.serializeString(this, str, builder);
     }
 
 
-
-    public final void serializeArray( Object obj, CharBuf builder ) {
-        this.arraySerializer.serializeArray ( this, obj, builder );
-    }
-
-
-
-    public final void serializeUnknown ( Object obj, CharBuf builder ) {
-        this.unknownSerializer.serializeUnknown ( this, obj, builder );
-    }
-
-    public final void serializeDate ( Date date, CharBuf builder ) {
-
-        this.dateSerializer.serializeDate ( this, date, builder );
+    public final void serializeMap(Map<Object, Object> map, CharBuf builder) {
+        this.mapSerializer.serializeMap(this, map, builder);
 
     }
 
+    public final void serializeCollection(Collection<?> collection, CharBuf builder) {
+
+        this.collectionSerializer.serializeCollection(this, collection, builder);
+    }
 
 
+    public final void serializeArray(Object obj, CharBuf builder) {
+        this.arraySerializer.serializeArray(this, obj, builder);
+    }
 
 
-    public final void serializeInstance ( Object obj, CharBuf builder )  {
-           this.instanceSerializer.serializeInstance ( this, obj, builder );
+    public final void serializeUnknown(Object obj, CharBuf builder) {
+        this.unknownSerializer.serializeUnknown(this, obj, builder);
+    }
+
+    public final void serializeDate(Date date, CharBuf builder) {
+
+        this.dateSerializer.serializeDate(this, date, builder);
+
+    }
+
+
+    public final void serializeInstance(Object obj, CharBuf builder) {
+        this.instanceSerializer.serializeInstance(this, obj, builder);
 
     }
 
     @Override
     public void serializeInstance(Object obj, CharBuf builder, boolean includeTypeInfo) {
-        this.instanceSerializer.serializeInstance ( this, obj, builder, includeTypeInfo );
+        this.instanceSerializer.serializeInstance(this, obj, builder, includeTypeInfo);
 
     }
 
     @Override
-    public void serializeSubtypeInstance( Object obj, CharBuf builder ) {
-        this.instanceSerializer.serializeSubtypeInstance ( this, obj, builder );
+    public void serializeSubtypeInstance(Object obj, CharBuf builder) {
+        this.instanceSerializer.serializeSubtypeInstance(this, obj, builder);
     }
 
-    public final Map<String, FieldAccess> getFields ( Class<? extends Object> aClass ) {
-        return fieldsAccessor.getFields ( aClass );
+    public final Map<String, FieldAccess> getFields(Class<? extends Object> aClass) {
+        return fieldsAccessor.getFields(aClass);
     }
 
 
@@ -249,8 +237,8 @@ public class JsonSerializerImpl implements JsonSerializerInternal {
     public void serialize(CharBuf builder, Object obj) {
 
         try {
-            serializeObject( obj, builder );
-        } catch ( Exception ex ) {
+            serializeObject(obj, builder);
+        } catch (Exception ex) {
             Exceptions.handle("unable to serializeObject", ex);
         }
     }

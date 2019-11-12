@@ -28,8 +28,8 @@
 
 package io.advantageous.boon.json.serializers.impl;
 
-import io.advantageous.boon.json.serializers.JsonSerializerInternal;
 import io.advantageous.boon.json.serializers.DateSerializer;
+import io.advantageous.boon.json.serializers.JsonSerializerInternal;
 import io.advantageous.boon.primitive.CharBuf;
 
 import java.util.Date;
@@ -39,7 +39,7 @@ import java.util.Date;
  */
 public class DateSerializerImpl implements DateSerializer {
     @Override
-    public final void serializeDate ( JsonSerializerInternal jsonSerializer, Date date, CharBuf builder ) {
-            builder.addLong(date.getTime ());
+    public final void serializeDate(JsonSerializerInternal jsonSerializer, Date date, CharBuf builder) {
+        builder.addLong(date.getTime());
     }
 }

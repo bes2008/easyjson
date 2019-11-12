@@ -38,52 +38,52 @@ import java.util.Collection;
 
 public class CollectionSerializerImpl implements CollectionSerializer, ArraySerializer {
 
-    private static final char [] EMPTY_LIST_CHARS = {'[', ']'};
+    private static final char[] EMPTY_LIST_CHARS = {'[', ']'};
 
 
     @Override
-    public final void serializeCollection ( JsonSerializerInternal serializer, Collection<?> collection, CharBuf builder ) {
-        if ( collection.size () == 0 ) {
-            builder.addChars ( EMPTY_LIST_CHARS );
+    public final void serializeCollection(JsonSerializerInternal serializer, Collection<?> collection, CharBuf builder) {
+        if (collection.size() == 0) {
+            builder.addChars(EMPTY_LIST_CHARS);
             return;
         }
 
-        builder.addChar( '[' );
-        for ( Object o : collection ) {
+        builder.addChar('[');
+        for (Object o : collection) {
             if (o == null) {
                 builder.addNull();
-                builder.addChar ( ',' );
+                builder.addChar(',');
                 continue;
             }
             serializer.serializeObject(o, builder);
-            builder.addChar ( ',' );
+            builder.addChar(',');
         }
-        builder.removeLastChar ();
-        builder.addChar( ']' );
+        builder.removeLastChar();
+        builder.addChar(']');
 
     }
 
     @Override
-    public void serializeArray ( JsonSerializerInternal serializer, Object array, CharBuf builder )  {
-        if ( Array.getLength ( array ) == 0 ) {
-            builder.addChars ( EMPTY_LIST_CHARS );
+    public void serializeArray(JsonSerializerInternal serializer, Object array, CharBuf builder) {
+        if (Array.getLength(array) == 0) {
+            builder.addChars(EMPTY_LIST_CHARS);
             return;
         }
 
-        builder.addChar( '[' );
-        final int length = Array.getLength ( array );
-        for ( int index = 0; index < length; index++ ) {
+        builder.addChar('[');
+        final int length = Array.getLength(array);
+        for (int index = 0; index < length; index++) {
             final Object o = Array.get(array, index);
             if (o == null) {
                 builder.addNull();
-                builder.addChar ( ',' );
+                builder.addChar(',');
                 continue;
             }
-            serializer.serializeObject ( o, builder );
-            builder.addChar ( ',' );
+            serializer.serializeObject(o, builder);
+            builder.addChar(',');
         }
-        builder.removeLastChar ();
-        builder.addChar( ']' );
+        builder.removeLastChar();
+        builder.addChar(']');
 
     }
 }

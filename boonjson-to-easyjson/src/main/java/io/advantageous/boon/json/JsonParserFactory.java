@@ -86,7 +86,7 @@ public class JsonParserFactory {
         return this;
     }
 
-    public boolean isStrict(){
+    public boolean isStrict() {
         return !lax;
     }
 

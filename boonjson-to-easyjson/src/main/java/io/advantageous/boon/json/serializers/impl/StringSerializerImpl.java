@@ -47,7 +47,7 @@ public class StringSerializerImpl implements StringSerializer {
     }
 
     @Override
-    public final void serializeString ( JsonSerializerInternal serializer, String string, CharBuf builder )  {
+    public final void serializeString(JsonSerializerInternal serializer, String string, CharBuf builder) {
         if (encodeStrings) {
 
             builder.asJsonString(string, asAscii);

@@ -40,7 +40,6 @@ import java.util.Collections;
 import java.util.List;
 
 
-
 /**
  * Converts an input JSON String into Java objects works with String or char array
  * as input. Produces an Object which can be any of the basic JSON types mapped
@@ -54,87 +53,81 @@ public class JsonParserUsingCharacterSource extends BaseJsonParser {
     }
 
 
-
-
-
-
-
-    protected String exceptionDetails( String message ) {
-        return characterSource.errorDetails ( message );
+    protected String exceptionDetails(String message) {
+        return characterSource.errorDetails(message);
     }
 
 
     protected final Object decodeJsonObject() {
-        LazyMap map = new LazyMap ();
+        LazyMap map = new LazyMap();
 
         try {
 
-        CharacterSource characterSource = this.characterSource;
+            CharacterSource characterSource = this.characterSource;
 
-        if ( characterSource.currentChar() == '{' )  {
-            characterSource.nextChar();
-        }
-
-
-        while (characterSource.hasChar()) {
-
-            characterSource.skipWhiteSpace ();
+            if (characterSource.currentChar() == '{') {
+                characterSource.nextChar();
+            }
 
 
-            if ( characterSource.currentChar () == DOUBLE_QUOTE ) {
+            while (characterSource.hasChar()) {
 
-                String key = decodeString();
-                //puts ("key", key);
+                characterSource.skipWhiteSpace();
 
-                if ( internKeys ) {
-                    String keyPrime = internedKeysCache.get( key );
-                    if ( keyPrime == null ) {
-                        key = key.intern();
-                        internedKeysCache.put( key, key );
-                    } else {
-                        key = keyPrime;
+
+                if (characterSource.currentChar() == DOUBLE_QUOTE) {
+
+                    String key = decodeString();
+                    //puts ("key", key);
+
+                    if (internKeys) {
+                        String keyPrime = internedKeysCache.get(key);
+                        if (keyPrime == null) {
+                            key = key.intern();
+                            internedKeysCache.put(key, key);
+                        } else {
+                            key = keyPrime;
+                        }
                     }
+
+                    characterSource.skipWhiteSpace();
+                    if (characterSource.currentChar() != COLON) {
+
+                        complain("expecting current character to be : but was " + charDescription(characterSource.currentChar()) + "\n");
+                    }
+
+                    characterSource.nextChar();
+
+                    characterSource.skipWhiteSpace();
+
+                    Object value = decodeValue();
+
+
+                    characterSource.skipWhiteSpace();
+
+                    map.put(key, value);
+
+
                 }
 
-                characterSource.skipWhiteSpace ();
-                if ( characterSource.currentChar() != COLON ) {
+                int ch = characterSource.currentChar();
+                if (ch == '}') {
+                    characterSource.nextChar();
+                    break;
+                } else if (ch == ',') {
+                    characterSource.nextChar();
+                    continue;
+                } else {
+                    complain(
+                            "expecting '}' or ',' but got current char " + charDescription(ch));
 
-                    complain( "expecting current character to be : but was " + charDescription( characterSource.currentChar() ) + "\n" );
                 }
-
-                characterSource.nextChar ();
-
-                characterSource.skipWhiteSpace();
-
-                Object value = decodeValue();
-
-
-
-                characterSource.skipWhiteSpace();
-
-                map.put( key, value );
-
-
             }
-
-            int ch = characterSource.currentChar();
-            if ( ch == '}' ) {
-                characterSource.nextChar();
-                break;
-            } else if ( ch == ',' ) {
-                characterSource.nextChar();
-                continue;
-            } else {
-                complain(
-                        "expecting '}' or ',' but got current char " + charDescription( ch ) );
-
-            }
-        }
         } catch (Exception ex) {
             if (ex instanceof JsonException) {
                 throw ex;
             }
-            throw new JsonException ( exceptionDetails ( "Unable to parse JSON object" ), ex );
+            throw new JsonException(exceptionDetails("Unable to parse JSON object"), ex);
         }
 
 
@@ -142,18 +135,17 @@ public class JsonParserUsingCharacterSource extends BaseJsonParser {
     }
 
 
-    protected final void complain( String complaint ) {
-        throw new JsonException( exceptionDetails( complaint ) );
+    protected final void complain(String complaint) {
+        throw new JsonException(exceptionDetails(complaint));
     }
-
 
 
     private final Object decodeValue() {
         CharacterSource characterSource = this.characterSource;
         Object value = null;
-        characterSource.skipWhiteSpace ();
+        characterSource.skipWhiteSpace();
 
-        switch ( characterSource.currentChar () ) {
+        switch (characterSource.currentChar()) {
 
             case '"':
                 value = decodeString();
@@ -198,72 +190,68 @@ public class JsonParserUsingCharacterSource extends BaseJsonParser {
                 break;
 
             default:
-                throw new JsonException( exceptionDetails( "Unable to determine the " +
-                        "current character, it is not a string, number, array, or object" ) );
+                throw new JsonException(exceptionDetails("Unable to determine the " +
+                        "current character, it is not a string, number, array, or object"));
 
         }
 
         return value;
     }
-
-
 
 
     private final Object decodeNumber(boolean negative) {
 
-        char[] chars = characterSource.readNumber ();
+        char[] chars = characterSource.readNumber();
         Object value = null;
 
-        if ( CharScanner.hasDecimalChar(chars, negative) )  {
-            value = CharScanner.parseDouble( chars );
-        } else if (CharScanner.isInteger ( chars )) {
-            value = CharScanner.parseInt ( chars );
-        } else if (CharScanner.isLong( chars )) {
-            value = CharScanner.parseLong ( chars );
+        if (CharScanner.hasDecimalChar(chars, negative)) {
+            value = CharScanner.parseDouble(chars);
+        } else if (CharScanner.isInteger(chars)) {
+            value = CharScanner.parseInt(chars);
+        } else if (CharScanner.isLong(chars)) {
+            value = CharScanner.parseLong(chars);
         }
 
         return value;
     }
-
 
 
     protected static final char[] NULL = Chr.chars("null");
 
     protected final Object decodeNull() {
-        if ( !characterSource.consumeIfMatch ( NULL ) ) {
-            throw new JsonException( exceptionDetails( "null not parse properly" ) );
+        if (!characterSource.consumeIfMatch(NULL)) {
+            throw new JsonException(exceptionDetails("null not parse properly"));
         }
         return null;
     }
 
 
-    protected static final char[] TRUE = Chr.chars( "true" );
+    protected static final char[] TRUE = Chr.chars("true");
 
     protected final boolean decodeTrue() {
 
-        if ( characterSource.consumeIfMatch ( TRUE ) ) {
+        if (characterSource.consumeIfMatch(TRUE)) {
             return true;
         } else {
-            throw new JsonException( exceptionDetails( "true not parsed properly" ) );
+            throw new JsonException(exceptionDetails("true not parsed properly"));
         }
     }
 
 
-    protected static char[] FALSE = Chr.chars( "false" );
+    protected static char[] FALSE = Chr.chars("false");
 
     protected final boolean decodeFalse() {
 
-        if ( characterSource.consumeIfMatch ( FALSE ) ) {
+        if (characterSource.consumeIfMatch(FALSE)) {
             return false;
         } else {
-            throw new JsonException( exceptionDetails( "false not parsed properly" ) );
+            throw new JsonException(exceptionDetails("false not parsed properly"));
         }
 
     }
 
 
-
-    private CharBuf builder = CharBuf.create( 20 );
+    private CharBuf builder = CharBuf.create(20);
 
     private String decodeString() {
 
@@ -273,16 +261,15 @@ public class JsonParserUsingCharacterSource extends BaseJsonParser {
         characterSource.nextChar();
 
 
-        char [] chars = characterSource.findNextChar ( '"', '\\' );
-
+        char[] chars = characterSource.findNextChar('"', '\\');
 
 
         String value = null;
-        if ( characterSource.hadEscape() ) {
-            value = builder.decodeJsonString ( chars ).toString ();
-            builder.recycle ();
+        if (characterSource.hadEscape()) {
+            value = builder.decodeJsonString(chars).toString();
+            builder.recycle();
         } else {
-            value = new String( chars  );
+            value = new String(chars);
         }
 
         return value;
@@ -297,60 +284,58 @@ public class JsonParserUsingCharacterSource extends BaseJsonParser {
         try {
 
 
-        CharacterSource characterSource = this.characterSource;
+            CharacterSource characterSource = this.characterSource;
 
-        if ( this.characterSource.currentChar() == '[' ) {
-            characterSource.nextChar();
-        }
-
-
-        characterSource.skipWhiteSpace ();
-
-
-
-        /* the list might be empty  */
-        if ( this.characterSource.currentChar() == ']' ) {
-            characterSource.nextChar();
-            return Collections.EMPTY_LIST;
-        }
-
-        list = new ArrayList();
-
-
-
-        do {
-
-            characterSource.skipWhiteSpace ();
-
-            Object arrayItem = decodeValue ();
-
-            list.add( arrayItem );
-
-
-
-            characterSource.skipWhiteSpace ();
-
-            int c = characterSource.currentChar();
-
-            if ( c == COMMA ) {
+            if (this.characterSource.currentChar() == '[') {
                 characterSource.nextChar();
-                continue;
-            } else if ( c == CLOSED_BRACKET ) {
-                foundEnd = true;
-                characterSource.nextChar();
-                break;
-            } else {
-
-                String charString = charDescription( c );
-
-                complain(
-                        String.format( "expecting a ',' or a ']', " +
-                                " but got \nthe current character of  %s " +
-                                " on array index of %s \n", charString, list.size() )
-                );
-
             }
-        } while ( characterSource.hasChar () );
+
+
+            characterSource.skipWhiteSpace();
+
+
+
+            /* the list might be empty  */
+            if (this.characterSource.currentChar() == ']') {
+                characterSource.nextChar();
+                return Collections.EMPTY_LIST;
+            }
+
+            list = new ArrayList();
+
+
+            do {
+
+                characterSource.skipWhiteSpace();
+
+                Object arrayItem = decodeValue();
+
+                list.add(arrayItem);
+
+
+                characterSource.skipWhiteSpace();
+
+                int c = characterSource.currentChar();
+
+                if (c == COMMA) {
+                    characterSource.nextChar();
+                    continue;
+                } else if (c == CLOSED_BRACKET) {
+                    foundEnd = true;
+                    characterSource.nextChar();
+                    break;
+                } else {
+
+                    String charString = charDescription(c);
+
+                    complain(
+                            String.format("expecting a ',' or a ']', " +
+                                    " but got \nthe current character of  %s " +
+                                    " on array index of %s \n", charString, list.size())
+                    );
+
+                }
+            } while (characterSource.hasChar());
 
 
         } catch (Exception ex) {
@@ -358,11 +343,11 @@ public class JsonParserUsingCharacterSource extends BaseJsonParser {
                 throw ex;
             }
 
-            throw new JsonException (exceptionDetails("Unexpected issue"),  ex );
+            throw new JsonException(exceptionDetails("Unexpected issue"), ex);
         }
 
         if (!foundEnd) {
-            throw new JsonException (exceptionDetails("Could not find end of JSON array") );
+            throw new JsonException(exceptionDetails("Could not find end of JSON array"));
 
         }
         return list;
@@ -370,22 +355,15 @@ public class JsonParserUsingCharacterSource extends BaseJsonParser {
     }
 
 
-
-
-
     @Override
-    public Object parse ( char[] chars ) {
-        characterSource = new CharArrayCharacterSource( chars  );
-        return decodeValue ();
+    public Object parse(char[] chars) {
+        characterSource = new CharArrayCharacterSource(chars);
+        return decodeValue();
     }
 
 
-
-
-
-
     @Override
-    public  Object parse(  Reader reader ) {
+    public Object parse(Reader reader) {
 
         if (reader instanceof StringReader) {
             try {
@@ -393,7 +371,7 @@ public class JsonParserUsingCharacterSource extends BaseJsonParser {
                 int length = BeanUtils.idxInt(reader, "length");
                 int next = BeanUtils.idxInt(reader, "next");
 
-                if (str!= null && next == 0 && length == str.length()) {
+                if (str != null && next == 0 && length == str.length()) {
                     return parse(str);
                 }
             } catch (Exception ex) {
@@ -403,17 +381,17 @@ public class JsonParserUsingCharacterSource extends BaseJsonParser {
         }
 
 
-        characterSource = new ReaderCharacterSource ( reader );
-        return  this.decodeValue ();
+        characterSource = new ReaderCharacterSource(reader);
+        return this.decodeValue();
 
     }
 
 
     @Override
-    public Object parse ( byte[] value, Charset charset ) {
+    public Object parse(byte[] value, Charset charset) {
         if (value.length < 20_000) {
-            characterSource = new CharArrayCharacterSource ( new String ( value, charset )  );
-            return  this.decodeValue ();
+            characterSource = new CharArrayCharacterSource(new String(value, charset));
+            return this.decodeValue();
 
         } else {
             return parse(new InMemoryInputStream(value), charset);
@@ -424,24 +402,20 @@ public class JsonParserUsingCharacterSource extends BaseJsonParser {
     IOInputStream ioInputStream;
 
     @Override
-    public Object parse ( InputStream inputStream, Charset charset ) {
+    public Object parse(InputStream inputStream, Charset charset) {
 
-        if (inputStream instanceof ByteArrayInputStream ) {
+        if (inputStream instanceof ByteArrayInputStream) {
 
-            return parse ( new InputStreamReader( inputStream, charset ) );
+            return parse(new InputStreamReader(inputStream, charset));
 
         } else {
-            ioInputStream =  IOInputStream.input(ioInputStream, 50_000).input(inputStream);
-            return parse ( new InputStreamReader( ioInputStream, charset ) );
+            ioInputStream = IOInputStream.input(ioInputStream, 50_000).input(inputStream);
+            return parse(new InputStreamReader(ioInputStream, charset));
 
         }
 
 
-
     }
-
-
-
 
 
 }

@@ -36,6 +36,6 @@ import io.advantageous.boon.primitive.CharBuf;
  */
 public interface CustomFieldSerializer {
 
-    boolean serializeField(JsonSerializerInternal serializer, Object parent, FieldAccess fieldAccess, CharBuf builder  );
+    boolean serializeField(JsonSerializerInternal serializer, Object parent, FieldAccess fieldAccess, CharBuf builder);
 
 }

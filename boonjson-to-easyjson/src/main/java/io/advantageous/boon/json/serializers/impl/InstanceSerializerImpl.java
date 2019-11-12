@@ -29,8 +29,8 @@
 package io.advantageous.boon.json.serializers.impl;
 
 import io.advantageous.boon.core.reflection.fields.FieldAccess;
-import io.advantageous.boon.json.serializers.JsonSerializerInternal;
 import io.advantageous.boon.json.serializers.InstanceSerializer;
+import io.advantageous.boon.json.serializers.JsonSerializerInternal;
 import io.advantageous.boon.primitive.CharBuf;
 
 import java.util.Collection;
@@ -39,61 +39,60 @@ import java.util.Map;
 /**
  * Created by rick on 1/1/14.
  */
-public class InstanceSerializerImpl implements InstanceSerializer{
+public class InstanceSerializerImpl implements InstanceSerializer {
 
     @Override
-    public final void serializeInstance ( JsonSerializerInternal serializer, Object instance, CharBuf builder ) {
-        final Map<String, FieldAccess> fieldAccessors =   serializer.getFields(instance.getClass ());
-        final Collection<FieldAccess> values = fieldAccessors.values ();
+    public final void serializeInstance(JsonSerializerInternal serializer, Object instance, CharBuf builder) {
+        final Map<String, FieldAccess> fieldAccessors = serializer.getFields(instance.getClass());
+        final Collection<FieldAccess> values = fieldAccessors.values();
 
 
-
-        builder.addChar( '{' );
+        builder.addChar('{');
 
         int index = 0;
-        for ( FieldAccess fieldAccess : values ) {
-            if (serializer.serializeField ( instance, fieldAccess, builder ) ) {
-                builder.addChar ( ',' );
+        for (FieldAccess fieldAccess : values) {
+            if (serializer.serializeField(instance, fieldAccess, builder)) {
+                builder.addChar(',');
                 index++;
             }
         }
-        if ( index > 0 ) {
+        if (index > 0) {
             builder.removeLastChar();
         }
-        builder.addChar( '}' );
+        builder.addChar('}');
 
     }
 
     @Override
-    public void serializeSubtypeInstance( JsonSerializerInternal serializer, Object instance, CharBuf builder ) {
+    public void serializeSubtypeInstance(JsonSerializerInternal serializer, Object instance, CharBuf builder) {
 
 
-        builder.addString( "{\"class\":" );
-        builder.addQuoted ( instance.getClass ().getName () );
-        final Map<String, FieldAccess> fieldAccessors = serializer.getFields ( instance.getClass () );
+        builder.addString("{\"class\":");
+        builder.addQuoted(instance.getClass().getName());
+        final Map<String, FieldAccess> fieldAccessors = serializer.getFields(instance.getClass());
 
         int index = 0;
         Collection<FieldAccess> values = fieldAccessors.values();
         int length = values.size();
 
-        if ( length > 0 ) {
-            builder.addChar( ',' );
+        if (length > 0) {
+            builder.addChar(',');
 
 
-            for ( FieldAccess fieldAccess : values ) {
-                boolean sent = serializer.serializeField ( instance, fieldAccess, builder );
+            for (FieldAccess fieldAccess : values) {
+                boolean sent = serializer.serializeField(instance, fieldAccess, builder);
                 if (sent) {
                     index++;
-                    builder.addChar( ',' );
+                    builder.addChar(',');
                 }
             }
 
 
-            if ( index > 0 ) {
+            if (index > 0) {
                 builder.removeLastChar();
             }
 
-            builder.addChar( '}' );
+            builder.addChar('}');
 
 
         }
@@ -103,28 +102,28 @@ public class InstanceSerializerImpl implements InstanceSerializer{
     @Override
     public void serializeInstance(JsonSerializerImpl serializer, Object instance, CharBuf builder, boolean includeTypeInfo) {
 
-        final Map<String, FieldAccess> fieldAccessors =   serializer.getFields(instance.getClass ());
-        final Collection<FieldAccess> values = fieldAccessors.values ();
+        final Map<String, FieldAccess> fieldAccessors = serializer.getFields(instance.getClass());
+        final Collection<FieldAccess> values = fieldAccessors.values();
 
         if (includeTypeInfo) {
             builder.addString("{\"class\":");
             builder.addQuoted(instance.getClass().getName());
-            builder.addChar ( ',' );
+            builder.addChar(',');
         } else {
 
             builder.addChar('{');
         }
         int index = 0;
-        for ( FieldAccess fieldAccess : values ) {
-            if (serializer.serializeField ( instance, fieldAccess, builder ) ) {
-                builder.addChar ( ',' );
+        for (FieldAccess fieldAccess : values) {
+            if (serializer.serializeField(instance, fieldAccess, builder)) {
+                builder.addChar(',');
                 index++;
             }
         }
-        if ( index > 0 ) {
+        if (index > 0) {
             builder.removeLastChar();
         }
-        builder.addChar( '}' );
+        builder.addChar('}');
 
     }
 }

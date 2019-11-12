@@ -28,10 +28,10 @@
 
 package io.advantageous.boon.json.implementation;
 
+import io.advantageous.boon.core.TypeType;
 import io.advantageous.boon.core.Value;
 import io.advantageous.boon.core.value.*;
 import io.advantageous.boon.primitive.CharScanner;
-import io.advantageous.boon.core.TypeType;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,7 +44,7 @@ import java.util.List;
  */
 public class JsonFastParser extends JsonParserCharArray {
 
-    protected static ValueContainer EMPTY_LIST = new ValueContainer ( Collections.emptyList() );
+    protected static ValueContainer EMPTY_LIST = new ValueContainer(Collections.emptyList());
 
     protected final boolean useValues;
     protected final boolean chop;
@@ -55,23 +55,23 @@ public class JsonFastParser extends JsonParserCharArray {
         return useValues;
     }
 
-    public JsonFastParser(  ) {
-        this( false );
+    public JsonFastParser() {
+        this(false);
     }
 
-    public JsonFastParser(  boolean useValues ) {
-        this(  useValues, false );
+    public JsonFastParser(boolean useValues) {
+        this(useValues, false);
     }
 
-    public JsonFastParser(  boolean useValues, boolean chop ) {
-        this(  useValues, chop, !chop );
+    public JsonFastParser(boolean useValues, boolean chop) {
+        this(useValues, chop, !chop);
     }
 
-    public JsonFastParser(  boolean useValues, boolean chop, boolean lazyChop ) {
-        this( useValues, chop, lazyChop, true );
+    public JsonFastParser(boolean useValues, boolean chop, boolean lazyChop) {
+        this(useValues, chop, lazyChop, true);
     }
 
-    public JsonFastParser(  boolean useValues, boolean chop, boolean lazyChop, boolean checkDates ) {
+    public JsonFastParser(boolean useValues, boolean chop, boolean lazyChop, boolean checkDates) {
         this.useValues = useValues;
         this.chop = chop;
         this.lazyChop = lazyChop;
@@ -82,38 +82,38 @@ public class JsonFastParser extends JsonParserCharArray {
 
         char[] array = charArray;
 
-        if ( __currentChar == '{' )
+        if (__currentChar == '{')
             __index++;
 
-        ValueMap map =  useValues ? new ValueMapImpl() : new LazyValueMap( lazyChop );
-        Value value  = new ValueContainer ( map );
+        ValueMap map = useValues ? new ValueMapImpl() : new LazyValueMap(lazyChop);
+        Value value = new ValueContainer(map);
 
         objectLoop:
-        for (; __index < array.length; __index++ ) {
-            skipWhiteSpaceIfNeeded ();
-            switch ( __currentChar ) {
+        for (; __index < array.length; __index++) {
+            skipWhiteSpaceIfNeeded();
+            switch (__currentChar) {
 
                 case '"':
-                    Value key = decodeStringOverlay ();
-                    skipWhiteSpaceIfNeeded ();
+                    Value key = decodeStringOverlay();
+                    skipWhiteSpaceIfNeeded();
 
-                    if ( __currentChar != ':' ) {
+                    if (__currentChar != ':') {
 
-                        complain ( "expecting current character to be " + charDescription ( __currentChar ) + "\n" );
+                        complain("expecting current character to be " + charDescription(__currentChar) + "\n");
                     }
                     __index++;
 
-                    Value item = decodeValueOverlay ();
+                    Value item = decodeValueOverlay();
 
-                    skipWhiteSpaceIfNeeded ();
+                    skipWhiteSpaceIfNeeded();
 
 
-                    MapItemValue miv = new MapItemValue ( key, item );
+                    MapItemValue miv = new MapItemValue(key, item);
 
-                    map.add ( miv );
+                    map.add(miv);
             }
 
-            switch ( __currentChar ) {
+            switch (__currentChar) {
                 case '}':
                     __index++;
                     break objectLoop;
@@ -123,8 +123,8 @@ public class JsonFastParser extends JsonParserCharArray {
 
                 default:
 
-                    complain (
-                            "expecting '}' or ',' but got current char " + charDescription ( __currentChar ) );
+                    complain(
+                            "expecting '}' or ',' but got current char " + charDescription(__currentChar));
 
             }
         }
@@ -133,27 +133,27 @@ public class JsonFastParser extends JsonParserCharArray {
 
     private Value decodeValueOverlay() {
 
-        skipWhiteSpaceIfNeeded ();
+        skipWhiteSpaceIfNeeded();
 
-        switch ( __currentChar ) {
+        switch (__currentChar) {
 
             case '"':
-                return decodeStringOverlay ();
+                return decodeStringOverlay();
 
             case '{':
-                return decodeJsonObjectLazyFinalParse ();
+                return decodeJsonObjectLazyFinalParse();
 
             case 't':
-                return decodeTrue () == true ? ValueContainer.TRUE : ValueContainer.FALSE;
+                return decodeTrue() == true ? ValueContainer.TRUE : ValueContainer.FALSE;
 
             case 'f':
-                return decodeFalse () == false ? ValueContainer.FALSE : ValueContainer.TRUE;
+                return decodeFalse() == false ? ValueContainer.FALSE : ValueContainer.TRUE;
 
             case 'n':
-                return decodeNull () == null ? ValueContainer.NULL : ValueContainer.NULL;
+                return decodeNull() == null ? ValueContainer.NULL : ValueContainer.NULL;
 
             case '[':
-                return decodeJsonArrayOverlay ();
+                return decodeJsonArrayOverlay();
 
             case '1':
             case '2':
@@ -165,14 +165,14 @@ public class JsonFastParser extends JsonParserCharArray {
             case '8':
             case '9':
             case '0':
-                return decodeNumberOverlay (false);
+                return decodeNumberOverlay(false);
 
             case '-':
-                return decodeNumberOverlay (true);
+                return decodeNumberOverlay(true);
 
             default:
-                complain ( "Unable to determine the " +
-                        "current character, it is not a string, number, array, or object" );
+                complain("Unable to determine the " +
+                        "current character, it is not a string, number, array, or object");
                 return null;
         }
     }
@@ -182,7 +182,7 @@ public class JsonFastParser extends JsonParserCharArray {
         char[] array = charArray;
 
         final int startIndex = __index;
-        int index =  __index;
+        int index = __index;
         char currentChar;
         boolean doubleFloat = false;
 
@@ -194,15 +194,15 @@ public class JsonFastParser extends JsonParserCharArray {
             currentChar = array[index];
             if (CharScanner.isNumberDigit(currentChar)) {
                 //noop
-            } else if ( currentChar <= 32 ) { //white
+            } else if (currentChar <= 32) { //white
                 break;
-            } else if ( CharScanner.isDelimiter ( currentChar ) ) {
+            } else if (CharScanner.isDelimiter(currentChar)) {
                 break;
-            } else if ( CharScanner.isDecimalChar(currentChar) ) {
+            } else if (CharScanner.isDecimalChar(currentChar)) {
                 doubleFloat = true;
             }
             index++;
-            if (index   >= array.length) break;
+            if (index >= array.length) break;
         }
 
         __index = index;
@@ -210,7 +210,7 @@ public class JsonFastParser extends JsonParserCharArray {
 
         TypeType type = doubleFloat ? TypeType.DOUBLE : TypeType.INT;
 
-        NumberValue value = new NumberValue ( chop, type, startIndex, __index, this.charArray );
+        NumberValue value = new NumberValue(chop, type, startIndex, __index, this.charArray);
 
         return value;
     }
@@ -221,22 +221,22 @@ public class JsonFastParser extends JsonParserCharArray {
         int index = __index;
         char currentChar = charArray[index];
 
-        if ( index < array.length && currentChar == '"' ) {
+        if (index < array.length && currentChar == '"') {
             index++;
         }
 
         final int startIndex = index;
 
-        boolean encoded = CharScanner.hasEscapeChar ( array, index, indexHolder );
+        boolean encoded = CharScanner.hasEscapeChar(array, index, indexHolder);
         index = indexHolder[0];
 
-        if (encoded)  {
-            index = CharScanner.findEndQuote ( array, index );
+        if (encoded) {
+            index = CharScanner.findEndQuote(array, index);
         }
 
-        Value value = new CharSequenceValue ( chop, TypeType.STRING, startIndex, index, array, encoded, checkDates );
+        Value value = new CharSequenceValue(chop, TypeType.STRING, startIndex, index, array, encoded, checkDates);
 
-        if ( index < array.length ) {
+        if (index < array.length) {
             index++;
         }
 
@@ -246,28 +246,28 @@ public class JsonFastParser extends JsonParserCharArray {
 
     private Value decodeJsonArrayOverlay() {
 
-        char [] array = charArray;
-        if ( __currentChar == '[' ) {
+        char[] array = charArray;
+        if (__currentChar == '[') {
             __index++;
         }
 
-        skipWhiteSpaceIfNeeded ();
+        skipWhiteSpaceIfNeeded();
 
         /* the list might be empty  */
-        if ( __currentChar == ']' ) {
+        if (__currentChar == ']') {
             __index++;
             return EMPTY_LIST;
         }
 
         List<Object> list;
 
-        if ( useValues ) {
-            list = new ArrayList<> ();
+        if (useValues) {
+            list = new ArrayList<>();
         } else {
-            list = new ValueList ( lazyChop );
+            list = new ValueList(lazyChop);
         }
 
-        Value value = new ValueContainer ( list );
+        Value value = new ValueContainer(list);
 
         Value item;
         char c;
@@ -275,10 +275,10 @@ public class JsonFastParser extends JsonParserCharArray {
         boolean foundEnd = false;
 
         arrayLoop:
-        for ( ;__index < array.length; __index++) {
-            item = decodeValueOverlay ();
+        for (; __index < array.length; __index++) {
+            item = decodeValueOverlay();
 
-            list.add ( item );
+            list.add(item);
             c = currentChar();
             switch (c) {
                 case ',':
@@ -291,7 +291,7 @@ public class JsonFastParser extends JsonParserCharArray {
 
 
             lastIndex = __index;
-            skipWhiteSpaceIfNeeded ();
+            skipWhiteSpaceIfNeeded();
             c = currentChar();
 
             switch (c) {
@@ -299,35 +299,35 @@ public class JsonFastParser extends JsonParserCharArray {
                     continue;
                 case ']':
                     if (__index == lastIndex) {
-                        complain ( "missing ]" );
+                        complain("missing ]");
                     }
                     foundEnd = true;
                     __index++;
                     break arrayLoop;
                 default:
-                    complain (
-                        String.format ( "expecting a ',' or a ']', " +
-                                " but got \nthe current character of  %s " +
-                                " on array size of %s \n", charDescription ( __currentChar ), list.size () )
-                );
+                    complain(
+                            String.format("expecting a ',' or a ']', " +
+                                    " but got \nthe current character of  %s " +
+                                    " on array size of %s \n", charDescription(__currentChar), list.size())
+                    );
             }
         }
 
 
-        if (!foundEnd ) {
-            complain ( "Did not find end of Json Array" );
+        if (!foundEnd) {
+            complain("Did not find end of Json Array");
         }
         return value;
     }
 
-    public  Object parse( char[] chars ) {
-        lastIndex = chars.length -1;
+    public Object parse(char[] chars) {
+        lastIndex = chars.length - 1;
         __index = 0;
         charArray = chars;
 
-        Value value = decodeValueOverlay(  );
-        if (value.isContainer ()) {
-            return value.toValue ();
+        Value value = decodeValueOverlay();
+        if (value.isContainer()) {
+            return value.toValue();
         } else {
             return value;
         }

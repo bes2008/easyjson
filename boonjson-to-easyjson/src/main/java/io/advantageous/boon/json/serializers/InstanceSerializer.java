@@ -35,8 +35,9 @@ import io.advantageous.boon.primitive.CharBuf;
  * Created by rick on 1/1/14.
  */
 public interface InstanceSerializer {
-    void serializeInstance(JsonSerializerInternal serializer,  Object instance, CharBuf builder );
-    void serializeSubtypeInstance( JsonSerializerInternal serializer, Object instance, CharBuf builder );
+    void serializeInstance(JsonSerializerInternal serializer, Object instance, CharBuf builder);
+
+    void serializeSubtypeInstance(JsonSerializerInternal serializer, Object instance, CharBuf builder);
 
     void serializeInstance(JsonSerializerImpl jsonSerializer, Object obj, CharBuf builder, boolean includeTypeInfo);
 }

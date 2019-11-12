@@ -47,7 +47,7 @@ public class JsonAsciiParser extends JsonBaseByteArrayParser {
         int index = __index;
         int currentChar = array[index];
 
-        if ( index < array.length && currentChar == '"' ) {
+        if (index < array.length && currentChar == '"') {
             index++;
         }
 
@@ -58,17 +58,16 @@ public class JsonAsciiParser extends JsonBaseByteArrayParser {
         index = indexHolder[0];
 
 
-
         String value = null;
-        if ( encoded ) {
-            index = ByteScanner.findEndQuote ( array,  index);
-            value = builder.decodeJsonString ( array, startIndex, index ).toString ();
-            builder.recycle ();
+        if (encoded) {
+            index = ByteScanner.findEndQuote(array, index);
+            value = builder.decodeJsonString(array, startIndex, index).toString();
+            builder.recycle();
         } else {
-            value = new String( array, startIndex, ( index - startIndex ) );
+            value = new String(array, startIndex, (index - startIndex));
         }
 
-        if ( index < charArray.length ) {
+        if (index < charArray.length) {
             index++;
         }
         __index = index;

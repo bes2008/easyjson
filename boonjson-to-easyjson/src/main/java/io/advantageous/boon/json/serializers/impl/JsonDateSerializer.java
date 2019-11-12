@@ -28,10 +28,10 @@
 
 package io.advantageous.boon.json.serializers.impl;
 
-import io.advantageous.boon.json.serializers.JsonSerializerInternal;
 import io.advantageous.boon.core.Dates;
 import io.advantageous.boon.core.reflection.FastStringUtils;
 import io.advantageous.boon.json.serializers.DateSerializer;
+import io.advantageous.boon.json.serializers.JsonSerializerInternal;
 import io.advantageous.boon.primitive.CharBuf;
 import io.advantageous.boon.primitive.SimpleLRUCache;
 
@@ -41,20 +41,20 @@ import java.util.TimeZone;
 
 public class JsonDateSerializer implements DateSerializer {
 
-    private final Calendar calendar = Calendar.getInstance( TimeZone.getTimeZone( "GMT" ) );
+    private final Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
     private final SimpleLRUCache<Object, String> dateCache = new SimpleLRUCache<>(200);
 
 
     @Override
-    public final void serializeDate( JsonSerializerInternal jsonSerializer, Date date, CharBuf builder ) {
-        String string = dateCache.get ( date );
-        if ( string == null) {
-            CharBuf buf =  CharBuf.create ( Dates.JSON_TIME_LENGTH );
-            Dates.jsonDateChars ( calendar, date, buf );
+    public final void serializeDate(JsonSerializerInternal jsonSerializer, Date date, CharBuf builder) {
+        String string = dateCache.get(date);
+        if (string == null) {
+            CharBuf buf = CharBuf.create(Dates.JSON_TIME_LENGTH);
+            Dates.jsonDateChars(calendar, date, buf);
             string = buf.toString();
-            dateCache.put ( date, string );
+            dateCache.put(date, string);
 
         }
-        builder.addChars ( FastStringUtils.toCharArray( string ) );
+        builder.addChars(FastStringUtils.toCharArray(string));
     }
 }

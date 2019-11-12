@@ -40,7 +40,7 @@ import java.util.Set;
  * Created by rick on 1/1/14.
  */
 public class MapSerializerImpl implements MapSerializer {
-    private static final char [] EMPTY_MAP_CHARS = {'{', '}'};
+    private static final char[] EMPTY_MAP_CHARS = {'{', '}'};
     private final boolean includeNulls;
 
     public MapSerializerImpl(boolean includeNulls) {
@@ -48,23 +48,23 @@ public class MapSerializerImpl implements MapSerializer {
     }
 
 
-    private void serializeFieldName ( String name, CharBuf builder ) {
-        builder.addJsonFieldName ( FastStringUtils.toCharArray(name) );
+    private void serializeFieldName(String name, CharBuf builder) {
+        builder.addJsonFieldName(FastStringUtils.toCharArray(name));
     }
 
     @Override
-    public final void serializeMap ( JsonSerializerInternal serializer, Map<Object, Object> map, CharBuf builder ) {
+    public final void serializeMap(JsonSerializerInternal serializer, Map<Object, Object> map, CharBuf builder) {
 
-        if ( map.size () == 0 ) {
-            builder.addChars ( EMPTY_MAP_CHARS );
+        if (map.size() == 0) {
+            builder.addChars(EMPTY_MAP_CHARS);
             return;
         }
 
 
-        builder.addChar( '{' );
+        builder.addChar('{');
 
         final Set<Map.Entry<Object, Object>> entrySet = map.entrySet();
-        int index=0;
+        int index = 0;
 
         if (!includeNulls) {
             for (Map.Entry<Object, Object> entry : entrySet) {
@@ -75,18 +75,18 @@ public class MapSerializerImpl implements MapSerializer {
                     index++;
                 }
             }
-        }else {
+        } else {
             for (Map.Entry<Object, Object> entry : entrySet) {
-                    serializeFieldName(entry.getKey().toString(), builder);
-                    serializer.serializeObject(entry.getValue(), builder);
-                    builder.addChar(',');
-                    index++;
+                serializeFieldName(entry.getKey().toString(), builder);
+                serializer.serializeObject(entry.getValue(), builder);
+                builder.addChar(',');
+                index++;
 
             }
         }
-        if (index>0)
-        builder.removeLastChar ();
-        builder.addChar( '}' );
+        if (index > 0)
+            builder.removeLastChar();
+        builder.addChar('}');
 
     }
 }

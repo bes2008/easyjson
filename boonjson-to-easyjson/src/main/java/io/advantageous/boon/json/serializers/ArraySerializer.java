@@ -35,6 +35,6 @@ import io.advantageous.boon.primitive.CharBuf;
  */
 public interface ArraySerializer {
 
-    void serializeArray(JsonSerializerInternal serializer,  Object instance, CharBuf builder ) ;
+    void serializeArray(JsonSerializerInternal serializer, Object instance, CharBuf builder);
 
 }

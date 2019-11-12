@@ -36,21 +36,27 @@ import java.util.Map;
  */
 public interface JsonParserEvents {
 
-    boolean  objectStart(int index);
-    boolean  objectEnd(int index, Map<String, Object> object);
+    boolean objectStart(int index);
 
-    boolean  objectFieldName(int index, Map<String, Object> map, CharSequence name);
-    boolean  objectField(int index, Map<String, Object> map, CharSequence name, Object field);
+    boolean objectEnd(int index, Map<String, Object> object);
 
-    boolean  arrayStart(int index);
-    boolean  arrayEnd(int index, List<Object> list);
-    boolean  arrayItem(int index, List<Object> list, Object item);
+    boolean objectFieldName(int index, Map<String, Object> map, CharSequence name);
+
+    boolean objectField(int index, Map<String, Object> map, CharSequence name, Object field);
+
+    boolean arrayStart(int index);
+
+    boolean arrayEnd(int index, List<Object> list);
+
+    boolean arrayItem(int index, List<Object> list, Object item);
 
 
-    boolean  number(int startIndex, int endIndex, Number number);
-    boolean  string(int startIndex, int endIndex, CharSequence string);
+    boolean number(int startIndex, int endIndex, Number number);
 
-    boolean  bool( int endIndex, boolean value);
-    boolean  nullValue( int endIndex);
+    boolean string(int startIndex, int endIndex, CharSequence string);
+
+    boolean bool(int endIndex, boolean value);
+
+    boolean nullValue(int endIndex);
 
 }

@@ -33,10 +33,10 @@ import io.advantageous.boon.primitive.CharBuf;
 /**
  * Created by rick on 1/2/14.
  */
-public interface CustomObjectSerializer <T> {
+public interface CustomObjectSerializer<T> {
 
     Class<T> type();
 
-    void serializeObject(JsonSerializerInternal serializer,  T instance, CharBuf builder );
+    void serializeObject(JsonSerializerInternal serializer, T instance, CharBuf builder);
 
 }

@@ -37,6 +37,6 @@ import java.util.Date;
  */
 public interface DateSerializer {
 
-      void serializeDate (JsonSerializerInternal jsonSerializer, Date date, CharBuf builder );
+    void serializeDate(JsonSerializerInternal jsonSerializer, Date date, CharBuf builder);
 
 }
