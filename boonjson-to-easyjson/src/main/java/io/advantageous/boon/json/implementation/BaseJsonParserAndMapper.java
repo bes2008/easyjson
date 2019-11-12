@@ -29,6 +29,8 @@
 package io.advantageous.boon.json.implementation;
 
 import com.jn.easyjson.core.JSON;
+import com.jn.easyjson.core.JSONBuilder;
+import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.PrimitiveArrays;
 import com.jn.langx.util.io.Charsets;
@@ -76,7 +78,7 @@ public class BaseJsonParserAndMapper implements JsonParserAndMapper {
     public BaseJsonParserAndMapper(JsonParser parser, Mapper mapper) {
         this.parser = parser;
         this.mapper = mapper;
-
+        json = JSONBuilderProvider.simplest();
     }
 
 

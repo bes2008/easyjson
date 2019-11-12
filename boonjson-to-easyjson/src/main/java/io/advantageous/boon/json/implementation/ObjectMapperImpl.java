@@ -29,6 +29,8 @@
 package io.advantageous.boon.json.implementation;
 
 import com.jn.easyjson.core.JSON;
+import com.jn.easyjson.core.JSONBuilder;
+import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.langx.util.io.Charsets;
 import com.jn.langx.util.io.IOs;
 import com.jn.langx.util.reflect.type.Types;
@@ -53,16 +55,18 @@ public class ObjectMapperImpl implements ObjectMapper {
     private final JsonSerializerFactory serializerFactory;
 
     public ObjectMapperImpl(JsonParserFactory parserFactory, JsonSerializerFactory serializerFactory) {
-
         this.parserFactory = parserFactory;
         this.serializerFactory = serializerFactory;
+
+        JSONBuilder jsonBuilder = JSONBuilderProvider.create();
+        jsonBuilder.serializeNulls(serializerFactory.isIncludeNulls());
+        jsonBuilder.setLenient(!parserFactory.isStrict());
+        json = jsonBuilder.build();
 
     }
 
     public ObjectMapperImpl() {
-        this.parserFactory = new JsonParserFactory();
-        this.serializerFactory = new JsonSerializerFactory();
-        this.serializerFactory.useFieldsOnly();
+        this(new JsonParserFactory(), new JsonSerializerFactory().useFieldsOnly());
     }
 
 
