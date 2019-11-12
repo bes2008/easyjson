@@ -61,6 +61,8 @@
             <scope>test</scope>
             <optional>true</optional>
         </dependency>
+
+
         <dependency>
             <groupId>com.github.advantageous</groupId>
             <artifactId>boon-json</artifactId>
