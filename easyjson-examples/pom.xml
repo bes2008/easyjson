@@ -11,6 +11,7 @@
 
     <artifactId>easyjson-examples</artifactId>
     <dependencies>
+        <!--supported by orgjson-to-easyjson -->
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
@@ -18,6 +19,8 @@
             <scope>test</scope>
             <optional>true</optional>
         </dependency>
+
+        <!--supported by jsonlib-to-easyjson -->
         <!--http://json-lib.sourceforge.net-->
         <dependency>
             <groupId>com.hynnet</groupId>
@@ -25,12 +28,16 @@
             <version>2.4</version>
             <optional>true</optional>
         </dependency>
+
+        <!--supported by minimaljson-to-easyjson -->
         <dependency>
             <groupId>com.eclipsesource.minimal-json</groupId>
             <artifactId>minimal-json</artifactId>
             <version>0.9.5</version>
             <scope>test</scope>
         </dependency>
+
+        <!--supported by moshi-to-easyjson -->
         <dependency>
             <groupId>com.squareup.moshi</groupId>
             <artifactId>moshi</artifactId>
@@ -45,6 +52,8 @@
             <scope>test</scope>
             <optional>true</optional>
         </dependency>
+
+        <!--supported by androidjson-to-easyjson -->
         <dependency>
             <groupId>com.vaadin.external.google</groupId>
             <artifactId>android-json</artifactId>
@@ -59,6 +68,8 @@
             <scope>test</scope>
             <optional>true</optional>
         </dependency>
+
+
         <!-- https://github.com/phax/ph-commons/ph-json -->
         <dependency>
             <groupId>com.helger</groupId>
@@ -109,6 +120,8 @@
             <optional>true</optional>
             <scope>test</scope>
         </dependency>
+
+        <!--supported by simplejson-to-easyjson -->
         <!-- https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple -->
         <!-- http://code.google.com/p/json-simple/ -->
         <dependency>
@@ -118,6 +131,8 @@
             <scope>test</scope>
             <optional>true</optional>
         </dependency>
+
+        <!--supported by progsbasejson-to-easyjson -->
         <dependency>
             <groupId>com.progsbase.libraries</groupId>
             <artifactId>JSON</artifactId>
@@ -126,6 +141,7 @@
             <optional>true</optional>
         </dependency>
 
+        <!--supported by jsonsmart-to-easyjson -->
         <dependency>
             <groupId>net.minidev</groupId>
             <artifactId>json-smart</artifactId>
