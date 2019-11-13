@@ -279,7 +279,25 @@ Provides a unified JSON access API, you can adapter any JSON library to Gson, Ja
 &lt;/dependency>
                 </pre>
             </td>          
-        </tr>                       
+        </tr>  
+        <tr>
+            <td>Boon-json</td>
+            <td><pre>
+        &lt;dependency>
+            &lt;groupId>com.github.advantageous&lt;/groupId>
+            &lt;artifactId>boon-json&lt;/artifactId>
+            &lt;version>0.5.7-RC1&lt;/version>
+        &lt;/dependency>
+                </pre></td>
+            <td>0.5.7-RC1</td>
+            <td><pre>
+        &lt;dependency>
+            &lt;groupId>com.github.fangjinuo.easyjson&lt;/groupId>
+            &lt;artifactId>boonjson-to-easyjson&lt;/artifactId>
+            &lt;version>${version}&lt;/version>
+        &lt;/dependency>
+                </pre></td>          
+        </tr>                           
     </tbody>
 </table>
 

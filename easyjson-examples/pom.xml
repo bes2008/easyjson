@@ -62,7 +62,7 @@
             <optional>true</optional>
         </dependency>
 
-
+        <!--supported by boonjson-to-easyjson -->
         <dependency>
             <groupId>com.github.advantageous</groupId>
             <artifactId>boon-json</artifactId>
