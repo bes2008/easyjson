@@ -71,6 +71,10 @@ public class JsonMappingParser implements JsonParserAndMapper {
 
     private CharBuf charBuf;
 
+    @Override
+    public Charset getCharset() {
+        return charset;
+    }
 
     private char[] copyBuf;
     private int bufSize = 1024 * 4;
