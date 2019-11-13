@@ -9,10 +9,6 @@ addons:
 matrix:
   include:
     - jdk: openjdk8
-      env: compilejdk=openjdk6
-    - jdk: openjdk7
-      env: compilejdk=openjdk7
-    - jdk: openjdk8
       env: compilejdk=openjdk8
     - jdk: openjdk10
       env: compilejdk=openjdk10
