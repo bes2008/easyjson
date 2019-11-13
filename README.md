@@ -11,7 +11,8 @@
 
 [![JDK](https://img.shields.io/badge/JDK-1.6+-green.svg)](https://www.oracle.com/technetwork/java/javase/downloads/index.html)
 
-[![maven](https://img.shields.io/badge/maven-2.0.5-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.easyjson)
+[![maven](https://img.shields.io/badge/maven-2.1.0-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.easyjson%20AND%20v:2.1.0)
+[![maven](https://img.shields.io/badge/maven-2.0.5-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.easyjson%20AND%20v:2.0.5)
 [![maven](https://img.shields.io/badge/maven-2.0.alpha4.0-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.easyjson)
 [![maven](https://img.shields.io/badge/maven-2.0.alpha3.0-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.easyjson)
 [![maven](https://img.shields.io/badge/maven-2.0.alpha2.0-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.easyjson)
