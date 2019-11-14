@@ -100,7 +100,7 @@
             <dependency>
                 <groupId>com.github.fangjinuo.langx</groupId>
                 <artifactId>langx-java</artifactId>
-                <version>1.1.0</version>
+                <version>1.2.0</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
