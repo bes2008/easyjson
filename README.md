@@ -11,7 +11,11 @@
 
 [![JDK](https://img.shields.io/badge/JDK-1.6+-green.svg)](https://www.oracle.com/technetwork/java/javase/downloads/index.html)
 
-[![maven](https://img.shields.io/badge/maven-2.0.5-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.easyjson)
+[Github](https://github.com/fangjinuo/easyjson)： https://github.com/fangjinuo/easyjson
+[Gitee](https://gitee.com/fangjinuo/easyjson)： https://gitee.com/fangjinuo/easyjson
+
+[![maven](https://img.shields.io/badge/maven-2.1.0-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.easyjson%20AND%20v:2.1.0)
+[![maven](https://img.shields.io/badge/maven-2.0.5-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.easyjson%20AND%20v:2.0.5)
 [![maven](https://img.shields.io/badge/maven-2.0.alpha4.0-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.easyjson)
 [![maven](https://img.shields.io/badge/maven-2.0.alpha3.0-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.easyjson)
 [![maven](https://img.shields.io/badge/maven-2.0.alpha2.0-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.easyjson)
@@ -279,7 +283,25 @@ Provides a unified JSON access API, you can adapter any JSON library to Gson, Ja
 &lt;/dependency>
                 </pre>
             </td>          
-        </tr>                       
+        </tr>  
+        <tr>
+            <td>Boon-json</td>
+            <td><pre>
+        &lt;dependency>
+            &lt;groupId>com.github.advantageous&lt;/groupId>
+            &lt;artifactId>boon-json&lt;/artifactId>
+            &lt;version>0.5.7-RC1&lt;/version>
+        &lt;/dependency>
+                </pre></td>
+            <td>0.5.7-RC1</td>
+            <td><pre>
+        &lt;dependency>
+            &lt;groupId>com.github.fangjinuo.easyjson&lt;/groupId>
+            &lt;artifactId>boonjson-to-easyjson&lt;/artifactId>
+            &lt;version>${version}&lt;/version>
+        &lt;/dependency>
+                </pre></td>          
+        </tr>                           
     </tbody>
 </table>
 
@@ -289,5 +311,7 @@ Provides a unified JSON access API, you can adapter any JSON library to Gson, Ja
    
    
 ### Contact:
+如果遇到问题，可以在Github, Gitee 上提出issue, 也可以在QQ群里询问。
+
 QQ Group: 750929088   
 ![QQ Group](https://github.com/fangjinuo/sqlhelper/blob/master/_images/qq_group.png)
