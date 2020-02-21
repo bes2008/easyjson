@@ -27,6 +27,7 @@ import com.jn.easyjson.tests.examples.struct.Person;
 import com.jn.langx.util.reflect.type.Types;
 import org.junit.Test;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -134,6 +135,15 @@ public class EasyJsonTests extends BaseTests {
             System.out.println(gson.toJson(t3));
             System.out.println("=====================EasyJson tree [" + jsonLibraryName + "] test end =============================");
         }
+    }
+
+    @Test
+    public void genericTest() {
+        String str = "[[{\"a\":\"b\"}]]";
+        Type type = Types.getListParameterizedType(Types.getListParameterizedType(Types.getMapParameterizedType(String.class, String.class)));
+        Object obj = new JacksonJSONBuilder().build().fromJson(str, type);
+        System.out.println(obj.toString());
+
     }
 
 }

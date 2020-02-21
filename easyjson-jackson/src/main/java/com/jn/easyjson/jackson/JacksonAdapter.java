@@ -15,6 +15,7 @@
 package com.jn.easyjson.jackson;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jn.easyjson.core.JsonException;
@@ -33,30 +34,35 @@ public class JacksonAdapter implements JsonHandler {
     @Override
     public <T> T deserialize(String json, Type typeOfT) throws JsonException {
         try {
-            if (Jacksons.isJacksonJavaType(typeOfT)) {
-                return objectMapper.readValue(json, Jacksons.toJavaType(typeOfT));
-            }
-            if (Types.isPrimitive(typeOfT)) {
-                return objectMapper.readValue(json, objectMapper.getTypeFactory().constructType(Types.getPrimitiveWrapClass(typeOfT)));
-            }
-            if (Types.isClass(typeOfT)) {
-                return objectMapper.readValue(json, objectMapper.getTypeFactory().constructType(Types.toClass(typeOfT)));
-            }
-
-            if (Types.isParameterizedType(typeOfT)) {
-                ParameterizedType pType = (ParameterizedType) typeOfT;
-                Class<?> parametrized = Types.toClass(pType.getRawType());
-                Type[] parameterTypes = pType.getActualTypeArguments();
-                Class[] parameterClasses = new Class[parameterTypes.length];
-                for (int i = 0; i < parameterTypes.length; i++) {
-                    parameterClasses[i] = Types.toClass(parameterTypes[i]);
-                }
-                return objectMapper.readValue(json, objectMapper.getTypeFactory().constructParametricType(parametrized, parameterClasses));
-            }
+            return objectMapper.readValue(json, toJavaType(typeOfT));
         } catch (Throwable ex) {
             throw new JsonException(ex);
         }
-        return null;
+    }
+
+    private JavaType toJavaType(Type typeOfT) {
+        if (Jacksons.isJacksonJavaType(typeOfT)) {
+            return Jacksons.toJavaType(typeOfT);
+        }
+        if (Types.isPrimitive(typeOfT)) {
+            return objectMapper.getTypeFactory().constructType(Types.getPrimitiveWrapClass(typeOfT));
+        }
+
+        if (Types.isClass(typeOfT)) {
+            return objectMapper.getTypeFactory().constructType(Types.toClass(typeOfT));
+        }
+
+        if (Types.isParameterizedType(typeOfT)) {
+            ParameterizedType pType = (ParameterizedType) typeOfT;
+            Class<?> parametrized = Types.toClass(pType.getRawType());
+            Type[] parameterTypes = pType.getActualTypeArguments();
+            JavaType[] parameterClasses = new JavaType[parameterTypes.length];
+            for (int i = 0; i < parameterTypes.length; i++) {
+                parameterClasses[i] = toJavaType(parameterTypes[i]);
+            }
+            return objectMapper.getTypeFactory().constructParametricType(parametrized, parameterClasses);
+        }
+        return Jacksons.toJavaType(typeOfT);
     }
 
     @Override
