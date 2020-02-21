@@ -24,6 +24,7 @@ import com.jn.easyjson.gson.GsonJSONBuilder;
 import com.jn.easyjson.jackson.JacksonJSONBuilder;
 import com.jn.easyjson.tests.examples.struct.Gender;
 import com.jn.easyjson.tests.examples.struct.Person;
+import com.jn.langx.util.reflect.type.ParameterizedTypeGetter;
 import com.jn.langx.util.reflect.type.Types;
 import net.arnx.jsonic.TypeReference;
 import org.junit.Test;
@@ -150,6 +151,10 @@ public class EasyJsonTests extends BaseTests {
         // jackson TypeReference API
         type = new TypeReference<List<List<Map<String, String>>>>() {
         }.getType();
+        obj = json.fromJson(str, type);
+        System.out.println(obj.toString());
+
+        type = new ParameterizedTypeGetter<List<List<Map<String,String>>>>(){}.getType();
         obj = json.fromJson(str, type);
         System.out.println(obj.toString());
     }
