@@ -148,13 +148,23 @@ public class EasyJsonTests extends BaseTests {
         Object obj = json.fromJson(str, type);
         System.out.println(obj.toString());
 
+        // langx-java type
+        type = new ParameterizedTypeGetter<List<List<Map<String,String>>>>(){}.getType();
+        obj = json.fromJson(str, type);
+        System.out.println(obj.toString());
+
         // jackson TypeReference API
         type = new TypeReference<List<List<Map<String, String>>>>() {
         }.getType();
         obj = json.fromJson(str, type);
         System.out.println(obj.toString());
 
-        type = new ParameterizedTypeGetter<List<List<Map<String,String>>>>(){}.getType();
+
+        json = new FastJsonJSONBuilder().build();
+        obj = json.fromJson(str, type);
+        System.out.println(obj.toString());
+
+        json = new GsonJSONBuilder().build();
         obj = json.fromJson(str, type);
         System.out.println(obj.toString());
     }
