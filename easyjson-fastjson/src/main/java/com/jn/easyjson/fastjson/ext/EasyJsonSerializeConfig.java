@@ -47,15 +47,19 @@ public class EasyJsonSerializeConfig extends SerializeConfig {
             List<FieldInfo> sortedFieldInfoes = new ArrayList<FieldInfo>();
 
             for (FieldInfo fieldInfo : fields) {
-                if (exclusionConfiguration.isExcludedField(fieldInfo.field, true)) {
-                    continue;
+                if (FieldInfos.isField(fieldInfo)) {
+                    if (exclusionConfiguration.isExcludedField(fieldInfo.field, true)) {
+                        continue;
+                    }
                 }
                 fieldInfoes.add(fieldInfo);
             }
 
             for (FieldInfo fieldInfo : sortedFields) {
-                if (exclusionConfiguration.isExcludedField(fieldInfo.field, true)) {
-                    continue;
+                if (FieldInfos.isField(fieldInfo)) {
+                    if (exclusionConfiguration.isExcludedField(fieldInfo.field, true)) {
+                        continue;
+                    }
                 }
                 sortedFieldInfoes.add(fieldInfo);
             }
