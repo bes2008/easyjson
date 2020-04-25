@@ -322,3 +322,9 @@ QQ Group: 750929088
 + [esmvc](https://github.com/fangjinuo/es-mvc): ElasticSearch 通用客户端，就像MyBatis Mapper那样顺滑
 + [redisclient](https://github.com/fangjinuo/redisclient): 基于Spring RestTemplate提供的客户端
 + [audit](https://github.com/fangjinuo/audit)：通用的Java应用审计框架
+
+
+## 鸣谢
+最后，感谢 Jetbrains 提供免费License，方便了开源项目的发展。
+
+[![Jetbrains](https://github.com/fangjinuo/sqlhelper/blob/master/_images/jetbrains.png)](https://www.jetbrains.com/zh-cn/)
