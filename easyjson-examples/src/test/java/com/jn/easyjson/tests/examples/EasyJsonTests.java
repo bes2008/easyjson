@@ -149,7 +149,7 @@ public class EasyJsonTests extends BaseTests {
         System.out.println(obj.toString());
 
         // langx-java type
-        type = new ParameterizedTypeGetter<List<List<Map<String,String>>>>(){}.getType();
+        type = new ParameterizedTypeGetter<List<List<Map<String,String>>>>(){}.getRawType();
         obj = json.fromJson(str, type);
         System.out.println(obj.toString());
 
