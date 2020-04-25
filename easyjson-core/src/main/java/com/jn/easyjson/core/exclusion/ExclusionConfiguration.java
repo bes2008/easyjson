@@ -14,6 +14,7 @@
 
 package com.jn.easyjson.core.exclusion;
 
+import com.jn.langx.annotation.NonNull;
 import com.jn.langx.util.reflect.FieldAttributes;
 import com.jn.langx.util.reflect.Reflects;
 
@@ -27,7 +28,7 @@ import java.util.List;
 public final class ExclusionConfiguration {
 
     /**
-     * modifier exlusion:
+     * modifier exclusion:
      * default : transient, static
      * else: you specified using {@link #overrideModifiers(int...)}
      */
@@ -106,7 +107,7 @@ public final class ExclusionConfiguration {
     }
 
 
-    public boolean isExcludedField(Field field, boolean serialize) {
+    public boolean isExcludedField(@NonNull Field field, boolean serialize) {
         if ((_modifiers & field.getModifiers()) != 0) {
             return true;
         }
