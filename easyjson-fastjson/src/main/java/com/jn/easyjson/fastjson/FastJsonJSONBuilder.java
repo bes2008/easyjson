@@ -87,7 +87,9 @@ public class FastJsonJSONBuilder extends JSONBuilder {
         builder.addFeature(SerializerFeature.DisableCircularReferenceDetect);
         builder.addFeature(SerializerFeature.SkipTransientField);
         builder.addFeature(SerializerFeature.IgnoreErrorGetter);
-        builder.addFeature(SerializerFeature.IgnoreNonFieldGetter);
+        if(!serializeNonFieldGetter()) {
+            builder.addFeature(SerializerFeature.IgnoreNonFieldGetter);
+        }
 
         // SerializerFeature.WriteNullStringAsEmpty ==> ""
         // SerializerFeature.WriteNullListAsEmpty ==>[]

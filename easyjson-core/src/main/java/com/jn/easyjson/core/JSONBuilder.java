@@ -41,6 +41,7 @@ public abstract class JSONBuilder implements Cloneable {
     // boolean priority: on_off > 1_0 > true_false
     private boolean serializeBooleanUsingOnOff = false;
     private boolean serializeBooleanUsing1_0 = false;
+    private boolean serializeNonFieldGetter = true;
 
     // print format
     private boolean prettyFormat = false;
@@ -128,6 +129,15 @@ public abstract class JSONBuilder implements Cloneable {
 
     public boolean serializeNumberAsString() {
         return serializeNumberAsString;
+    }
+
+    public boolean serializeNonFieldGetter() {
+        return this.serializeNonFieldGetter;
+    }
+
+    public JSONBuilder serializeNonFieldGetter(boolean serializeNonFieldGetter) {
+        this.serializeNonFieldGetter = serializeNonFieldGetter;
+        return this;
     }
 
     public JSONBuilder serializeUseDateFormat(DateFormat df) {

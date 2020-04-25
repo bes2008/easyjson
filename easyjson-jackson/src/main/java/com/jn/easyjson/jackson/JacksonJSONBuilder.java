@@ -14,10 +14,7 @@
 
 package com.jn.easyjson.jackson;
 
-import com.fasterxml.jackson.databind.DeserializationConfig;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.SerializationConfig;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.module.SimpleDeserializers;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.jn.easyjson.core.JSON;
@@ -159,6 +156,10 @@ public class JacksonJSONBuilder extends JSONBuilder {
         configNumber(mapper);
         configEnum(mapper);
         configDate(mapper);
+
+        if(!serializeNonFieldGetter()){
+            mapper.configure(MapperFeature.REQUIRE_SETTERS_FOR_GETTERS, true);
+        }
 
         mapper.configure(SerializationFeature.INDENT_OUTPUT, prettyFormat());
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
