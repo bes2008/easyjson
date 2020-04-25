@@ -63,6 +63,10 @@
             <distribution>manual</distribution>
         </license>
     </licenses>
+    <properties>
+        <langx.version>2.2.7</langx.version>
+    </properties>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -100,7 +104,7 @@
             <dependency>
                 <groupId>com.github.fangjinuo.langx</groupId>
                 <artifactId>langx-java</artifactId>
-                <version>1.2.3</version>
+                <version>${langx.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
