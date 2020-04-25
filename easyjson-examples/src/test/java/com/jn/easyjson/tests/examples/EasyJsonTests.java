@@ -24,9 +24,12 @@ import com.jn.easyjson.gson.GsonJSONBuilder;
 import com.jn.easyjson.jackson.JacksonJSONBuilder;
 import com.jn.easyjson.tests.examples.struct.Gender;
 import com.jn.easyjson.tests.examples.struct.Person;
+import com.jn.langx.util.reflect.type.ParameterizedTypeGetter;
 import com.jn.langx.util.reflect.type.Types;
+import net.arnx.jsonic.TypeReference;
 import org.junit.Test;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -134,6 +137,36 @@ public class EasyJsonTests extends BaseTests {
             System.out.println(gson.toJson(t3));
             System.out.println("=====================EasyJson tree [" + jsonLibraryName + "] test end =============================");
         }
+    }
+
+    @Test
+    public void genericTest() {
+        String str = "[[{\"a\":\"b\"}]]";
+        JSON json = new JacksonJSONBuilder().build();
+        // Types API
+        Type type = Types.getListParameterizedType(Types.getListParameterizedType(Types.getMapParameterizedType(String.class, String.class)));
+        Object obj = json.fromJson(str, type);
+        System.out.println(obj.toString());
+
+        // langx-java type
+        type = new ParameterizedTypeGetter<List<List<Map<String,String>>>>(){}.getType();
+        obj = json.fromJson(str, type);
+        System.out.println(obj.toString());
+
+        // jackson TypeReference API
+        type = new TypeReference<List<List<Map<String, String>>>>() {
+        }.getType();
+        obj = json.fromJson(str, type);
+        System.out.println(obj.toString());
+
+
+        json = new FastJsonJSONBuilder().build();
+        obj = json.fromJson(str, type);
+        System.out.println(obj.toString());
+
+        json = new GsonJSONBuilder().build();
+        obj = json.fromJson(str, type);
+        System.out.println(obj.toString());
     }
 
 }
