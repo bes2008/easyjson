@@ -322,3 +322,4 @@ QQ Group: 750929088
 + [esmvc](https://github.com/fangjinuo/es-mvc): ElasticSearch 通用客户端，就像MyBatis Mapper那样顺滑
 + [redisclient](https://github.com/fangjinuo/redisclient): 基于Spring RestTemplate提供的客户端
 + [audit](https://github.com/fangjinuo/audit)：通用的Java应用审计框架
++ [dmmq](https://github.com/fangjinuo/dmmq): 基于disruptor 实现的内存消息队列
