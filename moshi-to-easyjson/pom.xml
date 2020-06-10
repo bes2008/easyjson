@@ -9,6 +9,9 @@
         <version>2.2.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
+    <properties>
+        <moshi.version>1.9.2</moshi.version>
+    </properties>
 
     <artifactId>moshi-to-easyjson</artifactId>
     <dependencies>
@@ -21,11 +24,6 @@
             <artifactId>easyjson-examples</artifactId>
             <optional>true</optional>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.google.code.findbugs</groupId>
-            <artifactId>jsr305</artifactId>
-            <version>3.0.2</version>
         </dependency>
         <dependency>
             <groupId>com.squareup.okio</groupId>
