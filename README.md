@@ -296,7 +296,25 @@ Provides a unified JSON access API, you can adapter any JSON library to Gson, Ja
             &lt;version>${version}&lt;/version>
         &lt;/dependency>
                 </pre></td>          
-        </tr>                           
+        </tr>    
+        <tr>
+            <td>Moshi</td>
+            <td><pre>
+        &lt;dependency>
+            &lt;groupId>com.squareup.moshi&lt;/groupId>
+            &lt;artifactId>moshi&lt;/artifactId>
+            &lt;version>1.9.2&lt;/version>
+        &lt;/dependency>
+                </pre></td>
+            <td>1.8.6+</td>
+            <td><pre>
+        &lt;dependency>
+            &lt;groupId>com.github.fangjinuo.easyjson&lt;/groupId>
+            &lt;artifactId>moshi-to-easyjson&lt;/artifactId>
+            &lt;version>${version}&lt;/version>
+        &lt;/dependency>
+                </pre></td>          
+        </tr>                       
     </tbody>
 </table>
 
