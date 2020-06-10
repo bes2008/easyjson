@@ -15,9 +15,9 @@
  */
 package com.squareup.moshi;
 
+import com.jn.langx.annotation.Nullable;
 import com.squareup.moshi.internal.Util;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
@@ -33,63 +33,25 @@ final class StandardJsonAdapters {
         @Override
         public JsonAdapter<?> create(
                 Type type, Set<? extends Annotation> annotations, Moshi moshi) {
-            if (!annotations.isEmpty()) {
-                return null;
-            }
-            if (type == boolean.class) {
-                return BOOLEAN_JSON_ADAPTER;
-            }
-            if (type == byte.class) {
-                return BYTE_JSON_ADAPTER;
-            }
-            if (type == char.class) {
-                return CHARACTER_JSON_ADAPTER;
-            }
-            if (type == double.class) {
-                return DOUBLE_JSON_ADAPTER;
-            }
-            if (type == float.class) {
-                return FLOAT_JSON_ADAPTER;
-            }
-            if (type == int.class) {
-                return INTEGER_JSON_ADAPTER;
-            }
-            if (type == long.class) {
-                return LONG_JSON_ADAPTER;
-            }
-            if (type == short.class) {
-                return SHORT_JSON_ADAPTER;
-            }
-            if (type == Boolean.class) {
-                return BOOLEAN_JSON_ADAPTER.nullSafe();
-            }
-            if (type == Byte.class) {
-                return BYTE_JSON_ADAPTER.nullSafe();
-            }
-            if (type == Character.class) {
-                return CHARACTER_JSON_ADAPTER.nullSafe();
-            }
-            if (type == Double.class) {
-                return DOUBLE_JSON_ADAPTER.nullSafe();
-            }
-            if (type == Float.class) {
-                return FLOAT_JSON_ADAPTER.nullSafe();
-            }
-            if (type == Integer.class) {
-                return INTEGER_JSON_ADAPTER.nullSafe();
-            }
-            if (type == Long.class) {
-                return LONG_JSON_ADAPTER.nullSafe();
-            }
-            if (type == Short.class) {
-                return SHORT_JSON_ADAPTER.nullSafe();
-            }
-            if (type == String.class) {
-                return STRING_JSON_ADAPTER.nullSafe();
-            }
-            if (type == Object.class) {
-                return new ObjectJsonAdapter(moshi).nullSafe();
-            }
+            if (!annotations.isEmpty()) return null;
+            if (type == boolean.class) return BOOLEAN_JSON_ADAPTER;
+            if (type == byte.class) return BYTE_JSON_ADAPTER;
+            if (type == char.class) return CHARACTER_JSON_ADAPTER;
+            if (type == double.class) return DOUBLE_JSON_ADAPTER;
+            if (type == float.class) return FLOAT_JSON_ADAPTER;
+            if (type == int.class) return INTEGER_JSON_ADAPTER;
+            if (type == long.class) return LONG_JSON_ADAPTER;
+            if (type == short.class) return SHORT_JSON_ADAPTER;
+            if (type == Boolean.class) return BOOLEAN_JSON_ADAPTER.nullSafe();
+            if (type == Byte.class) return BYTE_JSON_ADAPTER.nullSafe();
+            if (type == Character.class) return CHARACTER_JSON_ADAPTER.nullSafe();
+            if (type == Double.class) return DOUBLE_JSON_ADAPTER.nullSafe();
+            if (type == Float.class) return FLOAT_JSON_ADAPTER.nullSafe();
+            if (type == Integer.class) return INTEGER_JSON_ADAPTER.nullSafe();
+            if (type == Long.class) return LONG_JSON_ADAPTER.nullSafe();
+            if (type == Short.class) return SHORT_JSON_ADAPTER.nullSafe();
+            if (type == String.class) return STRING_JSON_ADAPTER.nullSafe();
+            if (type == Object.class) return new ObjectJsonAdapter(moshi).nullSafe();
 
             Class<?> rawType = Types.getRawType(type);
 
@@ -306,16 +268,14 @@ final class StandardJsonAdapters {
                 }
                 options = JsonReader.Options.of(nameStrings);
             } catch (NoSuchFieldException e) {
-                throw new RuntimeException("Missing field in " + enumType.getName(), e);
+                throw new AssertionError("Missing field in " + enumType.getName() + ", " + e.getMessage());
             }
         }
 
         @Override
         public T fromJson(JsonReader reader) throws IOException {
             int index = reader.selectString(options);
-            if (index != -1) {
-                return constants[index];
-            }
+            if (index != -1) return constants[index];
 
             // We can consume the string safely, we are terminating anyway.
             String path = reader.getPath();
@@ -339,7 +299,7 @@ final class StandardJsonAdapters {
      * This adapter is used when the declared type is {@code java.lang.Object}. Typically the runtime
      * type is something else, and when encoding JSON this delegates to the runtime type's adapter.
      * For decoding (where there is no runtime type to inspect), this uses maps and lists.
-     * <p>
+     *
      * <p>This adapter needs a Moshi instance to look up the appropriate adapter for runtime types as
      * they are encountered.
      */
@@ -407,12 +367,8 @@ final class StandardJsonAdapters {
          * appropriate constructor.
          */
         private Class<?> toJsonType(Class<?> valueClass) {
-            if (Map.class.isAssignableFrom(valueClass)) {
-                return Map.class;
-            }
-            if (Collection.class.isAssignableFrom(valueClass)) {
-                return Collection.class;
-            }
+            if (Map.class.isAssignableFrom(valueClass)) return Map.class;
+            if (Collection.class.isAssignableFrom(valueClass)) return Collection.class;
             return valueClass;
         }
 

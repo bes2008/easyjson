@@ -21,10 +21,10 @@ import javax.annotation.Nullable;
  * Thrown when the data in a JSON document doesn't match the data expected by the caller. For
  * example, suppose the application expects a boolean but the JSON document contains a string. When
  * the call to {@link JsonReader#nextBoolean} is made, a {@code JsonDataException} is thrown.
- * <p>
+ *
  * <p>Exceptions of this type should be fixed by either changing the application code to accept
  * the unexpected JSON, or by changing the JSON to conform to the application's expectations.
- * <p>
+ *
  * <p>This exception may also be triggered if a document's nesting exceeds 31 levels. This depth is
  * sufficient for all practical applications, but shallow enough to avoid uglier failures like
  * {@link StackOverflowError}.

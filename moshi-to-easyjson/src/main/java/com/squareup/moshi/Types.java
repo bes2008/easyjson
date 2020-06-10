@@ -34,6 +34,37 @@ public final class Types {
     }
 
     /**
+     * Resolves the generated {@link JsonAdapter} fully qualified class name for a given
+     * {@link JsonClass JsonClass-annotated} {@code clazz}. This is the same lookup logic used by
+     * both the Moshi code generation as well as lookup for any JsonClass-annotated classes. This can
+     * be useful if generating your own JsonAdapters without using Moshi's first party code gen.
+     *
+     * @param clazz the class to calculate a generated JsonAdapter name for.
+     * @return the resolved fully qualified class name to the expected generated JsonAdapter class.
+     * Note that this name will always be a top-level class name and not a nested class.
+     */
+    public static String generatedJsonAdapterName(Class<?> clazz) {
+        if (clazz.getAnnotation(JsonClass.class) == null) {
+            throw new IllegalArgumentException("Class does not have a JsonClass annotation: " + clazz);
+        }
+        return generatedJsonAdapterName(clazz.getName());
+    }
+
+    /**
+     * Resolves the generated {@link JsonAdapter} fully qualified class name for a given
+     * {@link JsonClass JsonClass-annotated} {@code className}. This is the same lookup logic used by
+     * both the Moshi code generation as well as lookup for any JsonClass-annotated classes. This can
+     * be useful if generating your own JsonAdapters without using Moshi's first party code gen.
+     *
+     * @param className the fully qualified class to calculate a generated JsonAdapter name for.
+     * @return the resolved fully qualified class name to the expected generated JsonAdapter class.
+     * Note that this name will always be a top-level class name and not a nested class.
+     */
+    public static String generatedJsonAdapterName(String className) {
+        return className.replace("$", "_") + "JsonAdapter";
+    }
+
+    /**
      * Checks if {@code annotations} contains {@code jsonQualifier}.
      * Returns the subset of {@code annotations} without {@code jsonQualifier}, or null if {@code
      * annotations} does not contain {@code jsonQualifier}.
@@ -63,6 +94,9 @@ public final class Types {
      * method if {@code rawType} is not enclosed in another type.
      */
     public static ParameterizedType newParameterizedType(Type rawType, Type... typeArguments) {
+        if (typeArguments.length == 0) {
+            throw new IllegalArgumentException("Missing type arguments for " + rawType);
+        }
         return new ParameterizedTypeImpl(null, rawType, typeArguments);
     }
 
@@ -72,6 +106,9 @@ public final class Types {
      */
     public static ParameterizedType newParameterizedTypeWithOwner(
             Type ownerType, Type rawType, Type... typeArguments) {
+        if (typeArguments.length == 0) {
+            throw new IllegalArgumentException("Missing type arguments for " + rawType);
+        }
         return new ParameterizedTypeImpl(ownerType, rawType, typeArguments);
     }
 
@@ -89,7 +126,13 @@ public final class Types {
      * ? extends Object}.
      */
     public static WildcardType subtypeOf(Type bound) {
-        return new WildcardTypeImpl(new Type[]{bound}, EMPTY_TYPE_ARRAY);
+        Type[] upperBounds;
+        if (bound instanceof WildcardType) {
+            upperBounds = ((WildcardType) bound).getUpperBounds();
+        } else {
+            upperBounds = new Type[]{bound};
+        }
+        return new WildcardTypeImpl(upperBounds, EMPTY_TYPE_ARRAY);
     }
 
     /**
@@ -97,7 +140,13 @@ public final class Types {
      * bound} is {@code String.class}, this returns {@code ? super String}.
      */
     public static WildcardType supertypeOf(Type bound) {
-        return new WildcardTypeImpl(new Type[]{Object.class}, new Type[]{bound});
+        Type[] lowerBounds;
+        if (bound instanceof WildcardType) {
+            lowerBounds = ((WildcardType) bound).getLowerBounds();
+        } else {
+            lowerBounds = new Type[]{bound};
+        }
+        return new WildcardTypeImpl(new Type[]{Object.class}, lowerBounds);
     }
 
     public static Class<?> getRawType(Type type) {
@@ -164,9 +213,7 @@ public final class Types {
             return a.equals(b); // Class already specifies equals().
 
         } else if (a instanceof ParameterizedType) {
-            if (!(b instanceof ParameterizedType)) {
-                return false;
-            }
+            if (!(b instanceof ParameterizedType)) return false;
             ParameterizedType pa = (ParameterizedType) a;
             ParameterizedType pb = (ParameterizedType) b;
             Type[] aTypeArguments = pa instanceof ParameterizedTypeImpl
@@ -184,26 +231,20 @@ public final class Types {
                 return equals(((Class) b).getComponentType(),
                         ((GenericArrayType) a).getGenericComponentType());
             }
-            if (!(b instanceof GenericArrayType)) {
-                return false;
-            }
+            if (!(b instanceof GenericArrayType)) return false;
             GenericArrayType ga = (GenericArrayType) a;
             GenericArrayType gb = (GenericArrayType) b;
             return equals(ga.getGenericComponentType(), gb.getGenericComponentType());
 
         } else if (a instanceof WildcardType) {
-            if (!(b instanceof WildcardType)) {
-                return false;
-            }
+            if (!(b instanceof WildcardType)) return false;
             WildcardType wa = (WildcardType) a;
             WildcardType wb = (WildcardType) b;
             return Arrays.equals(wa.getUpperBounds(), wb.getUpperBounds())
                     && Arrays.equals(wa.getLowerBounds(), wb.getLowerBounds());
 
         } else if (a instanceof TypeVariable) {
-            if (!(b instanceof TypeVariable)) {
-                return false;
-            }
+            if (!(b instanceof TypeVariable)) return false;
             TypeVariable<?> va = (TypeVariable<?>) a;
             TypeVariable<?> vb = (TypeVariable<?>) b;
             return va.getGenericDeclaration() == vb.getGenericDeclaration()
@@ -272,9 +313,8 @@ public final class Types {
                         }
                         if ("toString".equals(methodName)) {
                             return "@" + annotationType.getName() + "()";
-                        } else {
-                            return method.invoke(proxy, args);
                         }
+                        return method.invoke(proxy, args);
                     }
                 });
     }
@@ -286,9 +326,7 @@ public final class Types {
     static Type[] mapKeyAndValueTypes(Type context, Class<?> contextRawType) {
         // Work around a problem with the declaration of java.util.Properties. That class should extend
         // Hashtable<String, String>, but it's declared to extend Hashtable<Object, Object>.
-        if (context == Properties.class) {
-            return new Type[]{String.class, String.class};
-        }
+        if (context == Properties.class) return new Type[]{String.class, String.class};
 
         Type mapType = getSupertype(context, contextRawType, Map.class);
         if (mapType instanceof ParameterizedType) {
@@ -306,9 +344,7 @@ public final class Types {
      * @param supertype a superclass of, or interface implemented by, this.
      */
     static Type getSupertype(Type context, Class<?> contextRawType, Class<?> supertype) {
-        if (!supertype.isAssignableFrom(contextRawType)) {
-            throw new IllegalArgumentException();
-        }
+        if (!supertype.isAssignableFrom(contextRawType)) throw new IllegalArgumentException();
         return resolve(context, contextRawType,
                 getGenericSupertype(context, contextRawType, supertype));
     }
@@ -330,21 +366,5 @@ public final class Types {
         } else {
             return null;
         }
-    }
-
-    /**
-     * Returns true if this is a Type supported by {@link StandardJsonAdapters#FACTORY}.
-     */
-    static boolean isAllowedPlatformType(Type type) {
-        return type == Boolean.class
-                || type == Byte.class
-                || type == Character.class
-                || type == Double.class
-                || type == Float.class
-                || type == Integer.class
-                || type == Long.class
-                || type == Short.class
-                || type == String.class
-                || type == Object.class;
     }
 }

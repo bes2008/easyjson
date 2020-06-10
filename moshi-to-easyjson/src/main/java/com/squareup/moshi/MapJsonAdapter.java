@@ -25,7 +25,6 @@ import java.util.Set;
 /**
  * Converts maps with string keys to JSON objects.
  * <p>
- * TODO: support maps with other key types and convert to/from strings.
  */
 final class MapJsonAdapter<K, V> extends JsonAdapter<Map<K, V>> {
     public static final Factory FACTORY = new Factory() {

@@ -814,7 +814,6 @@ final class LinkedHashTreeMap<K, V> extends AbstractMap<K, V> implements Seriali
         @Override
         public Iterator<Entry<K, V>> iterator() {
             return new LinkedTreeMapIterator<Entry<K, V>>() {
-                @Override
                 public Entry<K, V> next() {
                     return nextNode();
                 }
@@ -855,7 +854,6 @@ final class LinkedHashTreeMap<K, V> extends AbstractMap<K, V> implements Seriali
         @Override
         public Iterator<K> iterator() {
             return new LinkedTreeMapIterator<K>() {
-                @Override
                 public K next() {
                     return nextNode().key;
                 }

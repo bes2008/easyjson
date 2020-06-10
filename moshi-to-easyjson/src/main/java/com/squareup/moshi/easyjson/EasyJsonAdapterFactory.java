@@ -36,6 +36,9 @@ public class EasyJsonAdapterFactory implements JsonAdapter.Factory {
     @Override
     public JsonAdapter<?> create(Type type, Set<? extends Annotation> annotations, Moshi moshi) {
         JsonAdapter adapterDelegate = delegate.create(type, annotations, moshi);
+        if(adapterDelegate==null){
+            return null;
+        }
         JSONBuilder jsonBuilder = JSONBuilderProvider.create();
         EasyJsonAdapter adapter = new EasyJsonAdapter();
         adapter.setJsonBuilder(jsonBuilder);

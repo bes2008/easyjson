@@ -15,9 +15,12 @@
  */
 package com.squareup.moshi;
 
-import okio.BufferedSource;
+import com.jn.langx.annotation.Nullable;
+import okio.Buffer;
+import okio.BufferedSink;
+import okio.ForwardingSink;
+import okio.Okio;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -33,8 +36,7 @@ import static java.lang.Double.POSITIVE_INFINITY;
  */
 final class JsonValueWriter extends JsonWriter {
     Object[] stack = new Object[32];
-    private @Nullable
-    String deferredName;
+    private @Nullable String deferredName;
 
     JsonValueWriter() {
         pushScope(EMPTY_DOCUMENT);
@@ -240,21 +242,36 @@ final class JsonValueWriter extends JsonWriter {
     }
 
     @Override
-    public JsonWriter value(BufferedSource source) throws IOException {
+    public BufferedSink valueSink() {
         if (promoteValueToName) {
             throw new IllegalStateException(
-                    "BufferedSource cannot be used as a map key in JSON at path " + getPath());
+                    "BufferedSink cannot be used as a map key in JSON at path " + getPath());
         }
-        Object value = JsonReader.of(source).readJsonValue();
-        boolean serializeNulls = this.serializeNulls;
-        this.serializeNulls = true;
-        try {
-            add(value);
-        } finally {
-            this.serializeNulls = serializeNulls;
+        if (peekScope() == STREAMING_VALUE) {
+            throw new IllegalStateException("Sink from valueSink() was not closed");
         }
-        pathIndices[stackSize - 1]++;
-        return this;
+        pushScope(STREAMING_VALUE);
+
+        final Buffer buffer = new Buffer();
+        return Okio.buffer(new ForwardingSink(buffer) {
+            @Override
+            public void close() throws IOException {
+                if (peekScope() != STREAMING_VALUE || stack[stackSize] != null) {
+                    throw new AssertionError();
+                }
+                stackSize--; // Remove STREAMING_VALUE from the stack.
+
+                Object value = JsonReader.of(buffer).readJsonValue();
+                boolean serializeNulls = JsonValueWriter.this.serializeNulls;
+                JsonValueWriter.this.serializeNulls = true;
+                try {
+                    add(value);
+                } finally {
+                    JsonValueWriter.this.serializeNulls = serializeNulls;
+                }
+                pathIndices[stackSize - 1]++;
+            }
+        });
     }
 
     @Override
@@ -299,6 +316,9 @@ final class JsonValueWriter extends JsonWriter {
             @SuppressWarnings("unchecked") // Our lists always have object values.
                     List<Object> list = (List<Object>) stack[stackSize - 1];
             list.add(newTop);
+
+        } else if (scope == STREAMING_VALUE) {
+            throw new IllegalStateException("Sink from valueSink() was not closed");
 
         } else {
             throw new IllegalStateException("Nesting problem.");

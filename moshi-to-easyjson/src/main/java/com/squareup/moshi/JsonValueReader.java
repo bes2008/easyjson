@@ -31,21 +31,21 @@ import static com.squareup.moshi.JsonScope.CLOSED;
  * This class reads a JSON document by traversing a Java object comprising maps, lists, and JSON
  * primitives. It does depth-first traversal keeping a stack starting with the root object. During
  * traversal a stack tracks the current position in the document:
- * <p>
+ *
  * <ul>
- * <li>The next element to act upon is on the top of the stack.
- * <li>When the top of the stack is a {@link List}, calling {@link #beginArray()} replaces the
- * list with a {@link JsonIterator}. The first element of the iterator is pushed on top of the
- * iterator.
- * <li>Similarly, when the top of the stack is a {@link Map}, calling {@link #beginObject()}
- * replaces the map with an {@link JsonIterator} of its entries. The first element of the
- * iterator is pushed on top of the iterator.
- * <li>When the top of the stack is a {@link Map.Entry}, calling {@link #nextName()} returns the
- * entry's key and replaces the entry with its value on the stack.
- * <li>When an element is consumed it is popped. If the new top of the stack has a non-exhausted
- * iterator, the next element of that iterator is pushed.
- * <li>If the top of the stack is an exhausted iterator, calling {@link #endArray} or {@link
- * #endObject} will pop it.
+ *   <li>The next element to act upon is on the top of the stack.
+ *   <li>When the top of the stack is a {@link List}, calling {@link #beginArray()} replaces the
+ *       list with a {@link JsonIterator}. The first element of the iterator is pushed on top of the
+ *       iterator.
+ *   <li>Similarly, when the top of the stack is a {@link Map}, calling {@link #beginObject()}
+ *       replaces the map with an {@link JsonIterator} of its entries. The first element of the
+ *       iterator is pushed on top of the iterator.
+ *   <li>When the top of the stack is a {@link Map.Entry}, calling {@link #nextName()} returns the
+ *       entry's key and replaces the entry with its value on the stack.
+ *   <li>When an element is consumed it is popped. If the new top of the stack has a non-exhausted
+ *       iterator, the next element of that iterator is pushed.
+ *   <li>If the top of the stack is an exhausted iterator, calling {@link #endArray} or {@link
+ *       #endObject} will pop it.
  * </ul>
  */
 final class JsonValueReader extends JsonReader {
@@ -210,7 +210,10 @@ final class JsonValueReader extends JsonReader {
     @Override
     public void skipName() throws IOException {
         if (failOnUnknown) {
-            throw new JsonDataException("Cannot skip unexpected " + peek() + " at " + getPath());
+            // Capture the peeked value before nextName() since it will reset its value.
+            Token peeked = peek();
+            nextName(); // Move the path forward onto the offending name.
+            throw new JsonDataException("Cannot skip unexpected " + peeked + " at " + getPath());
         }
 
         Map.Entry<?, ?> peeked = require(Map.Entry.class, Token.NAME);
@@ -360,6 +363,9 @@ final class JsonValueReader extends JsonReader {
 
         Object skipped = stackSize != 0 ? stack[stackSize - 1] : null;
 
+        if (skipped instanceof JsonIterator) {
+            throw new JsonDataException("Expected a value but was " + peek() + " at path " + getPath());
+        }
         if (skipped instanceof Map.Entry) {
             // We're skipping a name. Promote the map entry's value.
             Map.Entry<?, ?> entry = (Map.Entry<?, ?>) stack[stackSize - 1];
@@ -367,6 +373,8 @@ final class JsonValueReader extends JsonReader {
         } else if (stackSize > 0) {
             // We're skipping a value.
             remove();
+        } else {
+            throw new JsonDataException("Expected a value but was " + peek() + " at path " + getPath());
         }
     }
 

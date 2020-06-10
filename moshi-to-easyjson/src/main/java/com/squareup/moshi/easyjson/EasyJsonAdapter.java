@@ -37,6 +37,7 @@ public class EasyJsonAdapter<E> extends JsonAdapter<E> {
         return jsonBuilder.build().fromJson(jsonString, type);
     }
 
+
     @Override
     public void toJson(JsonWriter writer, @Nullable E value) throws IOException {
         String jsonString = jsonBuilder.build().toJson(value);

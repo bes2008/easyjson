@@ -27,12 +27,27 @@ import static com.squareup.moshi.Types.*;
 public final class Util {
     public static final Set<Annotation> NO_ANNOTATIONS = Collections.emptySet();
     public static final Type[] EMPTY_TYPE_ARRAY = new Type[]{};
+    @Nullable
+    public static final Class<?> DEFAULT_CONSTRUCTOR_MARKER;
+    @Nullable
+    private static final Class<? extends Annotation> METADATA;
+
+    static {
+        Class<? extends Annotation> metadata = null;
+        Class<?> defaultConstructorMarker = null;
+        try {
+            metadata = (Class<? extends Annotation>) Class.forName("kotlin.Metadata");
+            defaultConstructorMarker = Class.forName("kotlin.jvm.internal.DefaultConstructorMarker");
+        } catch (ClassNotFoundException ignored) {
+        }
+        METADATA = metadata;
+        DEFAULT_CONSTRUCTOR_MARKER = defaultConstructorMarker;
+    }
 
     private Util() {
     }
 
     public static boolean typesMatch(Type pattern, Type candidate) {
-        // TODO: permit raw types (like Set.class) to match non-raw candidates (like Set<Long>).
         return Types.equals(pattern, candidate);
     }
 
@@ -44,9 +59,7 @@ public final class Util {
         Set<Annotation> result = null;
         for (Annotation annotation : annotations) {
             if (annotation.annotationType().isAnnotationPresent(JsonQualifier.class)) {
-                if (result == null) {
-                    result = new LinkedHashSet<Annotation>();
-                }
+                if (result == null) result = new LinkedHashSet<Annotation>();
                 result.add(annotation);
             }
         }
@@ -55,14 +68,9 @@ public final class Util {
 
     public static boolean isAnnotationPresent(
             Set<? extends Annotation> annotations, Class<? extends Annotation> annotationClass) {
-        if (annotations.isEmpty()) {
-            // Save an iterator in the common case.
-            return false;
-        }
+        if (annotations.isEmpty()) return false; // Save an iterator in the common case.
         for (Annotation annotation : annotations) {
-            if (annotation.annotationType() == annotationClass) {
-                return true;
-            }
+            if (annotation.annotationType() == annotationClass) return true;
         }
         return false;
     }
@@ -90,6 +98,7 @@ public final class Util {
                 || name.startsWith("java.")
                 || name.startsWith("javax.")
                 || name.startsWith("kotlin.")
+                || name.startsWith("kotlinx.")
                 || name.startsWith("scala.");
     }
 
@@ -98,12 +107,8 @@ public final class Util {
      */
     public static RuntimeException rethrowCause(InvocationTargetException e) {
         Throwable cause = e.getTargetException();
-        if (cause instanceof RuntimeException) {
-            throw (RuntimeException) cause;
-        }
-        if (cause instanceof Error) {
-            throw (Error) cause;
-        }
+        if (cause instanceof RuntimeException) throw (RuntimeException) cause;
+        if (cause instanceof Error) throw (Error) cause;
         throw new RuntimeException(cause);
     }
 
@@ -117,24 +122,18 @@ public final class Util {
             return c.isArray() ? new GenericArrayTypeImpl(canonicalize(c.getComponentType())) : c;
 
         } else if (type instanceof ParameterizedType) {
-            if (type instanceof ParameterizedTypeImpl) {
-                return type;
-            }
+            if (type instanceof ParameterizedTypeImpl) return type;
             ParameterizedType p = (ParameterizedType) type;
             return new ParameterizedTypeImpl(p.getOwnerType(),
                     p.getRawType(), p.getActualTypeArguments());
 
         } else if (type instanceof GenericArrayType) {
-            if (type instanceof GenericArrayTypeImpl) {
-                return type;
-            }
+            if (type instanceof GenericArrayTypeImpl) return type;
             GenericArrayType g = (GenericArrayType) type;
             return new GenericArrayTypeImpl(g.getGenericComponentType());
 
         } else if (type instanceof WildcardType) {
-            if (type instanceof WildcardTypeImpl) {
-                return type;
-            }
+            if (type instanceof WildcardTypeImpl) return type;
             WildcardType w = (WildcardType) type;
             return new WildcardTypeImpl(w.getUpperBounds(), w.getLowerBounds());
 
@@ -143,20 +142,45 @@ public final class Util {
         }
     }
 
+    /**
+     * If type is a "? extends X" wildcard, returns X; otherwise returns type unchanged.
+     */
+    public static Type removeSubtypeWildcard(Type type) {
+        if (!(type instanceof WildcardType)) return type;
+
+        Type[] lowerBounds = ((WildcardType) type).getLowerBounds();
+        if (lowerBounds.length != 0) return type;
+
+        Type[] upperBounds = ((WildcardType) type).getUpperBounds();
+        if (upperBounds.length != 1) throw new IllegalArgumentException();
+
+        return upperBounds[0];
+    }
+
     public static Type resolve(Type context, Class<?> contextRawType, Type toResolve) {
+        return resolve(context, contextRawType, toResolve, new LinkedHashSet<TypeVariable>());
+    }
+
+    private static Type resolve(Type context, Class<?> contextRawType, Type toResolve,
+                                Collection<TypeVariable> visitedTypeVariables) {
         // This implementation is made a little more complicated in an attempt to avoid object-creation.
         while (true) {
             if (toResolve instanceof TypeVariable) {
                 TypeVariable<?> typeVariable = (TypeVariable<?>) toResolve;
-                toResolve = resolveTypeVariable(context, contextRawType, typeVariable);
-                if (toResolve == typeVariable) {
+                if (visitedTypeVariables.contains(typeVariable)) {
+                    // cannot reduce due to infinite recursion
                     return toResolve;
+                } else {
+                    visitedTypeVariables.add(typeVariable);
                 }
+                toResolve = resolveTypeVariable(context, contextRawType, typeVariable);
+                if (toResolve == typeVariable) return toResolve;
 
             } else if (toResolve instanceof Class && ((Class<?>) toResolve).isArray()) {
                 Class<?> original = (Class<?>) toResolve;
                 Type componentType = original.getComponentType();
-                Type newComponentType = resolve(context, contextRawType, componentType);
+                Type newComponentType = resolve(context, contextRawType, componentType,
+                        visitedTypeVariables);
                 return componentType == newComponentType
                         ? original
                         : arrayOf(newComponentType);
@@ -164,7 +188,8 @@ public final class Util {
             } else if (toResolve instanceof GenericArrayType) {
                 GenericArrayType original = (GenericArrayType) toResolve;
                 Type componentType = original.getGenericComponentType();
-                Type newComponentType = resolve(context, contextRawType, componentType);
+                Type newComponentType = resolve(context, contextRawType, componentType,
+                        visitedTypeVariables);
                 return componentType == newComponentType
                         ? original
                         : arrayOf(newComponentType);
@@ -172,12 +197,13 @@ public final class Util {
             } else if (toResolve instanceof ParameterizedType) {
                 ParameterizedType original = (ParameterizedType) toResolve;
                 Type ownerType = original.getOwnerType();
-                Type newOwnerType = resolve(context, contextRawType, ownerType);
+                Type newOwnerType = resolve(context, contextRawType, ownerType, visitedTypeVariables);
                 boolean changed = newOwnerType != ownerType;
 
                 Type[] args = original.getActualTypeArguments();
                 for (int t = 0, length = args.length; t < length; t++) {
-                    Type resolvedTypeArgument = resolve(context, contextRawType, args[t]);
+                    Type resolvedTypeArgument = resolve(context, contextRawType, args[t],
+                            visitedTypeVariables);
                     if (resolvedTypeArgument != args[t]) {
                         if (!changed) {
                             args = args.clone();
@@ -197,12 +223,14 @@ public final class Util {
                 Type[] originalUpperBound = original.getUpperBounds();
 
                 if (originalLowerBound.length == 1) {
-                    Type lowerBound = resolve(context, contextRawType, originalLowerBound[0]);
+                    Type lowerBound = resolve(context, contextRawType, originalLowerBound[0],
+                            visitedTypeVariables);
                     if (lowerBound != originalLowerBound[0]) {
                         return supertypeOf(lowerBound);
                     }
                 } else if (originalUpperBound.length == 1) {
-                    Type upperBound = resolve(context, contextRawType, originalUpperBound[0]);
+                    Type upperBound = resolve(context, contextRawType, originalUpperBound[0],
+                            visitedTypeVariables);
                     if (upperBound != originalUpperBound[0]) {
                         return subtypeOf(upperBound);
                     }
@@ -219,9 +247,7 @@ public final class Util {
         Class<?> declaredByRaw = declaringClassOf(unknown);
 
         // We can't reduce this further.
-        if (declaredByRaw == null) {
-            return unknown;
-        }
+        if (declaredByRaw == null) return unknown;
 
         Type declaredBy = getGenericSupertype(context, contextRawType, declaredByRaw);
         if (declaredBy instanceof ParameterizedType) {
@@ -281,9 +307,7 @@ public final class Util {
 
     static int indexOf(Object[] array, Object toFind) {
         for (int i = 0; i < array.length; i++) {
-            if (toFind.equals(array[i])) {
-                return i;
-            }
+            if (toFind.equals(array[i])) return i;
         }
         throw new NoSuchElementException();
     }
@@ -329,9 +353,7 @@ public final class Util {
             this.rawType = canonicalize(rawType);
             this.typeArguments = typeArguments.clone();
             for (int t = 0; t < this.typeArguments.length; t++) {
-                if (this.typeArguments[t] == null) {
-                    throw new NullPointerException();
-                }
+                if (this.typeArguments[t] == null) throw new NullPointerException();
                 checkNotPrimitive(this.typeArguments[t]);
                 this.typeArguments[t] = canonicalize(this.typeArguments[t]);
             }
@@ -423,28 +445,18 @@ public final class Util {
         Type lowerBound;
 
         public WildcardTypeImpl(Type[] upperBounds, Type[] lowerBounds) {
-            if (lowerBounds.length > 1) {
-                throw new IllegalArgumentException();
-            }
-            if (upperBounds.length != 1) {
-                throw new IllegalArgumentException();
-            }
+            if (lowerBounds.length > 1) throw new IllegalArgumentException();
+            if (upperBounds.length != 1) throw new IllegalArgumentException();
 
             if (lowerBounds.length == 1) {
-                if (lowerBounds[0] == null) {
-                    throw new NullPointerException();
-                }
+                if (lowerBounds[0] == null) throw new NullPointerException();
                 checkNotPrimitive(lowerBounds[0]);
-                if (upperBounds[0] != Object.class) {
-                    throw new IllegalArgumentException();
-                }
+                if (upperBounds[0] != Object.class) throw new IllegalArgumentException();
                 this.lowerBound = canonicalize(lowerBounds[0]);
                 this.upperBound = Object.class;
 
             } else {
-                if (upperBounds[0] == null) {
-                    throw new NullPointerException();
-                }
+                if (upperBounds[0] == null) throw new NullPointerException();
                 checkNotPrimitive(upperBounds[0]);
                 this.lowerBound = null;
                 this.upperBound = canonicalize(upperBounds[0]);
@@ -502,23 +514,35 @@ public final class Util {
         if (jsonClass == null || !jsonClass.generateAdapter()) {
             return null;
         }
-        String adapterClassName = rawType.getName().replace("$", "_") + "JsonAdapter";
+        String adapterClassName = Types.generatedJsonAdapterName(rawType.getName());
         try {
             @SuppressWarnings("unchecked") // We generate types to match.
                     Class<? extends JsonAdapter<?>> adapterClass = (Class<? extends JsonAdapter<?>>)
                     Class.forName(adapterClassName, true, rawType.getClassLoader());
+            Constructor<? extends JsonAdapter<?>> constructor;
+            Object[] args;
             if (type instanceof ParameterizedType) {
-                Constructor<? extends JsonAdapter<?>> constructor
-                        = adapterClass.getDeclaredConstructor(Moshi.class, Type[].class);
-                constructor.setAccessible(true);
-                return constructor.newInstance(moshi, ((ParameterizedType) type).getActualTypeArguments())
-                        .nullSafe();
+                Type[] typeArgs = ((ParameterizedType) type).getActualTypeArguments();
+                try {
+                    // Common case first
+                    constructor = adapterClass.getDeclaredConstructor(Moshi.class, Type[].class);
+                    args = new Object[]{moshi, typeArgs};
+                } catch (NoSuchMethodException e) {
+                    constructor = adapterClass.getDeclaredConstructor(Type[].class);
+                    args = new Object[]{typeArgs};
+                }
             } else {
-                Constructor<? extends JsonAdapter<?>> constructor
-                        = adapterClass.getDeclaredConstructor(Moshi.class);
-                constructor.setAccessible(true);
-                return constructor.newInstance(moshi).nullSafe();
+                try {
+                    // Common case first
+                    constructor = adapterClass.getDeclaredConstructor(Moshi.class);
+                    args = new Object[]{moshi};
+                } catch (NoSuchMethodException e) {
+                    constructor = adapterClass.getDeclaredConstructor();
+                    args = new Object[0];
+                }
             }
+            constructor.setAccessible(true);
+            return constructor.newInstance(args).nullSafe();
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(
                     "Failed to find the generated JsonAdapter class for " + rawType, e);
@@ -534,5 +558,71 @@ public final class Util {
         } catch (InvocationTargetException e) {
             throw rethrowCause(e);
         }
+    }
+
+    public static boolean isKotlin(Class<?> targetClass) {
+        return METADATA != null && targetClass.isAnnotationPresent(METADATA);
+    }
+
+    /**
+     * Reflectively looks up the defaults constructor of a kotlin class.
+     *
+     * @param targetClass the target kotlin class to instantiate.
+     * @param <T>         the type of {@code targetClass}.
+     * @return the instantiated {@code targetClass} instance.
+     */
+    public static <T> Constructor<T> lookupDefaultsConstructor(Class<T> targetClass) {
+        if (DEFAULT_CONSTRUCTOR_MARKER == null) {
+            throw new IllegalStateException("DefaultConstructorMarker not on classpath. Make sure the "
+                    + "Kotlin stdlib is on the classpath.");
+        }
+        Constructor<T> defaultConstructor = findConstructor(targetClass);
+        defaultConstructor.setAccessible(true);
+        return defaultConstructor;
+    }
+
+    private static <T> Constructor<T> findConstructor(Class<T> targetClass) {
+        for (Constructor<?> constructor : targetClass.getDeclaredConstructors()) {
+            Class<?>[] paramTypes = constructor.getParameterTypes();
+            if (paramTypes.length != 0
+                    && paramTypes[paramTypes.length - 1].equals(DEFAULT_CONSTRUCTOR_MARKER)) {
+                //noinspection unchecked
+                return (Constructor<T>) constructor;
+            }
+        }
+
+        throw new IllegalStateException("No defaults constructor found for " + targetClass);
+    }
+
+    public static JsonDataException missingProperty(
+            String propertyName,
+            String jsonName,
+            JsonReader reader
+    ) {
+        String path = reader.getPath();
+        String message;
+        if (jsonName.equals(propertyName)) {
+            message = String.format("Required value '%s' missing at %s", propertyName, path);
+        } else {
+            message = String.format("Required value '%s' (JSON name '%s') missing at %s",
+                    propertyName, jsonName, path);
+        }
+        return new JsonDataException(message);
+    }
+
+    public static JsonDataException unexpectedNull(
+            String propertyName,
+            String jsonName,
+            JsonReader reader
+    ) {
+        String path = reader.getPath();
+        String message;
+        if (jsonName.equals(propertyName)) {
+            message = String.format("Non-null value '%s' was null at %s", propertyName, path);
+        } else {
+            message = String.format("Non-null value '%s' (JSON name '%s') was null at %s",
+                    propertyName, jsonName, path);
+        }
+        return new JsonDataException(message);
     }
 }
