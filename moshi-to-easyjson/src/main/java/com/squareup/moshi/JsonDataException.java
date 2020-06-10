@@ -15,7 +15,8 @@
  */
 package com.squareup.moshi;
 
-import javax.annotation.Nullable;
+
+import com.jn.langx.annotation.Nullable;
 
 /**
  * Thrown when the data in a JSON document doesn't match the data expected by the caller. For

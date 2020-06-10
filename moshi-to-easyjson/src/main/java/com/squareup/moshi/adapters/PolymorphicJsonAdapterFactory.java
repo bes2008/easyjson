@@ -15,7 +15,6 @@ package com.squareup.moshi.adapters;
 
 import com.squareup.moshi.*;
 
-import javax.annotation.CheckReturnValue;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
@@ -115,7 +114,6 @@ public final class PolymorphicJsonAdapterFactory<T> implements JsonAdapter.Facto
      * @param labelKey The key in the JSON object whose value determines the type to which to map the
      *                 JSON object.
      */
-    @CheckReturnValue
     public static <T> PolymorphicJsonAdapterFactory<T> of(Class<T> baseType, String labelKey) {
         if (baseType == null) {
             throw new NullPointerException("baseType == null");

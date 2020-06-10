@@ -15,12 +15,12 @@
  */
 package com.squareup.moshi.internal;
 
+import com.jn.langx.annotation.Nullable;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.JsonDataException;
 import com.squareup.moshi.JsonReader;
 import com.squareup.moshi.JsonWriter;
 import java.io.IOException;
-import javax.annotation.Nullable;
 
 public final class NonNullJsonAdapter<T> extends JsonAdapter<T> {
 
@@ -34,7 +34,6 @@ public final class NonNullJsonAdapter<T> extends JsonAdapter<T> {
     return delegate;
   }
 
-  @Nullable
   @Override
   public T fromJson(JsonReader reader) throws IOException {
     if (reader.peek() == JsonReader.Token.NULL) {

@@ -15,12 +15,11 @@
  */
 package com.squareup.moshi;
 
+import com.jn.langx.annotation.Nullable;
 import com.jn.langx.util.io.IOs;
 import okio.BufferedSink;
 import okio.BufferedSource;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nullable;
 import java.io.Closeable;
 import java.io.Flushable;
 import java.io.IOException;
@@ -164,7 +163,6 @@ public abstract class JsonWriter implements Closeable, Flushable {
     /**
      * Returns a new instance that writes UTF-8 encoded JSON to {@code sink}.
      */
-    @CheckReturnValue
     public static JsonWriter of(BufferedSink sink) {
         return new JsonUtf8Writer(sink);
     }
@@ -231,7 +229,7 @@ public abstract class JsonWriter implements Closeable, Flushable {
      * Returns a string containing only whitespace, used for each level of
      * indentation. If empty, the encoded document will be compact.
      */
-    @CheckReturnValue
+    
     public final String getIndent() {
         return indent != null ? indent : "";
     }
@@ -255,7 +253,7 @@ public abstract class JsonWriter implements Closeable, Flushable {
     /**
      * Returns true if this writer has relaxed syntax rules.
      */
-    @CheckReturnValue
+    
     public final boolean isLenient() {
         return lenient;
     }
@@ -272,7 +270,7 @@ public abstract class JsonWriter implements Closeable, Flushable {
      * Returns true if object members are serialized when their value is null.
      * This has no impact on array elements. The default is false.
      */
-    @CheckReturnValue
+    
     public final boolean getSerializeNulls() {
         return serializeNulls;
     }
@@ -398,7 +396,7 @@ public abstract class JsonWriter implements Closeable, Flushable {
      * Since no validation is performed, options like {@link #setSerializeNulls} and other writer
      * configurations are not respected.
      */
-    @CheckReturnValue
+    
     public abstract BufferedSink valueSink() throws IOException;
 
     /**
@@ -479,7 +477,7 @@ public abstract class JsonWriter implements Closeable, Flushable {
      * <p>This method returns an opaque token. Callers must match all calls to this method with a call
      * to {@link #endFlatten} with the matching token.
      */
-    @CheckReturnValue
+    
     public final int beginFlatten() {
         int context = peekScope();
         if (context != NONEMPTY_OBJECT && context != EMPTY_OBJECT
@@ -502,7 +500,7 @@ public abstract class JsonWriter implements Closeable, Flushable {
      * Returns a <a href="http://goessner.net/articles/JsonPath/">JsonPath</a> to
      * the current location in the JSON value.
      */
-    @CheckReturnValue
+    
     public final String getPath() {
         return JsonScope.getPath(stackSize, scopes, pathNames, pathIndices);
     }

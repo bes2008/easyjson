@@ -15,10 +15,9 @@
  */
 package com.squareup.moshi;
 
+import com.jn.langx.annotation.Nullable;
 import com.squareup.moshi.internal.Util.*;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nullable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
 import java.util.*;
@@ -28,7 +27,7 @@ import static com.squareup.moshi.internal.Util.*;
 /**
  * Factory methods for types.
  */
-@CheckReturnValue
+
 public final class Types {
     private Types() {
     }

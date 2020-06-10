@@ -16,8 +16,8 @@
 package com.squareup.moshi;
 
 import com.jn.easyjson.core.JSONBuilderProvider;
+import com.jn.langx.annotation.Nullable;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Arrays;

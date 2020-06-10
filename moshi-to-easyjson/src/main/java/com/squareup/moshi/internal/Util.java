@@ -15,9 +15,9 @@
  */
 package com.squareup.moshi.internal;
 
+import com.jn.langx.annotation.Nullable;
 import com.squareup.moshi.*;
 
-import javax.annotation.Nullable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
 import java.util.*;

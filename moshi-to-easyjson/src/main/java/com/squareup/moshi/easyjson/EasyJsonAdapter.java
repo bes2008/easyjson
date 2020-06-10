@@ -15,12 +15,12 @@
 package com.squareup.moshi.easyjson;
 
 import com.jn.easyjson.core.JSONBuilder;
+import com.jn.langx.annotation.Nullable;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.JsonReader;
 import com.squareup.moshi.JsonWriter;
 import okio.Buffer;
 
-import javax.annotation.Nullable;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.lang.reflect.Type;

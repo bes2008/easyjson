@@ -15,12 +15,12 @@
  */
 package com.squareup.moshi;
 
+import com.jn.langx.annotation.Nullable;
 import com.jn.langx.util.io.IOs;
 import okio.Buffer;
 import okio.BufferedSource;
 import okio.ByteString;
 
-import javax.annotation.Nullable;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;

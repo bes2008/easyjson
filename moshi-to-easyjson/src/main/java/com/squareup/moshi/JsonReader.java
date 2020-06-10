@@ -15,12 +15,11 @@
  */
 package com.squareup.moshi;
 
+import com.jn.langx.annotation.Nullable;
 import okio.Buffer;
 import okio.BufferedSource;
 import okio.ByteString;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nullable;
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -199,7 +198,7 @@ public abstract class JsonReader implements Closeable {
     /**
      * Returns a new instance that reads UTF-8 encoded JSON from {@code source}.
      */
-    @CheckReturnValue
+    
     public static JsonReader of(BufferedSource source) {
         return new JsonUtf8Reader(source);
     }
@@ -283,7 +282,7 @@ public abstract class JsonReader implements Closeable {
     /**
      * Returns true if this parser is liberal in what it accepts.
      */
-    @CheckReturnValue
+    
     public final boolean isLenient() {
         return lenient;
     }
@@ -303,7 +302,7 @@ public abstract class JsonReader implements Closeable {
     /**
      * Returns true if this parser forbids skipping names and values.
      */
-    @CheckReturnValue
+    
     public final boolean failOnUnknown() {
         return failOnUnknown;
     }
@@ -335,13 +334,13 @@ public abstract class JsonReader implements Closeable {
     /**
      * Returns true if the current array or object has another element.
      */
-    @CheckReturnValue
+    
     public abstract boolean hasNext() throws IOException;
 
     /**
      * Returns the type of the next token without consuming it.
      */
-    @CheckReturnValue
+    
     public abstract Token peek() throws IOException;
 
     /**
@@ -349,14 +348,14 @@ public abstract class JsonReader implements Closeable {
      *
      * @throws JsonDataException if the next token in the stream is not a property name.
      */
-    @CheckReturnValue
+    
     public abstract String nextName() throws IOException;
 
     /**
      * If the next token is a {@linkplain Token#NAME property name} that's in {@code options}, this
      * consumes it and returns its index. Otherwise this returns -1 and no name is consumed.
      */
-    @CheckReturnValue
+    
     public abstract int selectName(Options options) throws IOException;
 
     /**
@@ -380,7 +379,7 @@ public abstract class JsonReader implements Closeable {
      * If the next token is a {@linkplain Token#STRING string} that's in {@code options}, this
      * consumes it and returns its index. Otherwise this returns -1 and no string is consumed.
      */
-    @CheckReturnValue
+    
     public abstract int selectString(Options options) throws IOException;
 
     /**
@@ -515,14 +514,14 @@ public abstract class JsonReader implements Closeable {
      *   jsonReader.nextInt() // Returns 456, reader contains 789 and ].
      * }</pre>
      */
-    @CheckReturnValue
+    
     public abstract JsonReader peekJson();
 
     /**
      * Returns a <a href="http://goessner.net/articles/JsonPath/">JsonPath</a> to
      * the current location in the JSON value.
      */
-    @CheckReturnValue
+    
     public final String getPath() {
         return JsonScope.getPath(stackSize, scopes, pathNames, pathIndices);
     }
@@ -546,7 +545,7 @@ public abstract class JsonReader implements Closeable {
             this.doubleQuoteSuffix = doubleQuoteSuffix;
         }
 
-        @CheckReturnValue
+        
         public static Options of(String... strings) {
             try {
                 ByteString[] result = new ByteString[strings.length];

@@ -15,9 +15,9 @@
  */
 package com.squareup.moshi;
 
+import com.jn.langx.annotation.Nullable;
 import okio.*;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
 
 import static com.squareup.moshi.JsonScope.*;
