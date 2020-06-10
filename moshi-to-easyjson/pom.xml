@@ -10,6 +10,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <properties>
+        <supported.moshi.version>1.8.6+</supported.moshi.version>
         <moshi.version>1.9.2</moshi.version>
     </properties>
 
