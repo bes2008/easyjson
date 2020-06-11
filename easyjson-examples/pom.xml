@@ -71,52 +71,6 @@
             <optional>true</optional>
         </dependency>
 
-
-        <!-- https://github.com/phax/ph-commons/ph-json -->
-        <dependency>
-            <groupId>com.helger</groupId>
-            <artifactId>ph-json</artifactId>
-            <version>9.3.4</version>
-            <scope>test</scope>
-            <optional>true</optional>
-        </dependency>
-
-        <dependency>
-            <groupId>com.owlike</groupId>
-            <artifactId>genson</artifactId>
-            <version>1.5</version>
-            <scope>test</scope>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.johnzon</groupId>
-            <artifactId>johnzon-core</artifactId>
-            <version>1.1.12</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>net.sf.flexjson</groupId>
-            <artifactId>flexjson</artifactId>
-            <version>3.3</version>
-            <scope>test</scope>
-            <optional>true</optional>
-        </dependency>
-        <!-- http://jsonic.sourceforge.jp/ -->
-        <dependency>
-            <groupId>net.arnx</groupId>
-            <artifactId>jsonic</artifactId>
-            <version>1.3.10</version>
-            <optional>true</optional>
-        </dependency>
-
-        <dependency>
-            <groupId>com.sun.jersey</groupId>
-            <artifactId>jersey-json</artifactId>
-            <version>1.19.4</version>
-            <optional>true</optional>
-            <scope>test</scope>
-        </dependency>
-
         <!--supported by simplejson-to-easyjson -->
         <!-- https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple -->
         <!-- http://code.google.com/p/json-simple/ -->

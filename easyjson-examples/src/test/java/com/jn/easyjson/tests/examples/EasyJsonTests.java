@@ -14,6 +14,7 @@
 
 package com.jn.easyjson.tests.examples;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.jn.easyjson.core.JSON;
 import com.jn.easyjson.core.JSONBuilder;
 import com.jn.easyjson.core.JSONBuilderProvider;
@@ -26,7 +27,6 @@ import com.jn.easyjson.tests.examples.struct.Gender;
 import com.jn.easyjson.tests.examples.struct.Person;
 import com.jn.langx.util.reflect.type.ParameterizedTypeGetter;
 import com.jn.langx.util.reflect.type.Types;
-import net.arnx.jsonic.TypeReference;
 import org.junit.Test;
 
 import java.lang.reflect.Type;
