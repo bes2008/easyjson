@@ -15,17 +15,18 @@
  */
 package com.squareup.moshi;
 
+import com.jn.langx.annotation.Nullable;
+import com.jn.langx.util.collection.Collects;
+import com.jn.langx.util.function.Consumer;
+import com.squareup.moshi.easyjson.EasyJsonAdapterFactory;
 import com.squareup.moshi.internal.Util;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.util.*;
 
-import static com.squareup.moshi.internal.Util.canonicalize;
-import static com.squareup.moshi.internal.Util.typeAnnotatedWithAnnotations;
+import static com.squareup.moshi.internal.Util.*;
 
 /**
  * Coordinates binding between JSON values and Java objects.
@@ -34,11 +35,11 @@ public final class Moshi {
     static final List<JsonAdapter.Factory> BUILT_IN_FACTORIES = new ArrayList<JsonAdapter.Factory>(5);
 
     static {
-        BUILT_IN_FACTORIES.add(StandardJsonAdapters.FACTORY);
-        BUILT_IN_FACTORIES.add(CollectionJsonAdapter.FACTORY);
-        BUILT_IN_FACTORIES.add(MapJsonAdapter.FACTORY);
-        BUILT_IN_FACTORIES.add(ArrayJsonAdapter.FACTORY);
-        BUILT_IN_FACTORIES.add(ClassJsonAdapter.FACTORY);
+        BUILT_IN_FACTORIES.add(new EasyJsonAdapterFactory(StandardJsonAdapters.FACTORY));
+        BUILT_IN_FACTORIES.add(new EasyJsonAdapterFactory(CollectionJsonAdapter.FACTORY));
+        BUILT_IN_FACTORIES.add(new EasyJsonAdapterFactory(MapJsonAdapter.FACTORY));
+        BUILT_IN_FACTORIES.add(new EasyJsonAdapterFactory(ArrayJsonAdapter.FACTORY));
+        BUILT_IN_FACTORIES.add(new EasyJsonAdapterFactory(ClassJsonAdapter.FACTORY));
     }
 
     private final List<JsonAdapter.Factory> factories;
@@ -46,9 +47,17 @@ public final class Moshi {
     private final Map<Object, JsonAdapter<?>> adapterCache = new LinkedHashMap<Object, JsonAdapter<?>>();
 
     Moshi(Builder builder) {
-        List<JsonAdapter.Factory> factories = new ArrayList<JsonAdapter.Factory>(
-                builder.factories.size() + BUILT_IN_FACTORIES.size());
-        factories.addAll(builder.factories);
+        final List<JsonAdapter.Factory> factories = new ArrayList<JsonAdapter.Factory>(builder.factories.size() + BUILT_IN_FACTORIES.size());
+        Collects.forEach(builder.factories, new Consumer<JsonAdapter.Factory>() {
+            @Override
+            public void accept(JsonAdapter.Factory factory) {
+                if(factory instanceof EasyJsonAdapterFactory){
+                    factories.add(factory);
+                }else{
+                    factories.add(new EasyJsonAdapterFactory(factory));
+                }
+            }
+        });
         factories.addAll(BUILT_IN_FACTORIES);
         this.factories = Collections.unmodifiableList(factories);
     }
@@ -56,17 +65,17 @@ public final class Moshi {
     /**
      * Returns a JSON adapter for {@code type}, creating it if necessary.
      */
-    @CheckReturnValue
+    
     public <T> JsonAdapter<T> adapter(Type type) {
         return adapter(type, Util.NO_ANNOTATIONS);
     }
 
-    @CheckReturnValue
+    
     public <T> JsonAdapter<T> adapter(Class<T> type) {
         return adapter(type, Util.NO_ANNOTATIONS);
     }
 
-    @CheckReturnValue
+    
     public <T> JsonAdapter<T> adapter(Type type, Class<? extends Annotation> annotationType) {
         if (annotationType == null) {
             throw new NullPointerException("annotationType == null");
@@ -75,7 +84,7 @@ public final class Moshi {
                 Collections.singleton(Types.createJsonQualifierImplementation(annotationType)));
     }
 
-    @CheckReturnValue
+    
     public <T> JsonAdapter<T> adapter(Type type, Class<? extends Annotation>... annotationTypes) {
         if (annotationTypes.length == 1) {
             return adapter(type, annotationTypes[0]);
@@ -87,7 +96,7 @@ public final class Moshi {
         return adapter(type, Collections.unmodifiableSet(annotations));
     }
 
-    @CheckReturnValue
+    
     public <T> JsonAdapter<T> adapter(Type type, Set<? extends Annotation> annotations) {
         return adapter(type, annotations, null);
     }
@@ -96,7 +105,7 @@ public final class Moshi {
      * @param fieldName An optional field name associated with this type. The field name is used as a
      *                  hint for better adapter lookup error messages for nested structures.
      */
-    @CheckReturnValue
+    
     @SuppressWarnings("unchecked") // Factories are required to return only matching JsonAdapters.
     public <T> JsonAdapter<T> adapter(Type type, Set<? extends Annotation> annotations,
                                       @Nullable String fieldName) {
@@ -107,15 +116,13 @@ public final class Moshi {
             throw new NullPointerException("annotations == null");
         }
 
-        type = canonicalize(type);
+        type = removeSubtypeWildcard(canonicalize(type));
 
         // If there's an equivalent adapter in the cache, we're done!
         Object cacheKey = cacheKey(type, annotations);
         synchronized (adapterCache) {
             JsonAdapter<?> result = adapterCache.get(cacheKey);
-            if (result != null) {
-                return (JsonAdapter<T>) result;
-            }
+            if (result != null) return (JsonAdapter<T>) result;
         }
 
         LookupChain lookupChain = lookupChainThreadLocal.get();
@@ -127,16 +134,12 @@ public final class Moshi {
         boolean success = false;
         JsonAdapter<T> adapterFromCall = lookupChain.push(type, fieldName, cacheKey);
         try {
-            if (adapterFromCall != null) {
-                return adapterFromCall;
-            }
+            if (adapterFromCall != null) return adapterFromCall;
 
             // Ask each factory to create the JSON adapter.
             for (int i = 0, size = factories.size(); i < size; i++) {
                 JsonAdapter<T> result = (JsonAdapter<T>) factories.get(i).create(type, annotations, this);
-                if (result == null) {
-                    continue;
-                }
+                if (result == null) continue;
 
                 // Success! Notify the LookupChain so it is cached and can be used by re-entrant calls.
                 lookupChain.adapterFound(result);
@@ -153,13 +156,15 @@ public final class Moshi {
         }
     }
 
-    @CheckReturnValue
+    
     @SuppressWarnings("unchecked") // Factories are required to return only matching JsonAdapters.
     public <T> JsonAdapter<T> nextAdapter(JsonAdapter.Factory skipPast, Type type,
                                           Set<? extends Annotation> annotations) {
-        if (annotations == null) throw new NullPointerException("annotations == null");
+        if (annotations == null) {
+            throw new NullPointerException("annotations == null");
+        }
 
-        type = canonicalize(type);
+        type = removeSubtypeWildcard(canonicalize(type));
 
         int skipPastIndex = factories.indexOf(skipPast);
         if (skipPastIndex == -1) {
@@ -167,9 +172,7 @@ public final class Moshi {
         }
         for (int i = skipPastIndex + 1, size = factories.size(); i < size; i++) {
             JsonAdapter<T> result = (JsonAdapter<T>) factories.get(i).create(type, annotations, this);
-            if (result != null) {
-                return result;
-            }
+            if (result != null) return result;
         }
         throw new IllegalArgumentException("No next JsonAdapter for "
                 + typeAnnotatedWithAnnotations(type, annotations));
@@ -178,7 +181,7 @@ public final class Moshi {
     /**
      * Returns a new builder containing all custom factories used by the current instance.
      */
-    @CheckReturnValue
+    
     public Moshi.Builder newBuilder() {
         int fullSize = factories.size();
         int tailSize = BUILT_IN_FACTORIES.size();
@@ -190,9 +193,7 @@ public final class Moshi {
      * Returns an opaque object that's equal if the type and annotations are equal.
      */
     private Object cacheKey(Type type, Set<? extends Annotation> annotations) {
-        if (annotations.isEmpty()) {
-            return type;
-        }
+        if (annotations.isEmpty()) return type;
         return Arrays.asList(type, annotations);
     }
 
@@ -256,7 +257,7 @@ public final class Moshi {
             return this;
         }
 
-        @CheckReturnValue
+        
         public Moshi build() {
             return new Moshi(this);
         }
@@ -264,18 +265,18 @@ public final class Moshi {
 
     /**
      * A possibly-reentrant chain of lookups for JSON adapters.
-     * <p>
+     *
      * <p>We keep track of the current stack of lookups: we may start by looking up the JSON adapter
      * for Employee, re-enter looking for the JSON adapter of HomeAddress, and re-enter again looking
      * up the JSON adapter of PostalCode. If any of these lookups fail we can provide a stack trace
      * with all of the lookups.
-     * <p>
+     *
      * <p>Sometimes a JSON adapter factory depends on its own product; either directly or indirectly.
      * To make this work, we offer a JSON adapter stub while the final adapter is being computed.
      * When it is ready, we wire the stub to that finished adapter. This is necessary in
      * self-referential object models, such as an {@code Employee} class that has a {@code
      * List<Employee>} field for an organization's management hierarchy.
-     * <p>
+     *
      * <p>This class defers putting any JSON adapters in the cache until the topmost JSON adapter has
      * successfully been computed. That way we don't pollute the cache with incomplete stubs, or
      * adapters that may transitively depend on incomplete stubs.

@@ -15,9 +15,9 @@
  */
 package com.squareup.moshi.adapters;
 
+import com.jn.langx.annotation.Nullable;
 import com.squareup.moshi.*;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.Arrays;
 

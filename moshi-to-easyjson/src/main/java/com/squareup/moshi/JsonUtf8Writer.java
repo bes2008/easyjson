@@ -15,11 +15,9 @@
  */
 package com.squareup.moshi;
 
-import okio.BufferedSink;
-import okio.BufferedSource;
-import okio.Sink;
+import com.jn.langx.annotation.Nullable;
+import okio.*;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
 
 import static com.squareup.moshi.JsonScope.*;
@@ -85,12 +83,12 @@ final class JsonUtf8Writer extends JsonWriter {
                     "Array cannot be used as a map key in JSON at path " + getPath());
         }
         writeDeferredName();
-        return open(EMPTY_ARRAY, NONEMPTY_ARRAY, "[");
+        return open(EMPTY_ARRAY, NONEMPTY_ARRAY, '[');
     }
 
     @Override
     public JsonWriter endArray() throws IOException {
-        return close(EMPTY_ARRAY, NONEMPTY_ARRAY, "]");
+        return close(EMPTY_ARRAY, NONEMPTY_ARRAY, ']');
     }
 
     @Override
@@ -100,20 +98,20 @@ final class JsonUtf8Writer extends JsonWriter {
                     "Object cannot be used as a map key in JSON at path " + getPath());
         }
         writeDeferredName();
-        return open(EMPTY_OBJECT, NONEMPTY_OBJECT, "{");
+        return open(EMPTY_OBJECT, NONEMPTY_OBJECT, '{');
     }
 
     @Override
     public JsonWriter endObject() throws IOException {
         promoteValueToName = false;
-        return close(EMPTY_OBJECT, NONEMPTY_OBJECT, "}");
+        return close(EMPTY_OBJECT, NONEMPTY_OBJECT, '}');
     }
 
     /**
      * Enters a new scope by appending any necessary whitespace and the given
      * bracket.
      */
-    private JsonWriter open(int empty, int nonempty, String openBracket) throws IOException {
+    private JsonWriter open(int empty, int nonempty, char openBracket) throws IOException {
         if (stackSize == flattenStackSize
                 && (scopes[stackSize - 1] == empty || scopes[stackSize - 1] == nonempty)) {
             // Cancel this open. Invert the flatten stack size until this is closed.
@@ -124,7 +122,7 @@ final class JsonUtf8Writer extends JsonWriter {
         checkStack();
         pushScope(empty);
         pathIndices[stackSize - 1] = 0;
-        sink.writeUtf8(openBracket);
+        sink.writeByte(openBracket);
         return this;
     }
 
@@ -132,7 +130,7 @@ final class JsonUtf8Writer extends JsonWriter {
      * Closes the current scope by appending any necessary whitespace and the
      * given bracket.
      */
-    private JsonWriter close(int empty, int nonempty, String closeBracket) throws IOException {
+    private JsonWriter close(int empty, int nonempty, char closeBracket) throws IOException {
         int context = peekScope();
         if (context != nonempty && context != empty) {
             throw new IllegalStateException("Nesting problem.");
@@ -152,7 +150,7 @@ final class JsonUtf8Writer extends JsonWriter {
         if (context == nonempty) {
             newline();
         }
-        sink.writeUtf8(closeBracket);
+        sink.writeByte(closeBracket);
         return this;
     }
 
@@ -287,16 +285,39 @@ final class JsonUtf8Writer extends JsonWriter {
     }
 
     @Override
-    public JsonWriter value(BufferedSource source) throws IOException {
+    public BufferedSink valueSink() throws IOException {
         if (promoteValueToName) {
             throw new IllegalStateException(
-                    "BufferedSource cannot be used as a map key in JSON at path " + getPath());
+                    "BufferedSink cannot be used as a map key in JSON at path " + getPath());
         }
         writeDeferredName();
         beforeValue();
-        sink.writeAll(source);
-        pathIndices[stackSize - 1]++;
-        return this;
+        pushScope(STREAMING_VALUE);
+        return Okio.buffer(new Sink() {
+            @Override
+            public void write(Buffer source, long byteCount) throws IOException {
+                sink.write(source, byteCount);
+            }
+
+            @Override
+            public void close() {
+                if (peekScope() != STREAMING_VALUE) {
+                    throw new AssertionError();
+                }
+                stackSize--; // Remove STREAMING_VALUE from the stack.
+                pathIndices[stackSize - 1]++;
+            }
+
+            @Override
+            public void flush() throws IOException {
+                sink.flush();
+            }
+
+            @Override
+            public Timeout timeout() {
+                return Timeout.NONE;
+            }
+        });
     }
 
     /**
@@ -396,6 +417,7 @@ final class JsonUtf8Writer extends JsonWriter {
      */
     @SuppressWarnings("fallthrough")
     private void beforeValue() throws IOException {
+        int nextTop;
         switch (peekScope()) {
             case NONEMPTY_DOCUMENT:
                 if (!lenient) {
@@ -404,26 +426,28 @@ final class JsonUtf8Writer extends JsonWriter {
                 }
                 // fall-through
             case EMPTY_DOCUMENT: // first in document
-                replaceTop(NONEMPTY_DOCUMENT);
-                break;
-
-            case EMPTY_ARRAY: // first in array
-                replaceTop(NONEMPTY_ARRAY);
-                newline();
+                nextTop = NONEMPTY_DOCUMENT;
                 break;
 
             case NONEMPTY_ARRAY: // another in array
                 sink.writeByte(',');
+                // fall-through
+            case EMPTY_ARRAY: // first in array
                 newline();
+                nextTop = NONEMPTY_ARRAY;
                 break;
 
             case DANGLING_NAME: // value for name
+                nextTop = NONEMPTY_OBJECT;
                 sink.writeUtf8(separator);
-                replaceTop(NONEMPTY_OBJECT);
                 break;
+
+            case STREAMING_VALUE:
+                throw new IllegalStateException("Sink from valueSink() was not closed");
 
             default:
                 throw new IllegalStateException("Nesting problem.");
         }
+        replaceTop(nextTop);
     }
 }

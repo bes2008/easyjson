@@ -15,7 +15,8 @@
  */
 package com.squareup.moshi;
 
-import javax.annotation.Nullable;
+import com.jn.langx.annotation.Nullable;
+
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
@@ -25,7 +26,6 @@ import java.util.Set;
 /**
  * Converts maps with string keys to JSON objects.
  * <p>
- * TODO: support maps with other key types and convert to/from strings.
  */
 final class MapJsonAdapter<K, V> extends JsonAdapter<Map<K, V>> {
     public static final Factory FACTORY = new Factory() {

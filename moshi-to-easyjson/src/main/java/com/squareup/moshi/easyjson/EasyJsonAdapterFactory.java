@@ -16,10 +16,10 @@ package com.squareup.moshi.easyjson;
 
 import com.jn.easyjson.core.JSONBuilder;
 import com.jn.easyjson.core.JSONBuilderProvider;
+import com.jn.langx.annotation.Nullable;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 
-import javax.annotation.Nullable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.util.Set;
@@ -36,6 +36,9 @@ public class EasyJsonAdapterFactory implements JsonAdapter.Factory {
     @Override
     public JsonAdapter<?> create(Type type, Set<? extends Annotation> annotations, Moshi moshi) {
         JsonAdapter adapterDelegate = delegate.create(type, annotations, moshi);
+        if(adapterDelegate==null){
+            return null;
+        }
         JSONBuilder jsonBuilder = JSONBuilderProvider.create();
         EasyJsonAdapter adapter = new EasyJsonAdapter();
         adapter.setJsonBuilder(jsonBuilder);

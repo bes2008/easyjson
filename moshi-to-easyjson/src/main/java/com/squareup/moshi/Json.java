@@ -23,16 +23,16 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * Customizes how a field is encoded as JSON.
- * <p>
+ *
  * <p>Although this annotation doesn't declare a {@link Target}, it is only honored in the following
  * elements:
- * <p>
+ *
  * <ul>
- * <li><strong>Java class fields</strong>
- * <li><strong>Kotlin properties</strong> for use with {@code moshi-kotlin}. This includes both
- * properties declared in the constructor and properties declared as members.
+ *   <li><strong>Java class fields</strong>
+ *   <li><strong>Kotlin properties</strong> for use with {@code moshi-kotlin}. This includes both
+ *       properties declared in the constructor and properties declared as members.
  * </ul>
- * <p>
+ *
  * <p>Users of the <a href="https://github.com/rharter/auto-value-moshi">AutoValue: Moshi
  * Extension</a> may also use this annotation on abstract getters.
  */

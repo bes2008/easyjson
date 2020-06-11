@@ -15,9 +15,9 @@
  */
 package com.squareup.moshi;
 
+import com.jn.langx.annotation.Nullable;
 import com.squareup.moshi.internal.Util;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
@@ -26,28 +26,29 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import static com.squareup.moshi.internal.Util.resolve;
-import static com.squareup.moshi.internal.Util.typeAnnotatedWithAnnotations;
 
 /**
  * Emits a regular class as a JSON object by mapping Java fields to JSON object properties.
- * <p>
+ *
  * <h3>Platform Types</h3>
  * Fields from platform classes are omitted from both serialization and deserialization unless
  * they are either public or protected. This includes the following packages and their subpackages:
- * <p>
+ *
  * <ul>
- * <li>android.*
- * <li>java.*
- * <li>javax.*
- * <li>kotlin.*
- * <li>scala.*
+ *   <li>android.*
+ *   <li>androidx.*
+ *   <li>java.*
+ *   <li>javax.*
+ *   <li>kotlin.*
+ *   <li>kotlinx.*
+ *   <li>scala.*
  * </ul>
  */
 final class ClassJsonAdapter<T> extends JsonAdapter<T> {
     public static final JsonAdapter.Factory FACTORY = new JsonAdapter.Factory() {
         @Override
-        @Nullable
-        public JsonAdapter<?> create(
+        public @Nullable
+        JsonAdapter<?> create(
                 Type type, Set<? extends Annotation> annotations, Moshi moshi) {
             if (!(type instanceof Class) && !(type instanceof ParameterizedType)) {
                 return null;
@@ -56,13 +57,16 @@ final class ClassJsonAdapter<T> extends JsonAdapter<T> {
             if (rawType.isInterface() || rawType.isEnum()) {
                 return null;
             }
-            if (Util.isPlatformType(rawType) && !Types.isAllowedPlatformType(rawType)) {
-                throw new IllegalArgumentException("Platform "
-                        + typeAnnotatedWithAnnotations(type, annotations)
-                        + " requires explicit JsonAdapter to be registered");
-            }
             if (!annotations.isEmpty()) {
                 return null;
+            }
+            if (Util.isPlatformType(rawType)) {
+                String messagePrefix = "Platform " + rawType;
+                if (type instanceof ParameterizedType) {
+                    messagePrefix += " in " + type;
+                }
+                throw new IllegalArgumentException(
+                        messagePrefix + " requires explicit JsonAdapter to be registered");
             }
 
             if (rawType.isAnonymousClass()) {
@@ -77,6 +81,12 @@ final class ClassJsonAdapter<T> extends JsonAdapter<T> {
             }
             if (Modifier.isAbstract(rawType.getModifiers())) {
                 throw new IllegalArgumentException("Cannot serialize abstract class " + rawType.getName());
+            }
+            if (Util.isKotlin(rawType)) {
+                throw new IllegalArgumentException("Cannot serialize Kotlin type " + rawType.getName()
+                        + ". Reflective serialization of Kotlin classes without using kotlin-reflect has "
+                        + "undefined and unexpected behavior. Please use KotlinJsonAdapter from the "
+                        + "moshi-kotlin artifact or use code gen from the moshi-kotlin-codegen artifact.");
             }
 
             ClassFactory<Object> classFactory = ClassFactory.get(rawType);

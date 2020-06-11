@@ -6,9 +6,13 @@
     <parent>
         <artifactId>easyjson</artifactId>
         <groupId>com.github.fangjinuo.easyjson</groupId>
-        <version>2.2.1</version>
+        <version>2.3.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
+    <properties>
+        <supported.moshi.version>1.8.6+</supported.moshi.version>
+        <moshi.version>1.9.2</moshi.version>
+    </properties>
 
     <artifactId>moshi-to-easyjson</artifactId>
     <dependencies>
@@ -23,14 +27,15 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.google.code.findbugs</groupId>
-            <artifactId>jsr305</artifactId>
-            <version>3.0.2</version>
-        </dependency>
-        <dependency>
             <groupId>com.squareup.okio</groupId>
             <artifactId>okio</artifactId>
             <version>1.16.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.fangjinuo.easyjson</groupId>
+            <artifactId>easyjson-jackson</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

@@ -15,12 +15,12 @@
  */
 package com.squareup.moshi;
 
+import com.jn.langx.annotation.Nullable;
 import com.jn.langx.util.io.IOs;
 import okio.Buffer;
 import okio.BufferedSource;
 import okio.ByteString;
 
-import javax.annotation.Nullable;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -607,7 +607,10 @@ final class JsonUtf8Reader extends JsonReader {
     @Override
     public void skipName() throws IOException {
         if (failOnUnknown) {
-            throw new JsonDataException("Cannot skip unexpected " + peek() + " at " + getPath());
+            // Capture the peeked value before nextName() since it will reset its value.
+            Token peeked = peek();
+            nextName(); // Move the path forward onto the offending name.
+            throw new JsonDataException("Cannot skip unexpected " + peeked + " at " + getPath());
         }
         int p = peeked;
         if (p == PEEKED_NONE) {
@@ -836,7 +839,7 @@ final class JsonUtf8Reader extends JsonReader {
         } catch (NumberFormatException e) {
             throw new JsonDataException("Expected a long but was " + peekedString
                     + " at path " + getPath());
-        } catch (ArithmeticException e) {
+        } catch ( ArithmeticException e){
             throw new JsonDataException("Expected a long but was " + peekedString
                     + " at path " + getPath());
         }
@@ -999,11 +1002,19 @@ final class JsonUtf8Reader extends JsonReader {
                 pushScope(JsonScope.EMPTY_OBJECT);
                 count++;
             } else if (p == PEEKED_END_ARRAY) {
-                stackSize--;
                 count--;
+                if (count < 0) {
+                    throw new JsonDataException(
+                            "Expected a value but was " + peek() + " at path " + getPath());
+                }
+                stackSize--;
             } else if (p == PEEKED_END_OBJECT) {
-                stackSize--;
                 count--;
+                if (count < 0) {
+                    throw new JsonDataException(
+                            "Expected a value but was " + peek() + " at path " + getPath());
+                }
+                stackSize--;
             } else if (p == PEEKED_UNQUOTED_NAME || p == PEEKED_UNQUOTED) {
                 skipUnquotedValue();
             } else if (p == PEEKED_DOUBLE_QUOTED || p == PEEKED_DOUBLE_QUOTED_NAME) {
@@ -1012,6 +1023,9 @@ final class JsonUtf8Reader extends JsonReader {
                 skipQuotedValue(SINGLE_QUOTE_OR_SLASH);
             } else if (p == PEEKED_NUMBER) {
                 buffer.skip(peekedNumberLength);
+            } else if (p == PEEKED_EOF) {
+                throw new JsonDataException(
+                        "Expected a value but was " + peek() + " at path " + getPath());
             }
             peeked = PEEKED_NONE;
         } while (count != 0);
@@ -1183,9 +1197,7 @@ final class JsonUtf8Reader extends JsonReader {
                 return (char) escaped;
 
             default:
-                if (!lenient) {
-                    throw syntaxError("Invalid escape sequence: \\" + (char) escaped);
-                }
+                if (!lenient) throw syntaxError("Invalid escape sequence: \\" + (char) escaped);
                 return (char) escaped;
         }
     }

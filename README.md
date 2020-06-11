@@ -296,7 +296,25 @@ Provides a unified JSON access API, you can adapter any JSON library to Gson, Ja
             &lt;version>${version}&lt;/version>
         &lt;/dependency>
                 </pre></td>          
-        </tr>                           
+        </tr>    
+        <tr>
+            <td>Moshi</td>
+            <td><pre>
+        &lt;dependency>
+            &lt;groupId>com.squareup.moshi&lt;/groupId>
+            &lt;artifactId>moshi&lt;/artifactId>
+            &lt;version>1.9.2&lt;/version>
+        &lt;/dependency>
+                </pre></td>
+            <td>1.8.6+</td>
+            <td><pre>
+        &lt;dependency>
+            &lt;groupId>com.github.fangjinuo.easyjson&lt;/groupId>
+            &lt;artifactId>moshi-to-easyjson&lt;/artifactId>
+            &lt;version>${version}&lt;/version>
+        &lt;/dependency>
+                </pre></td>          
+        </tr>                       
     </tbody>
 </table>
 
@@ -322,4 +340,9 @@ QQ Group: 750929088
 + [esmvc](https://github.com/fangjinuo/es-mvc): ElasticSearch 通用客户端，就像MyBatis Mapper那样顺滑
 + [redisclient](https://github.com/fangjinuo/redisclient): 基于Spring RestTemplate提供的客户端
 + [audit](https://github.com/fangjinuo/audit)：通用的Java应用审计框架
-+ [dmmq](https://github.com/fangjinuo/dmmq): 基于disruptor 实现的内存消息队列
+
+
+## 鸣谢
+最后，感谢 Jetbrains 提供免费License，方便了开源项目的发展。
+
+[![Jetbrains](https://github.com/fangjinuo/sqlhelper/blob/master/_images/jetbrains.png)](https://www.jetbrains.com/zh-cn/)
