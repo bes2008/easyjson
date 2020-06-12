@@ -143,7 +143,7 @@ public class EasyJsonTests extends BaseTests {
     public void genericTest() {
         String str = "[[{\"a\":\"b\"}]]";
         JSON json = new JacksonJSONBuilder().build();
-        // Types API
+        // Types API: List<List<Map<String,String>>
         Type type = Types.getListParameterizedType(Types.getListParameterizedType(Types.getMapParameterizedType(String.class, String.class)));
         Object obj = json.fromJson(str, type);
         System.out.println(obj.toString());

@@ -16,9 +16,7 @@ package com.alibaba.fastjson.serializer;
 import com.alibaba.fastjson.*;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.annotation.JSONType;
-import com.alibaba.fastjson.parser.deserializer.OptionalCodec;
 import com.alibaba.fastjson.spi.Module;
-import com.alibaba.fastjson.support.moneta.MonetaCodec;
 import com.alibaba.fastjson.support.springfox.SwaggerJsonSerializer;
 import com.alibaba.fastjson.util.*;
 import com.alibaba.fastjson.util.IdentityHashMap;
@@ -601,7 +599,7 @@ public class SerializeConfig {
                             };
                             for (String name : names) {
                                 if (name.equals(className)) {
-                                    put(Class.forName(name), writer = OptionalCodec.instance);
+                                    //put(Class.forName(name), writer = OptionalCodec.instance);
                                     return writer;
                                 }
                             }
@@ -718,11 +716,6 @@ public class SerializeConfig {
 
                 if ("java.nio.HeapByteBuffer".equals(className)) {
                     put(clazz, writer = ByteBufferCodec.instance);
-                    return writer;
-                }
-
-                if ("org.javamoney.moneta.Money".equals(className)) {
-                    put(clazz, writer = MonetaCodec.instance);
                     return writer;
                 }
 

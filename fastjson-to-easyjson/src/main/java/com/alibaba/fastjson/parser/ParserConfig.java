@@ -21,7 +21,6 @@ import com.alibaba.fastjson.asm.TypeCollector;
 import com.alibaba.fastjson.parser.deserializer.*;
 import com.alibaba.fastjson.serializer.*;
 import com.alibaba.fastjson.spi.Module;
-import com.alibaba.fastjson.support.moneta.MonetaCodec;
 import com.alibaba.fastjson.util.*;
 import com.alibaba.fastjson.util.IdentityHashMap;
 import com.alibaba.fastjson.util.ServiceLoader;
@@ -511,7 +510,6 @@ public class ParserConfig {
                     };
                     for (String name : names) {
                         if (name.equals(className)) {
-                            deserializers.put(Class.forName(name), derializer = OptionalCodec.instance);
                             return derializer;
                         }
                     }
@@ -583,10 +581,6 @@ public class ParserConfig {
 
         if (clazz == Map.Entry.class) {
             deserializers.put(clazz, derializer = MiscCodec.instance);
-        }
-
-        if (className.equals("org.javamoney.moneta.Money")) {
-            deserializers.put(clazz, derializer = MonetaCodec.instance);
         }
 
         final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
