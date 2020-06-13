@@ -64,7 +64,7 @@
         </license>
     </licenses>
     <properties>
-        <langx.version>2.5.0</langx.version>
+        <langx.version>2.5.1</langx.version>
     </properties>
 
     <dependencyManagement>
