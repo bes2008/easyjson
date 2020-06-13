@@ -17,6 +17,7 @@ package com.jn.easyjson.core;
 import com.jn.easyjson.core.exclusion.Exclusion;
 import com.jn.easyjson.core.exclusion.ExclusionConfiguration;
 import com.jn.easyjson.core.exclusion.IgnoreAnnotationExclusion;
+import com.jn.langx.util.function.Consumer2;
 
 import java.text.DateFormat;
 
@@ -49,6 +50,7 @@ public abstract class JSONBuilder implements Cloneable {
     private final ExclusionConfiguration exclusionConfiguration;
 
     private boolean isLenient;
+
 
     public JSONBuilder() {
         exclusionConfiguration = new ExclusionConfiguration();
@@ -238,6 +240,15 @@ public abstract class JSONBuilder implements Cloneable {
 
     public ExclusionConfiguration getExclusionConfiguration() {
         return exclusionConfiguration;
+    }
+
+    public JSONBuilder withTargetClass(Class clazz){
+        return this;
+    }
+
+    public JSONBuilder withTargetClass(Class clazz, Consumer2<JSONBuilder, Class> consumer){
+        consumer.accept(this, clazz);
+        return this;
     }
 
     public abstract JSON build();
