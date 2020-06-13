@@ -15,11 +15,15 @@ package com.alibaba.fastjson.serializer;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.easyjson.FastEasyJsons;
 import com.alibaba.fastjson.util.IOUtils;
+import com.jn.easyjson.core.JSONBuilder;
+import com.jn.easyjson.core.JSONBuilderProvider;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Writer;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -71,6 +75,7 @@ public class JSONSerializer extends SerializeFilterable {
             writer.close();
         }
     }
+
 
     public static void write(SerializeWriter out, Object object) {
         JSONSerializer serializer = new JSONSerializer(out);
@@ -267,37 +272,16 @@ public class JSONSerializer extends SerializeFilterable {
     }
 
     public final void write(Object object) {
-        if (object == null) {
-            out.writeNull();
-            return;
-        }
-
-        Class<?> clazz = object.getClass();
-        ObjectSerializer writer = getObjectWriter(clazz);
-
-        try {
-            writer.write(this, object, null, null, 0);
-        } catch (IOException e) {
-            throw new JSONException(e.getMessage(), e);
-        }
+        String json = FastEasyJsons.getJsonBuilder(this.out.getFeatures()).serializeUseDateFormat(this.getDateFormat()).build().toJson(object);
+        this.out.write(json);
     }
 
     /**
      * @since 1.2.57
      */
     public final void writeAs(Object object, Class type) {
-        if (object == null) {
-            out.writeNull();
-            return;
-        }
-
-        ObjectSerializer writer = getObjectWriter(type);
-
-        try {
-            writer.write(this, object, null, null, 0);
-        } catch (IOException e) {
-            throw new JSONException(e.getMessage(), e);
-        }
+        String json = FastEasyJsons.getJsonBuilder(this.out.getFeatures()).serializeUseDateFormat(this.getDateFormat()).build().toJson(object, type);
+        this.out.write(json);
     }
 
     public final void writeWithFieldName(Object object, Object fieldName) {
@@ -305,98 +289,19 @@ public class JSONSerializer extends SerializeFilterable {
     }
 
     protected final void writeKeyValue(char seperator, String key, Object value) {
-        if (seperator != '\0') {
-            out.write(seperator);
-        }
-        out.writeFieldName(key);
         write(value);
     }
 
     public final void writeWithFieldName(Object object, Object fieldName, Type fieldType, int fieldFeatures) {
-        try {
-            if (object == null) {
-                out.writeNull();
-                return;
-            }
-
-            Class<?> clazz = object.getClass();
-
-            ObjectSerializer writer = getObjectWriter(clazz);
-
-            writer.write(this, object, fieldName, fieldType, fieldFeatures);
-        } catch (IOException e) {
-            throw new JSONException(e.getMessage(), e);
-        }
+        write(object);
     }
 
     public final void writeWithFormat(Object object, String format) {
-        if (object instanceof Date) {
-            if ("unixtime".equals(format)) {
-                long seconds = ((Date) object).getTime() / 1000L;
-                out.writeInt((int) seconds);
-                return;
-            }
-            DateFormat dateFormat = this.getDateFormat();
-            if (dateFormat == null) {
-                try {
-                    dateFormat = new SimpleDateFormat(format, locale);
-                } catch (IllegalArgumentException e) {
-                    String format2 = format.replaceAll("T", "'T'");
-                    dateFormat = new SimpleDateFormat(format2, locale);
-                }
-                dateFormat.setTimeZone(timeZone);
-            }
-            String text = dateFormat.format((Date) object);
-            out.writeString(text);
-            return;
-        }
-
-        if (object instanceof byte[]) {
-            byte[] bytes = (byte[]) object;
-            if ("gzip".equals(format) || "gzip,base64".equals(format)) {
-                GZIPOutputStream gzipOut = null;
-                try {
-                    ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
-                    if (bytes.length < 512) {
-                        gzipOut = new GZIPOutputStream(byteOut, bytes.length);
-                    } else {
-                        gzipOut = new GZIPOutputStream(byteOut);
-                    }
-                    gzipOut.write(bytes);
-                    gzipOut.finish();
-                    out.writeByteArray(byteOut.toByteArray());
-                } catch (IOException ex) {
-                    throw new JSONException("write gzipBytes error", ex);
-                } finally {
-                    IOUtils.close(gzipOut);
-                }
-            } else if ("hex".equals(format)) {
-                out.writeHex(bytes);
-            } else {
-                out.writeByteArray(bytes);
-            }
-            return;
-        }
-
-        if (object instanceof Collection) {
-            Collection collection = (Collection) object;
-            Iterator iterator = collection.iterator();
-            out.write('[');
-            for (int i = 0; i < collection.size(); i++) {
-                Object item = iterator.next();
-                if (i != 0) {
-                    out.write(',');
-                }
-                writeWithFormat(item, format);
-            }
-            out.write(']');
-            return;
-        }
         write(object);
     }
 
     public final void write(String text) {
-        StringCodec.instance.write(this, text);
+        write(text);
     }
 
     public ObjectSerializer getObjectWriter(Class<?> clazz) {

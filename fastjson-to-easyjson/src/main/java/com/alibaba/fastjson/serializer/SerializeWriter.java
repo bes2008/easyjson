@@ -139,6 +139,10 @@ public final class SerializeWriter extends Writer {
         computeFeatures();
     }
 
+    public int getFeatures(){
+        return this.features;
+    }
+
     public int getMaxBufSize() {
         return maxBufSize;
     }
