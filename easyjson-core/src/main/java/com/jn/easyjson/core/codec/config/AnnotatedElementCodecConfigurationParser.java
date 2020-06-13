@@ -14,19 +14,11 @@
 
 package com.jn.easyjson.core.codec.config;
 
-import com.jn.langx.IdGenerator;
+import com.jn.langx.configuration.ConfigurationParser;
 
-/**
- * @inheritDoc
- */
-public class PropertyIdGenerator implements IdGenerator<String> {
-    @Override
-    public String get(String propertyName) {
-        return propertyName;
-    }
+import java.lang.reflect.AnnotatedElement;
 
+public interface AnnotatedElementCodecConfigurationParser extends ConfigurationParser<AnnotatedElement, CodecConfiguration> {
     @Override
-    public String get() {
-        return null;
-    }
+    public CodecConfiguration parse(AnnotatedElement annotatedElement);
 }

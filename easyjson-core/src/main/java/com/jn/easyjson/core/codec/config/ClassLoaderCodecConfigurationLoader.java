@@ -15,10 +15,50 @@
 package com.jn.easyjson.core.codec.config;
 
 import com.jn.langx.configuration.ConfigurationLoader;
+import com.jn.langx.util.reflect.Reflects;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.lang.reflect.Field;
 
 public class ClassLoaderCodecConfigurationLoader<T extends CodecConfiguration> implements ConfigurationLoader<T> {
+    private static final Logger logger = LoggerFactory.getLogger(ClassLoaderCodecConfigurationLoader.class);
+
+    private BeanPropertyIdParser beanPropertyIdParser = new BeanPropertyIdParser();
+    private ClassLoader classLoader;
+    private AnnotatedElementCodecConfigurationParser parser;
+
+    public ClassLoaderCodecConfigurationLoader(AnnotatedElementCodecConfigurationParser parser) {
+        this.parser = parser;
+    }
+
+    public ClassLoader getClassLoader() {
+        return classLoader;
+    }
+
+    public void setClassLoader(ClassLoader classLoader) {
+        this.classLoader = classLoader;
+    }
+
     @Override
-    public T load(String id) {
+    public T load(String qualifiedId) {
+        BeanPropertyId id = beanPropertyIdParser.parse(qualifiedId);
+        Class clazz = null;
+        try {
+            clazz = classLoader.loadClass(id.getBeanClass());
+        } catch (ClassNotFoundException ex) {
+            logger.error("Can't find class: {}", id.getBeanClass());
+            return null;
+        }
+        if(clazz==null){
+            logger.error("Can't find class: {}", id.getBeanClass());
+            return null;
+        }
+        Field field = Reflects.getAnyField(clazz, id.getPropertyName());
+        if(field!=null){
+            parser.parse(field);
+        }
         return null;
     }
+
 }

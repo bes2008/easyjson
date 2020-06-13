@@ -12,21 +12,26 @@
  * limitations under the License.
  */
 
-package com.jn.easyjson.core.codec.config;
+package com.jn.easyjson.tests.fastjson;
 
-import com.jn.langx.IdGenerator;
+import com.alibaba.fastjson.JSON;
+import org.junit.Test;
 
-/**
- * @inheritDoc
- */
-public class PropertyIdGenerator implements IdGenerator<String> {
-    @Override
-    public String get(String propertyName) {
-        return propertyName;
+import java.util.Date;
+
+public class FastjsonAnnotationTests {
+    @Test
+    public void test(){
+        User user = new User();
+        user.setBirthday(new Date());
+        user.setId("zhangsan_id");
+        user.setEmail("zhangsan@163.com");
+        user.setDescription("hello, zhangsan");
+        user.setPhoneNumber("123123123");
+        user.setServerAuthType(1);
+        user.setUsername("zhangsan");
+
+        System.out.println(JSON.toJSONString(user));
     }
 
-    @Override
-    public String get() {
-        return null;
-    }
 }

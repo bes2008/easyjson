@@ -14,7 +14,10 @@
 
 package com.jn.easyjson.tests.fastjson;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 import java.io.Serializable;
+import java.util.Date;
 
 public class User implements Serializable{
     private static final long serialVersionUID = -1;
@@ -23,7 +26,10 @@ public class User implements Serializable{
     private String password;
     private String roleId;
     private String email;
+    @JSONField(serialize = false)
     private String phoneNumber;
+    @JSONField(format = "yyyy-MM-dd")
+    private Date birthday;
     private String description;
     private Integer serverAuthType;
 
@@ -93,5 +99,13 @@ public class User implements Serializable{
 
     public void setServerAuthType(Integer serverAuthType) {
         this.serverAuthType = serverAuthType;
+    }
+
+    public Date getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
     }
 }

@@ -14,43 +14,64 @@
 
 package com.jn.easyjson.core;
 
+import com.jn.easyjson.core.codec.config.CodecConfigurationRepository;
+import com.jn.easyjson.core.codec.config.PropertyCodecConfiguration;
 import com.jn.easyjson.core.exclusion.Exclusion;
 import com.jn.easyjson.core.exclusion.ExclusionConfiguration;
 import com.jn.easyjson.core.exclusion.IgnoreAnnotationExclusion;
 import com.jn.langx.util.function.Consumer2;
 
 import java.text.DateFormat;
+import java.util.Map;
 
+/**
+ * 代表单词 JSON 转换请求的 JSON 构建器。
+ * 也可以作为全局使用。
+ */
 public abstract class JSONBuilder implements Cloneable {
+    /***
+     * 这些配置项，都代表了单次请求的配置。
+     */
+
+    /**
+     * 配置排除策略
+     */
+    private final ExclusionConfiguration exclusionConfiguration;
     // null
     private boolean serializeNulls = false;
-
     // enum priority: ordinal() > toString() > field > name()
     private boolean serializeEnumUsingToString = false; // default using name()
     private boolean serializeEnumUsingValue = false;
     private String serializeEnumUsingField = null;
-
     // date priority: dateFormat > pattern > toString() > timestamp []
     private DateFormat dateFormat = null;
     private String serializeDateUsingPattern = null;// default : using timestamp
     private boolean serializeDateUsingToString = false;
-
     // number priority: longAsString > numberAsString > number
     private boolean serializeLongAsString = false;
     private boolean serializeNumberAsString = false;
-
     // boolean priority: on_off > 1_0 > true_false
     private boolean serializeBooleanUsingOnOff = false;
     private boolean serializeBooleanUsing1_0 = false;
     private boolean serializeNonFieldGetter = true;
-
     // print format
     private boolean prettyFormat = false;
-
-    private final ExclusionConfiguration exclusionConfiguration;
-
     private boolean isLenient;
 
+    /**
+     * 单次请求中，为 Bean的属性提供的配置项
+     */
+    private Map<String, PropertyCodecConfiguration> propertyCodecConfigurationMap;
+
+    /**
+     * 是否使用全局配置项
+     */
+    private boolean useGlobalConfiguration = false;
+
+    /**
+     * 全局配置项, 这里面其实是每个类每个字段的默认配置项
+     */
+    private static final CodecConfigurationRepository codecConfigurationRepository = new CodecConfigurationRepository();
 
     public JSONBuilder() {
         exclusionConfiguration = new ExclusionConfiguration();
@@ -58,6 +79,15 @@ public abstract class JSONBuilder implements Cloneable {
 
     public JSONBuilder(ExclusionConfiguration exclusionConfiguration) {
         this.exclusionConfiguration = exclusionConfiguration;
+    }
+
+    public static JSONBuilder clone(JSONBuilder builder) {
+        try {
+            Object jsonBuilder = builder.clone();
+            return (JSONBuilder) jsonBuilder;
+        } catch (CloneNotSupportedException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
     public boolean isLenient() {
@@ -242,11 +272,20 @@ public abstract class JSONBuilder implements Cloneable {
         return exclusionConfiguration;
     }
 
-    public JSONBuilder withTargetClass(Class clazz){
+    public JSONBuilder useGlobalConfiguration(boolean use){
+        this.useGlobalConfiguration = use;
         return this;
     }
 
-    public JSONBuilder withTargetClass(Class clazz, Consumer2<JSONBuilder, Class> consumer){
+    public boolean isUseGlobalConfiguration(){
+        return this.useGlobalConfiguration;
+    }
+
+    public JSONBuilder withTargetClass(Class clazz) {
+        return this;
+    }
+
+    public JSONBuilder withTargetClass(Class clazz, Consumer2<JSONBuilder, Class> consumer) {
         consumer.accept(this, clazz);
         return this;
     }
@@ -267,14 +306,5 @@ public abstract class JSONBuilder implements Cloneable {
         builder.serializeDateUsingToString(this.serializeDateUsingToString);
         builder.serializeBooleanUsingOnOff(this.serializeBooleanUsingOnOff);
         builder.serializeBooleanUsing1_0(this.serializeBooleanUsing1_0);
-    }
-
-    public static JSONBuilder clone(JSONBuilder builder) {
-        try {
-            Object jsonBuilder = builder.clone();
-            return (JSONBuilder) jsonBuilder;
-        } catch (CloneNotSupportedException ex) {
-            throw new RuntimeException(ex);
-        }
     }
 }

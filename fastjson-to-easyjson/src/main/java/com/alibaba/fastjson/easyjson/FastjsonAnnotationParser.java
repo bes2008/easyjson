@@ -12,21 +12,9 @@
  * limitations under the License.
  */
 
-package com.jn.easyjson.core.codec.config;
+package com.alibaba.fastjson.easyjson;
 
-import com.jn.langx.IdGenerator;
+import com.jn.langx.configuration.ConfigurationParser;
 
-/**
- * @inheritDoc
- */
-public class PropertyIdGenerator implements IdGenerator<String> {
-    @Override
-    public String get(String propertyName) {
-        return propertyName;
-    }
-
-    @Override
-    public String get() {
-        return null;
-    }
+public class FastjsonAnnotationParser implements ConfigurationParser<> {
 }

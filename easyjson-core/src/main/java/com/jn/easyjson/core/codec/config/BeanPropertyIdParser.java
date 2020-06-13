@@ -14,19 +14,19 @@
 
 package com.jn.easyjson.core.codec.config;
 
-import com.jn.langx.IdGenerator;
+import com.jn.langx.Parser;
+import com.jn.langx.util.Strings;
 
-/**
- * @inheritDoc
- */
-public class PropertyIdGenerator implements IdGenerator<String> {
+public class BeanPropertyIdParser implements Parser<String, BeanPropertyId> {
     @Override
-    public String get(String propertyName) {
-        return propertyName;
-    }
-
-    @Override
-    public String get() {
-        return null;
+    public BeanPropertyId parse(String qualifiedId) {
+        String[] segments = Strings.split(qualifiedId, "#");
+        if (segments.length != 2) {
+            return null;
+        }
+        BeanPropertyId propertyId = new BeanPropertyId();
+        propertyId.setBeanClass(segments[0]);
+        propertyId.setPropertyName(segments[1]);
+        return propertyId;
     }
 }
