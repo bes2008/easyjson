@@ -39,7 +39,7 @@
         </dependency>
         <dependency>
             <groupId>com.github.fangjinuo.easyjson</groupId>
-            <artifactId>easyjson-gson</artifactId>
+            <artifactId>easyjson-jackson</artifactId>
             <scope>test</scope>
         </dependency>
 
