@@ -16,6 +16,7 @@
 package com.alibaba.fastjson;
 
 
+import com.alibaba.fastjson.easyjson.FastEasyJsons;
 import com.alibaba.fastjson.parser.DefaultJSONParser;
 import com.alibaba.fastjson.parser.Feature;
 import com.alibaba.fastjson.parser.ParserConfig;
@@ -163,29 +164,7 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
         if (text == null) {
             return null;
         }
-        return JsonMapper.fromJsonTreeNode(getJsonBuilder(DEFAULT_GENERATE_FEATURE).build().fromJson(text));
-    }
-
-    private static JSONBuilder getJsonBuilder(int features, SerializerFeature... features2) {
-        JSONBuilder jsonBuilder = JSONBuilderProvider.create();
-        if (features2 != null) {
-            for (SerializerFeature feature : features2) {
-                features |= feature.getMask();
-            }
-        }
-        boolean serializeNulls = (SerializerFeature.WriteMapNullValue.getMask() & features) != 0;
-        jsonBuilder.serializeNulls(serializeNulls);
-        boolean serializeEnumUsingToString = (SerializerFeature.WriteEnumUsingToString.getMask() & features) != 0;
-        jsonBuilder.serializeEnumUsingToString(serializeEnumUsingToString);
-        boolean serializeEnumUsingName = (SerializerFeature.WriteEnumUsingName.getMask() & features) != 0;
-        jsonBuilder.serializeEnumUsingValue(!serializeEnumUsingName);
-        boolean skipTransientField = (SerializerFeature.SkipTransientField.getMask() & features) != 0;
-        if (skipTransientField) {
-            jsonBuilder.excludeFieldsWithAppendModifiers(Modifier.TRANSIENT);
-        }
-        boolean prettyFormat = (SerializerFeature.PrettyFormat.getMask() & features) != 0;
-        jsonBuilder.prettyFormat(prettyFormat);
-        return jsonBuilder;
+        return JsonMapper.fromJsonTreeNode(FastEasyJsons.getJsonBuilder(DEFAULT_GENERATE_FEATURE).build().fromJson(text));
     }
 
     public static Object parse(String text, int features) {
@@ -339,7 +318,7 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
         if (input == null) {
             return null;
         }
-        return getJsonBuilder(JSON.DEFAULT_GENERATE_FEATURE).build().fromJson(input, clazz);
+        return FastEasyJsons.getJsonBuilder(JSON.DEFAULT_GENERATE_FEATURE).build().fromJson(input, clazz);
 
     }
 
@@ -505,7 +484,7 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
             return null;
         }
 
-        JsonTreeNode node = getJsonBuilder(DEFAULT_GENERATE_FEATURE).build().fromJson(text);
+        JsonTreeNode node = FastEasyJsons.getJsonBuilder(DEFAULT_GENERATE_FEATURE).build().fromJson(text);
         JsonArrayNode arrayNode = null;
         if (node.isJsonArrayNode()) {
             arrayNode = node.getAsJsonArrayNode();
@@ -520,7 +499,7 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
         if (text == null) {
             return null;
         }
-        return getJsonBuilder(JSON.DEFAULT_GENERATE_FEATURE).build().fromJson(text, Types.getListParameterizedType(clazz));
+        return FastEasyJsons.getJsonBuilder(JSON.DEFAULT_GENERATE_FEATURE).build().fromJson(text, Types.getListParameterizedType(clazz));
     }
 
     public static List<Object> parseArray(String text, Type[] types) {
@@ -553,7 +532,7 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
      * @since 1.2.11
      */
     public static String toJSONString(Object object, int defaultFeatures, SerializerFeature... features) {
-        return getJsonBuilder(defaultFeatures, features).build().toJson(object);
+        return FastEasyJsons.getJsonBuilder(defaultFeatures, features).build().toJson(object);
     }
 
     /**
@@ -566,7 +545,7 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
 
     public static String toJSONStringWithDateFormat(Object object, String dateFormat, int defaultFeatures,
                                                     SerializerFeature... features) {
-        return getJsonBuilder(defaultFeatures, features).serializeDateUsingPattern(dateFormat).build().toJson(object);
+        return FastEasyJsons.getJsonBuilder(defaultFeatures, features).serializeDateUsingPattern(dateFormat).build().toJson(object);
     }
 
     public static String toJSONString(Object object, SerializeFilter filter, SerializerFeature... features) {
@@ -901,12 +880,12 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
     }
 
     public static boolean isValidObject(String str) {
-        JsonTreeNode node = getJsonBuilder(DEFAULT_GENERATE_FEATURE).build().fromJson(str);
+        JsonTreeNode node = FastEasyJsons.getJsonBuilder(DEFAULT_GENERATE_FEATURE).build().fromJson(str);
         return node != null && node.isJsonObjectNode();
     }
 
     public static boolean isValidArray(String str) {
-        JsonTreeNode node = getJsonBuilder(DEFAULT_GENERATE_FEATURE).build().fromJson(str);
+        JsonTreeNode node = FastEasyJsons.getJsonBuilder(DEFAULT_GENERATE_FEATURE).build().fromJson(str);
         return node != null && node.isJsonArrayNode();
     }
 
