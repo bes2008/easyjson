@@ -2,9 +2,13 @@
 *.iml
 target/
 .settings/
+
 # eclipse
 .project
 .classpath
+
+# testng
+test-output/
 
 # Compiled class file
 *.class
