@@ -17,12 +17,15 @@ package com.jn.easyjson.core.codec.dialect;
 import com.jn.langx.util.reflect.Reflects;
 
 import java.lang.ref.WeakReference;
+import java.util.List;
 
 /**
  * id 是类全名
  */
 public class ClassCodecConfiguration extends CodecConfiguration {
     private WeakReference clazzRef;
+
+    private List<String> excludePropertyNames;
 
     public Class getClazz() {
         return clazzRef.getClass();
@@ -31,5 +34,17 @@ public class ClassCodecConfiguration extends CodecConfiguration {
     public void setClazz(Class clazz) {
         this.clazzRef = new WeakReference(clazz);
         this.setId(Reflects.getFQNClassName(clazz));
+    }
+
+    public void addExcludePropertyName(String propertyName){
+        excludePropertyNames.add(propertyName);
+    }
+
+    public List<String> getExcludePropertyNames() {
+        return excludePropertyNames;
+    }
+
+    public void setExcludePropertyNames(List<String> excludePropertyNames) {
+        this.excludePropertyNames = excludePropertyNames;
     }
 }
