@@ -14,7 +14,6 @@ public class UserEntity implements Serializable {
     private String name;
     private Gender gender;
     private String password;
-    private String email;
     private double weight;
     private int height;
     private Date birthday;
@@ -51,14 +50,6 @@ public class UserEntity implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public double getWeight() {
