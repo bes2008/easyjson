@@ -29,17 +29,18 @@ public class CompareTools {
     private static void assertDeepEquals(String owner, Object actual, Object expected) {
         String desc = (owner == null ? "" : owner);
         // 都为空
-        if (actual == null && expected == null) {
-            System.out.println("actual   " + desc + " = " + actual);
+        if (expected == null) {
             System.out.println("expected " + desc + " = " + expected);
+            System.out.println("actual   " + desc + " = " + actual);
             return;
         }
+        Assert.assertEquals(actual != null, expected != null, desc + " is not null");
         // 先比对class是否相等
-        Assert.assertEquals(actual.getClass(), expected.getClass(), "class");
+        Assert.assertEquals(actual.getClass(), expected.getClass(), desc + " class");
         Class<?> clazz = actual.getClass();
         if (isPrimitive(clazz)) { // 基本类型
-            System.out.println("actual   " + desc + " = " + actual);
             System.out.println("expected " + desc + " = " + expected);
+            System.out.println("actual   " + desc + " = " + actual);
             Assert.assertEquals(actual, expected, desc + " value");
         } else if (Map.class.isAssignableFrom(clazz)) { // MAP类
             Map<?, ?> aMap = (Map<?, ?>) actual;
@@ -76,8 +77,8 @@ public class CompareTools {
     private static void assertListValueEquals(String owner, List<?> aList, List<?> eList) {
         // 空集合
         if (aList.isEmpty() && eList.isEmpty()) {
-            System.out.println("actual   " + owner + " = " + "[]");
             System.out.println("expected " + owner + " = " + "[]");
+            System.out.println("actual   " + owner + " = " + "[]");
             return;
         }
         Assert.assertEquals(aList.size(), eList.size(), owner + " size");
@@ -92,8 +93,8 @@ public class CompareTools {
     private static void assertMapValueEquals(String owner, Map<?, ?> aMap, Map<?, ?> eMap) {
         // 空Map
         if (aMap.isEmpty() && eMap.isEmpty()) {
-            System.out.println("actual   " + owner + " = " + "[]");
-            System.out.println("expected " + owner + " = " + "[]");
+            System.out.println("expected " + owner + " = " + "{}");
+            System.out.println("actual   " + owner + " = " + "{}");
             return;
         }
         Assert.assertEquals(aMap.size(), eMap.size(), owner + " size");
@@ -135,8 +136,8 @@ public class CompareTools {
             String desc = owner + "." + field.getName();
             // 如果发生异常了, 异常必须相等, 否则字段值必须相等
             if (aException != null || eException != null) {
-                System.out.println("actual   " + desc + " = " + aException.toString());
                 System.out.println("expected " + desc + " = " + eException.toString());
+                System.out.println("actual   " + desc + " = " + aException.toString());
                 Assert.assertEquals(aException.getClass(), eException.getClass(), "Get " + desc + " exception");
                 Assert.assertEquals(aException.getMessage(), eException.getMessage(), "Get " + desc + " exception");
                 continue;
