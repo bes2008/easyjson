@@ -21,7 +21,7 @@ public class EasyJsonBaseTest {
     
     private static JSON json = JSONBuilderProvider.simplest();
 
-    protected static UserEntity getUserEntityObject() {
+    protected UserEntity getUserEntityObject() {
         UserEntity user = new UserEntity();
         user.setId("1001");
         user.setName("Test1");
@@ -41,7 +41,7 @@ public class EasyJsonBaseTest {
     }
 
     @Test(priority = 10001)
-    public void testUserEntity10001() {
+    public void testSerialize10001() {
         UserEntity user = getUserEntityObject();
         String jsonString = json.toJson(user);
         System.out.println(jsonString);
@@ -49,7 +49,7 @@ public class EasyJsonBaseTest {
     }
 
     @Test(priority = 10002)
-    public void testUserEntity10002() {
+    public void testDeserialize10002() {
         String jsonString = getUserEntityString();
         UserEntity actual = json.fromJson(jsonString, UserEntity.class);
         UserEntity expected = getUserEntityObject();
