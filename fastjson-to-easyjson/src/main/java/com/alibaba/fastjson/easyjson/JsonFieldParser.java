@@ -21,12 +21,14 @@ import com.jn.easyjson.core.codec.dialect.BeanPropertyAnnotatedCodecConfiguratio
 import com.jn.easyjson.core.codec.dialect.BeanPropertyIdGenerator;
 import com.jn.easyjson.core.codec.dialect.PropertyCodecConfiguration;
 import com.jn.easyjson.core.util.Members;
+import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.reflect.Reflects;
 
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
+import java.util.List;
 
 public class JsonFieldParser implements BeanPropertyAnnotatedCodecConfigurationParser {
     private BeanPropertyIdGenerator idGenerator = new BeanPropertyIdGenerator();
@@ -54,12 +56,23 @@ public class JsonFieldParser implements BeanPropertyAnnotatedCodecConfigurationP
 
             configuration.setId(idGenerator.withBeanClass(beanClass).withPropertyName(propertyName).get());
 
+            configuration.setAlias(jsonField.name());
+            configuration.setSerialize(jsonField.serialize());
+            configuration.setDeserialize(jsonField.deserialize());
+            configuration.setDatePattern(jsonField.format());
+
             // serializeFeatures
-            SerializerFeature[] serializeFeatures = jsonField.serialzeFeatures();
+            List<SerializerFeature> serializeFeatures = Collects.asList(jsonField.serialzeFeatures());
             configuration.set("serializeFeatures", serializeFeatures);
+            if (serializeFeatures.contains(SerializerFeature.WriteEnumUsingToString)) {
+                configuration.setEnumUsingToString(true);
+            }
+            if (serializeFeatures.contains(SerializerFeature.WriteEnumUsingName)) {
+                configuration.setEnumUsingValue(false);
+            }
 
             // deserializeFeatures
-            Feature[] parseFeatures = jsonField.parseFeatures();
+            List<Feature> parseFeatures = Collects.asList(jsonField.parseFeatures());
             configuration.set("deserializeFeatures", parseFeatures);
 
             return configuration;
