@@ -15,10 +15,12 @@
 package com.jn.easyjson.core.codec.dialect;
 
 import com.jn.langx.configuration.Configuration;
+import com.jn.langx.util.collection.MapAccessor;
 
 import java.text.DateFormat;
+import java.util.HashMap;
 
-public class CodecConfiguration implements Configuration {
+public class CodecConfiguration extends MapAccessor implements Configuration {
 
     private String id;
 
@@ -48,12 +50,16 @@ public class CodecConfiguration implements Configuration {
      */
     private boolean enumUsingName = true;
     // 编号
-    private boolean enumUsingValue=false;
-    private boolean enumUsingToString=false;
+    private boolean enumUsingValue = false;
+    private boolean enumUsingToString = false;
 
 
-    private boolean booleanUsing01=false;
-    private boolean booleanUsingONOFF=false;
+    private boolean booleanUsing01 = false;
+    private boolean booleanUsingONOFF = false;
+
+    public CodecConfiguration(){
+        setTarget(new HashMap<String, Object>());
+    }
 
     @Override
     public String getId() {
