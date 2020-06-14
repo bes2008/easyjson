@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.jn.easyjson.core.codec.config;
+package com.jn.easyjson.core.codec.dialect;
 
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.configuration.ConfigurationLoader;

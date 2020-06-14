@@ -12,11 +12,10 @@
  * limitations under the License.
  */
 
-package com.jn.easyjson.core.codec.config;
+package com.jn.easyjson.core.codec.dialect;
 
-import java.lang.reflect.AnnotatedElement;
+import com.jn.langx.configuration.AbstractConfigurationRepository;
+import com.jn.langx.configuration.ConfigurationWriter;
 
-public interface BeanClassAnnotatedCodecConfigurationParser extends AnnotatedElementCodecConfigurationParser<ClassCodecConfiguration> {
-    @Override
-    ClassCodecConfiguration parse(AnnotatedElement annotatedElement);
+public class ClassLoaderCodecConfigurationRepository <T extends CodecConfiguration> extends AbstractConfigurationRepository<T, ClassLoaderCodecConfigurationLoader<T>, ConfigurationWriter<T>> {
 }

@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.jn.easyjson.core.codec.config;
+package com.jn.easyjson.core.codec.dialect;
 
 import java.lang.ref.WeakReference;
 

@@ -12,10 +12,21 @@
  * limitations under the License.
  */
 
-package com.jn.easyjson.core.codec.config;
+package com.jn.easyjson.core.codec.dialect;
 
-import com.jn.langx.configuration.AbstractConfigurationRepository;
-import com.jn.langx.configuration.ConfigurationWriter;
+import com.jn.langx.IdGenerator;
 
-public class ClassLoaderCodecConfigurationRepository <T extends CodecConfiguration> extends AbstractConfigurationRepository<T, ClassLoaderCodecConfigurationLoader<T>, ConfigurationWriter<T>> {
+/**
+ * @inheritDoc
+ */
+public class PropertyIdGenerator implements IdGenerator<String> {
+    @Override
+    public String get(String propertyName) {
+        return propertyName;
+    }
+
+    @Override
+    public String get() {
+        return null;
+    }
 }

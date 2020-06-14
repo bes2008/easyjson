@@ -14,8 +14,8 @@
 
 package com.jn.easyjson.core;
 
-import com.jn.easyjson.core.codec.config.CodecConfigurationRepository;
-import com.jn.easyjson.core.codec.config.PropertyCodecConfiguration;
+import com.jn.easyjson.core.codec.dialect.CodecConfigurationRepository;
+import com.jn.easyjson.core.codec.dialect.PropertyCodecConfiguration;
 import com.jn.easyjson.core.exclusion.Exclusion;
 import com.jn.easyjson.core.exclusion.ExclusionConfiguration;
 import com.jn.easyjson.core.exclusion.IgnoreAnnotationExclusion;
