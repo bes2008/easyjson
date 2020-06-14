@@ -28,5 +28,11 @@
 			<artifactId>easyjson-jackson</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+        <dependency>
+            <groupId>com.github.fangjinuo.easyjson</groupId>
+            <artifactId>easyjson-test-base</artifactId>
+			<version>${project.version}</version>
+        </dependency>
     </dependencies>
 </project>
