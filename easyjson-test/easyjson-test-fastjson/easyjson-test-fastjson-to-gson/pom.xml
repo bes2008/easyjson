@@ -31,7 +31,7 @@
 
         <dependency>
             <groupId>com.github.fangjinuo.easyjson</groupId>
-            <artifactId>easyjson-test-base</artifactId>
+            <artifactId>easyjson-test-fastjson-base</artifactId>
 			<version>${project.version}</version>
         </dependency>
     </dependencies>
