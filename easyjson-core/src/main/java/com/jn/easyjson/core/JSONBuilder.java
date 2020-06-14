@@ -14,8 +14,8 @@
 
 package com.jn.easyjson.core;
 
-import com.jn.easyjson.core.codec.dialect.CodecConfigurationRepository;
 import com.jn.easyjson.core.codec.dialect.CodecConfigurationRepositoryService;
+import com.jn.easyjson.core.codec.dialect.DialectIdentify;
 import com.jn.easyjson.core.codec.dialect.PropertyCodecConfiguration;
 import com.jn.easyjson.core.exclusion.Exclusion;
 import com.jn.easyjson.core.exclusion.ExclusionConfiguration;
@@ -68,6 +68,8 @@ public abstract class JSONBuilder implements Cloneable {
      * 是否使用全局配置项
      */
     private boolean useGlobalConfiguration = false;
+
+    private DialectIdentify dialectId;
 
     /**
      * 全局配置项, 这里面其实是每个类每个字段的默认配置项
@@ -273,13 +275,22 @@ public abstract class JSONBuilder implements Cloneable {
         return exclusionConfiguration;
     }
 
-    public JSONBuilder useGlobalConfiguration(boolean use){
+    public JSONBuilder useGlobalConfiguration(boolean use) {
         this.useGlobalConfiguration = use;
         return this;
     }
 
-    public boolean isUseGlobalConfiguration(){
+    public boolean isUseGlobalConfiguration() {
         return this.useGlobalConfiguration;
+    }
+
+    public JSONBuilder dialectIdentify(DialectIdentify dialectId){
+        this.dialectId = dialectId;
+        return this;
+    }
+
+    public DialectIdentify dialectIdentify(){
+        return this.dialectId ;
     }
 
     public JSONBuilder withTargetClass(Class clazz) {
@@ -307,5 +318,6 @@ public abstract class JSONBuilder implements Cloneable {
         builder.serializeDateUsingToString(this.serializeDateUsingToString);
         builder.serializeBooleanUsingOnOff(this.serializeBooleanUsingOnOff);
         builder.serializeBooleanUsing1_0(this.serializeBooleanUsing1_0);
+        builder.useGlobalConfiguration(this.useGlobalConfiguration);
     }
 }

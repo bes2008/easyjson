@@ -34,16 +34,16 @@ import java.lang.reflect.Method;
  */
 public abstract class CodecConfigurationRepository<T extends CodecConfiguration> extends AbstractConfigurationRepository<T, ClassLoaderCodecConfigurationLoader<T>, ConfigurationWriter<T>> {
     private ConcurrentReferenceHashMap<ClassLoader, ClassLoaderCodecConfigurationRepository<T>> repositories = new ConcurrentReferenceHashMap<ClassLoader, ClassLoaderCodecConfigurationRepository<T>>(1000, 0.95f, Runtime.getRuntime().availableProcessors(), ReferenceType.WEAK, ReferenceType.WEAK);
-    private JsonLibraryIdentify jsonLibraryIdentify;
+    private DialectIdentify dialectIdentify;
     private BeanClassAnnotatedCodecConfigurationParser defaultBeanClassParser;
     private BeanPropertyAnnotatedCodecConfigurationParser defaultBeanPropertyParser;
 
-    public JsonLibraryIdentify getJsonLibraryIdentify() {
-        return jsonLibraryIdentify;
+    public DialectIdentify getDialectIdentify() {
+        return dialectIdentify;
     }
 
-    public void setJsonLibraryIdentify(JsonLibraryIdentify jsonLibraryIdentify) {
-        this.jsonLibraryIdentify = jsonLibraryIdentify;
+    public void setDialectIdentify(DialectIdentify dialectIdentify) {
+        this.dialectIdentify = dialectIdentify;
     }
 
     @Override

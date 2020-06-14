@@ -17,13 +17,13 @@ package com.jn.easyjson.core.codec.dialect;
 import com.jn.langx.util.Objects;
 import com.jn.langx.util.hash.HashCodeBuilder;
 
-public final class JsonLibraryIdentify {
+public final class DialectIdentify {
     private String id;
     private String libUrl;
 
-    public JsonLibraryIdentify(){}
+    public DialectIdentify(){}
 
-    public JsonLibraryIdentify(String id, String libUrl){
+    public DialectIdentify(String id, String libUrl){
         setId(id);
         setLibUrl(libUrl);
     }
@@ -47,9 +47,9 @@ public final class JsonLibraryIdentify {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof JsonLibraryIdentify)) return false;
+        if (!(o instanceof DialectIdentify)) return false;
 
-        JsonLibraryIdentify that = (JsonLibraryIdentify) o;
+        DialectIdentify that = (DialectIdentify) o;
 
         if (!Objects.equals(id, that.id)) {
             return false;

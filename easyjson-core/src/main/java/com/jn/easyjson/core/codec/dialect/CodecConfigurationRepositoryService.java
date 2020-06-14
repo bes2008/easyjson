@@ -26,7 +26,7 @@ import java.util.ServiceLoader;
 
 @Singleton
 public class CodecConfigurationRepositoryService implements Initializable {
-    private static final Map<JsonLibraryIdentify, CodecConfigurationRepository> repositoryMap = new HashMap<JsonLibraryIdentify, CodecConfigurationRepository>();
+    private static final Map<DialectIdentify, CodecConfigurationRepository> repositoryMap = new HashMap<DialectIdentify, CodecConfigurationRepository>();
     private static final CodecConfigurationRepositoryService INSTANCE = new CodecConfigurationRepositoryService();
 
     private volatile boolean inited = false;
@@ -53,6 +53,6 @@ public class CodecConfigurationRepositoryService implements Initializable {
     }
 
     public void register(CodecConfigurationRepository codecConfigurationRepository){
-        repositoryMap.put(codecConfigurationRepository.getJsonLibraryIdentify(), codecConfigurationRepository);
+        repositoryMap.put(codecConfigurationRepository.getDialectIdentify(), codecConfigurationRepository);
     }
 }

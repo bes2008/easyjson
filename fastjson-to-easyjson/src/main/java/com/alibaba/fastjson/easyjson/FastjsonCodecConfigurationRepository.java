@@ -19,6 +19,6 @@ import com.jn.easyjson.core.codec.dialect.CodecConfigurationRepository;
 
 public class FastjsonCodecConfigurationRepository extends CodecConfigurationRepository {
     public FastjsonCodecConfigurationRepository() {
-        setJsonLibraryIdentify(FastEasyJsons.FASTJSON);
+        setDialectIdentify(FastEasyJsons.FASTJSON);
     }
 }

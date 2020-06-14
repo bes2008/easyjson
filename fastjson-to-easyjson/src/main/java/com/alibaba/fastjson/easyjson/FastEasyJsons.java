@@ -19,7 +19,7 @@ import com.alibaba.fastjson.annotation.JSONType;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.jn.easyjson.core.JSONBuilder;
 import com.jn.easyjson.core.JSONBuilderProvider;
-import com.jn.easyjson.core.codec.dialect.JsonLibraryIdentify;
+import com.jn.easyjson.core.codec.dialect.DialectIdentify;
 import com.jn.easyjson.core.exclusion.FieldNamesExclusion;
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.util.Emptys;
@@ -34,10 +34,10 @@ import java.util.List;
 import java.util.Map;
 
 public class FastEasyJsons {
-    public static final JsonLibraryIdentify FASTJSON;
+    public static final DialectIdentify FASTJSON;
 
     static {
-        FASTJSON = new JsonLibraryIdentify("fastjson", Reflects.getCodeLocation(FastEasyJsons.class).toString());
+        FASTJSON = new DialectIdentify("fastjson", Reflects.getCodeLocation(FastEasyJsons.class).toString());
     }
 
     private FastEasyJsons() {
