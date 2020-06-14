@@ -5,8 +5,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import org.testng.Assert;
 import com.jn.langx.util.reflect.Reflects;
 
@@ -18,7 +21,7 @@ import com.jn.langx.util.reflect.Reflects;
  */
 public class CompareTools {
 
-    /** 比对两个对象的字段值是否一致 **/
+    /** 比对两个对象是否深度一致 **/
     public static void assertDeepEquals(Object actual, Object expected) {
         assertDeepEquals(null, actual, expected);
     }
@@ -38,6 +41,10 @@ public class CompareTools {
             System.out.println("actual   " + desc + " = " + actual);
             System.out.println("expected " + desc + " = " + expected);
             Assert.assertEquals(actual, expected, desc + " value");
+        } else if (Map.class.isAssignableFrom(clazz)) { // MAP类
+            Map<?, ?> aMap = (Map<?, ?>) actual;
+            Map<?, ?> eMap = (Map<?, ?>) expected;
+            assertMapValueEquals(owner == null ? clazz.getSimpleName() : owner, aMap, eMap);
         } else if (clazz.isArray()) { // 数组类
             List<Object> aList = Arrays.asList((Object[]) actual);
             List<Object> eList = Arrays.asList((Object[]) expected);
@@ -48,11 +55,22 @@ public class CompareTools {
             List<Object> eList = new ArrayList<>();
             eList.addAll((Collection<?>) expected);
             assertListValueEquals(owner == null ? clazz.getSimpleName() : owner, aList, eList);
-        } else if (Map.class.isAssignableFrom(clazz)) { // MAP类
-            // TODO
+        } else if (Iterable.class.isAssignableFrom(clazz)) { // 迭代类
+            List<Object> aList = iterableToList((Iterable<?>) actual);
+            List<Object> eList = iterableToList((Iterable<?>) expected);
+            assertListValueEquals(owner == null ? clazz.getSimpleName() : owner, aList, eList);
         } else { // 其他类型, 比较字段值
             assertFieldValueEquals(owner == null ? clazz.getSimpleName() : owner, actual, expected);
         }
+    }
+
+    private static List<Object> iterableToList(Iterable<?> iterable) {
+        List<Object> list = new ArrayList<>();
+        Iterator<?> iterator = iterable.iterator();
+        while (iterator.hasNext()) {
+            list.add(iterator.next());
+        }
+        return list;
     }
 
     private static void assertListValueEquals(String owner, List<?> aList, List<?> eList) {
@@ -70,7 +88,28 @@ public class CompareTools {
             assertDeepEquals(owner + '[' + i + ']', aItem, eItem);
         }
     }
-    
+
+    private static void assertMapValueEquals(String owner, Map<?, ?> aMap, Map<?, ?> eMap) {
+        // 空Map
+        if (aMap.isEmpty() && eMap.isEmpty()) {
+            System.out.println("actual   " + owner + " = " + "[]");
+            System.out.println("expected " + owner + " = " + "[]");
+            return;
+        }
+        Assert.assertEquals(aMap.size(), eMap.size(), owner + " size");
+
+        Set<Object> keys = new LinkedHashSet<>();
+        keys.addAll(aMap.keySet());
+        keys.addAll(eMap.keySet());
+        for (Object key : keys) {
+            String desc = owner + '.' + key;
+            Assert.assertEquals(aMap.containsKey(key), eMap.containsKey(key), desc + " contains");
+            Object aValue = aMap.get(key);
+            Object eValue = eMap.get(key);
+            assertDeepEquals(desc, aValue, eValue);
+        }
+    }
+
     private static void assertFieldValueEquals(String owner, Object actual, Object expected) {
         // 遍历所有字段
         Class<?> clazz = actual.getClass();
