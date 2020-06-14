@@ -43,7 +43,7 @@ public class PropertyCodecConfiguration extends CodecConfiguration{
     /**
      * 当 isClassProperty 时, classRef 才有意义
      */
-    private WeakReference clazzRef;
+    private WeakReference<Class> clazzRef;
 
     public String getName() {
         return name;
@@ -69,11 +69,11 @@ public class PropertyCodecConfiguration extends CodecConfiguration{
         isClassProperty = classProperty;
     }
 
-    public WeakReference getClazzRef() {
-        return clazzRef;
+    public Class getClazz() {
+        return clazzRef==null? null: clazzRef.get();
     }
 
-    public void setClazzRef(WeakReference clazzRef) {
-        this.clazzRef = clazzRef;
+    public void setClazz(Class clazz) {
+        this.clazzRef = new WeakReference<Class>(clazz);
     }
 }

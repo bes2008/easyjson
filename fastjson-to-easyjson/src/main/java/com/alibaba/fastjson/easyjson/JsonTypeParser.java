@@ -14,8 +14,12 @@
 
 package com.alibaba.fastjson.easyjson;
 
+import com.alibaba.fastjson.annotation.JSONType;
+import com.alibaba.fastjson.parser.Feature;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.jn.easyjson.core.codec.dialect.BeanClassAnnotatedCodecConfigurationParser;
 import com.jn.easyjson.core.codec.dialect.ClassCodecConfiguration;
+import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.reflect.Reflects;
 
 import java.lang.reflect.AnnotatedElement;
@@ -23,11 +27,29 @@ import java.lang.reflect.AnnotatedElement;
 public class JsonTypeParser implements BeanClassAnnotatedCodecConfigurationParser {
     @Override
     public ClassCodecConfiguration parse(AnnotatedElement annotatedElement) {
-        if(annotatedElement instanceof Class){
-            Class beanClass = (Class)annotatedElement;
+        if (annotatedElement instanceof Class) {
+            Class beanClass = (Class) annotatedElement;
+
+            JSONType jsonType = Reflects.getAnnotation(beanClass, JSONType.class);
+            if (jsonType == null) {
+                return null;
+            }
+
             ClassCodecConfiguration configuration = new ClassCodecConfiguration();
             configuration.setClazz(beanClass);
             configuration.setId(Reflects.getFQNClassName(beanClass));
+
+            // ignores
+            String[] ignores = jsonType.ignores();
+            configuration.setExcludePropertyNames(Collects.asList(ignores));
+
+            // serializeFeatures
+            SerializerFeature[] serializeFeatures = jsonType.serialzeFeatures();
+            configuration.set("serializeFeatures", serializeFeatures);
+
+            // deserializeFeatures
+            Feature[] parseFeatures = jsonType.parseFeatures();
+            configuration.set("deserializeFeatures", parseFeatures);
 
             return configuration;
         }

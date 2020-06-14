@@ -14,5 +14,49 @@
 
 package com.alibaba.fastjson.easyjson;
 
-public class JsonFieldParser {
+import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson.parser.Feature;
+import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.jn.easyjson.core.codec.dialect.BeanPropertyAnnotatedCodecConfigurationParser;
+import com.jn.easyjson.core.codec.dialect.BeanPropertyIdGenerator;
+import com.jn.easyjson.core.codec.dialect.PropertyCodecConfiguration;
+import com.jn.langx.util.reflect.Reflects;
+
+import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Field;
+import java.lang.reflect.Member;
+import java.lang.reflect.Method;
+
+public class JsonFieldParser implements BeanPropertyAnnotatedCodecConfigurationParser {
+    private BeanPropertyIdGenerator idGenerator = new BeanPropertyIdGenerator();
+    @Override
+    public PropertyCodecConfiguration parse(AnnotatedElement annotatedElement) {
+        if (annotatedElement instanceof Field || annotatedElement instanceof Method) {
+            Member member = (Member) annotatedElement;
+            Class beanClass = member.getDeclaringClass();
+
+            JSONField jsonField = Reflects.getAnnotation(beanClass, JSONField.class);
+            if (jsonField == null) {
+                return null;
+            }
+
+            PropertyCodecConfiguration configuration = new PropertyCodecConfiguration();
+            configuration.setClazz(beanClass);
+
+            String propertyName = null;
+
+            configuration.setId(idGenerator.withBeanClass(beanClass).withPropertyName(propertyName).get());
+
+            // serializeFeatures
+            SerializerFeature[] serializeFeatures = jsonField.serialzeFeatures();
+            configuration.set("serializeFeatures", serializeFeatures);
+
+            // deserializeFeatures
+            Feature[] parseFeatures = jsonField.parseFeatures();
+            configuration.set("deserializeFeatures", parseFeatures);
+
+            return configuration;
+        }
+        return null;
+    }
 }
