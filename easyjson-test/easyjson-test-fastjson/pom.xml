@@ -14,6 +14,7 @@
     <packaging>pom</packaging>
 	
     <modules>
+        <module>easyjson-test-fastjson-base</module>
         <module>easyjson-test-fastjson-to-gson</module>
         <module>easyjson-test-fastjson-to-jackson</module>
 	</modules>

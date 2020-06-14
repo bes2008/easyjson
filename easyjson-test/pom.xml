@@ -16,8 +16,6 @@
     <modules>
         <module>easyjson-test-base</module>
         <module>easyjson-test-fastjson</module>
-        <module>easyjson-test-gson</module>
-        <module>easyjson-test-jackson</module>
 	</modules>
 	
 	<dependencies>
