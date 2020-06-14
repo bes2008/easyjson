@@ -1,6 +1,10 @@
 .idea/
 *.iml
 target/
+.settings/
+# eclipse
+.project
+.classpath
 
 # Compiled class file
 *.class
