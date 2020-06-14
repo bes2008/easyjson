@@ -28,16 +28,16 @@ public class CompareTools {
 
     private static void assertDeepEquals(String owner, Object actual, Object expected) {
         String desc = (owner == null ? "" : owner);
-        // 都为空
+        // 期望对象为空值
         if (expected == null) {
             System.out.println("expected " + desc + " = " + expected);
             System.out.println("actual   " + desc + " = " + actual);
+            Assert.assertNull(actual, desc);
             return;
         }
-        Assert.assertEquals(actual != null, expected != null, desc + " is not null");
         // 先比对class是否相等
         Assert.assertEquals(actual.getClass(), expected.getClass(), desc + " class");
-        Class<?> clazz = actual.getClass();
+        Class<?> clazz = expected.getClass();
         if (isPrimitive(clazz)) { // 基本类型
             System.out.println("expected " + desc + " = " + expected);
             System.out.println("actual   " + desc + " = " + actual);
@@ -113,7 +113,7 @@ public class CompareTools {
 
     private static void assertFieldValueEquals(String owner, Object actual, Object expected) {
         // 遍历所有字段
-        Class<?> clazz = actual.getClass();
+        Class<?> clazz = expected.getClass();
         Collection<Field> fields = Reflects.getAllDeclaredFields(clazz);
         for (Field field : fields) {
             field.setAccessible(true);
