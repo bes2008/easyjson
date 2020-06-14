@@ -55,4 +55,8 @@ public class CodecConfigurationRepositoryService implements Initializable {
     public void register(CodecConfigurationRepository codecConfigurationRepository){
         repositoryMap.put(codecConfigurationRepository.getDialectIdentify(), codecConfigurationRepository);
     }
+
+    public CodecConfigurationRepository getCodecConfigurationRepository(DialectIdentify dialectIdentify){
+        return repositoryMap.get(dialectIdentify);
+    }
 }

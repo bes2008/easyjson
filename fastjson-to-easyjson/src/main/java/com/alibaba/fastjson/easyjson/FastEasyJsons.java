@@ -19,6 +19,9 @@ import com.alibaba.fastjson.annotation.JSONType;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.jn.easyjson.core.JSONBuilder;
 import com.jn.easyjson.core.JSONBuilderProvider;
+import com.jn.easyjson.core.codec.dialect.ClassCodecConfiguration;
+import com.jn.easyjson.core.codec.dialect.CodecConfigurationRepository;
+import com.jn.easyjson.core.codec.dialect.CodecConfigurationRepositoryService;
 import com.jn.easyjson.core.codec.dialect.DialectIdentify;
 import com.jn.easyjson.core.exclusion.FieldNamesExclusion;
 import com.jn.langx.annotation.NonNull;
@@ -81,6 +84,8 @@ public class FastEasyJsons {
             }
         }
 
+        CodecConfigurationRepository configurationRepository = CodecConfigurationRepositoryService.getInstance().getCodecConfigurationRepository(FASTJSON);
+        ClassCodecConfiguration classCodecConfiguration = configurationRepository.getClassCodecConfiguration(targetClass);
         parseJSONType(jsonBuilder, targetClass);
         jsonBuilder.addExclusionStrategies(new FastjsonAnnotationExclusion());
         return jsonBuilder;
