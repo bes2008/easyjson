@@ -28,10 +28,23 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-public class CodecConfigurationRepository<T extends CodecConfiguration> extends AbstractConfigurationRepository<T, ClassLoaderCodecConfigurationLoader<T>, ConfigurationWriter<T>> {
+/**
+ * xxxjson-to-easyjson 时，才会为xxx json 提供一个这样的仓库，但不是必须的。
+ * @param <T>
+ */
+public abstract class CodecConfigurationRepository<T extends CodecConfiguration> extends AbstractConfigurationRepository<T, ClassLoaderCodecConfigurationLoader<T>, ConfigurationWriter<T>> {
     private ConcurrentReferenceHashMap<ClassLoader, ClassLoaderCodecConfigurationRepository<T>> repositories = new ConcurrentReferenceHashMap<ClassLoader, ClassLoaderCodecConfigurationRepository<T>>(1000, 0.95f, Runtime.getRuntime().availableProcessors(), ReferenceType.WEAK, ReferenceType.WEAK);
+    private JsonLibraryIdentify jsonLibraryIdentify;
     private BeanClassAnnotatedCodecConfigurationParser defaultBeanClassParser;
     private BeanPropertyAnnotatedCodecConfigurationParser defaultBeanPropertyParser;
+
+    public JsonLibraryIdentify getJsonLibraryIdentify() {
+        return jsonLibraryIdentify;
+    }
+
+    public void setJsonLibraryIdentify(JsonLibraryIdentify jsonLibraryIdentify) {
+        this.jsonLibraryIdentify = jsonLibraryIdentify;
+    }
 
     @Override
     public void setReloadIntervalInSeconds(int reloadIntervalInSeconds) {
