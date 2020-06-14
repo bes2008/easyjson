@@ -15,6 +15,7 @@
 package com.jn.easyjson.core;
 
 import com.jn.easyjson.core.codec.dialect.CodecConfigurationRepository;
+import com.jn.easyjson.core.codec.dialect.CodecConfigurationRepositoryService;
 import com.jn.easyjson.core.codec.dialect.PropertyCodecConfiguration;
 import com.jn.easyjson.core.exclusion.Exclusion;
 import com.jn.easyjson.core.exclusion.ExclusionConfiguration;
@@ -25,7 +26,7 @@ import java.text.DateFormat;
 import java.util.Map;
 
 /**
- * 代表单词 JSON 转换请求的 JSON 构建器。
+ * 代表单次 JSON 转换请求的 JSON 构建器。
  * 也可以作为全局使用。
  */
 public abstract class JSONBuilder implements Cloneable {
@@ -71,7 +72,7 @@ public abstract class JSONBuilder implements Cloneable {
     /**
      * 全局配置项, 这里面其实是每个类每个字段的默认配置项
      */
-    private static final CodecConfigurationRepository codecConfigurationRepository = new CodecConfigurationRepository();
+    private static final CodecConfigurationRepositoryService codecConfigurationRepository = CodecConfigurationRepositoryService.getInstance();
 
     public JSONBuilder() {
         exclusionConfiguration = new ExclusionConfiguration();

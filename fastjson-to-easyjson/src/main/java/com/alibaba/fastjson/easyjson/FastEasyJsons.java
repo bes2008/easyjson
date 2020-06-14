@@ -19,6 +19,7 @@ import com.alibaba.fastjson.annotation.JSONType;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.jn.easyjson.core.JSONBuilder;
 import com.jn.easyjson.core.JSONBuilderProvider;
+import com.jn.easyjson.core.codec.dialect.JsonLibraryIdentify;
 import com.jn.easyjson.core.exclusion.FieldNamesExclusion;
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.util.Emptys;
@@ -33,6 +34,14 @@ import java.util.List;
 import java.util.Map;
 
 public class FastEasyJsons {
+    public static final JsonLibraryIdentify FASTJSON;
+
+    static {
+        FASTJSON = new JsonLibraryIdentify("fastjson", Reflects.getCodeLocation(FastEasyJsons.class).toString());
+    }
+
+    private FastEasyJsons() {
+    }
 
     public static JSONBuilder getJsonBuilder(int features, SerializerFeature... features2) {
         JSONBuilder jsonBuilder = JSONBuilderProvider.create();
@@ -54,7 +63,6 @@ public class FastEasyJsons {
         boolean prettyFormat = (SerializerFeature.PrettyFormat.getMask() & features) != 0;
         jsonBuilder.prettyFormat(prettyFormat);
         jsonBuilder.useGlobalConfiguration(true);
-        jsonBuilder.
         return jsonBuilder;
     }
 

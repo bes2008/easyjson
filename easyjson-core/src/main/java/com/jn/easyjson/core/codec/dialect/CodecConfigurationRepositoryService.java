@@ -34,6 +34,10 @@ public class CodecConfigurationRepositoryService implements Initializable {
         init();
     }
 
+    public static CodecConfigurationRepositoryService getInstance(){
+        return INSTANCE;
+    }
+
     @Override
     public void init() throws InitializationException {
         if(!inited){
@@ -42,9 +46,13 @@ public class CodecConfigurationRepositoryService implements Initializable {
             Collects.forEach(serviceLoader, new Consumer<CodecConfigurationRepository>() {
                 @Override
                 public void accept(CodecConfigurationRepository codecConfigurationRepository) {
-
+                    register(codecConfigurationRepository);
                 }
             });
         }
+    }
+
+    public void register(CodecConfigurationRepository codecConfigurationRepository){
+        repositoryMap.put(codecConfigurationRepository.getJsonLibraryIdentify(), codecConfigurationRepository);
     }
 }

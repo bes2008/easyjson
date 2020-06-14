@@ -14,7 +14,10 @@
 
 package com.alibaba.fastjson.easyjson;
 
-import com.jn.langx.configuration.ConfigurationParser;
 
-public class FastjsonAnnotationParser implements ConfigurationParser<> {
+import com.jn.easyjson.core.codec.dialect.CodecConfigurationRepository;
+
+public class FastjsonCodecConfigurationRepository extends CodecConfigurationRepository {
+
+
 }

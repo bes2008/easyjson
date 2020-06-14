@@ -14,6 +14,55 @@
 
 package com.jn.easyjson.core.codec.dialect;
 
-public interface JsonLibraryIdentify {
-    String identify();
+import com.jn.langx.util.Objects;
+import com.jn.langx.util.hash.HashCodeBuilder;
+
+public final class JsonLibraryIdentify {
+    private String id;
+    private String libUrl;
+
+    public JsonLibraryIdentify(){}
+
+    public JsonLibraryIdentify(String id, String libUrl){
+        setId(id);
+        setLibUrl(libUrl);
+    }
+
+    public String getId() {
+        return this.id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getLibUrl() {
+        return this.libUrl;
+    }
+
+    public void setLibUrl(String libUrl) {
+        this.libUrl = libUrl;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof JsonLibraryIdentify)) return false;
+
+        JsonLibraryIdentify that = (JsonLibraryIdentify) o;
+
+        if (!Objects.equals(id, that.id)) {
+            return false;
+        }
+
+        if (!Objects.equals(libUrl, that.libUrl)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder().with(id).with(libUrl).build();
+    }
 }
