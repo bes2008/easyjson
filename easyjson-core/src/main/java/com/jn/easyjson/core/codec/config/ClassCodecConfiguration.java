@@ -21,7 +21,7 @@ import java.lang.ref.WeakReference;
 /**
  * id 是类全名
  */
-public class ClassCodecConfiguration extends CodecConfiguration{
+public class ClassCodecConfiguration extends CodecConfiguration {
     private WeakReference clazzRef;
 
     public Class getClazz() {

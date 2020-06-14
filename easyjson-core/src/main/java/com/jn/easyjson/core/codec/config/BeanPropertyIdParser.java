@@ -21,12 +21,14 @@ public class BeanPropertyIdParser implements Parser<String, BeanPropertyId> {
     @Override
     public BeanPropertyId parse(String qualifiedId) {
         String[] segments = Strings.split(qualifiedId, "#");
-        if (segments.length != 2) {
+        if (segments.length == 0) {
             return null;
         }
         BeanPropertyId propertyId = new BeanPropertyId();
         propertyId.setBeanClass(segments[0]);
-        propertyId.setPropertyName(segments[1]);
+        if (segments.length > 1) {
+            propertyId.setPropertyName(segments[1]);
+        }
         return propertyId;
     }
 }

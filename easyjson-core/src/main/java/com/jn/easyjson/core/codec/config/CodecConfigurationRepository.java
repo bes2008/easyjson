@@ -16,13 +16,22 @@ package com.jn.easyjson.core.codec.config;
 
 import com.jn.langx.configuration.AbstractConfigurationRepository;
 import com.jn.langx.configuration.ConfigurationWriter;
+import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.ConcurrentReferenceHashMap;
 import com.jn.langx.util.function.Consumer2;
+import com.jn.langx.util.reflect.Reflects;
 import com.jn.langx.util.reflect.reference.ReferenceType;
 
+import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+
 public class CodecConfigurationRepository<T extends CodecConfiguration> extends AbstractConfigurationRepository<T, ClassLoaderCodecConfigurationLoader<T>, ConfigurationWriter<T>> {
-    private ConcurrentReferenceHashMap<ClassLoader, AbstractConfigurationRepository<T, ClassLoaderCodecConfigurationLoader<T>, ConfigurationWriter<T>>> repositories = new ConcurrentReferenceHashMap<ClassLoader, AbstractConfigurationRepository<T, ClassLoaderCodecConfigurationLoader<T>, ConfigurationWriter<T>>>(1000, 0.95f, Runtime.getRuntime().availableProcessors(), ReferenceType.WEAK,ReferenceType.WEAK);
+    private ConcurrentReferenceHashMap<ClassLoader, ClassLoaderCodecConfigurationRepository<T>> repositories = new ConcurrentReferenceHashMap<ClassLoader, ClassLoaderCodecConfigurationRepository<T>>(1000, 0.95f, Runtime.getRuntime().availableProcessors(), ReferenceType.WEAK, ReferenceType.WEAK);
+    private BeanClassAnnotatedCodecConfigurationParser defaultBeanClassParser;
+    private BeanPropertyAnnotatedCodecConfigurationParser defaultBeanPropertyParser;
 
     @Override
     public void setReloadIntervalInSeconds(int reloadIntervalInSeconds) {
@@ -35,4 +44,43 @@ public class CodecConfigurationRepository<T extends CodecConfiguration> extends 
         });
     }
 
+    public ClassCodecConfiguration getClassCodecConfiguration(Class clazz){
+        ClassLoaderCodecConfigurationRepository<T> repository = findRepository(clazz);
+        return (ClassCodecConfiguration)repository.getById(Reflects.getFQNClassName(clazz));
+    }
+
+    public PropertyCodecConfiguration getPropertyCodeConfiguration(Class clazz, String propertyName) {
+        Preconditions.checkNotNull(clazz);
+        Preconditions.checkNotNull(propertyName);
+        ClassLoaderCodecConfigurationRepository<T> repository = findRepository(clazz);
+        return (PropertyCodecConfiguration)repository.getById(new BeanPropertyIdGenerator().withBeanClass(clazz).withPropertyName(propertyName).get());
+    }
+
+    private ClassLoaderCodecConfigurationRepository<T> findRepository(AnnotatedElement annotatedElement) {
+        Class clazz = null;
+        if (annotatedElement instanceof Class) {
+            clazz = ((Class) annotatedElement);
+        } else if (annotatedElement instanceof Field) {
+            clazz = ((Field) annotatedElement).getDeclaringClass();
+        } else if (annotatedElement instanceof Method) {
+            clazz = ((Method) annotatedElement).getDeclaringClass();
+        } else if (annotatedElement instanceof Constructor) {
+            clazz = ((Constructor) annotatedElement).getDeclaringClass();
+        }
+        Preconditions.checkNotNull(clazz);
+        ClassLoader classLoader = clazz.getClassLoader();
+        if (classLoader == null) {
+            classLoader = FakeBootstrapClassLoader.getInstance();
+        }
+        ClassLoaderCodecConfigurationRepository<T> repository = repositories.get(classLoader);
+        if (repository == null) {
+            repository = new ClassLoaderCodeConfigurationRepositoryBuilder<T>()
+                   .beanClassAnnotatedCodecConfigurationParser(defaultBeanClassParser)
+                   .beanPropertyCodecConfigurationParser(defaultBeanPropertyParser)
+                   .classLoader(classLoader)
+                   .build();
+            repositories.putIfAbsent(classLoader, repository);
+        }
+        return repository;
+    }
 }

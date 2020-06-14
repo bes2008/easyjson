@@ -14,11 +14,8 @@
 
 package com.jn.easyjson.core.codec.config;
 
-import com.jn.langx.configuration.ConfigurationParser;
+import com.jn.langx.configuration.AbstractConfigurationRepository;
+import com.jn.langx.configuration.ConfigurationWriter;
 
-import java.lang.reflect.AnnotatedElement;
-
-public interface AnnotatedElementCodecConfigurationParser<T extends CodecConfiguration> extends ConfigurationParser<AnnotatedElement, T> {
-    @Override
-    public T parse(AnnotatedElement annotatedElement);
+public class ClassLoaderCodecConfigurationRepository <T extends CodecConfiguration> extends AbstractConfigurationRepository<T, ClassLoaderCodecConfigurationLoader<T>, ConfigurationWriter<T>> {
 }

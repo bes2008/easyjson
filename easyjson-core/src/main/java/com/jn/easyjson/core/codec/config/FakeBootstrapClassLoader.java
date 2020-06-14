@@ -14,11 +14,21 @@
 
 package com.jn.easyjson.core.codec.config;
 
-import com.jn.langx.configuration.ConfigurationParser;
+import com.jn.langx.annotation.Singleton;
 
-import java.lang.reflect.AnnotatedElement;
+@Singleton
+public class FakeBootstrapClassLoader extends ClassLoader {
+    private static final FakeBootstrapClassLoader INSTANCE = new FakeBootstrapClassLoader();
 
-public interface AnnotatedElementCodecConfigurationParser<T extends CodecConfiguration> extends ConfigurationParser<AnnotatedElement, T> {
+    private FakeBootstrapClassLoader() {
+    }
+
+    public static FakeBootstrapClassLoader getInstance() {
+        return INSTANCE;
+    }
+
     @Override
-    public T parse(AnnotatedElement annotatedElement);
+    public String toString() {
+        return "FakeBootStrapClassLoader";
+    }
 }
