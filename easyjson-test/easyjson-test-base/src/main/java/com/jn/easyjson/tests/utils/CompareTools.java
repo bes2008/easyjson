@@ -14,7 +14,7 @@ import com.jn.langx.util.reflect.Reflects;
 public class CompareTools {
 
     /** 比对两个对象的字段值是否一致 **/
-    public static void compareEntityFields(Object actual, Object expected) {
+    public static void assertFieldValueEquals(Object actual, Object expected) {
         Assert.assertEquals(actual.getClass(), expected.getClass());
         Class<?> clazz = actual.getClass();
         // 遍历所有字段
