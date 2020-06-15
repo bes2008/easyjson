@@ -24,6 +24,7 @@ import com.jn.easyjson.core.exclusion.ExclusionConfiguration;
 import com.jn.easyjson.jackson.deserializer.BooleanDeserializer;
 import com.jn.easyjson.jackson.deserializer.Deserializers;
 import com.jn.easyjson.jackson.deserializer.EnumDeserializer;
+import com.jn.easyjson.jackson.ext.EasyJsonJacksonAnnotationIntrospector;
 import com.jn.easyjson.jackson.ext.EasyJsonObjectMapper;
 import com.jn.easyjson.jackson.modifier.EasyjsonBeanDeserializerModifier;
 import com.jn.easyjson.jackson.modifier.EasyjsonBeanSerializerModifier;
@@ -160,7 +161,11 @@ public class JacksonJSONBuilder extends JSONBuilder {
 
 
         if (serializeNulls()) {
-            //  objectMapper.configure(SerializationFeature);
+            mapper.configure(SerializationFeature.WRITE_NULL_MAP_VALUES,true);
+            mapper.setConfig(mapper.getSerializationConfig()
+                    .withAppendedAnnotationIntrospector(new EasyJsonJacksonAnnotationIntrospector())
+                    .withAttribute(JacksonConstants.SERIALIZE_NULLS_ATTR_KEY,true)
+            );
         }
 
         configBoolean(mapper);
