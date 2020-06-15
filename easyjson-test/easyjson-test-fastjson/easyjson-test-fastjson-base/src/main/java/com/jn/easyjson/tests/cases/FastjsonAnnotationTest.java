@@ -7,6 +7,8 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.annotation.JSONType;
 import com.jn.easyjson.tests.utils.CompareTools;
 
+import java.util.Date;
+
 /**
  * FastJson注解测试类
  *
@@ -29,6 +31,7 @@ public class FastjsonAnnotationTest {
         user.setId("1001");
         user.setName("Test1");
         user.setPassword("a@b@c");
+        user.setBirthday(new Date(1577808000000L));
         return user;
     }
 
@@ -52,8 +55,16 @@ public class FastjsonAnnotationTest {
         return "{\"id\":\"1001\",\"name\":\"Test1\",\"password\":\"a@b@c\"}";
     }
 
+    protected String getUserEntity2String() {
+        return "{\"id\":\"1001\",\"name\":\"Test1\",\"password\":\"a@b@c\",\"birthday\":1577808000000}";
+    }
+
     protected String getUserEntityIgnorePasswordString() {
         return "{\"id\":\"1001\",\"name\":\"Test1\"}";
+    }
+
+    protected String getUserEntity2IgnorePasswordString() {
+        return "{\"id\":\"1001\",\"name\":\"Test1\",\"birthday\":1577808000000}";
     }
 
     @Test(priority = 10001)
@@ -78,12 +89,12 @@ public class FastjsonAnnotationTest {
         UserEntity2 user = getUserEntity2Object();
         String jsonString = JSONObject.toJSONString(user);
         System.out.println(jsonString);
-        Assert.assertEquals(jsonString, getUserEntityIgnorePasswordString());
+        Assert.assertEquals(jsonString, getUserEntity2IgnorePasswordString());
     }
 
     @Test(priority = 10004)
     public void testDeserialize10004() {
-        String jsonString = getUserEntityString();
+        String jsonString = getUserEntity2String();
         UserEntity2 actual = JSONObject.parseObject(jsonString, UserEntity2.class);
         UserEntity2 expected = getUserEntity2Object();
         expected.setPassword(null);
@@ -155,6 +166,8 @@ public class FastjsonAnnotationTest {
         public void setPassword(String password) {
             this.password = password;
         }
+
+
     }
 
     protected static class UserEntity2 {
@@ -163,6 +176,9 @@ public class FastjsonAnnotationTest {
         private String name;
         @JSONField(serialize = false, deserialize = false)
         private String password;
+        @JSONField(format = "yyyy-MM-dd")
+        private Date birthday;
+
 
         public String getId() {
             return id;
@@ -186,6 +202,14 @@ public class FastjsonAnnotationTest {
 
         public void setPassword(String password) {
             this.password = password;
+        }
+
+        public Date getBirthday() {
+            return birthday;
+        }
+
+        public void setBirthday(Date birthday) {
+            this.birthday = birthday;
         }
     }
 
