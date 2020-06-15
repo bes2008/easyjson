@@ -16,7 +16,12 @@ package com.alibaba.fastjson.easyjson;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.annotation.JSONType;
+import com.jn.easyjson.core.codec.dialect.ClassCodecConfiguration;
+import com.jn.easyjson.core.codec.dialect.CodecConfigurationRepository;
+import com.jn.easyjson.core.codec.dialect.CodecConfigurationRepositoryService;
+import com.jn.easyjson.core.codec.dialect.PropertyCodecConfiguration;
 import com.jn.easyjson.core.exclusion.Exclusion;
+import com.jn.easyjson.core.util.Members;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.reflect.FieldAttributes;
 import com.jn.langx.util.reflect.MethodAttributes;
@@ -24,6 +29,7 @@ import com.jn.langx.util.reflect.Reflects;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
+import java.lang.reflect.Method;
 
 /**
  * 处理 fastjson  JSONType, JSONField 注解
@@ -46,40 +52,28 @@ public class FastjsonAnnotationExclusion implements Exclusion {
     }
 
     private boolean skipProperty(Member member, boolean serializePhrase) {
-        Class beanClass = member.getDeclaringClass();
-        JSONField jsonField = Reflects.getAnnotation(beanClass, JSONField.class);
-        JSONType jsonType = Reflects.getAnnotation(beanClass, JSONType.class);
-        String name = null;
-        if (member instanceof Field) {
-            name = new FieldAttributes((Field) member).getName();
-        } else {
-            String method = member.getName();
-
-            if (method.startsWith("get") || method.startsWith("set")) {
-                name = method.substring(3);
-            } else if (method.startsWith("is")) {
-                name = method.substring(2);
-            }
+        if(member instanceof Field || member instanceof Method){
+            Class beanClass = member.getDeclaringClass();
+            String name = Members.extractFieldName(member);
+            return skipProperty(beanClass, name, serializePhrase);
         }
-        return skipProperty(name, member.getDeclaringClass(), jsonType, jsonField, serializePhrase);
+        return true;
     }
 
-    private boolean skipProperty(String propertyName, Class declaringClass, JSONType jsonType, JSONField jsonField, boolean serializePhrase) {
-        String[] ignores = jsonType == null ? null : jsonType.ignores();
+    private boolean skipProperty(Class beanClass, String propertyName, boolean serializePhrase) {
+        CodecConfigurationRepository configurationRepository = CodecConfigurationRepositoryService.getInstance().getCodecConfigurationRepository(FastEasyJsons.FASTJSON);
+        PropertyCodecConfiguration propertyCodeConfiguration = configurationRepository.getPropertyCodeConfiguration(beanClass, propertyName);
+        if (propertyCodeConfiguration == null) {
+            ClassCodecConfiguration classCodecConfiguration = configurationRepository.getClassCodecConfiguration(beanClass);
+            return classCodecConfiguration == null && classCodecConfiguration.getExcludePropertyNames().contains(propertyName);
+        }
+
         if (serializePhrase) {
-            if (jsonField != null) {
-                return !jsonField.serialize();
-            } else {
-                return Collects.asList(ignores).contains(propertyName);
-            }
+            return !propertyCodeConfiguration.isSerialize();
         } else {
-            // deserialize phrase
-            if (jsonField != null) {
-                return !jsonField.deserialize();
-            } else {
-                return Collects.asList(ignores).contains(propertyName);
-            }
+            return !propertyCodeConfiguration.isDeserialize();
         }
     }
+
 
 }

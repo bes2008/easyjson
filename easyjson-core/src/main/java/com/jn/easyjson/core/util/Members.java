@@ -7,9 +7,19 @@ import com.jn.langx.util.reflect.Modifiers;
 import com.jn.langx.util.reflect.Reflects;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 
 public class Members {
+    public static String extractFieldName(Member member){
+        if(member instanceof Field){
+            return member.getName();
+        }
+        if(member instanceof Method){
+            return extractFieldName((Method) member);
+        }
+        return null;
+    }
 
     public static String extractFieldName(Method method){
         if(isGetterOrSetter(method)){

@@ -14,6 +14,7 @@
 
 package com.jn.easyjson.core.codec.dialect;
 
+import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.reflect.Reflects;
 
 import java.lang.ref.WeakReference;
@@ -25,7 +26,7 @@ import java.util.List;
 public class ClassCodecConfiguration extends CodecConfiguration {
     private WeakReference clazzRef;
 
-    private List<String> excludePropertyNames;
+    private List<String> excludePropertyNames= Collects.emptyArrayList();
 
     public Class getClazz() {
         return clazzRef.getClass();
