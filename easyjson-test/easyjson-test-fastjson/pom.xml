@@ -12,6 +12,7 @@
 
     <artifactId>easyjson-test-fastjson</artifactId>
     <packaging>pom</packaging>
+    <description>fastjson测试用例包</description>
 	
     <modules>
         <module>easyjson-test-fastjson-base</module>

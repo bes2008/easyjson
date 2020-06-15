@@ -12,6 +12,12 @@
 
     <artifactId>easyjson-test</artifactId>
     <packaging>pom</packaging>
+    <description>
+    	测试用例包.
+    	xxx-base结尾的工程存放xxx实际的测试处理逻辑, 所有Test类都是abstract的, 只提供给其他工程引用, 不能直接运行;
+    	xxx-impl结尾的工程用于运行xxx实现框架自身的测试用例, 只是简单的引用base中的测试用例和在pom中配置实现类;
+    	xxx-to-yyy结尾的工程用于运行xxx桥接至yyy的测试用例, 只是简单的引用base中的测试用例和在pom中配置各种实现类.
+    </description>
 	
     <modules>
         <module>easyjson-test-base</module>

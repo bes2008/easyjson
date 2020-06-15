@@ -12,6 +12,7 @@
 
     <artifactId>easyjson-test-base</artifactId>
 	<packaging>jar</packaging>
+    <description>基础测试用例, 包含仅使用easyjson-core的API的所有测试用例</description>
 
     <dependencies>
         <dependency>

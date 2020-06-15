@@ -12,6 +12,10 @@
 
     <artifactId>easyjson-test-fastjson-impl</artifactId>
 	<packaging>jar</packaging>
+	<description>
+		使用easyjson或fastjson的API, 以fastjson自身作为实现框架的测试场景
+		(不引用fastjson-to-easyjson, 只引用fastjson)
+	</description>
 
     <dependencies>
         <dependency>

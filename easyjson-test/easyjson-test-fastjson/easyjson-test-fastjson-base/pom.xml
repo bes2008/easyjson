@@ -12,6 +12,7 @@
 
     <artifactId>easyjson-test-fastjson-base</artifactId>
 	<packaging>jar</packaging>
+	<description>存放使用fastjson的API的所有测试用例, 只提供给其他工程引用, 不能直接运行</description>
 
     <dependencies>
         <dependency>
@@ -22,6 +23,8 @@
 			<groupId>com.github.fangjinuo.easyjson</groupId>
 			<artifactId>fastjson-to-easyjson</artifactId>
 			<version>${project.version}</version>
+			<scope>provided</scope>
+			<optional>true</optional>
 		</dependency>
 
         <dependency>

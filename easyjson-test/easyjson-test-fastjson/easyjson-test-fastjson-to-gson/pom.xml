@@ -12,6 +12,10 @@
 
     <artifactId>easyjson-test-fastjson-to-gson</artifactId>
 	<packaging>jar</packaging>
+	<description>
+		使用easyjson或fastjson的API, 以gson作为实现框架的测试场景
+		(引用fastjson-to-easyjson作为fastjson的API的桥接, 引用easyjson-gson作为json的实现框架)
+	</description>
 
     <dependencies>
         <dependency>
