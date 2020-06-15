@@ -29,7 +29,10 @@ import java.text.DateFormat;
  */
 public abstract class JSONBuilder implements Cloneable {
     /***
-     * 这些配置项，都代表了单次请求的配置。
+     * 这些配置项，都代表了单次请求的配置。但由于这个配置，是针对这一次或者N次操作的数据的通用配置，
+     * 所以它的优先级是最低的。
+     *
+     * 一旦一个类上有特定注解，则注解的优先级会高于这里的配置项的优先级。
      */
 
     /**

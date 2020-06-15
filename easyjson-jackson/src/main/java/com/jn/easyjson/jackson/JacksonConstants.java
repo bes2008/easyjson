@@ -16,6 +16,9 @@ package com.jn.easyjson.jackson;
 
 public class JacksonConstants {
 
+    // nulls
+    public static final String SERIALIZE_NULLS_ATTR_KEY="SERIALIZE_NULLS";
+
     // boolean priority attribute keys:
     public static final String SERIALIZE_BOOLEAN_USING_1_0_ATTR_KEY = "SERIALIZE_BOOLEAN_USING_1_0";
     public static final String SERIALIZE_BOOLEAN_USING_ON_OFF_ATTR_KEY = "SERIALIZE_BOOLEAN_USING_ON_OFF";

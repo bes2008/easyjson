@@ -35,6 +35,12 @@ public class NumberDeserializer extends JsonDeserializer<Number> implements Cont
 
     private Class<? extends Number> clazz;
 
+    public NumberDeserializer(){}
+
+    public NumberDeserializer(Class clazz){
+        this.clazz = clazz;
+    }
+
     @Override
     public Class<?> handledType() {
         return clazz;
