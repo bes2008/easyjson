@@ -55,6 +55,9 @@ public class ClassLoaderCodecConfigurationLoader<T extends CodecConfiguration> i
     @NonNull
     private BeanClassAnnotatedCodecConfigurationParser beanClassAnnotatedCodecConfigurationParser;
 
+    private PropertyCodecConfigurationMerger propertyCodecConfigurationMerger;
+
+
     public ClassLoaderCodecConfigurationLoader() {
     }
 
@@ -79,14 +82,22 @@ public class ClassLoaderCodecConfigurationLoader<T extends CodecConfiguration> i
         this.beanClassAnnotatedCodecConfigurationParser = beanClassAnnotatedCodecConfigurationParser;
     }
 
-    private ClassLoader getUsableClassLoader(){
+    public PropertyCodecConfigurationMerger getPropertyCodecConfigurationMerger() {
+        return propertyCodecConfigurationMerger;
+    }
+
+    public void setPropertyCodecConfigurationMerger(PropertyCodecConfigurationMerger propertyCodecConfigurationMerger) {
+        this.propertyCodecConfigurationMerger = propertyCodecConfigurationMerger;
+    }
+
+    private ClassLoader getUsableClassLoader() {
         ClassLoader cl = null;
-        if(classLoaderRef==null || classLoaderRef.get()==null || classLoaderRef.get()==FakeBootstrapClassLoader.getInstance()){
+        if (classLoaderRef == null || classLoaderRef.get() == null || classLoaderRef.get() == FakeBootstrapClassLoader.getInstance()) {
             cl = Thread.currentThread().getContextClassLoader();
-        }else {
+        } else {
             cl = classLoaderRef.get();
         }
-        if(cl==null){
+        if (cl == null) {
             cl = getClass().getClassLoader();
         }
         return cl;
@@ -95,7 +106,8 @@ public class ClassLoaderCodecConfigurationLoader<T extends CodecConfiguration> i
     @Override
     public T load(String qualifiedId) {
         Boolean loaded = loadFlagCache.get(qualifiedId);
-        if (loaded) {
+        if (loaded != null) {
+            // 已经解析过了
             return null;
         }
         BeanPropertyId id = beanPropertyIdParser.parse(qualifiedId);
@@ -118,29 +130,49 @@ public class ClassLoaderCodecConfigurationLoader<T extends CodecConfiguration> i
                 logger.error("Can't find class: {}", id.getBeanClass());
                 return null;
             }
-            PropertyCodecConfiguration propertyCodecConfiguration = null;
+
+            boolean useMerged = false;
+            PropertyCodecConfiguration codecConfiguration = new PropertyCodecConfiguration();
+            codecConfiguration.setClazz(clazz);
+            codecConfiguration.setId(qualifiedId);
+
+            PropertyCodecConfiguration fieldConfiguration = null;
             Field field = Reflects.getAnyField(clazz, id.getPropertyName());
             if (field != null) {
-                propertyCodecConfiguration = beanPropertyCodecConfigurationParser.parse(field);
+                fieldConfiguration = beanPropertyCodecConfigurationParser.parse(field);
+                if(fieldConfiguration!=null){
+                    propertyCodecConfigurationMerger.merge(codecConfiguration, fieldConfiguration);
+                    useMerged = true;
+                }
             }
             // getXxx
-            if (propertyCodecConfiguration == null) {
+            PropertyCodecConfiguration getterConfiguration = null;
+            if (getterConfiguration == null) {
                 String getter = Reflects.getGetter(id.getPropertyName());
                 Method getterMethod = Reflects.getAnyMethod(clazz, getter);
                 if (getterMethod != null) {
-                    propertyCodecConfiguration = beanPropertyCodecConfigurationParser.parse(getterMethod);
+                    getterConfiguration = beanPropertyCodecConfigurationParser.parse(getterMethod);
+                    if(getterConfiguration!=null){
+                        propertyCodecConfigurationMerger.merge(codecConfiguration, getterConfiguration);
+                        useMerged = true;
+                    }
                 }
             }
             // isXxx
-            if (propertyCodecConfiguration == null) {
+            if (getterConfiguration == null) {
                 String getter = Reflects.getIsGetter(id.getPropertyName());
                 Method getterMethod = Reflects.getAnyMethod(clazz, getter);
                 if (getterMethod != null) {
-                    propertyCodecConfiguration = beanPropertyCodecConfigurationParser.parse(getterMethod);
+                    getterConfiguration = beanPropertyCodecConfigurationParser.parse(getterMethod);
+                    if(getterConfiguration!=null){
+                        propertyCodecConfigurationMerger.merge(codecConfiguration, getterConfiguration);
+                        useMerged = true;
+                    }
                 }
             }
             // setXxx
-            if (propertyCodecConfiguration == null) {
+            PropertyCodecConfiguration setterConfiguration = null;
+            if (setterConfiguration == null) {
                 String setter = Reflects.getSetter(id.getPropertyName());
                 Class propertyType = null;
                 if (field != null) {
@@ -148,14 +180,18 @@ public class ClassLoaderCodecConfigurationLoader<T extends CodecConfiguration> i
                 }
                 Method setterMethod = propertyType == null ? Reflects.getAnyMethod(clazz, setter) : Reflects.getAnyMethod(clazz, setter, propertyType);
                 if (setterMethod != null) {
-                    propertyCodecConfiguration = beanPropertyCodecConfigurationParser.parse(setterMethod);
+                    setterConfiguration = beanPropertyCodecConfigurationParser.parse(setterMethod);
+                    if(setterConfiguration!=null){
+                        propertyCodecConfigurationMerger.merge(codecConfiguration, setterConfiguration);
+                        useMerged = true;
+                    }
                 }
             }
-            return (T) propertyCodecConfiguration;
-        }catch (Throwable ex){
+            return useMerged ? (T)codecConfiguration : null;
+        } catch (Throwable ex) {
             // ignore
 
-        }finally {
+        } finally {
             loadFlagCache.putIfAbsent(qualifiedId, true);
         }
         return null;

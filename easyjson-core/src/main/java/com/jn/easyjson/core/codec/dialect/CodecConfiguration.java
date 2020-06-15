@@ -27,17 +27,17 @@ public class CodecConfiguration extends MapAccessor implements Configuration {
     /**
      * 当值为null时，是否序列化
      */
-    private boolean serialNull;
+    private Boolean serialNull;
 
     /**
      * 是否要序列化
      */
-    private boolean serialize = true;
+    private Boolean serialize;
 
     /**
      * 是否要反序列化
      */
-    private boolean deserialize = true;
+    private Boolean deserialize;
 
     /**
      * 日期类型的字段，格式
@@ -48,14 +48,14 @@ public class CodecConfiguration extends MapAccessor implements Configuration {
     /**
      * 枚举序列化的方式
      */
-    private boolean enumUsingName = true;
+    private Boolean enumUsingName;
     // 编号
-    private boolean enumUsingValue = false;
-    private boolean enumUsingToString = false;
+    private Boolean enumUsingValue;
+    private Boolean enumUsingToString;
 
 
-    private boolean booleanUsing01 = false;
-    private boolean booleanUsingONOFF = false;
+    private Boolean booleanUsing01;
+    private Boolean booleanUsingONOFF;
 
     public CodecConfiguration(){
         setTarget(new HashMap<String, Object>());
@@ -71,27 +71,27 @@ public class CodecConfiguration extends MapAccessor implements Configuration {
         this.id = id;
     }
 
-    public boolean isSerialNull() {
+    public Boolean getSerialNull() {
         return serialNull;
     }
 
-    public void setSerialNull(boolean serialNull) {
+    public void setSerialNull(Boolean serialNull) {
         this.serialNull = serialNull;
     }
 
-    public boolean isSerialize() {
+    public Boolean getSerialize() {
         return serialize;
     }
 
-    public void setSerialize(boolean serialize) {
+    public void setSerialize(Boolean serialize) {
         this.serialize = serialize;
     }
 
-    public boolean isDeserialize() {
+    public Boolean getDeserialize() {
         return deserialize;
     }
 
-    public void setDeserialize(boolean deserialize) {
+    public void setDeserialize(Boolean deserialize) {
         this.deserialize = deserialize;
     }
 
@@ -111,43 +111,43 @@ public class CodecConfiguration extends MapAccessor implements Configuration {
         this.datePattern = datePattern;
     }
 
-    public boolean isEnumUsingName() {
+    public Boolean getEnumUsingName() {
         return enumUsingName;
     }
 
-    public void setEnumUsingName(boolean enumUsingName) {
+    public void setEnumUsingName(Boolean enumUsingName) {
         this.enumUsingName = enumUsingName;
     }
 
-    public boolean isEnumUsingValue() {
+    public Boolean getEnumUsingValue() {
         return enumUsingValue;
     }
 
-    public void setEnumUsingValue(boolean enumUsingValue) {
+    public void setEnumUsingValue(Boolean enumUsingValue) {
         this.enumUsingValue = enumUsingValue;
     }
 
-    public boolean isEnumUsingToString() {
+    public Boolean getEnumUsingToString() {
         return enumUsingToString;
     }
 
-    public void setEnumUsingToString(boolean enumUsingToString) {
+    public void setEnumUsingToString(Boolean enumUsingToString) {
         this.enumUsingToString = enumUsingToString;
     }
 
-    public boolean isBooleanUsing01() {
+    public Boolean getBooleanUsing01() {
         return booleanUsing01;
     }
 
-    public void setBooleanUsing01(boolean booleanUsing01) {
+    public void setBooleanUsing01(Boolean booleanUsing01) {
         this.booleanUsing01 = booleanUsing01;
     }
 
-    public boolean isBooleanUsingONOFF() {
+    public Boolean getBooleanUsingONOFF() {
         return booleanUsingONOFF;
     }
 
-    public void setBooleanUsingONOFF(boolean booleanUsingONOFF) {
+    public void setBooleanUsingONOFF(Boolean booleanUsingONOFF) {
         this.booleanUsingONOFF = booleanUsingONOFF;
     }
 }

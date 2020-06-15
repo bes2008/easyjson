@@ -35,10 +35,8 @@ public class PropertyCodecConfiguration extends CodecConfiguration{
      */
     private String alias;
 
-    /**
-     * 是否是类的属性（字段、getter，setter 都视为属性）
-     */
-    private boolean isClassProperty;
+
+    private PropertyConfigurationSourceType sourceType;
 
     /**
      * 当 isClassProperty 时, classRef 才有意义
@@ -61,19 +59,19 @@ public class PropertyCodecConfiguration extends CodecConfiguration{
         this.alias = alias;
     }
 
-    public boolean isClassProperty() {
-        return isClassProperty;
-    }
-
-    public void setClassProperty(boolean classProperty) {
-        isClassProperty = classProperty;
-    }
-
     public Class getClazz() {
         return clazzRef==null? null: clazzRef.get();
     }
 
     public void setClazz(Class clazz) {
         this.clazzRef = new WeakReference<Class>(clazz);
+    }
+
+    public PropertyConfigurationSourceType getSourceType() {
+        return sourceType;
+    }
+
+    public void setSourceType(PropertyConfigurationSourceType sourceType) {
+        this.sourceType = sourceType;
     }
 }

@@ -19,6 +19,7 @@ import com.jn.langx.annotation.NonNull;
 import com.jn.langx.cache.Cache;
 import com.jn.langx.cache.CacheBuilder;
 import com.jn.langx.configuration.ConfigurationCacheLoaderAdapter;
+import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.concurrent.CommonThreadFactory;
 import com.jn.langx.util.timing.timer.Timer;
 import com.jn.langx.util.timing.timer.WheelTimers;
@@ -39,6 +40,7 @@ public class ClassLoaderCodeConfigurationRepositoryBuilder<T extends CodecConfig
     @NonNull
     private BeanClassAnnotatedCodecConfigurationParser beanClassAnnotatedCodecConfigurationParser;
     private WeakReference<ClassLoader> classLoaderRef;
+    private PropertyCodecConfigurationMerger propertyCodecConfigurationMerger;
 
     public ClassLoaderCodeConfigurationRepositoryBuilder<T> beanPropertyCodecConfigurationParser(BeanPropertyAnnotatedCodecConfigurationParser beanPropertyCodecConfigurationParser) {
         this.beanPropertyCodecConfigurationParser = beanPropertyCodecConfigurationParser;
@@ -57,11 +59,20 @@ public class ClassLoaderCodeConfigurationRepositoryBuilder<T extends CodecConfig
     public BeanClassAnnotatedCodecConfigurationParser beanClassAnnotatedCodecConfigurationParser() {
         return this.beanClassAnnotatedCodecConfigurationParser;
     }
+    public PropertyCodecConfigurationMerger propertyCodecConfigurationMerger() {
+        return this.propertyCodecConfigurationMerger;
+    }
+
+    public ClassLoaderCodeConfigurationRepositoryBuilder<T> propertyCodecConfigurationMerger(PropertyCodecConfigurationMerger merger) {
+        this.propertyCodecConfigurationMerger = merger;
+        return this;
+    }
 
     public ClassLoaderCodeConfigurationRepositoryBuilder<T> classLoader(ClassLoader classLoader) {
         this.classLoaderRef = new WeakReference<ClassLoader>(classLoader);
         return this;
     }
+
 
     public ClassLoader classLoader() {
         if (this.classLoaderRef != null) {
@@ -70,12 +81,16 @@ public class ClassLoaderCodeConfigurationRepositoryBuilder<T extends CodecConfig
         return null;
     }
 
+
     @Override
     public ClassLoaderCodecConfigurationRepository<T> build() {
+        Preconditions.checkNotNull(propertyCodecConfigurationMerger);
+
         // loader
         ClassLoaderCodecConfigurationLoader<T> loaderCodecConfigurationLoader = new ClassLoaderCodecConfigurationLoader<T>();
         loaderCodecConfigurationLoader.setBeanClassAnnotatedCodecConfigurationParser(beanClassAnnotatedCodecConfigurationParser);
         loaderCodecConfigurationLoader.setBeanPropertyCodecConfigurationParser(beanPropertyCodecConfigurationParser);
+        loaderCodecConfigurationLoader.setPropertyCodecConfigurationMerger(propertyCodecConfigurationMerger);
         loaderCodecConfigurationLoader.setClassLoader(classLoader());
 
         // cache

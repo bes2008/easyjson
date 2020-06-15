@@ -30,6 +30,7 @@ import java.lang.reflect.Method;
 
 /**
  * xxxjson-to-easyjson 时，才会为xxx json 提供一个这样的仓库，但不是必须的。
+ *
  * @param <T>
  */
 public abstract class CodecConfigurationRepository<T extends CodecConfiguration> extends AbstractConfigurationRepository<T, ClassLoaderCodecConfigurationLoader<T>, ConfigurationWriter<T>> {
@@ -37,6 +38,7 @@ public abstract class CodecConfigurationRepository<T extends CodecConfiguration>
     private DialectIdentify dialectIdentify;
     private BeanClassAnnotatedCodecConfigurationParser defaultBeanClassParser;
     private BeanPropertyAnnotatedCodecConfigurationParser defaultBeanPropertyParser;
+    private PropertyCodecConfigurationMerger propertyCodecConfigurationMerger;
 
     public DialectIdentify getDialectIdentify() {
         return dialectIdentify;
@@ -57,16 +59,16 @@ public abstract class CodecConfigurationRepository<T extends CodecConfiguration>
         });
     }
 
-    public ClassCodecConfiguration getClassCodecConfiguration(Class clazz){
+    public ClassCodecConfiguration getClassCodecConfiguration(Class clazz) {
         ClassLoaderCodecConfigurationRepository<T> repository = findRepository(clazz);
-        return (ClassCodecConfiguration)repository.getById(Reflects.getFQNClassName(clazz));
+        return (ClassCodecConfiguration) repository.getById(Reflects.getFQNClassName(clazz));
     }
 
     public PropertyCodecConfiguration getPropertyCodeConfiguration(Class clazz, String propertyName) {
         Preconditions.checkNotNull(clazz);
         Preconditions.checkNotNull(propertyName);
         ClassLoaderCodecConfigurationRepository<T> repository = findRepository(clazz);
-        return (PropertyCodecConfiguration)repository.getById(new BeanPropertyIdGenerator().withBeanClass(clazz).withPropertyName(propertyName).get());
+        return (PropertyCodecConfiguration) repository.getById(new BeanPropertyIdGenerator().withBeanClass(clazz).withPropertyName(propertyName).get());
     }
 
     private ClassLoaderCodecConfigurationRepository<T> findRepository(AnnotatedElement annotatedElement) {
@@ -88,10 +90,11 @@ public abstract class CodecConfigurationRepository<T extends CodecConfiguration>
         ClassLoaderCodecConfigurationRepository<T> repository = repositories.get(classLoader);
         if (repository == null) {
             repository = new ClassLoaderCodeConfigurationRepositoryBuilder<T>()
-                   .beanClassAnnotatedCodecConfigurationParser(defaultBeanClassParser)
-                   .beanPropertyCodecConfigurationParser(defaultBeanPropertyParser)
-                   .classLoader(classLoader)
-                   .build();
+                    .beanClassAnnotatedCodecConfigurationParser(defaultBeanClassParser)
+                    .beanPropertyCodecConfigurationParser(defaultBeanPropertyParser)
+                    .propertyCodecConfigurationMerger(propertyCodecConfigurationMerger)
+                    .classLoader(classLoader)
+                    .build();
             repositories.putIfAbsent(classLoader, repository);
         }
         return repository;
@@ -111,5 +114,13 @@ public abstract class CodecConfigurationRepository<T extends CodecConfiguration>
 
     public void setDefaultBeanPropertyParser(BeanPropertyAnnotatedCodecConfigurationParser defaultBeanPropertyParser) {
         this.defaultBeanPropertyParser = defaultBeanPropertyParser;
+    }
+
+    public PropertyCodecConfigurationMerger getPropertyCodecConfigurationMerger() {
+        return propertyCodecConfigurationMerger;
+    }
+
+    public void setPropertyCodecConfigurationMerger(PropertyCodecConfigurationMerger propertyCodecConfigurationMerger) {
+        this.propertyCodecConfigurationMerger = propertyCodecConfigurationMerger;
     }
 }

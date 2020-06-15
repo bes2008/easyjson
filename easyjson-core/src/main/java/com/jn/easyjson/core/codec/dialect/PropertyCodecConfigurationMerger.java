@@ -12,16 +12,8 @@
  * limitations under the License.
  */
 
-package com.alibaba.fastjson.easyjson;
+package com.jn.easyjson.core.codec.dialect;
 
-
-import com.jn.easyjson.core.codec.dialect.CodecConfigurationRepository;
-
-public class FastjsonCodecConfigurationRepository extends CodecConfigurationRepository {
-    public FastjsonCodecConfigurationRepository() {
-        setDialectIdentify(FastEasyJsons.FASTJSON);
-        setDefaultBeanClassParser(new JsonTypeParser());
-        setDefaultBeanPropertyParser(new JsonFieldParser());
-        setPropertyCodecConfigurationMerger(new JsonFieldPropertyCodeConfigurationMerger());
-    }
+public interface PropertyCodecConfigurationMerger {
+    public void merge(PropertyCodecConfiguration baseConfiguration, PropertyCodecConfiguration newConfiguration);
 }
