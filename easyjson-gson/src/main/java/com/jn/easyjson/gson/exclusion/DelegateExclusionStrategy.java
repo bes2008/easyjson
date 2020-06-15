@@ -14,9 +14,12 @@
 
 package com.jn.easyjson.gson.exclusion;
 
-import com.jn.easyjson.core.exclusion.Exclusion;
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
+import com.jn.easyjson.core.exclusion.Exclusion;
+import com.jn.langx.util.reflect.Reflects;
+
+import java.lang.reflect.Field;
 
 public class DelegateExclusionStrategy implements ExclusionStrategy {
     private Exclusion exclusion;
@@ -29,7 +32,8 @@ public class DelegateExclusionStrategy implements ExclusionStrategy {
 
     @Override
     public boolean shouldSkipField(FieldAttributes f) {
-        return exclusion.shouldSkipField(new GsonFieldAttributesAdapter(f, null), serialize);
+        Field field = Reflects.getAnyFieldValue(f, "field", true, true);
+        return exclusion.shouldSkipField(new GsonFieldAttributesAdapter(f, field), serialize);
     }
 
     @Override
