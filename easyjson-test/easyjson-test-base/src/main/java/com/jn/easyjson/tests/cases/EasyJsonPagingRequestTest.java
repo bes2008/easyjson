@@ -44,7 +44,7 @@ public abstract class EasyJsonPagingRequestTest {
             Person p = new Person();
             p.setId(i);
             p.setName("name_" + i);
-            p.setBirthday(new Date());
+            p.setBirthday(new Date(1592179316459L));
             p.setGender(i % 2 == 0 ? Gender.MALE : Gender.FEMALE);
             p.setAuthCode(12312425353464564L + i);
 
