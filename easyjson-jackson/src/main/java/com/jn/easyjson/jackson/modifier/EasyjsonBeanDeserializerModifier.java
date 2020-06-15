@@ -36,7 +36,7 @@ public class EasyjsonBeanDeserializerModifier extends BeanDeserializerModifier {
         }
         if (Types.isPrimitive(beanClass)) {
             if (Number.class.isAssignableFrom(Types.getPrimitiveWrapClass(beanClass))) {
-                return new NumberDeserializer();
+                return new NumberDeserializer(beanClass);
             }
         }
         if (Date.class.isAssignableFrom(beanClass)) {
