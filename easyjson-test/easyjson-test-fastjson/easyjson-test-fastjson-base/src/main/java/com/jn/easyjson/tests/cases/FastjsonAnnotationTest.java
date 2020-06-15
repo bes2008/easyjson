@@ -23,6 +23,7 @@ public class FastjsonAnnotationTest {
         user.setId("1001");
         user.setName("Test1");
         user.setPassword("a@b@c");
+        user.setBirthday(new Date(1577845230400L));
         return user;
     }
 
@@ -31,7 +32,7 @@ public class FastjsonAnnotationTest {
         user.setId("1001");
         user.setName("Test1");
         user.setPassword("a@b@c");
-        user.setBirthday(new Date(1577808000000L));
+        user.setBirthday(new Date(1577845230400L));
         return user;
     }
 
@@ -40,6 +41,7 @@ public class FastjsonAnnotationTest {
         user.setId("1001");
         user.setName("Test1");
         user.setPassword("a@b@c");
+        user.setBirthday(new Date(1577845230400L));
         return user;
     }
 
@@ -48,23 +50,16 @@ public class FastjsonAnnotationTest {
         user.setId("1001");
         user.setName("Test1");
         user.setPassword("a@b@c");
+        user.setBirthday(new Date(1577845230400L));
         return user;
     }
 
     protected String getUserEntityString() {
-        return "{\"id\":\"1001\",\"name\":\"Test1\",\"password\":\"a@b@c\"}";
-    }
-
-    protected String getUserEntity2String() {
-        return "{\"id\":\"1001\",\"name\":\"Test1\",\"password\":\"a@b@c\",\"birthday\":1577808000000}";
+        return "{\"birthday\":\"2020-01-01\",\"id\":\"1001\",\"name\":\"Test1\",\"password\":\"a@b@c\"}";
     }
 
     protected String getUserEntityIgnorePasswordString() {
-        return "{\"id\":\"1001\",\"name\":\"Test1\"}";
-    }
-
-    protected String getUserEntity2IgnorePasswordString() {
-        return "{\"id\":\"1001\",\"name\":\"Test1\",\"birthday\":1577808000000}";
+        return "{\"birthday\":\"2020-01-01\",\"id\":\"1001\",\"name\":\"Test1\"}";
     }
 
     @Test(priority = 10001)
@@ -81,6 +76,7 @@ public class FastjsonAnnotationTest {
         UserEntity1 actual = JSONObject.parseObject(jsonString, UserEntity1.class);
         UserEntity1 expected = getUserEntity1Object();
         expected.setPassword(null);
+        expected.setBirthday(new Date(1577808000000L));
         CompareTools.assertDeepEquals(actual, expected);
     }
 
@@ -89,15 +85,16 @@ public class FastjsonAnnotationTest {
         UserEntity2 user = getUserEntity2Object();
         String jsonString = JSONObject.toJSONString(user);
         System.out.println(jsonString);
-        Assert.assertEquals(jsonString, getUserEntity2IgnorePasswordString());
+        Assert.assertEquals(jsonString, getUserEntityIgnorePasswordString());
     }
 
     @Test(priority = 10004)
     public void testDeserialize10004() {
-        String jsonString = getUserEntity2String();
+        String jsonString = getUserEntityString();
         UserEntity2 actual = JSONObject.parseObject(jsonString, UserEntity2.class);
         UserEntity2 expected = getUserEntity2Object();
         expected.setPassword(null);
+        expected.setBirthday(new Date(1577808000000L));
         CompareTools.assertDeepEquals(actual, expected);
     }
 
@@ -115,6 +112,7 @@ public class FastjsonAnnotationTest {
         UserEntity3 actual = JSONObject.parseObject(jsonString, UserEntity3.class);
         UserEntity3 expected = getUserEntity3Object();
         expected.setPassword(null);
+        expected.setBirthday(new Date(1577808000000L));
         CompareTools.assertDeepEquals(actual, expected);
     }
 
@@ -132,14 +130,26 @@ public class FastjsonAnnotationTest {
         UserEntity4 actual = JSONObject.parseObject(jsonString, UserEntity4.class);
         UserEntity4 expected = getUserEntity4Object();
         expected.setPassword(null);
+        expected.setBirthday(new Date(1577808000000L));
         CompareTools.assertDeepEquals(actual, expected);
     }
 
     protected static class UserEntity1 {
 
+        private Date birthday;
         private String id;
         private String name;
         private String password;
+
+        @JSONField(format = "yyyy-MM-dd")
+        public Date getBirthday() {
+            return birthday;
+        }
+
+        @JSONField(format = "yyyy-MM-dd")
+        public void setBirthday(Date birthday) {
+            this.birthday = birthday;
+        }
 
         public String getId() {
             return id;
@@ -167,42 +177,16 @@ public class FastjsonAnnotationTest {
             this.password = password;
         }
 
-
     }
 
     protected static class UserEntity2 {
 
+        @JSONField(format = "yyyy-MM-dd")
+        private Date birthday;
         private String id;
         private String name;
         @JSONField(serialize = false, deserialize = false)
         private String password;
-        @JSONField(format = "yyyy-MM-dd")
-        private Date birthday;
-
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getPassword() {
-            return password;
-        }
-
-        public void setPassword(String password) {
-            this.password = password;
-        }
 
         public Date getBirthday() {
             return birthday;
@@ -211,14 +195,6 @@ public class FastjsonAnnotationTest {
         public void setBirthday(Date birthday) {
             this.birthday = birthday;
         }
-    }
-
-    @JSONType(ignores = "password")
-    protected static class UserEntity3 {
-
-        private String id;
-        private String name;
-        private String password;
 
         public String getId() {
             return id;
@@ -245,12 +221,67 @@ public class FastjsonAnnotationTest {
         }
     }
 
-    @JSONType(includes = { "id", "name" })
-    protected static class UserEntity4 {
+    @JSONType(ignores = "password")
+    protected static class UserEntity3 {
 
+
+        @JSONField(format = "yyyy-MM-dd")
+        private Date birthday;
         private String id;
         private String name;
         private String password;
+
+        public Date getBirthday() {
+            return birthday;
+        }
+
+        public void setBirthday(Date birthday) {
+            this.birthday = birthday;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getPassword() {
+            return password;
+        }
+
+        public void setPassword(String password) {
+            this.password = password;
+        }
+
+    }
+
+    @JSONType(includes = { "id", "name", "birthday" })
+    protected static class UserEntity4 {
+
+
+        @JSONField(format = "yyyy-MM-dd")
+        private Date birthday;
+        private String id;
+        private String name;
+        private String password;
+
+        public Date getBirthday() {
+            return birthday;
+        }
+
+        public void setBirthday(Date birthday) {
+            this.birthday = birthday;
+        }
 
         public String getId() {
             return id;
