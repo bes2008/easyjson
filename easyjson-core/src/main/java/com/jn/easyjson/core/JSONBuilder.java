@@ -60,11 +60,6 @@ public abstract class JSONBuilder implements Cloneable {
     private boolean isLenient;
 
     /**
-     * 单次请求中，为 Bean的属性提供的配置项
-     */
-    private Map<String, PropertyCodecConfiguration> propertyCodecConfigurationMap;
-
-    /**
      * 是否使用全局配置项
      */
     private boolean useGlobalConfiguration = false;
