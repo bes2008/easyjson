@@ -34,6 +34,11 @@ public class CompareTools {
             System.out.println("actual   " + desc + " = " + actual);
             Assert.assertNull(actual, desc);
             return;
+        } else if (actual == null) {
+            System.out.println("expected " + desc + " = " + expected);
+            System.out.println("actual   " + desc + " = " + actual);
+            Assert.assertNotNull(actual, desc);
+            return;
         }
         // 先比对class是否相等
         Assert.assertEquals(actual.getClass(), expected.getClass(), desc + " class");
