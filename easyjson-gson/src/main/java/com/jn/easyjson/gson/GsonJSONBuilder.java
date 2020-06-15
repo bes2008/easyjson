@@ -76,7 +76,7 @@ public class GsonJSONBuilder extends JSONBuilder {
 
         // Enum
         EnumTypeAdapter enumTypeAdapter = new EnumTypeAdapter();
-        enumTypeAdapter.setUsingValue(serializeEnumUsingValue());
+        enumTypeAdapter.setUsingValue(serializeEnumUsingIndex());
         enumTypeAdapter.setUsingField(serializeEnumUsingField());
         enumTypeAdapter.setUsingToString(serializeEnumUsingToString());
         gsonBuilder.registerTypeHierarchyAdapter(Enum.class, enumTypeAdapter);

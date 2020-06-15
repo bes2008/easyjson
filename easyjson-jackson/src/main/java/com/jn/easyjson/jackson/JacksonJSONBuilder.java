@@ -86,11 +86,11 @@ public class JacksonJSONBuilder extends JSONBuilder {
         deserializationConfig = deserializationConfig.withoutAttribute(JacksonConstants.SERIALIZE_ENUM_USING_FIELD_ATTR_KEY);
 
         // ordinal()
-        if(serializeEnumUsingValue()) {
+        if(serializeEnumUsingIndex()) {
             serializationConfig = serializationConfig.with(SerializationFeature.WRITE_ENUMS_USING_INDEX);
         }
-        serializationConfig = serializationConfig.withAttribute(JacksonConstants.SERIALIZE_ENUM_USING_INDEX_ATTR_KEY, serializeEnumUsingValue());
-        deserializationConfig = deserializationConfig.withAttribute(JacksonConstants.SERIALIZE_ENUM_USING_INDEX_ATTR_KEY, serializeEnumUsingValue());
+        serializationConfig = serializationConfig.withAttribute(JacksonConstants.SERIALIZE_ENUM_USING_INDEX_ATTR_KEY, serializeEnumUsingIndex());
+        deserializationConfig = deserializationConfig.withAttribute(JacksonConstants.SERIALIZE_ENUM_USING_INDEX_ATTR_KEY, serializeEnumUsingIndex());
 
 
         // toString()

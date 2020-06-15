@@ -35,7 +35,7 @@ public abstract class EasyJsonPagingRequestTest {
 
     public EasyJsonPagingRequestTest() {
         JSONBuilder jsonBuilder = JSONBuilderProvider.create();
-        jsonBuilder.serializeNulls(false).serializeNumberAsString(true).serializeEnumUsingValue(true);
+        jsonBuilder.serializeNulls(false).serializeNumberAsString(true).serializeEnumUsingIndex(true);
         // IgnoreAnnotationExclusion不在这里测试, 单独写用例
         // jsonBuilder.addDeserializationExclusion(new IgnoreAnnotationExclusion());
         this.json = jsonBuilder.build();

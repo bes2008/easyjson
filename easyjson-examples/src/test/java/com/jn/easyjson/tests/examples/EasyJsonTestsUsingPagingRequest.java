@@ -61,7 +61,7 @@ public class EasyJsonTestsUsingPagingRequest extends BaseTests {
             String jsonLibraryName = entry.getKey();
             System.out.println("=====================EasyJson test [" + jsonLibraryName + "] start =============================");
             JSONBuilder jsonBuilder = entry.getValue();
-            JSON gson = jsonBuilder.serializeNulls(false).serializeNumberAsString(true).serializeEnumUsingValue(true).addDeserializationExclusion(new IgnoreAnnotationExclusion()).build();
+            JSON gson = jsonBuilder.serializeNulls(false).serializeNumberAsString(true).serializeEnumUsingIndex(true).addDeserializationExclusion(new IgnoreAnnotationExclusion()).build();
 
             // test simple object
             String str1 = gson.toJson(pagingRequest);

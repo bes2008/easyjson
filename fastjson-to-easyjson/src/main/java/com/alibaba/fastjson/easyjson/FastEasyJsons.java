@@ -44,7 +44,7 @@ public class FastEasyJsons {
         boolean serializeEnumUsingToString = (SerializerFeature.WriteEnumUsingToString.getMask() & features) != 0;
         jsonBuilder.serializeEnumUsingToString(serializeEnumUsingToString);
         boolean serializeEnumUsingName = (SerializerFeature.WriteEnumUsingName.getMask() & features) != 0;
-        jsonBuilder.serializeEnumUsingValue(!serializeEnumUsingName);
+        jsonBuilder.serializeEnumUsingIndex(!serializeEnumUsingName);
         boolean skipTransientField = (SerializerFeature.SkipTransientField.getMask() & features) != 0;
         if (skipTransientField) {
             jsonBuilder.excludeFieldsWithAppendModifiers(Modifier.TRANSIENT);

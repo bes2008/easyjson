@@ -16,14 +16,12 @@ package com.jn.easyjson.core;
 
 import com.jn.easyjson.core.codec.dialect.CodecConfigurationRepositoryService;
 import com.jn.easyjson.core.codec.dialect.DialectIdentify;
-import com.jn.easyjson.core.codec.dialect.PropertyCodecConfiguration;
 import com.jn.easyjson.core.exclusion.Exclusion;
 import com.jn.easyjson.core.exclusion.ExclusionConfiguration;
 import com.jn.easyjson.core.exclusion.IgnoreAnnotationExclusion;
 import com.jn.langx.util.function.Consumer2;
 
 import java.text.DateFormat;
-import java.util.Map;
 
 /**
  * 代表单次 JSON 转换请求的 JSON 构建器。
@@ -123,12 +121,12 @@ public abstract class JSONBuilder implements Cloneable {
         return serializeEnumUsingToString;
     }
 
-    public JSONBuilder serializeEnumUsingValue(boolean value) {
+    public JSONBuilder serializeEnumUsingIndex(boolean value) {
         this.serializeEnumUsingValue = value;
         return this;
     }
 
-    public boolean serializeEnumUsingValue() {
+    public boolean serializeEnumUsingIndex() {
         return serializeEnumUsingValue;
     }
 
@@ -304,7 +302,7 @@ public abstract class JSONBuilder implements Cloneable {
         builder.serializeNulls(this.serializeNulls);
         builder.prettyFormat(this.prettyFormat);
         builder.serializeEnumUsingToString(this.serializeEnumUsingToString);
-        builder.serializeEnumUsingValue(this.serializeEnumUsingValue);
+        builder.serializeEnumUsingIndex(this.serializeEnumUsingValue);
         builder.serializeEnumUsingField(this.serializeEnumUsingField);
         builder.serializeLongAsString(this.serializeLongAsString);
         builder.serializeNumberAsString(this.serializeNumberAsString);

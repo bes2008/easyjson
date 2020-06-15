@@ -48,7 +48,7 @@ public class EasyJsonTests extends BaseTests {
             String jsonLibraryName = entry.getKey();
             System.out.println("=====================EasyJson test [" + jsonLibraryName + "] start =============================");
             JSONBuilder jsonBuilder = entry.getValue();
-            JSON gson = jsonBuilder.serializeNulls(false).serializeNumberAsString(true).serializeEnumUsingValue(true).addDeserializationExclusion(new IgnoreAnnotationExclusion()).build();
+            JSON gson = jsonBuilder.serializeNulls(false).serializeNumberAsString(true).serializeEnumUsingIndex(true).addDeserializationExclusion(new IgnoreAnnotationExclusion()).build();
 
             // test simple object
             String str1 = gson.toJson(person, person.getClass());
@@ -88,7 +88,7 @@ public class EasyJsonTests extends BaseTests {
             genders.add(Gender.woman);
             genders.add(Gender.man);
 
-            JSON json = new JacksonJSONBuilder().serializeEnumUsingValue(true).build();
+            JSON json = new JacksonJSONBuilder().serializeEnumUsingIndex(true).build();
             String jsonString = json.toJson(genders);
             System.out.println(jsonString);
             List<Gender> a = json.fromJson(jsonString, Types.getListParameterizedType(Gender.class));
@@ -110,7 +110,7 @@ public class EasyJsonTests extends BaseTests {
 
             System.out.println("=====================EasyJson tree [" + jsonLibraryName + "] test start =============================");
             JSONBuilder jsonBuilder = JSONBuilderProvider.create();
-            JSON gson = jsonBuilder.serializeNulls(true).serializeNumberAsString(true).serializeEnumUsingValue(true).build();
+            JSON gson = jsonBuilder.serializeNulls(true).serializeNumberAsString(true).serializeEnumUsingIndex(true).build();
 
             // test simple object
             String str1 = gson.toJson(person, person.getClass());
