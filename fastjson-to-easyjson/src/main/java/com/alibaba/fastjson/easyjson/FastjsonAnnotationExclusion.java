@@ -20,6 +20,7 @@ import com.jn.easyjson.core.codec.dialect.CodecConfigurationRepositoryService;
 import com.jn.easyjson.core.codec.dialect.PropertyCodecConfiguration;
 import com.jn.easyjson.core.exclusion.Exclusion;
 import com.jn.easyjson.core.util.Members;
+import com.jn.langx.util.Emptys;
 import com.jn.langx.util.reflect.FieldAttributes;
 import com.jn.langx.util.reflect.MethodAttributes;
 
@@ -61,7 +62,15 @@ public class FastjsonAnnotationExclusion implements Exclusion {
         PropertyCodecConfiguration propertyCodeConfiguration = configurationRepository.getPropertyCodeConfiguration(beanClass, propertyName);
         if (propertyCodeConfiguration == null) {
             ClassCodecConfiguration classCodecConfiguration = configurationRepository.getClassCodecConfiguration(beanClass);
-            return classCodecConfiguration != null && classCodecConfiguration.getExcludePropertyNames().contains(propertyName);
+            if(classCodecConfiguration!=null){
+                if(Emptys.isNotEmpty(classCodecConfiguration.getExcludedPropertyNames())){
+                    return classCodecConfiguration.getExcludedPropertyNames().contains(propertyName);
+                }
+                if(Emptys.isNotEmpty(classCodecConfiguration.getIncludedPropertyNames())){
+                    return !classCodecConfiguration.getIncludedPropertyNames().contains(propertyName);
+                }
+            }
+            return false;
         }
 
         if (serializePhrase) {

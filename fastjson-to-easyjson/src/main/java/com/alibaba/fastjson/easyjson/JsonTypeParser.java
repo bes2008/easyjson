@@ -41,7 +41,11 @@ public class JsonTypeParser implements BeanClassAnnotatedCodecConfigurationParse
 
             // ignores
             String[] ignores = jsonType.ignores();
-            configuration.setExcludePropertyNames(Collects.asList(ignores));
+            configuration.setExcludedPropertyNames(Collects.asList(ignores));
+
+            // includes
+            String[] includes = jsonType.includes();
+            configuration.setIncludedPropertyNames(Collects.asList(includes));
 
             // serializeFeatures
             SerializerFeature[] serializeFeatures = jsonType.serialzeFeatures();

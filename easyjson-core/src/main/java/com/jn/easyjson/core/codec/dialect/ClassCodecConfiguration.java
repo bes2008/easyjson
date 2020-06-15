@@ -25,8 +25,8 @@ import java.util.List;
  */
 public class ClassCodecConfiguration extends CodecConfiguration {
     private WeakReference clazzRef;
-
-    private List<String> excludePropertyNames= Collects.emptyArrayList();
+    private List<String> includedPropertyNames = Collects.emptyArrayList();
+    private List<String> excludedPropertyNames= Collects.emptyArrayList();
 
     public Class getClazz() {
         return clazzRef.getClass();
@@ -36,16 +36,26 @@ public class ClassCodecConfiguration extends CodecConfiguration {
         this.clazzRef = new WeakReference(clazz);
         this.setId(Reflects.getFQNClassName(clazz));
     }
-
-    public void addExcludePropertyName(String propertyName){
-        excludePropertyNames.add(propertyName);
+    public void addIncludedPropertyName(String propertyName){
+        includedPropertyNames.add(propertyName);
+    }
+    public void addExcludedPropertyName(String propertyName){
+        excludedPropertyNames.add(propertyName);
     }
 
-    public List<String> getExcludePropertyNames() {
-        return excludePropertyNames;
+    public List<String> getIncludedPropertyNames() {
+        return includedPropertyNames;
     }
 
-    public void setExcludePropertyNames(List<String> excludePropertyNames) {
-        this.excludePropertyNames = excludePropertyNames;
+    public void setIncludedPropertyNames(List<String> includedPropertyNames) {
+        this.includedPropertyNames = includedPropertyNames;
+    }
+
+    public List<String> getExcludedPropertyNames() {
+        return excludedPropertyNames;
+    }
+
+    public void setExcludedPropertyNames(List<String> excludedPropertyNames) {
+        this.excludedPropertyNames = excludedPropertyNames;
     }
 }
