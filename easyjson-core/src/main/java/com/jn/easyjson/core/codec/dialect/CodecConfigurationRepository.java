@@ -33,7 +33,7 @@ import java.lang.reflect.Method;
  * @param <T>
  */
 public abstract class CodecConfigurationRepository<T extends CodecConfiguration> extends AbstractConfigurationRepository<T, ClassLoaderCodecConfigurationLoader<T>, ConfigurationWriter<T>> {
-    private ConcurrentReferenceHashMap<ClassLoader, ClassLoaderCodecConfigurationRepository<T>> repositories = new ConcurrentReferenceHashMap<ClassLoader, ClassLoaderCodecConfigurationRepository<T>>(1000, 0.95f, Runtime.getRuntime().availableProcessors(), ReferenceType.WEAK, ReferenceType.WEAK);
+    private final ConcurrentReferenceHashMap<ClassLoader, ClassLoaderCodecConfigurationRepository<T>> repositories = new ConcurrentReferenceHashMap<ClassLoader, ClassLoaderCodecConfigurationRepository<T>>(1000, 0.95f, Runtime.getRuntime().availableProcessors(), ReferenceType.WEAK, ReferenceType.WEAK);
     private DialectIdentify dialectIdentify;
     private BeanClassAnnotatedCodecConfigurationParser defaultBeanClassParser;
     private BeanPropertyAnnotatedCodecConfigurationParser defaultBeanPropertyParser;
@@ -95,5 +95,21 @@ public abstract class CodecConfigurationRepository<T extends CodecConfiguration>
             repositories.putIfAbsent(classLoader, repository);
         }
         return repository;
+    }
+
+    public BeanClassAnnotatedCodecConfigurationParser getDefaultBeanClassParser() {
+        return defaultBeanClassParser;
+    }
+
+    public void setDefaultBeanClassParser(BeanClassAnnotatedCodecConfigurationParser defaultBeanClassParser) {
+        this.defaultBeanClassParser = defaultBeanClassParser;
+    }
+
+    public BeanPropertyAnnotatedCodecConfigurationParser getDefaultBeanPropertyParser() {
+        return defaultBeanPropertyParser;
+    }
+
+    public void setDefaultBeanPropertyParser(BeanPropertyAnnotatedCodecConfigurationParser defaultBeanPropertyParser) {
+        this.defaultBeanPropertyParser = defaultBeanPropertyParser;
     }
 }
