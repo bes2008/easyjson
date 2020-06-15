@@ -38,6 +38,10 @@ public class EnumDeserializer<T extends Enum> extends JsonDeserializer<T> implem
 
     public EnumDeserializer() {
     }
+    public EnumDeserializer(Class clazz){
+        this.clazz = clazz;
+    }
+
 
     @Override
     public T deserialize(JsonParser p, DeserializationContext ctx) throws IOException, JsonProcessingException {

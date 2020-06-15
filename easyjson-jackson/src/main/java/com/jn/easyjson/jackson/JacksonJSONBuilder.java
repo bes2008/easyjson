@@ -25,6 +25,8 @@ import com.jn.easyjson.jackson.deserializer.BooleanDeserializer;
 import com.jn.easyjson.jackson.deserializer.Deserializers;
 import com.jn.easyjson.jackson.deserializer.EnumDeserializer;
 import com.jn.easyjson.jackson.ext.EasyJsonObjectMapper;
+import com.jn.easyjson.jackson.modifier.EasyjsonBeanDeserializerModifier;
+import com.jn.easyjson.jackson.modifier.EasyjsonBeanSerializerModifier;
 import com.jn.easyjson.jackson.serializer.BooleanSerializer;
 import com.jn.easyjson.jackson.serializer.EnumSerializer;
 import com.jn.langx.annotation.Name;
@@ -32,8 +34,8 @@ import com.jn.langx.annotation.Name;
 @Name("jackson")
 @DependOn("com.fasterxml.jackson.databind.ObjectMapper")
 public class JacksonJSONBuilder extends JSONBuilder {
-    private static boolean moduleRegistered = false;
-    private static EasyJsonObjectMapper objectMapper = new EasyJsonObjectMapper();
+    private static boolean moduleInited = false;
+    private static SimpleModule module = new SimpleModule();
 
     static {
         makesureEasyJsonBaseModuleRegisted();
@@ -48,10 +50,9 @@ public class JacksonJSONBuilder extends JSONBuilder {
     }
 
     private static void makesureEasyJsonBaseModuleRegisted() {
-        if (!moduleRegistered) {
+        if (!moduleInited) {
             synchronized (JacksonJSONBuilder.class) {
-                if (!moduleRegistered) {
-                    SimpleModule module = new SimpleModule();
+                if (!moduleInited) {
                     SimpleDeserializers simpleDeserializers = new Deserializers();
                     module.setDeserializers(simpleDeserializers);
 
@@ -63,8 +64,10 @@ public class JacksonJSONBuilder extends JSONBuilder {
                     module.addDeserializer(Enum.class, new EnumDeserializer<Enum>());
                     module.addSerializer(Enum.class, new EnumSerializer<Enum>());
 
-                    objectMapper.registerModule(module);
-                    moduleRegistered = true;
+                    module.setSerializerModifier(new EasyjsonBeanSerializerModifier());
+                    module.setDeserializerModifier(new EasyjsonBeanDeserializerModifier());
+
+                    moduleInited = true;
                 }
             }
         }
@@ -83,12 +86,18 @@ public class JacksonJSONBuilder extends JSONBuilder {
         deserializationConfig = deserializationConfig.withoutAttribute(JacksonConstants.SERIALIZE_ENUM_USING_FIELD_ATTR_KEY);
 
         // ordinal()
-        objectMapper.configure(SerializationFeature.WRITE_ENUMS_USING_INDEX, serializeEnumUsingValue());
+        if(serializeEnumUsingValue()) {
+            serializationConfig = serializationConfig.with(SerializationFeature.WRITE_ENUMS_USING_INDEX);
+        }
+        serializationConfig = serializationConfig.withAttribute(JacksonConstants.SERIALIZE_ENUM_USING_INDEX_ATTR_KEY, serializeEnumUsingValue());
         deserializationConfig = deserializationConfig.withAttribute(JacksonConstants.SERIALIZE_ENUM_USING_INDEX_ATTR_KEY, serializeEnumUsingValue());
 
+
         // toString()
-        objectMapper.configure(SerializationFeature.WRITE_ENUMS_USING_TO_STRING, serializeEnumUsingToString());
-        objectMapper.configure(DeserializationFeature.READ_ENUMS_USING_TO_STRING, serializeEnumUsingToString());
+        if(serializeEnumUsingToString()){
+            serializationConfig = serializationConfig.with(SerializationFeature.WRITE_ENUMS_USING_TO_STRING);
+            deserializationConfig = deserializationConfig.with(DeserializationFeature.READ_ENUMS_USING_TO_STRING);
+        }
 
         // field
         if (serializeEnumUsingField() != null) {
@@ -145,8 +154,10 @@ public class JacksonJSONBuilder extends JSONBuilder {
     @Override
     public JSON build() {
         makesureEasyJsonBaseModuleRegisted();
-        EasyJsonObjectMapper mapper = new EasyJsonObjectMapper(objectMapper);
+        EasyJsonObjectMapper mapper = new EasyJsonObjectMapper();
         mapper.setJsonBuilder(this);
+        mapper.registerModule(module);
+
 
         if (serializeNulls()) {
             //  objectMapper.configure(SerializationFeature);
