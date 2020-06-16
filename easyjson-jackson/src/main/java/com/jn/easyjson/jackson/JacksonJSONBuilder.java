@@ -173,7 +173,8 @@ public class JacksonJSONBuilder extends JSONBuilder {
         mapper.registerModule(module);
 
         // 配置全局属性
-        mapper.setConfig(mapper.getSerializationConfig().withAttribute(JacksonConstants.ENABLE_CUSTOM_CONFIGURATION, this.isEnableCustomConfiguration()));
+        mapper.setSerializationConfig(mapper.getSerializationConfig().withAttribute(JacksonConstants.ENABLE_CUSTOM_CONFIGURATION, this.isEnableCustomConfiguration()));
+        mapper.setDescrializationConfig(mapper.getDeserializationConfig().withAttribute(JacksonConstants.ENABLE_CUSTOM_CONFIGURATION, this.isEnableCustomConfiguration()));
         configNulls(mapper);
         configBoolean(mapper);
         configNumber(mapper);

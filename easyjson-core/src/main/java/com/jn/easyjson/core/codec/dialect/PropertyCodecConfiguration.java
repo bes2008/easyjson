@@ -14,7 +14,14 @@
 
 package com.jn.easyjson.core.codec.dialect;
 
+import com.jn.langx.annotation.NonNull;
+import com.jn.langx.util.Emptys;
+import com.jn.langx.util.Preconditions;
+import com.jn.langx.util.reflect.Reflects;
+
 import java.lang.ref.WeakReference;
+import java.util.Collection;
+import java.util.Map;
 
 /**
  * 序列化，或反序列化字段、方法时的配置
@@ -73,5 +80,32 @@ public class PropertyCodecConfiguration extends CodecConfiguration{
 
     public void setSourceType(PropertyConfigurationSourceType sourceType) {
         this.sourceType = sourceType;
+    }
+
+
+    public static PropertyCodecConfiguration getPropertyCodecConfiguration(@NonNull DialectIdentify dialectIdentify, @NonNull Object container, @NonNull String propertyName){
+        if(dialectIdentify==null){
+            return null;
+        }
+        if(container==null){
+            return null;
+        }
+        if(Emptys.isEmpty(propertyName)){
+            return null;
+        }
+
+        Class containerClass = container.getClass();
+        String packageName=  Reflects.getPackageName(containerClass);
+        if(packageName.startsWith("java.")){
+            return null;
+        }
+        if(container instanceof Map || container instanceof Collection || containerClass.isArray()){
+            return null;
+        }
+        CodecConfigurationRepository codecConfigurationRepository = CodecConfigurationRepositoryService.getInstance().getCodecConfigurationRepository(dialectIdentify);
+        if(codecConfigurationRepository==null){
+            return null;
+        }
+        return codecConfigurationRepository.getPropertyCodeConfiguration(containerClass, propertyName);
     }
 }

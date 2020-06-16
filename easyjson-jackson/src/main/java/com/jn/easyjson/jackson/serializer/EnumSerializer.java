@@ -18,10 +18,13 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import com.jn.easyjson.core.codec.dialect.PropertyCodecConfiguration;
+import com.jn.easyjson.jackson.Jacksons;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
 
+import static com.jn.easyjson.jackson.JacksonConstants.ENABLE_CUSTOM_CONFIGURATION;
 import static com.jn.easyjson.jackson.JacksonConstants.SERIALIZE_ENUM_USING_FIELD_ATTR_KEY;
 
 public class EnumSerializer<T extends Enum> extends JsonSerializer<T> {
@@ -32,8 +35,21 @@ public class EnumSerializer<T extends Enum> extends JsonSerializer<T> {
             gen.writeNull();
             return;
         }
-        boolean usingIndex = sp.isEnabled(SerializationFeature.WRITE_ENUMS_USING_INDEX);
-        boolean usingToString = sp.isEnabled(SerializationFeature.WRITE_ENUMS_USING_TO_STRING);
+        Boolean usingIndex = null;
+        Boolean usingToString = null;
+        if (Jacksons.getBooleanAttr(sp, ENABLE_CUSTOM_CONFIGURATION)) {
+            PropertyCodecConfiguration propertyCodecConfiguration = Jacksons.getPropertyCodecConfiguration(gen);
+            if (propertyCodecConfiguration != null) {
+                usingIndex = propertyCodecConfiguration.getEnumUsingIndex();
+                usingToString = propertyCodecConfiguration.getEnumUsingToString();
+            }
+        }
+        if (usingIndex == null) {
+            usingIndex = sp.isEnabled(SerializationFeature.WRITE_ENUMS_USING_INDEX);
+        }
+        if (usingToString == null) {
+            usingToString = sp.isEnabled(SerializationFeature.WRITE_ENUMS_USING_TO_STRING);
+        }
         String usingField = (String) sp.getAttribute(SERIALIZE_ENUM_USING_FIELD_ATTR_KEY);
 
         if (usingIndex) {
