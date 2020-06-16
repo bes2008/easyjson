@@ -63,7 +63,7 @@ public abstract class JSONBuilder implements Cloneable {
     /**
      * 是否使用全局配置项
      */
-    private boolean useGlobalConfiguration = false;
+    private boolean enableCustomConfiguration = false;
 
     private DialectIdentify dialectId;
 
@@ -271,13 +271,13 @@ public abstract class JSONBuilder implements Cloneable {
         return exclusionConfiguration;
     }
 
-    public JSONBuilder useGlobalConfiguration(boolean use) {
-        this.useGlobalConfiguration = use;
+    public JSONBuilder enableCustomConfiguration(boolean enable) {
+        this.enableCustomConfiguration = enable;
         return this;
     }
 
-    public boolean isUseGlobalConfiguration() {
-        return this.useGlobalConfiguration;
+    public boolean isEnableCustomConfiguration() {
+        return this.enableCustomConfiguration;
     }
 
     public JSONBuilder dialectIdentify(DialectIdentify dialectId){
@@ -314,6 +314,6 @@ public abstract class JSONBuilder implements Cloneable {
         builder.serializeDateUsingToString(this.serializeDateUsingToString);
         builder.serializeBooleanUsingOnOff(this.serializeBooleanUsingOnOff);
         builder.serializeBooleanUsing1_0(this.serializeBooleanUsing1_0);
-        builder.useGlobalConfiguration(this.useGlobalConfiguration);
+        builder.enableCustomConfiguration(this.enableCustomConfiguration);
     }
 }
