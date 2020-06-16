@@ -16,7 +16,7 @@ import java.util.Date;
  * @version 20200614
  */
 @Test
-public class FastjsonAnnotationTest {
+public abstract class FastjsonAnnotationTest {
 
     protected UserEntity1 getUserEntity1Object() {
         UserEntity1 user = new UserEntity1();
