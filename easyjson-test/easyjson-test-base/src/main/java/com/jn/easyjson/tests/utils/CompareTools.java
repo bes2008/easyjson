@@ -21,6 +21,53 @@ import com.jn.langx.util.reflect.Reflects;
  */
 public class CompareTools {
 
+    /** 比较两个JSON字符串是否一致 **/
+    public static void assertJsonEquals(String actual, String expected) {
+        Object aObject = parseJsonString(actual);
+        Object eObject = parseJsonString(expected);
+        assertDeepEquals(aObject, eObject);
+    }
+
+    private static Object parseJsonString(String jsonString) {
+        if (jsonString.startsWith("{") && jsonString.endsWith("}")) {
+            try {
+                Class.forName("com.google.gson.Gson");
+                return ParseJsonUseGson.parseObjectString(jsonString);
+            } catch (ClassNotFoundException e) {
+            }
+            try {
+                Class.forName("com.fasterxml.jackson.databind.ObjectMapper");
+                return ParseJsonUseGson.parseObjectString(jsonString);
+            } catch (ClassNotFoundException e) {
+            }
+            try {
+                Class.forName("com.alibaba.fastjson.JSON");
+                return ParseJsonUseFastjson.parseObjectString(jsonString);
+            } catch (ClassNotFoundException e) {
+            }
+            throw new RuntimeException("Can't find any supported JSON libraries : [gson, jackson, fastjson]");
+        }
+        if (jsonString.startsWith("[") && jsonString.endsWith("]")) {
+            try {
+                Class.forName("com.google.gson.Gson");
+                return ParseJsonUseGson.parseArrayString(jsonString);
+            } catch (ClassNotFoundException e) {
+            }
+            try {
+                Class.forName("com.fasterxml.jackson.databind.ObjectMapper");
+                return ParseJsonUseGson.parseArrayString(jsonString);
+            } catch (ClassNotFoundException e) {
+            }
+            try {
+                Class.forName("com.alibaba.fastjson.JSON");
+                return ParseJsonUseFastjson.parseArrayString(jsonString);
+            } catch (ClassNotFoundException e) {
+            }
+            throw new RuntimeException("Can't find any supported JSON libraries : [gson, jackson, fastjson]");
+        }
+        throw new IllegalArgumentException("Unsupported json string: " + jsonString);
+    }
+
     /** 比对两个对象是否深度一致 **/
     public static void assertDeepEquals(Object actual, Object expected) {
         assertDeepEquals(null, actual, expected);
@@ -153,13 +200,8 @@ public class CompareTools {
 
     private static boolean isPrimitive(Class<?> clazz) {
         // @formatter:off
-        return clazz.isPrimitive()
-            || clazz.isEnum()
-            || clazz == Boolean.class
-            || clazz == Character.class
-            || clazz == String.class
-            || Number.class.isAssignableFrom(clazz)
-            || Date.class.isAssignableFrom(clazz);
+        return clazz.isPrimitive() || clazz.isEnum() || clazz == Boolean.class || clazz == Character.class
+                || clazz == String.class || Number.class.isAssignableFrom(clazz) || Date.class.isAssignableFrom(clazz);
         // @formatter:on
     }
 }
