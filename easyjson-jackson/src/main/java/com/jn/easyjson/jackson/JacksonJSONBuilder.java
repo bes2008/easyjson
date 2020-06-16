@@ -44,10 +44,12 @@ public class JacksonJSONBuilder extends JSONBuilder {
 
     public JacksonJSONBuilder() {
         super();
+        dialectIdentify(Jacksons.JACKSON);
     }
 
     public JacksonJSONBuilder(ExclusionConfiguration exclusionConfiguration) {
         super(exclusionConfiguration);
+        dialectIdentify(Jacksons.JACKSON);
     }
 
     private static void makesureEasyJsonBaseModuleRegisted() {

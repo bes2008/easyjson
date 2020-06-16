@@ -52,7 +52,7 @@ public class FastEasyJsons {
         boolean prettyFormat = (SerializerFeature.PrettyFormat.getMask() & features) != 0;
         jsonBuilder.prettyFormat(prettyFormat);
         jsonBuilder.enableCustomConfiguration(true);
-        jsonBuilder.dialectIdentify(FASTJSON);
+        jsonBuilder.proxyDialectIdentify(FASTJSON);
 
         jsonBuilder.addExclusionStrategies(new FastjsonAnnotationExclusion());
         return jsonBuilder;

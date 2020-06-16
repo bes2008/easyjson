@@ -20,6 +20,7 @@ import com.google.gson.TypeAdapterFactory;
 import com.jn.easyjson.core.JSON;
 import com.jn.easyjson.core.JSONBuilder;
 import com.jn.easyjson.core.annotation.DependOn;
+import com.jn.easyjson.core.codec.dialect.DialectIdentify;
 import com.jn.easyjson.core.exclusion.Exclusion;
 import com.jn.easyjson.core.exclusion.ExclusionConfiguration;
 import com.jn.easyjson.gson.exclusion.DelegateExclusionStrategy;
@@ -39,12 +40,20 @@ import java.util.List;
 public class GsonJSONBuilder extends JSONBuilder {
     private static final Logger logger = LoggerFactory.getLogger(GsonJSONBuilder.class);
 
+    public static final DialectIdentify GSON = new DialectIdentify();
+    static {
+        GSON.setId("gson");
+        GSON.setLibUrl(Reflects.getCodeLocation(Gson.class).toString());
+    }
+
     public GsonJSONBuilder() {
         super();
+        dialectIdentify(GSON);
     }
 
     public GsonJSONBuilder(ExclusionConfiguration exclusionConfiguration) {
         super(exclusionConfiguration);
+        dialectIdentify(GSON);
     }
 
     @Override

@@ -17,6 +17,7 @@ package com.jn.easyjson.fastjson;
 import com.jn.easyjson.core.tree.JsonTreeSerializerBuilder;
 
 public class FastJson {
+
     private FastJsonSerializerBuilder serializerBuilder;
     private FastJsonParserBuilder deserializerBuilder;
     private JsonTreeSerializerBuilder jsonTreeSerializerBuilder;

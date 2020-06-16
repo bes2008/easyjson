@@ -65,6 +65,13 @@ public abstract class JSONBuilder implements Cloneable {
      */
     private boolean enableCustomConfiguration = false;
 
+    /**
+     * 代理库
+     */
+    private DialectIdentify proxyDialectId;
+    /**
+     * 真正的 JSON库
+     */
     private DialectIdentify dialectId;
 
     /**
@@ -278,6 +285,14 @@ public abstract class JSONBuilder implements Cloneable {
 
     public boolean isEnableCustomConfiguration() {
         return this.enableCustomConfiguration;
+    }
+    public JSONBuilder proxyDialectIdentify(DialectIdentify dialectId){
+        this.proxyDialectId = dialectId;
+        return this;
+    }
+
+    public DialectIdentify proxyDialectIdentify(){
+        return this.proxyDialectId ;
     }
 
     public JSONBuilder dialectIdentify(DialectIdentify dialectId){

@@ -16,7 +16,10 @@ package com.jn.easyjson.jackson;
 
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import com.jn.easyjson.core.codec.dialect.DialectIdentify;
+import com.jn.langx.util.reflect.Reflects;
 
 import java.lang.reflect.Type;
 import java.text.DateFormat;
@@ -98,5 +101,11 @@ public class Jacksons {
             return (String) object;
         }
         return null;
+    }
+
+    public static final DialectIdentify JACKSON = new DialectIdentify();
+    static {
+        JACKSON.setId("jackson");
+        JACKSON.setLibUrl(Reflects.getCodeLocation(ObjectMapper.class).toString());
     }
 }

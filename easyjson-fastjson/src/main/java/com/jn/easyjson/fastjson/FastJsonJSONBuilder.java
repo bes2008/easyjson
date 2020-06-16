@@ -21,6 +21,7 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.jn.easyjson.core.JSON;
 import com.jn.easyjson.core.JSONBuilder;
 import com.jn.easyjson.core.annotation.DependOn;
+import com.jn.easyjson.core.codec.dialect.DialectIdentify;
 import com.jn.easyjson.core.exclusion.ExclusionConfiguration;
 import com.jn.easyjson.core.tree.JsonTreeSerializerBuilder;
 import com.jn.easyjson.fastjson.codec.BooleanCodec;
@@ -29,17 +30,30 @@ import com.jn.easyjson.fastjson.codec.NumberCodec;
 import com.jn.easyjson.fastjson.ext.EasyJsonParserConfig;
 import com.jn.easyjson.fastjson.ext.EasyJsonSerializeConfig;
 import com.jn.langx.annotation.Name;
+import com.jn.langx.util.reflect.Reflects;
 
 @Name("fastjson")
 @DependOn("com.alibaba.fastjson.JSON")
 public class FastJsonJSONBuilder extends JSONBuilder {
 
+    public static final DialectIdentify FASTJSON = new DialectIdentify();
+    static {
+        FASTJSON.setId("fastjson");
+        try {
+            Class clazz = Class.forName("com.alibaba.fastjson.JSON");
+            FASTJSON.setLibUrl(Reflects.getCodeLocation(clazz).toString());
+        }catch (Throwable ex){
+            // ignore it
+        }
+    }
     public FastJsonJSONBuilder() {
         super();
+        dialectIdentify(FASTJSON);
     }
 
     public FastJsonJSONBuilder(ExclusionConfiguration exclusionConfiguration) {
         super(exclusionConfiguration);
+        dialectIdentify(FASTJSON);
     }
 
     @Override
