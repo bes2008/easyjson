@@ -35,7 +35,7 @@ public class CompareTools {
             if ("gson".equals(dialect)) {
                 return ParseJsonUseGson.parseObjectString(jsonString);
             } else if ("jackson".equals(dialect)) {
-                return ParseJsonUseGson.parseObjectString(jsonString);
+                return ParseJsonUseJackson.parseObjectString(jsonString);
             } else if ("fastjson".equals(dialect)) {
                 return ParseJsonUseFastjson.parseObjectString(jsonString);
             }
@@ -45,7 +45,7 @@ public class CompareTools {
             if ("gson".equals(dialect)) {
                 return ParseJsonUseGson.parseArrayString(jsonString);
             } else if ("jackson".equals(dialect)) {
-                return ParseJsonUseGson.parseArrayString(jsonString);
+                return ParseJsonUseJackson.parseArrayString(jsonString);
             } else if ("fastjson".equals(dialect)) {
                 return ParseJsonUseFastjson.parseArrayString(jsonString);
             }
