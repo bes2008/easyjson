@@ -1,7 +1,6 @@
 package com.jn.easyjson.tests.cases;
 
 import java.util.Date;
-import org.testng.Assert;
 import org.testng.annotations.Test;
 import com.jn.easyjson.core.JSON;
 import com.jn.easyjson.core.JSONBuilderProvider;
@@ -36,14 +35,16 @@ public abstract class EasyJsonBaseTest {
         return user;
     }
 
-    protected abstract String getUserEntityString();
+    protected String getUserEntityString() {
+        return "{\"id\":\"1001\",\"name\":\"Test1\",\"gender\":\"FEMALE\",\"password\":\"a@b@c\",\"weight\":60.5,\"height\":170,\"birthday\":1577808000000,\"intro\":\"This's a test user entity. \\\"EasyJson\\\"\",\"addresses\":[{\"name\":\"home\",\"details\":\"Nanjing China\"},{\"name\":\"office\",\"details\":\"Beijing China\"}]}";
+    }
 
     @Test(priority = 10001)
     public void testSerialize10001() {
         UserEntity user = getUserEntityObject();
         String jsonString = json.toJson(user);
         System.out.println(jsonString);
-        Assert.assertEquals(jsonString, getUserEntityString());
+        CompareTools.assertJsonEquals(jsonString, getUserEntityString());
     }
 
     @Test(priority = 10002)

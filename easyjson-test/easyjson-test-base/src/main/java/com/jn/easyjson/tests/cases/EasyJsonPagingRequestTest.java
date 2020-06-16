@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.testng.Assert;
 import org.testng.annotations.Test;
 import com.jn.easyjson.core.JSON;
 import com.jn.easyjson.core.JSONBuilder;
@@ -17,6 +16,7 @@ import com.jn.easyjson.tests.entity.struct.PagingResult;
 import com.jn.easyjson.tests.entity.struct.Person;
 import com.jn.easyjson.tests.entity.user.Gender;
 import com.jn.easyjson.tests.utils.CompareTools;
+import com.jn.langx.util.reflect.type.Types;
 
 /**
  * PagingRequest复杂对象测试
@@ -111,14 +111,16 @@ public abstract class EasyJsonPagingRequestTest {
         return pagingRequest;
     }
 
-    protected abstract String getPagingRequestString();
+    protected String getPagingRequestString() {
+        return "{\"escapeLikeParameter\":false,\"context\":{\"pagingRequest\":true,\"orderByRequest\":false,\"target\":{}},\"maxRows\":\"-1\",\"timeout\":\"0\",\"countColumn\":\"name_\",\"cacheCount\":true,\"pageNo\":\"20\",\"pageSize\":\"50\",\"condition\":{\"b\":\"2\",\"a\":\"1\"},\"result\":{\"pageNo\":\"20\",\"pageSize\":\"50\",\"total\":\"203423\",\"items\":[{\"id\":\"1\",\"name\":\"name_1\",\"birthday\":1592179316459,\"contact\":{\"email\":\"name_1@gmail.com\",\"phone\":\"phone1\",\"mobilePhone\":\"mphone1\",\"msn\":\"msn1\",\"webchat\":\"webchat1\"},\"gender\":\"FEMALE\",\"authCode\":\"12312425353464565\",\"married\":false},{\"id\":\"1\",\"name\":\"name_1\",\"birthday\":1592179316459,\"contact\":{\"email\":\"name_1@gmail.com\",\"phone\":\"phone1\",\"mobilePhone\":\"mphone1\",\"msn\":\"msn1\",\"webchat\":\"webchat1\"},\"gender\":\"FEMALE\",\"authCode\":\"12312425353464565\",\"married\":false},{\"id\":\"1\",\"name\":\"name_1\",\"birthday\":1592179316459,\"contact\":{\"email\":\"name_1@gmail.com\",\"phone\":\"phone1\",\"mobilePhone\":\"mphone1\",\"msn\":\"msn1\",\"webchat\":\"webchat1\"},\"gender\":\"FEMALE\",\"authCode\":\"12312425353464565\",\"married\":false},{\"id\":\"1\",\"name\":\"name_1\",\"birthday\":1592179316459,\"contact\":{\"email\":\"name_1@gmail.com\",\"phone\":\"phone1\",\"mobilePhone\":\"mphone1\",\"msn\":\"msn1\",\"webchat\":\"webchat1\"},\"gender\":\"FEMALE\",\"authCode\":\"12312425353464565\",\"married\":false},{\"id\":\"1\",\"name\":\"name_1\",\"birthday\":1592179316459,\"contact\":{\"email\":\"name_1@gmail.com\",\"phone\":\"phone1\",\"mobilePhone\":\"mphone1\",\"msn\":\"msn1\",\"webchat\":\"webchat1\"},\"gender\":\"FEMALE\",\"authCode\":\"12312425353464565\",\"married\":false},{\"id\":\"1\",\"name\":\"name_1\",\"birthday\":1592179316459,\"contact\":{\"email\":\"name_1@gmail.com\",\"phone\":\"phone1\",\"mobilePhone\":\"mphone1\",\"msn\":\"msn1\",\"webchat\":\"webchat1\"},\"gender\":\"FEMALE\",\"authCode\":\"12312425353464565\",\"married\":false},{\"id\":\"1\",\"name\":\"name_1\",\"birthday\":1592179316459,\"contact\":{\"email\":\"name_1@gmail.com\",\"phone\":\"phone1\",\"mobilePhone\":\"mphone1\",\"msn\":\"msn1\",\"webchat\":\"webchat1\"},\"gender\":\"FEMALE\",\"authCode\":\"12312425353464565\",\"married\":false},{\"id\":\"1\",\"name\":\"name_1\",\"birthday\":1592179316459,\"contact\":{\"email\":\"name_1@gmail.com\",\"phone\":\"phone1\",\"mobilePhone\":\"mphone1\",\"msn\":\"msn1\",\"webchat\":\"webchat1\"},\"gender\":\"FEMALE\",\"authCode\":\"12312425353464565\",\"married\":false},{\"id\":\"1\",\"name\":\"name_1\",\"birthday\":1592179316459,\"contact\":{\"email\":\"name_1@gmail.com\",\"phone\":\"phone1\",\"mobilePhone\":\"mphone1\",\"msn\":\"msn1\",\"webchat\":\"webchat1\"},\"gender\":\"FEMALE\",\"authCode\":\"12312425353464565\",\"married\":false},{\"id\":\"1\",\"name\":\"name_1\",\"birthday\":1592179316459,\"contact\":{\"email\":\"name_1@gmail.com\",\"phone\":\"phone1\",\"mobilePhone\":\"mphone1\",\"msn\":\"msn1\",\"webchat\":\"webchat1\"},\"gender\":\"FEMALE\",\"authCode\":\"12312425353464565\",\"married\":false}],\"maxPage\":\"4069\",\"maxPageCount\":\"4069\"},\"getAllFromNonZeroOffsetRequest\":false,\"emptyRequest\":false,\"subqueryPaging\":false,\"getAllRequest\":false,\"validRequest\":true,\"pagingRequest\":true,\"orderByAsString\":\"\"}";
+    }
 
     @Test(priority = 10001)
     public void testPagingRequestSerialize10001() {
         PagingRequest<Map<String, Object>, Person> object = getPagingRequestObject();
         String jsonString = json.toJson(object);
         System.out.println(jsonString);
-        Assert.assertEquals(jsonString, getPagingRequestString());
+        CompareTools.assertJsonEquals(jsonString, getPagingRequestString());
     }
 
     @Test(priority = 10101)
@@ -126,7 +128,7 @@ public abstract class EasyJsonPagingRequestTest {
         Person object = getPersonObject();
         String jsonString = json.toJson(object);
         System.out.println(jsonString);
-        Assert.assertEquals(jsonString, getPersonString());
+        CompareTools.assertJsonEquals(jsonString, getPersonString());
     }
 
     @Test(priority = 10102)
@@ -142,15 +144,14 @@ public abstract class EasyJsonPagingRequestTest {
         List<Person> object = getPersonsObject();
         String jsonString = json.toJson(object);
         System.out.println(jsonString);
-        Assert.assertEquals(jsonString, getPersonsString());
+        CompareTools.assertJsonEquals(jsonString, getPersonsString());
     }
 
     @Test(priority = 10202)
     public void testPersonsDeserialize10202() {
-        // TODO JSON对象缺少解析数组字符串的方法
-        // String jsonString = getPersonString();
-        // List<Person> actual = json.parseArray(jsonString, Person.class);
-        // List<Person> expected = getPersonsObject();
-        // CompareTools.assertDeepEquals(actual, expected);
+        String jsonString = getPersonsString();
+        List<Person> actual = json.fromJson(jsonString, Types.getListParameterizedType(Person.class));
+        List<Person> expected = getPersonsObject();
+        CompareTools.assertDeepEquals(actual, expected);
     }
 }
