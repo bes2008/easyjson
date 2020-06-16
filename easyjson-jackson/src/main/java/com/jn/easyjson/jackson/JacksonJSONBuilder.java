@@ -151,6 +151,17 @@ public class JacksonJSONBuilder extends JSONBuilder {
         objectMapper.setDescrializationConfig(deserializationConfig);
     }
 
+    private  void configNulls(EasyJsonObjectMapper objectMapper) {
+        if (serializeNulls()) {
+            objectMapper.configure(SerializationFeature.WRITE_NULL_MAP_VALUES,true);
+            objectMapper.setConfig(objectMapper.getSerializationConfig()
+                    .withAppendedAnnotationIntrospector(new EasyJsonJacksonAnnotationIntrospector())
+                    .withAttribute(JacksonConstants.SERIALIZE_NULLS_ATTR_KEY,true)
+            );
+        }
+
+    }
+
 
     @Override
     public JSON build() {
@@ -159,26 +170,19 @@ public class JacksonJSONBuilder extends JSONBuilder {
         mapper.setJsonBuilder(this);
         mapper.registerModule(module);
 
-
-        if (serializeNulls()) {
-            mapper.configure(SerializationFeature.WRITE_NULL_MAP_VALUES,true);
-            mapper.setConfig(mapper.getSerializationConfig()
-                    .withAppendedAnnotationIntrospector(new EasyJsonJacksonAnnotationIntrospector())
-                    .withAttribute(JacksonConstants.SERIALIZE_NULLS_ATTR_KEY,true)
-            );
-        }
-
+        // 配置全局属性
+        mapper.setConfig(mapper.getSerializationConfig().withAttribute(JacksonConstants.ENABLE_CUSTOM_CONFIGURATION, this.isEnableCustomConfiguration()));
+        configNulls(mapper);
         configBoolean(mapper);
         configNumber(mapper);
         configEnum(mapper);
         configDate(mapper);
-
         if(!serializeNonFieldGetter()){
             mapper.configure(MapperFeature.REQUIRE_SETTERS_FOR_GETTERS, true);
         }
-
         mapper.configure(SerializationFeature.INDENT_OUTPUT, prettyFormat());
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
         JacksonAdapter jsonHandler = new JacksonAdapter();
         jsonHandler.setObjectMapper(mapper);
         JSON json = new JSON();

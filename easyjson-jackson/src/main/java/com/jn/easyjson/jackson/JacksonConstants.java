@@ -16,6 +16,9 @@ package com.jn.easyjson.jackson;
 
 public class JacksonConstants {
 
+    // custom config switch
+    public static final String ENABLE_CUSTOM_CONFIGURATION="ENABLE_CUSTOM_CONFIGURATION";
+
     // nulls
     public static final String SERIALIZE_NULLS_ATTR_KEY="SERIALIZE_NULLS";
 
