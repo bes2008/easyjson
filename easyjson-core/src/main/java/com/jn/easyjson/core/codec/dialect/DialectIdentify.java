@@ -28,6 +28,18 @@ public final class DialectIdentify {
         setLibUrl(libUrl);
     }
 
+    public boolean isFastjson(){
+        return "fastjson".equals(id);
+    }
+
+    public boolean isGson(){
+        return "gson".equals(id);
+    }
+
+    public boolean isJackson(){
+        return "jackson".equals(id);
+    }
+
     public String getId() {
         return this.id;
     }

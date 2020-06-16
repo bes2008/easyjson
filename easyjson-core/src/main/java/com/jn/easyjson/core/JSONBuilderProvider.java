@@ -15,6 +15,7 @@
 package com.jn.easyjson.core;
 
 import com.jn.easyjson.core.annotation.DependOn;
+import com.jn.easyjson.core.codec.dialect.DialectIdentify;
 import com.jn.langx.annotation.Name;
 import com.jn.langx.util.reflect.Reflects;
 import org.slf4j.Logger;
@@ -44,6 +45,10 @@ public class JSONBuilderProvider {
 
     public static JSONBuilder create() {
         return create(defaultJsonBuilderClass);
+    }
+
+    public static final DialectIdentify getDefaultDialectIdentify(){
+        return create().dialectIdentify();
     }
 
     public static JSON simplest() {
