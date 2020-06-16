@@ -44,7 +44,7 @@ public class EnumSerializer<T extends Enum> extends JsonSerializer<T> {
                 usingToString = propertyCodecConfiguration.getEnumUsingToString();
             }
         }
-        if (usingIndex == null) {
+        if (usingIndex == null && usingToString==null) {
             usingIndex = sp.isEnabled(SerializationFeature.WRITE_ENUMS_USING_INDEX);
         }
         if (usingToString == null) {

@@ -58,7 +58,7 @@ public class EnumDeserializer<T extends Enum> extends JsonDeserializer<T> implem
                 usingToString = propertyCodecConfiguration.getEnumUsingToString();
             }
         }
-        if (usingIndex == null) {
+        if (usingIndex == null && usingToString == null) {
             usingIndex = Jacksons.getBooleanAttr(ctx, SERIALIZE_ENUM_USING_INDEX_ATTR_KEY);
         }
         if (usingToString == null) {

@@ -24,11 +24,12 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.jn.easyjson.core.codec.dialect.PropertyCodecConfiguration;
 import com.jn.easyjson.jackson.JacksonConstants;
 import com.jn.easyjson.jackson.Jacksons;
+import com.jn.langx.util.Dates;
+import com.jn.langx.util.Strings;
 
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import static com.jn.easyjson.jackson.JacksonConstants.ENABLE_CUSTOM_CONFIGURATION;
@@ -49,6 +50,10 @@ public class DateDeserializer<T extends Date> extends JsonDeserializer<T> implem
             if (propertyCodecConfiguration != null) {
                 df = propertyCodecConfiguration.getDateFormat();
                 pattern = propertyCodecConfiguration.getDatePattern();
+
+                if (df == null && Strings.isNotBlank(pattern)) {
+                    df = Dates.getSimpleDateFormat(pattern);
+                }
             }
         }
         if (df == null) {
@@ -61,8 +66,8 @@ public class DateDeserializer<T extends Date> extends JsonDeserializer<T> implem
 
 
         if (curr == JsonToken.VALUE_STRING) {
-            if (df == null && pattern != null && !pattern.trim().isEmpty()) {
-                df = new SimpleDateFormat(pattern);
+            if (df == null && Strings.isNotBlank(pattern)) {
+                df = Dates.getSimpleDateFormat(pattern);
             }
             if (df != null) {
                 try {
