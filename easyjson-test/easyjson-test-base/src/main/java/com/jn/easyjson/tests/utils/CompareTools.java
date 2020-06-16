@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.testng.Assert;
+import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.langx.util.reflect.Reflects;
 
 /**
@@ -29,39 +30,24 @@ public class CompareTools {
     }
 
     private static Object parseJsonString(String jsonString) {
+        String dialect = JSONBuilderProvider.create().dialectIdentify().getId();
         if (jsonString.startsWith("{") && jsonString.endsWith("}")) {
-            try {
-                Class.forName("com.google.gson.Gson");
+            if ("gson".equals(dialect)) {
                 return ParseJsonUseGson.parseObjectString(jsonString);
-            } catch (ClassNotFoundException e) {
-            }
-            try {
-                Class.forName("com.fasterxml.jackson.databind.ObjectMapper");
+            } else if ("jackson".equals(dialect)) {
                 return ParseJsonUseGson.parseObjectString(jsonString);
-            } catch (ClassNotFoundException e) {
-            }
-            try {
-                Class.forName("com.alibaba.fastjson.JSON");
+            } else if ("fastjson".equals(dialect)) {
                 return ParseJsonUseFastjson.parseObjectString(jsonString);
-            } catch (ClassNotFoundException e) {
             }
             throw new RuntimeException("Can't find any supported JSON libraries : [gson, jackson, fastjson]");
         }
         if (jsonString.startsWith("[") && jsonString.endsWith("]")) {
-            try {
-                Class.forName("com.google.gson.Gson");
+            if ("gson".equals(dialect)) {
                 return ParseJsonUseGson.parseArrayString(jsonString);
-            } catch (ClassNotFoundException e) {
-            }
-            try {
-                Class.forName("com.fasterxml.jackson.databind.ObjectMapper");
+            } else if ("jackson".equals(dialect)) {
                 return ParseJsonUseGson.parseArrayString(jsonString);
-            } catch (ClassNotFoundException e) {
-            }
-            try {
-                Class.forName("com.alibaba.fastjson.JSON");
+            } else if ("fastjson".equals(dialect)) {
                 return ParseJsonUseFastjson.parseArrayString(jsonString);
-            } catch (ClassNotFoundException e) {
             }
             throw new RuntimeException("Can't find any supported JSON libraries : [gson, jackson, fastjson]");
         }
