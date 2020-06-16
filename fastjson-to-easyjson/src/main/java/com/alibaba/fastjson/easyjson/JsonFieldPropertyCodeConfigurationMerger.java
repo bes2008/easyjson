@@ -53,8 +53,8 @@ public class JsonFieldPropertyCodeConfigurationMerger implements PropertyCodecCo
         if(newConfiguration.getEnumUsingToString()!=null){
             configuration.setEnumUsingToString(newConfiguration.getEnumUsingToString());
         }
-        if(newConfiguration.getEnumUsingValue()!=null){
-            configuration.setEnumUsingValue(newConfiguration.getEnumUsingValue());
+        if(newConfiguration.getEnumUsingIndex()!=null){
+            configuration.setEnumUsingIndex(newConfiguration.getEnumUsingIndex());
         }
         if(newConfiguration.getBooleanUsing01()!=null){
             configuration.setBooleanUsing01(newConfiguration.getBooleanUsing01());

@@ -18,14 +18,15 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.*;
+import com.jn.easyjson.core.codec.dialect.PropertyCodecConfiguration;
 import com.jn.easyjson.jackson.Jacksons;
+import com.jn.langx.util.Emptys;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.EnumSet;
 
-import static com.jn.easyjson.jackson.JacksonConstants.SERIALIZE_ENUM_USING_FIELD_ATTR_KEY;
-import static com.jn.easyjson.jackson.JacksonConstants.SERIALIZE_ENUM_USING_INDEX_ATTR_KEY;
+import static com.jn.easyjson.jackson.JacksonConstants.*;
 
 public class EnumDeserializer<T extends Enum> extends JsonDeserializer<T> implements ContextualDeserializer {
 
@@ -38,16 +39,34 @@ public class EnumDeserializer<T extends Enum> extends JsonDeserializer<T> implem
 
     public EnumDeserializer() {
     }
-    public EnumDeserializer(Class clazz){
+
+    public EnumDeserializer(Class clazz) {
         this.clazz = clazz;
     }
 
 
     @Override
     public T deserialize(JsonParser p, DeserializationContext ctx) throws IOException, JsonProcessingException {
-        boolean usingIndex = Jacksons.getBooleanAttr(ctx, SERIALIZE_ENUM_USING_INDEX_ATTR_KEY);
-        boolean usingToString = ctx.isEnabled(DeserializationFeature.READ_ENUMS_USING_TO_STRING);
-        String usingField = (String) ctx.getAttribute(SERIALIZE_ENUM_USING_FIELD_ATTR_KEY);
+
+        Boolean usingIndex = null;
+        Boolean usingToString = null;
+        String usingField = null;
+        if (Jacksons.getBooleanAttr(ctx, ENABLE_CUSTOM_CONFIGURATION)) {
+            PropertyCodecConfiguration propertyCodecConfiguration = Jacksons.getPropertyCodecConfiguration(p);
+            if (propertyCodecConfiguration != null) {
+                usingIndex = propertyCodecConfiguration.getEnumUsingIndex();
+                usingToString = propertyCodecConfiguration.getEnumUsingToString();
+            }
+        }
+        if (usingIndex == null) {
+            usingIndex = Jacksons.getBooleanAttr(ctx, SERIALIZE_ENUM_USING_INDEX_ATTR_KEY);
+        }
+        if (usingToString == null) {
+            usingToString = ctx.isEnabled(DeserializationFeature.READ_ENUMS_USING_TO_STRING);
+        }
+        if (Emptys.isEmpty(usingField)) {
+            usingField = (String) ctx.getAttribute(SERIALIZE_ENUM_USING_FIELD_ATTR_KEY);
+        }
         Class<T> enumClass = clazz;
         if (enumClass == null) {
             Object currentOwner = p.getCurrentValue();

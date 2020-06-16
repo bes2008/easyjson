@@ -50,7 +50,7 @@ public class CodecConfiguration extends MapAccessor implements Configuration {
      */
     private Boolean enumUsingName;
     // 编号
-    private Boolean enumUsingValue;
+    private Boolean enumUsingIndex;
     private Boolean enumUsingToString;
 
 
@@ -119,12 +119,12 @@ public class CodecConfiguration extends MapAccessor implements Configuration {
         this.enumUsingName = enumUsingName;
     }
 
-    public Boolean getEnumUsingValue() {
-        return enumUsingValue;
+    public Boolean getEnumUsingIndex() {
+        return enumUsingIndex;
     }
 
-    public void setEnumUsingValue(Boolean enumUsingValue) {
-        this.enumUsingValue = enumUsingValue;
+    public void setEnumUsingIndex(Boolean enumUsingIndex) {
+        this.enumUsingIndex = enumUsingIndex;
     }
 
     public Boolean getEnumUsingToString() {

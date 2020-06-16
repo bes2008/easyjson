@@ -81,7 +81,7 @@ public class JsonFieldParser implements BeanPropertyAnnotatedCodecConfigurationP
                 configuration.setEnumUsingToString(true);
             }
             if (serializeFeatures.contains(SerializerFeature.WriteEnumUsingName)) {
-                configuration.setEnumUsingValue(false);
+                configuration.setEnumUsingIndex(false);
             }
 
             // deserializeFeatures
