@@ -23,7 +23,6 @@ import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
-import com.jn.langx.util.Numbers;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -41,7 +40,7 @@ public final class ObjectTypeAdapter extends TypeAdapter<Object> {
         public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
             if (type.getRawType() == Object.class) {
                 TypeAdapter delegate = com.google.gson.internal.bind.ObjectTypeAdapter.FACTORY.create(gson, type);
-                return (TypeAdapter)new ObjectTypeAdapter(gson, delegate);
+                return (TypeAdapter) new ObjectTypeAdapter(gson, delegate);
             }
             return null;
         }
@@ -56,7 +55,7 @@ public final class ObjectTypeAdapter extends TypeAdapter<Object> {
     }
 
     ObjectTypeAdapter(Gson gson) {
-        this(gson,null);
+        this(gson, null);
     }
 
     @Override
@@ -87,17 +86,17 @@ public final class ObjectTypeAdapter extends TypeAdapter<Object> {
             case NUMBER:
                 Double dValue = in.nextDouble();
                 int iValue = dValue.intValue();
-                if(iValue == dValue){
+                if (iValue == dValue) {
                     return iValue;
                 }
 
-                long lValue= dValue.longValue();
-                if(lValue == dValue){
+                long lValue = dValue.longValue();
+                if (lValue == dValue) {
                     return lValue;
                 }
 
                 float fValue = dValue.floatValue();
-                if(fValue == dValue){
+                if (fValue == dValue) {
                     return fValue;
                 }
                 return dValue;
@@ -129,5 +128,13 @@ public final class ObjectTypeAdapter extends TypeAdapter<Object> {
         }
 
         typeAdapter.write(out, value);
+    }
+
+    @Override
+    public String toString() {
+        return "com.jn.easyjson.gson.typeadapter.ObjectTypeAdapter{" +
+                "gson=" + gson +
+                ", delegate=" + delegate +
+                '}';
     }
 }

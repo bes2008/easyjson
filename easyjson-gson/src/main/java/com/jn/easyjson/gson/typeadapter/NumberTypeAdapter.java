@@ -124,4 +124,12 @@ public class NumberTypeAdapter implements JsonSerializer<Number>, JsonDeserializ
         }
         return new JsonPrimitive(src);
     }
+
+    @Override
+    public String toString() {
+        return "com.jn.easyjson.gson.typeadapter.NumberTypeAdapter{" +
+                "longUsingString=" + longUsingString +
+                ", usingString=" + usingString +
+                '}';
+    }
 }

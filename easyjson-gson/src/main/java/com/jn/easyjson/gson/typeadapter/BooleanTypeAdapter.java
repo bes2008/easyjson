@@ -65,4 +65,12 @@ public class BooleanTypeAdapter implements JsonSerializer<Boolean>, JsonDeserial
         }
         return new JsonPrimitive(src);
     }
+
+    @Override
+    public String toString() {
+        return "com.jn.easyjson.gson.typeadapter.BooleanTypeAdapter{" +
+                "using1_0=" + using1_0 +
+                ", usingOnOff=" + usingOnOff +
+                '}';
+    }
 }

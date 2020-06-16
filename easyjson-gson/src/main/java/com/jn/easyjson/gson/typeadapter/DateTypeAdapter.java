@@ -72,5 +72,13 @@ public class DateTypeAdapter implements JsonSerializer<Date>, JsonDeserializer<D
         }
         return new JsonPrimitive(src.getTime());
     }
+
+    @Override
+    public String toString() {
+        return "com.jn.easyjson.gson.typeadapter.DateTypeAdapter{" +
+                "df=" + df +
+                ", usingToString=" + usingToString +
+                '}';
+    }
 }
 

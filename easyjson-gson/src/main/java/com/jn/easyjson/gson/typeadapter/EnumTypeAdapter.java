@@ -172,4 +172,13 @@ public class EnumTypeAdapter implements JsonSerializer<Enum>, JsonDeserializer<E
         return new JsonPrimitive(e.name());
     }
 
+    @Override
+    public String toString() {
+        return "com.jn.easyjson.gson.typeadapter.EnumTypeAdapter{" +
+                "usingValue=" + usingValue +
+                ", usingToString=" + usingToString +
+                ", usingField='" + usingField + '\'' +
+                ", usingName=" + usingName +
+                '}';
+    }
 }
