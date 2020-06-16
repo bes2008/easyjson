@@ -47,12 +47,16 @@ public class JSONBuilderProvider {
         return create(defaultJsonBuilderClass);
     }
 
-    public static final DialectIdentify getDefaultDialectIdentify(){
+    public static final DialectIdentify getDefaultDialectIdentify() {
         try {
-            return create().dialectIdentify();
-        }catch (Throwable ex){
+            return getDefaultDialectIdentifyOrException();
+        } catch (Throwable ex) {
             return null;
         }
+    }
+
+    public static final DialectIdentify getDefaultDialectIdentifyOrException() {
+        return create().dialectIdentify();
     }
 
     public static JSON simplest() {
