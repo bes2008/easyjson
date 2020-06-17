@@ -59,8 +59,7 @@ public class EasyjsonTypeAdapterRuntimeTypeWrapper<T> extends TypeAdapter<T> {
      * Finds a compatible runtime type if it is more specific
      */
     private Type getRuntimeTypeIfMoreSpecific(Type type, Object value) {
-        if (value != null
-                && (type == Object.class || type instanceof TypeVariable<?> || type instanceof Class<?>)) {
+        if (value != null && (type == Object.class || type instanceof TypeVariable<?> || type instanceof Class<?>)) {
             type = value.getClass();
         }
         return type;

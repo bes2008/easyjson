@@ -24,7 +24,8 @@ public class EasyjsonAdapterAnnotationTypeAdapterFactory implements TypeAdapterF
         return (TypeAdapter<T>) getTypeAdapter(constructorConstructor, gson, targetType, annotation);
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" }) // Casts guarded by conditionals.
+    @SuppressWarnings({"unchecked", "rawtypes"})
+        // Casts guarded by conditionals.
     TypeAdapter<?> getTypeAdapter(ConstructorConstructor constructorConstructor, Gson gson,
                                   TypeToken<?> type, JsonAdapter annotation) {
         Object instance = constructorConstructor.get(TypeToken.get(annotation.value())).construct();

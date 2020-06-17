@@ -75,30 +75,13 @@ public class GsonJSONBuilder extends JSONBuilder {
         }
 
         // Boolean
-        BooleanTypeAdapter booleanTypeAdapter = new BooleanTypeAdapter();
-        booleanTypeAdapter.setUsing1_0(serializeBooleanUsing1_0());
-        booleanTypeAdapter.setUsingOnOff(serializeBooleanUsingOnOff());
-        gsonBuilder.registerTypeHierarchyAdapter(Boolean.class, booleanTypeAdapter);
-
+        gsonBuilder.registerTypeAdapterFactory(new BooleanTypeAdapterFactory(this));
         // Number
-        NumberTypeAdapter numberTypeAdapter = new NumberTypeAdapter();
-        numberTypeAdapter.setLongUsingString(serializeLongAsString());
-        numberTypeAdapter.setUsingString(serializeNumberAsString());
-        gsonBuilder.registerTypeHierarchyAdapter(Number.class, numberTypeAdapter);
-
+        gsonBuilder.registerTypeAdapterFactory(new NumberTypeAdapterFactory(this));
         // Date
-        DateTypeAdapter dateTypeAdapter = new DateTypeAdapter();
-        dateTypeAdapter.setDateFormat(serializeUseDateFormat());
-        dateTypeAdapter.setPattern(serializeDateUsingPattern());
-        dateTypeAdapter.setUsingToString(serializeDateUsingToString());
-        gsonBuilder.registerTypeHierarchyAdapter(Date.class, dateTypeAdapter);
-
+        gsonBuilder.registerTypeAdapterFactory(new DateTypeAdapterFactory(this));
         // Enum
-        EnumTypeAdapter enumTypeAdapter = new EnumTypeAdapter();
-        enumTypeAdapter.setUsingValue(serializeEnumUsingIndex());
-        enumTypeAdapter.setUsingField(serializeEnumUsingField());
-        enumTypeAdapter.setUsingToString(serializeEnumUsingToString());
-        gsonBuilder.registerTypeHierarchyAdapter(Enum.class, enumTypeAdapter);
+        gsonBuilder.registerTypeAdapterFactory(new EnumTypeAdapterFactory(this));
 
         // pretty printing
         if (prettyFormat()) {
@@ -178,6 +161,7 @@ public class GsonJSONBuilder extends JSONBuilder {
                             break;
                         }
                     }
+                    index = reflectiveTypeAdapterFactoryIndex.get();
                     if(index>=0 && index<factories.size()){
                         FieldNamingStrategy fieldNamingStrategy = Reflects.getFieldValue(fieldNamingStrategyField, gson, true, false);
                         EasyjsonReflectiveTypeAdapterFactory reflectiveTypeAdapterFactory = new EasyjsonReflectiveTypeAdapterFactory(

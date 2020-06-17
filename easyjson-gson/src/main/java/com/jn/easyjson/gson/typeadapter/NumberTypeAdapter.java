@@ -15,19 +15,51 @@
 package com.jn.easyjson.gson.typeadapter;
 
 import com.google.gson.*;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonToken;
+import com.google.gson.stream.JsonWriter;
+import com.jn.easyjson.core.JSONBuilderAware;
+import com.jn.easyjson.core.codec.dialect.PropertyCodecConfiguration;
 import com.jn.easyjson.core.util.LazilyParsedNumber;
+import com.jn.easyjson.gson.GsonJSONBuilder;
+import com.jn.langx.util.Numbers;
+import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.reflect.type.Primitives;
 
+import java.io.IOException;
+import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.List;
 
 /**
  * priority: longUsingString > usingString > number
  */
-public class NumberTypeAdapter implements JsonSerializer<Number>, JsonDeserializer<Number> {
+public class NumberTypeAdapter extends TypeAdapter<Number> implements JSONBuilderAware<GsonJSONBuilder>, FieldAware, JsonSerializer<Number>, JsonDeserializer<Number> {
     private boolean longUsingString;
     private boolean usingString;
+    private Field currentField;
+    private GsonJSONBuilder jsonBuilder;
+    private Class targetClass;
+
+    public void setTargetClass(Class targetClass) {
+        this.targetClass = targetClass;
+    }
+
+    @Override
+    public void setJSONBuilder(GsonJSONBuilder jsonBuilder) {
+        this.jsonBuilder = jsonBuilder;
+    }
+
+    @Override
+    public GsonJSONBuilder getJSONBuilder() {
+        return this.jsonBuilder;
+    }
+
+    public void setField(Field currentField) {
+        this.currentField = currentField;
+    }
 
     public void setLongUsingString(boolean longUsingString) {
         this.longUsingString = longUsingString;
@@ -123,6 +155,102 @@ public class NumberTypeAdapter implements JsonSerializer<Number>, JsonDeserializ
             return new JsonPrimitive(src.toString());
         }
         return new JsonPrimitive(src);
+    }
+
+
+    @Override
+    public void write(JsonWriter out, Number value) throws IOException {
+        if(value==null){
+            out.nullValue();
+            return;
+        }
+
+        if (longUsingString && ( value.getClass() == Long.class || value.getClass() == Long.TYPE)) {
+            out.value(value.toString());
+            return;
+        }
+        if (usingString) {
+            out.value(value.toString());
+            return;
+        }
+        out.value(value);
+        return;
+    }
+    private static List<JsonToken> invalidValueTokens = Collects.newArrayList(
+            JsonToken.BEGIN_ARRAY,
+            JsonToken.END_ARRAY,
+            JsonToken.BEGIN_OBJECT,
+            JsonToken.END_OBJECT,
+            JsonToken.END_DOCUMENT,
+            JsonToken.NAME
+    );
+    @Override
+    public Number read(JsonReader in) throws IOException {
+        JsonToken jsonToken = in.peek();
+        if (jsonToken == JsonToken.NULL) {
+            return null;
+        }
+
+        if(invalidValueTokens.contains(jsonToken)){
+            return null;
+        }
+
+        if (jsonToken==JsonToken.STRING) {
+            String stringValue = jsonToken==JsonToken.STRING ? in.nextString():null;
+            if (targetClass == Long.TYPE || targetClass == Long.class) {
+                return Numbers.createLong(stringValue);
+            }
+            if (targetClass == double.class || targetClass == Double.class) {
+                return Numbers.createDouble(stringValue);
+            }
+            if (targetClass == int.class || targetClass == Integer.class) {
+                return  Numbers.createInteger(stringValue);
+            }
+            if (targetClass == float.class || targetClass == Float.class) {
+                return  Numbers.createFloat(stringValue);
+            }
+            if (targetClass == short.class || targetClass == Short.class) {
+                return Numbers.createInteger(stringValue);
+            }
+            if (targetClass == byte.class || targetClass == Byte.class) {
+                return Numbers.createInteger(stringValue);
+            }
+            if (targetClass == BigDecimal.class) {
+                return Numbers.createBigDecimal(stringValue);
+            }
+            if (targetClass == BigInteger.class) {
+                return Numbers.createBigInteger(stringValue);
+            }
+        }
+        if (jsonToken==JsonToken.NUMBER) {
+            Class typeOfT = Primitives.wrap(targetClass);
+            if (typeOfT == Byte.class) {
+                return Numbers.toByte(in.nextInt());
+            }
+            if (typeOfT == Short.class) {
+                return Numbers.toShort(in.nextInt());
+            }
+            if (typeOfT == Integer.class) {
+                return in.nextInt();
+            }
+            if (typeOfT == Float.class) {
+                return Numbers.toFloat(in.nextDouble());
+            }
+            if (typeOfT == Double.class) {
+                return in.nextDouble();
+            }
+            if (typeOfT == Long.class) {
+                return in.nextLong();
+            }
+            if (typeOfT == BigDecimal.class) {
+                return Numbers.createBigDecimal(""+in.nextDouble());
+            }
+            if (typeOfT == BigInteger.class) {
+                return Numbers.createBigInteger(""+in.nextDouble());
+            }
+            return in.nextDouble();
+        }
+        return 0;
     }
 
     @Override
