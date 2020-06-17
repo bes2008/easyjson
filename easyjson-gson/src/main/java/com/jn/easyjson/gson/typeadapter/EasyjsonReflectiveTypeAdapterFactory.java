@@ -16,6 +16,7 @@ import com.jn.langx.util.reflect.type.Types;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.*;
 
@@ -80,7 +81,7 @@ public class EasyjsonReflectiveTypeAdapterFactory implements TypeAdapterFactory 
     }
 
     private BoundField createBoundField(
-            final Gson context, final Field field, final String name, Class containerClass,
+            final Gson context, final Field field, final String name,
             final TypeToken<?> fieldType, boolean serialize, boolean deserialize) {
         final boolean isPrimitive = Primitives.isPrimitive(fieldType.getRawType());
         // special casing primitives here saves ~5% on Android...
@@ -152,7 +153,7 @@ public class EasyjsonReflectiveTypeAdapterFactory implements TypeAdapterFactory 
                 for (int i = 0, size = fieldNames.size(); i < size; ++i) {
                     String name = fieldNames.get(i);
                     if (i != 0) serialize = false; // only serialize the default name
-                    BoundField boundField = createBoundField(context, field, name, (Class)declaredType,
+                    BoundField boundField = createBoundField(context, field, name,
                             TypeToken.get(fieldType), serialize, deserialize);
                     BoundField replaced = result.put(name, boundField);
                     if (previous == null) previous = replaced;
