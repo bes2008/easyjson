@@ -24,6 +24,7 @@ import com.jn.easyjson.jackson.serializer.BooleanSerializer;
 import com.jn.easyjson.jackson.serializer.DateSerializer;
 import com.jn.easyjson.jackson.serializer.EnumSerializer;
 import com.jn.easyjson.jackson.serializer.NumberSerializer;
+import com.jn.langx.util.reflect.Reflects;
 import com.jn.langx.util.reflect.type.Types;
 
 import java.util.Date;
@@ -47,7 +48,7 @@ public class EasyjsonBeanSerializerModifier extends BeanSerializerModifier {
         if(Boolean.class == beanClass || boolean.class==beanClass){
             return new BooleanSerializer();
         }
-        if (Types.isPrimitive(beanClass) ) {
+        if (Reflects.isSubClassOrEquals(Number.class, beanClass) || Types.isPrimitive(beanClass) ) {
             if (Number.class.isAssignableFrom(Types.getPrimitiveWrapClass(beanClass))) {
                 return new NumberSerializer();
             }
