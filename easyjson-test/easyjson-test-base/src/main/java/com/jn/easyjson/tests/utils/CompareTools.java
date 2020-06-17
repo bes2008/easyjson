@@ -30,6 +30,7 @@ public class CompareTools {
     }
 
     private static Object parseJsonString(String jsonString) {
+        jsonString = jsonString.trim();
         String dialect = JSONBuilderProvider.create().dialectIdentify().getId();
         if (jsonString.startsWith("{") && jsonString.endsWith("}")) {
             if ("gson".equals(dialect)) {

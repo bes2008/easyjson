@@ -1,6 +1,8 @@
 package com.jn.easyjson.tests.cases;
 
+import java.io.IOException;
 import java.lang.reflect.Method;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -8,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import com.gitee.qdbp.tools.files.PathTools;
 import com.jn.easyjson.core.JSON;
 import com.jn.easyjson.core.JSONBuilder;
 import com.jn.easyjson.core.JSONBuilderProvider;
@@ -120,20 +123,25 @@ public abstract class EasyJsonPagingRequestTest {
         return pagingRequest;
     }
 
-    protected String getPagingRequestStringIncludeNulls() {
-        return "{\"cacheCount\":true,\"condition\":{\"a\":1,\"b\":2},\"context\":{\"orderByRequest\":false,\"pagingRequest\":true,\"request\":null,\"rowSelection\":null,\"target\":{}},\"countColumn\":\"name_\",\"dialect\":null,\"emptyRequest\":false,\"escapeLikeParameter\":false,\"fetchSize\":null,\"getAllFromNonZeroOffsetRequest\":false,\"getAllRequest\":false,\"likeParameterIndexes\":null,\"maxRows\":-1,\"orderBy\":null,\"orderByAsString\":\"\",\"pageNo\":20,\"pageSize\":50,\"pagingRequest\":true,\"result\":{\"items\":[{\"authCode\":12312425353464565,\"birthday\":1592179316459,\"contact\":{\"email\":\"name_1@gmail.com\",\"mobilePhone\":\"mphone1\",\"msn\":\"msn1\",\"phone\":\"phone1\",\"qq\":null,\"webchat\":\"webchat1\"},\"gender\":\"FEMALE\",\"id\":1,\"married\":false,\"name\":\"name_1\"},{\"authCode\":12312425353464565,\"birthday\":1592179316459,\"contact\":{\"email\":\"name_1@gmail.com\",\"mobilePhone\":\"mphone1\",\"msn\":\"msn1\",\"phone\":\"phone1\",\"qq\":null,\"webchat\":\"webchat1\"},\"gender\":\"FEMALE\",\"id\":1,\"married\":false,\"name\":\"name_1\"},{\"authCode\":12312425353464565,\"birthday\":1592179316459,\"contact\":{\"email\":\"name_1@gmail.com\",\"mobilePhone\":\"mphone1\",\"msn\":\"msn1\",\"phone\":\"phone1\",\"qq\":null,\"webchat\":\"webchat1\"},\"gender\":\"FEMALE\",\"id\":1,\"married\":false,\"name\":\"name_1\"},{\"authCode\":12312425353464565,\"birthday\":1592179316459,\"contact\":{\"email\":\"name_1@gmail.com\",\"mobilePhone\":\"mphone1\",\"msn\":\"msn1\",\"phone\":\"phone1\",\"qq\":null,\"webchat\":\"webchat1\"},\"gender\":\"FEMALE\",\"id\":1,\"married\":false,\"name\":\"name_1\"},{\"authCode\":12312425353464565,\"birthday\":1592179316459,\"contact\":{\"email\":\"name_1@gmail.com\",\"mobilePhone\":\"mphone1\",\"msn\":\"msn1\",\"phone\":\"phone1\",\"qq\":null,\"webchat\":\"webchat1\"},\"gender\":\"FEMALE\",\"id\":1,\"married\":false,\"name\":\"name_1\"},{\"authCode\":12312425353464565,\"birthday\":1592179316459,\"contact\":{\"email\":\"name_1@gmail.com\",\"mobilePhone\":\"mphone1\",\"msn\":\"msn1\",\"phone\":\"phone1\",\"qq\":null,\"webchat\":\"webchat1\"},\"gender\":\"FEMALE\",\"id\":1,\"married\":false,\"name\":\"name_1\"},{\"authCode\":12312425353464565,\"birthday\":1592179316459,\"contact\":{\"email\":\"name_1@gmail.com\",\"mobilePhone\":\"mphone1\",\"msn\":\"msn1\",\"phone\":\"phone1\",\"qq\":null,\"webchat\":\"webchat1\"},\"gender\":\"FEMALE\",\"id\":1,\"married\":false,\"name\":\"name_1\"},{\"authCode\":12312425353464565,\"birthday\":1592179316459,\"contact\":{\"email\":\"name_1@gmail.com\",\"mobilePhone\":\"mphone1\",\"msn\":\"msn1\",\"phone\":\"phone1\",\"qq\":null,\"webchat\":\"webchat1\"},\"gender\":\"FEMALE\",\"id\":1,\"married\":false,\"name\":\"name_1\"},{\"authCode\":12312425353464565,\"birthday\":1592179316459,\"contact\":{\"email\":\"name_1@gmail.com\",\"mobilePhone\":\"mphone1\",\"msn\":\"msn1\",\"phone\":\"phone1\",\"qq\":null,\"webchat\":\"webchat1\"},\"gender\":\"FEMALE\",\"id\":1,\"married\":false,\"name\":\"name_1\"},{\"authCode\":12312425353464565,\"birthday\":1592179316459,\"contact\":{\"email\":\"name_1@gmail.com\",\"mobilePhone\":\"mphone1\",\"msn\":\"msn1\",\"phone\":\"phone1\",\"qq\":null,\"webchat\":\"webchat1\"},\"gender\":\"FEMALE\",\"id\":1,\"married\":false,\"name\":\"name_1\"}],\"maxPage\":4069,\"maxPageCount\":4069,\"pageNo\":20,\"pageSize\":50,\"total\":203423},\"subqueryPaging\":false,\"subqueryPagingEndFlag\":null,\"subqueryPagingStartFlag\":null,\"timeout\":0,\"useLastPageIfPageOut\":null,\"validRequest\":true}";
+    protected String readClassResourceText(String path) throws IOException {
+        URL url = PathTools.findClassResource(EasyJsonPagingRequestTest.class, path);
+        return PathTools.downloadString(url);
     }
 
-    protected String getPagingRequestStringExcludeNulls() {
-        return "{\"cacheCount\":true,\"condition\":{\"a\":1,\"b\":2},\"context\":{\"orderByRequest\":false,\"pagingRequest\":true,\"target\":{}},\"countColumn\":\"name_\",\"emptyRequest\":false,\"escapeLikeParameter\":false,\"getAllFromNonZeroOffsetRequest\":false,\"getAllRequest\":false,\"maxRows\":-1,\"orderByAsString\":\"\",\"pageNo\":20,\"pageSize\":50,\"pagingRequest\":true,\"result\":{\"items\":[{\"authCode\":12312425353464565,\"birthday\":1592179316459,\"contact\":{\"email\":\"name_1@gmail.com\",\"mobilePhone\":\"mphone1\",\"msn\":\"msn1\",\"phone\":\"phone1\",\"webchat\":\"webchat1\"},\"gender\":\"FEMALE\",\"id\":1,\"married\":false,\"name\":\"name_1\"},{\"authCode\":12312425353464565,\"birthday\":1592179316459,\"contact\":{\"email\":\"name_1@gmail.com\",\"mobilePhone\":\"mphone1\",\"msn\":\"msn1\",\"phone\":\"phone1\",\"webchat\":\"webchat1\"},\"gender\":\"FEMALE\",\"id\":1,\"married\":false,\"name\":\"name_1\"},{\"authCode\":12312425353464565,\"birthday\":1592179316459,\"contact\":{\"email\":\"name_1@gmail.com\",\"mobilePhone\":\"mphone1\",\"msn\":\"msn1\",\"phone\":\"phone1\",\"webchat\":\"webchat1\"},\"gender\":\"FEMALE\",\"id\":1,\"married\":false,\"name\":\"name_1\"},{\"authCode\":12312425353464565,\"birthday\":1592179316459,\"contact\":{\"email\":\"name_1@gmail.com\",\"mobilePhone\":\"mphone1\",\"msn\":\"msn1\",\"phone\":\"phone1\",\"webchat\":\"webchat1\"},\"gender\":\"FEMALE\",\"id\":1,\"married\":false,\"name\":\"name_1\"},{\"authCode\":12312425353464565,\"birthday\":1592179316459,\"contact\":{\"email\":\"name_1@gmail.com\",\"mobilePhone\":\"mphone1\",\"msn\":\"msn1\",\"phone\":\"phone1\",\"webchat\":\"webchat1\"},\"gender\":\"FEMALE\",\"id\":1,\"married\":false,\"name\":\"name_1\"},{\"authCode\":12312425353464565,\"birthday\":1592179316459,\"contact\":{\"email\":\"name_1@gmail.com\",\"mobilePhone\":\"mphone1\",\"msn\":\"msn1\",\"phone\":\"phone1\",\"webchat\":\"webchat1\"},\"gender\":\"FEMALE\",\"id\":1,\"married\":false,\"name\":\"name_1\"},{\"authCode\":12312425353464565,\"birthday\":1592179316459,\"contact\":{\"email\":\"name_1@gmail.com\",\"mobilePhone\":\"mphone1\",\"msn\":\"msn1\",\"phone\":\"phone1\",\"webchat\":\"webchat1\"},\"gender\":\"FEMALE\",\"id\":1,\"married\":false,\"name\":\"name_1\"},{\"authCode\":12312425353464565,\"birthday\":1592179316459,\"contact\":{\"email\":\"name_1@gmail.com\",\"mobilePhone\":\"mphone1\",\"msn\":\"msn1\",\"phone\":\"phone1\",\"webchat\":\"webchat1\"},\"gender\":\"FEMALE\",\"id\":1,\"married\":false,\"name\":\"name_1\"},{\"authCode\":12312425353464565,\"birthday\":1592179316459,\"contact\":{\"email\":\"name_1@gmail.com\",\"mobilePhone\":\"mphone1\",\"msn\":\"msn1\",\"phone\":\"phone1\",\"webchat\":\"webchat1\"},\"gender\":\"FEMALE\",\"id\":1,\"married\":false,\"name\":\"name_1\"},{\"authCode\":12312425353464565,\"birthday\":1592179316459,\"contact\":{\"email\":\"name_1@gmail.com\",\"mobilePhone\":\"mphone1\",\"msn\":\"msn1\",\"phone\":\"phone1\",\"webchat\":\"webchat1\"},\"gender\":\"FEMALE\",\"id\":1,\"married\":false,\"name\":\"name_1\"}],\"maxPage\":4069,\"maxPageCount\":4069,\"pageNo\":20,\"pageSize\":50,\"total\":203423},\"subqueryPaging\":false,\"timeout\":0,\"validRequest\":true}";
+    protected String getPagingRequestStringIncludeNulls() throws IOException {
+        return readClassResourceText("json/PagingRequestIncludeNulls.json");
     }
 
-    protected String getPagingRequestStringNumberAsString() {
-        return "{\"cacheCount\":true,\"condition\":{\"a\":\"1\",\"b\":\"2\"},\"context\":{\"orderByRequest\":false,\"pagingRequest\":true,\"request\":null,\"rowSelection\":null,\"target\":{}},\"countColumn\":\"name_\",\"dialect\":null,\"emptyRequest\":false,\"escapeLikeParameter\":false,\"fetchSize\":null,\"getAllFromNonZeroOffsetRequest\":false,\"getAllRequest\":false,\"likeParameterIndexes\":null,\"maxRows\":\"-1\",\"orderBy\":null,\"orderByAsString\":\"\",\"pageNo\":\"20\",\"pageSize\":\"50\",\"pagingRequest\":true,\"result\":{\"items\":[{\"authCode\":\"12312425353464565\",\"birthday\":1592179316459,\"contact\":{\"email\":\"name_1@gmail.com\",\"mobilePhone\":\"mphone1\",\"msn\":\"msn1\",\"phone\":\"phone1\",\"qq\":null,\"webchat\":\"webchat1\"},\"gender\":\"FEMALE\",\"id\":\"1\",\"married\":false,\"name\":\"name_1\"},{\"authCode\":\"12312425353464565\",\"birthday\":1592179316459,\"contact\":{\"email\":\"name_1@gmail.com\",\"mobilePhone\":\"mphone1\",\"msn\":\"msn1\",\"phone\":\"phone1\",\"qq\":null,\"webchat\":\"webchat1\"},\"gender\":\"FEMALE\",\"id\":\"1\",\"married\":false,\"name\":\"name_1\"},{\"authCode\":\"12312425353464565\",\"birthday\":1592179316459,\"contact\":{\"email\":\"name_1@gmail.com\",\"mobilePhone\":\"mphone1\",\"msn\":\"msn1\",\"phone\":\"phone1\",\"qq\":null,\"webchat\":\"webchat1\"},\"gender\":\"FEMALE\",\"id\":\"1\",\"married\":false,\"name\":\"name_1\"},{\"authCode\":\"12312425353464565\",\"birthday\":1592179316459,\"contact\":{\"email\":\"name_1@gmail.com\",\"mobilePhone\":\"mphone1\",\"msn\":\"msn1\",\"phone\":\"phone1\",\"qq\":null,\"webchat\":\"webchat1\"},\"gender\":\"FEMALE\",\"id\":\"1\",\"married\":false,\"name\":\"name_1\"},{\"authCode\":\"12312425353464565\",\"birthday\":1592179316459,\"contact\":{\"email\":\"name_1@gmail.com\",\"mobilePhone\":\"mphone1\",\"msn\":\"msn1\",\"phone\":\"phone1\",\"qq\":null,\"webchat\":\"webchat1\"},\"gender\":\"FEMALE\",\"id\":\"1\",\"married\":false,\"name\":\"name_1\"},{\"authCode\":\"12312425353464565\",\"birthday\":1592179316459,\"contact\":{\"email\":\"name_1@gmail.com\",\"mobilePhone\":\"mphone1\",\"msn\":\"msn1\",\"phone\":\"phone1\",\"qq\":null,\"webchat\":\"webchat1\"},\"gender\":\"FEMALE\",\"id\":\"1\",\"married\":false,\"name\":\"name_1\"},{\"authCode\":\"12312425353464565\",\"birthday\":1592179316459,\"contact\":{\"email\":\"name_1@gmail.com\",\"mobilePhone\":\"mphone1\",\"msn\":\"msn1\",\"phone\":\"phone1\",\"qq\":null,\"webchat\":\"webchat1\"},\"gender\":\"FEMALE\",\"id\":\"1\",\"married\":false,\"name\":\"name_1\"},{\"authCode\":\"12312425353464565\",\"birthday\":1592179316459,\"contact\":{\"email\":\"name_1@gmail.com\",\"mobilePhone\":\"mphone1\",\"msn\":\"msn1\",\"phone\":\"phone1\",\"qq\":null,\"webchat\":\"webchat1\"},\"gender\":\"FEMALE\",\"id\":\"1\",\"married\":false,\"name\":\"name_1\"},{\"authCode\":\"12312425353464565\",\"birthday\":1592179316459,\"contact\":{\"email\":\"name_1@gmail.com\",\"mobilePhone\":\"mphone1\",\"msn\":\"msn1\",\"phone\":\"phone1\",\"qq\":null,\"webchat\":\"webchat1\"},\"gender\":\"FEMALE\",\"id\":\"1\",\"married\":false,\"name\":\"name_1\"},{\"authCode\":\"12312425353464565\",\"birthday\":1592179316459,\"contact\":{\"email\":\"name_1@gmail.com\",\"mobilePhone\":\"mphone1\",\"msn\":\"msn1\",\"phone\":\"phone1\",\"qq\":null,\"webchat\":\"webchat1\"},\"gender\":\"FEMALE\",\"id\":\"1\",\"married\":false,\"name\":\"name_1\"}],\"maxPage\":\"4069\",\"maxPageCount\":\"4069\",\"pageNo\":\"20\",\"pageSize\":\"50\",\"total\":\"203423\"},\"subqueryPaging\":false,\"subqueryPagingEndFlag\":null,\"subqueryPagingStartFlag\":null,\"timeout\":\"0\",\"useLastPageIfPageOut\":null,\"validRequest\":true}";
+    protected String getPagingRequestStringExcludeNulls() throws IOException {
+        return readClassResourceText("json/PagingRequestExcludeNulls.json");
+    }
+
+    protected String getPagingRequestStringNumberAsString() throws IOException {
+        return readClassResourceText("json/PagingRequestNumberAsString.json");
     }
 
     @Test(priority = 10001)
-    public void testPagingRequestSerializeIncludeNulls10001() {
+    public void testPagingRequestSerializeIncludeNulls10001() throws Exception {
         PagingRequest<Map<String, Object>, Person> object = getPagingRequestObject();
         String jsonString = json.toJson(object);
         System.out.println(jsonString);
@@ -141,7 +149,7 @@ public abstract class EasyJsonPagingRequestTest {
     }
 
     @Test(priority = 10002)
-    public void testPagingRequestSerializeExcludeNulls10002() {
+    public void testPagingRequestSerializeExcludeNulls10002() throws Exception {
         JSONBuilder jsonBuilder = JSONBuilderProvider.create();
         jsonBuilder.serializeNulls(false).serializeNumberAsString(false);
         JSON json = jsonBuilder.build();
@@ -152,7 +160,7 @@ public abstract class EasyJsonPagingRequestTest {
     }
 
     @Test(priority = 10003)
-    public void testPagingRequestSerializeNumberAsString10003() {
+    public void testPagingRequestSerializeNumberAsString10003() throws Exception {
         JSONBuilder jsonBuilder = JSONBuilderProvider.create();
         jsonBuilder.serializeNulls(true).serializeNumberAsString(true);
         JSON json = jsonBuilder.build();
