@@ -18,8 +18,8 @@ import java.util.Date;
 @Test
 public abstract class FastjsonAnnotationTest extends AbstractBaseTest {
 
-    protected UserEntity1 getUserEntity1Object() {
-        UserEntity1 user = new UserEntity1();
+    protected UserEntity1UseMethodIgnore getUserEntity1Object() {
+        UserEntity1UseMethodIgnore user = new UserEntity1UseMethodIgnore();
         user.setId("1001");
         user.setName("Test1");
         user.setPassword("a@b@c");
@@ -27,8 +27,8 @@ public abstract class FastjsonAnnotationTest extends AbstractBaseTest {
         return user;
     }
 
-    protected UserEntity2 getUserEntity2Object() {
-        UserEntity2 user = new UserEntity2();
+    protected UserEntity2UseFieldIgnore getUserEntity2Object() {
+        UserEntity2UseFieldIgnore user = new UserEntity2UseFieldIgnore();
         user.setId("1001");
         user.setName("Test1");
         user.setPassword("a@b@c");
@@ -63,36 +63,36 @@ public abstract class FastjsonAnnotationTest extends AbstractBaseTest {
     }
 
     @Test(priority = 10001)
-    public void testSerialize10001() {
-        UserEntity1 user = getUserEntity1Object();
+    public void testSerializeUseMethodIgnore10001() {
+        UserEntity1UseMethodIgnore user = getUserEntity1Object();
         String jsonString = JSONObject.toJSONString(user);
         System.out.println(jsonString);
         Assert.assertEquals(jsonString, getUserEntityIgnorePasswordString());
     }
 
     @Test(priority = 10002)
-    public void testDeserialize10002() {
+    public void testDeserializeUseMethodIgnore10002() {
         String jsonString = getUserEntityString();
-        UserEntity1 actual = JSONObject.parseObject(jsonString, UserEntity1.class);
-        UserEntity1 expected = getUserEntity1Object();
+        UserEntity1UseMethodIgnore actual = JSONObject.parseObject(jsonString, UserEntity1UseMethodIgnore.class);
+        UserEntity1UseMethodIgnore expected = getUserEntity1Object();
         expected.setPassword(null);
         expected.setBirthday(new Date(1577808000000L));
         CompareTools.assertDeepEquals(actual, expected);
     }
 
     @Test(priority = 10003)
-    public void testSerialize10003() {
-        UserEntity2 user = getUserEntity2Object();
+    public void testSerializeUseFieldIgnore10003() {
+        UserEntity2UseFieldIgnore user = getUserEntity2Object();
         String jsonString = JSONObject.toJSONString(user);
         System.out.println(jsonString);
         Assert.assertEquals(jsonString, getUserEntityIgnorePasswordString());
     }
 
     @Test(priority = 10004)
-    public void testDeserialize10004() {
+    public void testDeserializeUseFieldIgnore10004() {
         String jsonString = getUserEntityString();
-        UserEntity2 actual = JSONObject.parseObject(jsonString, UserEntity2.class);
-        UserEntity2 expected = getUserEntity2Object();
+        UserEntity2UseFieldIgnore actual = JSONObject.parseObject(jsonString, UserEntity2UseFieldIgnore.class);
+        UserEntity2UseFieldIgnore expected = getUserEntity2Object();
         expected.setPassword(null);
         expected.setBirthday(new Date(1577808000000L));
         CompareTools.assertDeepEquals(actual, expected);
@@ -134,7 +134,7 @@ public abstract class FastjsonAnnotationTest extends AbstractBaseTest {
         CompareTools.assertDeepEquals(actual, expected);
     }
 
-    protected static class UserEntity1 {
+    protected static class UserEntity1UseMethodIgnore {
 
         private Date birthday;
         private String id;
@@ -179,7 +179,7 @@ public abstract class FastjsonAnnotationTest extends AbstractBaseTest {
 
     }
 
-    protected static class UserEntity2 {
+    protected static class UserEntity2UseFieldIgnore {
 
         @JSONField(format = "yyyy-MM-dd")
         private Date birthday;
@@ -224,7 +224,6 @@ public abstract class FastjsonAnnotationTest extends AbstractBaseTest {
     @JSONType(ignores = "password")
     protected static class UserEntity3UseIgnores {
 
-
         @JSONField(format = "yyyy-MM-dd")
         private Date birthday;
         private String id;
@@ -267,7 +266,6 @@ public abstract class FastjsonAnnotationTest extends AbstractBaseTest {
 
     @JSONType(includes = { "id", "name", "birthday" })
     protected static class UserEntity4UseIncludes {
-
 
         @JSONField(format = "yyyy-MM-dd")
         private Date birthday;

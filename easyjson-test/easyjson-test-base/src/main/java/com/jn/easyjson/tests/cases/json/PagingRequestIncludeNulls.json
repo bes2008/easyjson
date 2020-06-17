@@ -20,6 +20,7 @@
 	"getAllRequest": false,
 	"likeParameterIndexes": null,
 	"maxRows": -1,
+	"needCount": null,
 	"orderBy": null,
 	"orderByAsString": "",
 	"pageNo": 20,

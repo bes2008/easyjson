@@ -5,27 +5,20 @@
 		"b": "2"
 	},
 	"context": {
-		"orderByRequest": false,
-		"pagingRequest": true,
 		"request": null,
 		"rowSelection": null,
-		"target": {}
+		"t": {}
 	},
 	"countColumn": "name_",
 	"dialect": null,
-	"emptyRequest": false,
-	"escapeLikeParameter": false,
+	"escapeLikeParameter": null,
 	"fetchSize": null,
-	"getAllFromNonZeroOffsetRequest": false,
-	"getAllRequest": false,
 	"likeParameterIndexes": null,
 	"maxRows": "-1",
 	"needCount": null,
 	"orderBy": null,
-	"orderByAsString": "",
 	"pageNo": "20",
 	"pageSize": "50",
-	"pagingRequest": true,
 	"result": {
 		"items": [
 			{
@@ -189,8 +182,6 @@
 				"name": "name_1"
 			}
 		],
-		"maxPage": "4069",
-		"maxPageCount": "4069",
 		"pageNo": "20",
 		"pageSize": "50",
 		"total": "203423"
@@ -199,6 +190,5 @@
 	"subqueryPagingEndFlag": null,
 	"subqueryPagingStartFlag": null,
 	"timeout": "0",
-	"useLastPageIfPageOut": null,
-	"validRequest": true
+	"useLastPageIfPageOut": null
 }
