@@ -99,16 +99,16 @@ public abstract class EasyJsonPagingRequestTest {
         return person;
     }
 
-    protected String getPersonString() {
-        return "{\"authCode\":12312425353464565,\"birthday\":1592179316459,\"contact\":{\"email\":\"name_1@gmail.com\",\"mobilePhone\":\"mphone1\",\"msn\":\"msn1\",\"phone\":\"phone1\",\"qq\":null,\"webchat\":\"webchat1\"},\"gender\":\"FEMALE\",\"id\":1,\"married\":false,\"name\":\"name_1\"}";
+    protected String getPersonString() throws IOException {
+        return readClassResourceText("json/PersonObjectString.json");
     }
 
     protected List<Person> getPersonsObject() {
         return persons;
     }
 
-    protected String getPersonsString() {
-        return "[{\"authCode\":12312425353464565,\"birthday\":1592179316459,\"contact\":{\"email\":\"name_1@gmail.com\",\"mobilePhone\":\"mphone1\",\"msn\":\"msn1\",\"phone\":\"phone1\",\"qq\":null,\"webchat\":\"webchat1\"},\"gender\":\"FEMALE\",\"id\":1,\"married\":false,\"name\":\"name_1\"},{\"authCode\":12312425353464565,\"birthday\":1592179316459,\"contact\":{\"email\":\"name_1@gmail.com\",\"mobilePhone\":\"mphone1\",\"msn\":\"msn1\",\"phone\":\"phone1\",\"qq\":null,\"webchat\":\"webchat1\"},\"gender\":\"FEMALE\",\"id\":1,\"married\":false,\"name\":\"name_1\"},{\"authCode\":12312425353464565,\"birthday\":1592179316459,\"contact\":{\"email\":\"name_1@gmail.com\",\"mobilePhone\":\"mphone1\",\"msn\":\"msn1\",\"phone\":\"phone1\",\"qq\":null,\"webchat\":\"webchat1\"},\"gender\":\"FEMALE\",\"id\":1,\"married\":false,\"name\":\"name_1\"},{\"authCode\":12312425353464565,\"birthday\":1592179316459,\"contact\":{\"email\":\"name_1@gmail.com\",\"mobilePhone\":\"mphone1\",\"msn\":\"msn1\",\"phone\":\"phone1\",\"qq\":null,\"webchat\":\"webchat1\"},\"gender\":\"FEMALE\",\"id\":1,\"married\":false,\"name\":\"name_1\"},{\"authCode\":12312425353464565,\"birthday\":1592179316459,\"contact\":{\"email\":\"name_1@gmail.com\",\"mobilePhone\":\"mphone1\",\"msn\":\"msn1\",\"phone\":\"phone1\",\"qq\":null,\"webchat\":\"webchat1\"},\"gender\":\"FEMALE\",\"id\":1,\"married\":false,\"name\":\"name_1\"},{\"authCode\":12312425353464565,\"birthday\":1592179316459,\"contact\":{\"email\":\"name_1@gmail.com\",\"mobilePhone\":\"mphone1\",\"msn\":\"msn1\",\"phone\":\"phone1\",\"qq\":null,\"webchat\":\"webchat1\"},\"gender\":\"FEMALE\",\"id\":1,\"married\":false,\"name\":\"name_1\"},{\"authCode\":12312425353464565,\"birthday\":1592179316459,\"contact\":{\"email\":\"name_1@gmail.com\",\"mobilePhone\":\"mphone1\",\"msn\":\"msn1\",\"phone\":\"phone1\",\"qq\":null,\"webchat\":\"webchat1\"},\"gender\":\"FEMALE\",\"id\":1,\"married\":false,\"name\":\"name_1\"},{\"authCode\":12312425353464565,\"birthday\":1592179316459,\"contact\":{\"email\":\"name_1@gmail.com\",\"mobilePhone\":\"mphone1\",\"msn\":\"msn1\",\"phone\":\"phone1\",\"qq\":null,\"webchat\":\"webchat1\"},\"gender\":\"FEMALE\",\"id\":1,\"married\":false,\"name\":\"name_1\"},{\"authCode\":12312425353464565,\"birthday\":1592179316459,\"contact\":{\"email\":\"name_1@gmail.com\",\"mobilePhone\":\"mphone1\",\"msn\":\"msn1\",\"phone\":\"phone1\",\"qq\":null,\"webchat\":\"webchat1\"},\"gender\":\"FEMALE\",\"id\":1,\"married\":false,\"name\":\"name_1\"},{\"authCode\":12312425353464565,\"birthday\":1592179316459,\"contact\":{\"email\":\"name_1@gmail.com\",\"mobilePhone\":\"mphone1\",\"msn\":\"msn1\",\"phone\":\"phone1\",\"qq\":null,\"webchat\":\"webchat1\"},\"gender\":\"FEMALE\",\"id\":1,\"married\":false,\"name\":\"name_1\"}]";
+    protected String getPersonsString() throws IOException {
+        return readClassResourceText("json/PersonArrayString.json");
     }
 
     protected Person getPersonById(int id) {
@@ -171,7 +171,7 @@ public abstract class EasyJsonPagingRequestTest {
     }
 
     @Test(priority = 10101)
-    public void testPersonSerialize10101() {
+    public void testPersonSerialize10101() throws Exception {
         Person object = getPersonObject();
         String jsonString = json.toJson(object);
         System.out.println(jsonString);
@@ -179,7 +179,7 @@ public abstract class EasyJsonPagingRequestTest {
     }
 
     @Test(priority = 10102)
-    public void testPersonDeserialize10102() {
+    public void testPersonDeserialize10102() throws Exception {
         String jsonString = getPersonString();
         Person actual = json.fromJson(jsonString, Person.class);
         Person expected = getPersonObject();
@@ -187,7 +187,7 @@ public abstract class EasyJsonPagingRequestTest {
     }
 
     @Test(priority = 10201)
-    public void testPersonsSerialize10201() {
+    public void testPersonsSerialize10201() throws Exception {
         List<Person> object = getPersonsObject();
         String jsonString = json.toJson(object);
         System.out.println(jsonString);
@@ -195,7 +195,7 @@ public abstract class EasyJsonPagingRequestTest {
     }
 
     @Test(priority = 10202)
-    public void testPersonsDeserialize10202() {
+    public void testPersonsDeserialize10202() throws Exception {
         String jsonString = getPersonsString();
         List<Person> actual = json.fromJson(jsonString, Types.getListParameterizedType(Person.class));
         List<Person> expected = getPersonsObject();
