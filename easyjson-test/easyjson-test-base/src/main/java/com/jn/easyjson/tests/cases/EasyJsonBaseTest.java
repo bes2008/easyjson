@@ -15,8 +15,7 @@ import com.jn.easyjson.tests.utils.CompareTools;
  * @author zhaohuihua
  * @version 20200614
  */
-@Test
-public abstract class EasyJsonBaseTest {
+public abstract class EasyJsonBaseTest extends AbstractBaseTest {
     
     private static JSON json = JSONBuilderProvider.simplest();
 
@@ -36,7 +35,7 @@ public abstract class EasyJsonBaseTest {
     }
 
     protected String getUserEntityString() {
-        return "{\"id\":\"1001\",\"name\":\"Test1\",\"gender\":\"FEMALE\",\"password\":\"a@b@c\",\"weight\":60.5,\"height\":170,\"birthday\":1577808000000,\"intro\":\"This's a test user entity. \\\"EasyJson\\\"\",\"addresses\":[{\"name\":\"home\",\"details\":\"Nanjing China\"},{\"name\":\"office\",\"details\":\"Beijing China\"}]}";
+        return readClassResourceText("json/BaseTestUserEntityString.json");
     }
 
     @Test(priority = 10001)

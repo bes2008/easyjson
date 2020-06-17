@@ -1,16 +1,11 @@
 package com.jn.easyjson.tests.cases;
 
-import java.io.IOException;
-import java.lang.reflect.Method;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import com.gitee.qdbp.tools.files.PathTools;
 import com.jn.easyjson.core.JSON;
 import com.jn.easyjson.core.JSONBuilder;
 import com.jn.easyjson.core.JSONBuilderProvider;
@@ -29,7 +24,7 @@ import com.jn.langx.util.reflect.type.Types;
  * @author zhaohuihua
  * @version 20200615
  */
-public abstract class EasyJsonPagingRequestTest {
+public abstract class EasyJsonPagingRequestTest extends AbstractBaseTest {
 
     private JSON json;
     private Person person;
@@ -37,13 +32,6 @@ public abstract class EasyJsonPagingRequestTest {
     private Map<String, Person> nameToPersonMap = new HashMap<String, Person>();
     private Map<Integer, Person> idToPersonMap = new HashMap<Integer, Person>();
     private PagingRequest<Map<String, Object>, Person> pagingRequest;
-
-    @BeforeMethod
-    public void testStart(Method method) {
-        System.out.println("/************************************************************\\");
-        System.out.println("| " + method.getDeclaringClass().getSimpleName() + '.' + method.getName());
-        System.out.println("\\************************************************************/");
-    }
 
     public EasyJsonPagingRequestTest() {
         JSONBuilder jsonBuilder = JSONBuilderProvider.create();
@@ -99,7 +87,7 @@ public abstract class EasyJsonPagingRequestTest {
         return person;
     }
 
-    protected String getPersonString() throws IOException {
+    protected String getPersonString() {
         return readClassResourceText("json/PersonObjectString.json");
     }
 
@@ -107,7 +95,7 @@ public abstract class EasyJsonPagingRequestTest {
         return persons;
     }
 
-    protected String getPersonsString() throws IOException {
+    protected String getPersonsString() {
         return readClassResourceText("json/PersonArrayString.json");
     }
 
@@ -123,25 +111,20 @@ public abstract class EasyJsonPagingRequestTest {
         return pagingRequest;
     }
 
-    protected String readClassResourceText(String path) throws IOException {
-        URL url = PathTools.findClassResource(EasyJsonPagingRequestTest.class, path);
-        return PathTools.downloadString(url);
-    }
-
-    protected String getPagingRequestStringIncludeNulls() throws IOException {
+    protected String getPagingRequestStringIncludeNulls() {
         return readClassResourceText("json/PagingRequestIncludeNulls.json");
     }
 
-    protected String getPagingRequestStringExcludeNulls() throws IOException {
+    protected String getPagingRequestStringExcludeNulls() {
         return readClassResourceText("json/PagingRequestExcludeNulls.json");
     }
 
-    protected String getPagingRequestStringNumberAsString() throws IOException {
+    protected String getPagingRequestStringNumberAsString() {
         return readClassResourceText("json/PagingRequestNumberAsString.json");
     }
 
     @Test(priority = 10001)
-    public void testPagingRequestSerializeIncludeNulls10001() throws Exception {
+    public void testPagingRequestSerializeIncludeNulls10001() {
         PagingRequest<Map<String, Object>, Person> object = getPagingRequestObject();
         String jsonString = json.toJson(object);
         System.out.println(jsonString);
@@ -149,7 +132,7 @@ public abstract class EasyJsonPagingRequestTest {
     }
 
     @Test(priority = 10002)
-    public void testPagingRequestSerializeExcludeNulls10002() throws Exception {
+    public void testPagingRequestSerializeExcludeNulls10002() {
         JSONBuilder jsonBuilder = JSONBuilderProvider.create();
         jsonBuilder.serializeNulls(false).serializeNumberAsString(false);
         JSON json = jsonBuilder.build();
@@ -160,7 +143,7 @@ public abstract class EasyJsonPagingRequestTest {
     }
 
     @Test(priority = 10003)
-    public void testPagingRequestSerializeNumberAsString10003() throws Exception {
+    public void testPagingRequestSerializeNumberAsString10003() {
         JSONBuilder jsonBuilder = JSONBuilderProvider.create();
         jsonBuilder.serializeNulls(true).serializeNumberAsString(true);
         JSON json = jsonBuilder.build();
@@ -171,7 +154,7 @@ public abstract class EasyJsonPagingRequestTest {
     }
 
     @Test(priority = 10101)
-    public void testPersonSerialize10101() throws Exception {
+    public void testPersonSerialize10101() {
         Person object = getPersonObject();
         String jsonString = json.toJson(object);
         System.out.println(jsonString);
@@ -179,7 +162,7 @@ public abstract class EasyJsonPagingRequestTest {
     }
 
     @Test(priority = 10102)
-    public void testPersonDeserialize10102() throws Exception {
+    public void testPersonDeserialize10102() {
         String jsonString = getPersonString();
         Person actual = json.fromJson(jsonString, Person.class);
         Person expected = getPersonObject();
@@ -187,7 +170,7 @@ public abstract class EasyJsonPagingRequestTest {
     }
 
     @Test(priority = 10201)
-    public void testPersonsSerialize10201() throws Exception {
+    public void testPersonsSerialize10201() {
         List<Person> object = getPersonsObject();
         String jsonString = json.toJson(object);
         System.out.println(jsonString);
@@ -195,7 +178,7 @@ public abstract class EasyJsonPagingRequestTest {
     }
 
     @Test(priority = 10202)
-    public void testPersonsDeserialize10202() throws Exception {
+    public void testPersonsDeserialize10202() {
         String jsonString = getPersonsString();
         List<Person> actual = json.fromJson(jsonString, Types.getListParameterizedType(Person.class));
         List<Person> expected = getPersonsObject();
