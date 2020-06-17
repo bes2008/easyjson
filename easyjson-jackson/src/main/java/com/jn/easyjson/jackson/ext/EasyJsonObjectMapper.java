@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationConfig;
 import com.fasterxml.jackson.databind.cfg.DeserializerFactoryConfig;
 import com.fasterxml.jackson.databind.deser.DefaultDeserializationContext;
+import com.fasterxml.jackson.databind.ser.DefaultSerializerProvider;
 import com.jn.easyjson.jackson.JacksonJSONBuilder;
 
 public class EasyJsonObjectMapper extends ObjectMapper {
@@ -52,6 +53,14 @@ public class EasyJsonObjectMapper extends ObjectMapper {
 
     public void setDefaultDeserializationContext(DefaultDeserializationContext context) {
         this._deserializationContext = context;
+    }
+
+    protected DefaultSerializerProvider _serializerProvider(SerializationConfig config) {
+        DefaultSerializerProvider provider = _serializerProvider.createInstance(config, _serializerFactory);
+        if(!jsonBuilder.serializeNulls()){
+
+        }
+        return provider;
     }
 
     public JacksonJSONBuilder getJsonBuilder() {

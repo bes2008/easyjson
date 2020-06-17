@@ -153,7 +153,7 @@ public class JacksonJSONBuilder extends JSONBuilder {
         objectMapper.setDescrializationConfig(deserializationConfig);
     }
 
-    private  void configNulls(EasyJsonObjectMapper objectMapper) {
+    private void configNulls(EasyJsonObjectMapper objectMapper) {
         if (serializeNulls()) {
             objectMapper.configure(SerializationFeature.WRITE_NULL_MAP_VALUES,true);
             objectMapper.setConfig(objectMapper.getSerializationConfig()

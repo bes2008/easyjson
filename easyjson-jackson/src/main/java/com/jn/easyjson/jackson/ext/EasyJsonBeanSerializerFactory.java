@@ -16,13 +16,11 @@ package com.jn.easyjson.jackson.ext;
 
 import com.fasterxml.jackson.databind.BeanDescription;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.SerializationConfig;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.cfg.SerializerFactoryConfig;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
-import com.fasterxml.jackson.databind.ser.BeanPropertyWriter;
-import com.fasterxml.jackson.databind.ser.BeanSerializerBuilder;
-import com.fasterxml.jackson.databind.ser.BeanSerializerFactory;
-import com.fasterxml.jackson.databind.ser.SerializerFactory;
+import com.fasterxml.jackson.databind.ser.*;
 import com.jn.easyjson.core.exclusion.ExclusionConfiguration;
 
 import java.lang.reflect.Field;
@@ -77,6 +75,12 @@ public class EasyJsonBeanSerializerFactory extends BeanSerializerFactory {
         }
         //==================EasyJson exclusion end=========================
         return super.findBeanProperties(prov, beanDesc, builder);
+    }
+
+    protected PropertyBuilder constructPropertyBuilder(SerializationConfig config, BeanDescription beanDesc){
+        EasyjsonPropertyBuilder propertyBuilder = new EasyjsonPropertyBuilder(config, beanDesc);
+        propertyBuilder.setObjectMapper(objectMapper);
+        return propertyBuilder;
     }
 
 }
