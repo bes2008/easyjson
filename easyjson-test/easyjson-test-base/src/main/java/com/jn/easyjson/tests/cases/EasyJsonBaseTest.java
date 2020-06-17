@@ -35,7 +35,7 @@ public abstract class EasyJsonBaseTest extends AbstractBaseTest {
     }
 
     protected String getUserEntityString() {
-        return readClassResourceText("json/BaseTestUserEntityString.json");
+        return readClassResourceText(EasyJsonBaseTest.class, "json/BaseTestUserEntityString.json");
     }
 
     @Test(priority = 10001)

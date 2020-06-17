@@ -88,7 +88,7 @@ public abstract class EasyJsonPagingRequestTest extends AbstractBaseTest {
     }
 
     protected String getPersonString() {
-        return readClassResourceText("json/PersonObjectString.json");
+        return readClassResourceText(EasyJsonPagingRequestTest.class, "json/PersonObjectString.json");
     }
 
     protected List<Person> getPersonsObject() {
@@ -96,7 +96,7 @@ public abstract class EasyJsonPagingRequestTest extends AbstractBaseTest {
     }
 
     protected String getPersonsString() {
-        return readClassResourceText("json/PersonArrayString.json");
+        return readClassResourceText(EasyJsonPagingRequestTest.class, "json/PersonArrayString.json");
     }
 
     protected Person getPersonById(int id) {
@@ -112,15 +112,15 @@ public abstract class EasyJsonPagingRequestTest extends AbstractBaseTest {
     }
 
     protected String getPagingRequestStringIncludeNulls() {
-        return readClassResourceText("json/PagingRequestIncludeNulls.json");
+        return readClassResourceText(EasyJsonPagingRequestTest.class, "json/PagingRequestIncludeNulls.json");
     }
 
     protected String getPagingRequestStringExcludeNulls() {
-        return readClassResourceText("json/PagingRequestExcludeNulls.json");
+        return readClassResourceText(EasyJsonPagingRequestTest.class, "json/PagingRequestExcludeNulls.json");
     }
 
     protected String getPagingRequestStringNumberAsString() {
-        return readClassResourceText("json/PagingRequestNumberAsString.json");
+        return readClassResourceText(EasyJsonPagingRequestTest.class, "json/PagingRequestNumberAsString.json");
     }
 
     @Test(priority = 10001)

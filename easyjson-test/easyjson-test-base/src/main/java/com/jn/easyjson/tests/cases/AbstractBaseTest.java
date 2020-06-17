@@ -8,8 +8,8 @@ import com.gitee.qdbp.tools.files.PathTools;
 
 public abstract class AbstractBaseTest {
 
-    protected String readClassResourceText(String path) {
-        URL url = PathTools.findClassResource(this.getClass(), path);
+    protected String readClassResourceText(Class<?> clazz, String path) {
+        URL url = PathTools.findClassResource(clazz, path);
         try {
             return PathTools.downloadString(url);
         } catch (IOException e) {
