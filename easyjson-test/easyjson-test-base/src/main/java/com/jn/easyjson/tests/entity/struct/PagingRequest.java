@@ -21,7 +21,7 @@ import com.jn.langx.util.collection.Collects;
 
 public class PagingRequest<C, E> extends SelectRequest<PagingRequest<C, E>, PagingRequestContext<C, E>> {
     private static final long serialVersionUID = 1L;
-    private Boolean count = null;
+    private Boolean needCount = null;
     private String countColumn;
     private Boolean cacheCount = null;
 
@@ -35,7 +35,7 @@ public class PagingRequest<C, E> extends SelectRequest<PagingRequest<C, E>, Pagi
     private C condition;
     private PagingResult<E> result;
 
-    private boolean isSubQueryPaging = false;
+    private boolean subqueryPaging = false;
     private String subqueryPagingStartFlag;
     private String subqueryPagingEndFlag;
 
@@ -100,12 +100,12 @@ public class PagingRequest<C, E> extends SelectRequest<PagingRequest<C, E>, Pagi
         return this;
     }
 
-    public Boolean needCount() {
-        return this.count;
+    public Boolean getNeedCount() {
+        return this.needCount;
     }
 
-    public PagingRequest<C, E> setCount(Boolean count) {
-        this.count = count;
+    public PagingRequest<C, E> setNeedCount(Boolean needCount) {
+        this.needCount = needCount;
         return this;
     }
 
@@ -124,7 +124,7 @@ public class PagingRequest<C, E> extends SelectRequest<PagingRequest<C, E>, Pagi
 
     public void clear(boolean clearResult) {
         super.clear();
-        count = null;
+        needCount = null;
         useLastPageIfPageOut = null;
         setCtx(null);
         if (clearResult) {
@@ -198,17 +198,17 @@ public class PagingRequest<C, E> extends SelectRequest<PagingRequest<C, E>, Pagi
     }
 
     public boolean isSubqueryPaging() {
-        return isSubQueryPaging;
+        return subqueryPaging;
     }
 
-    public PagingRequest<C, E> subqueryPaging(boolean subQueryPaging) {
-        isSubQueryPaging = subQueryPaging;
+    public PagingRequest<C, E> setSubqueryPaging(boolean subqueryPaging) {
+        this.subqueryPaging = subqueryPaging;
         return this;
     }
 
 
-    public PagingRequest<C, E> subqueryPaging(String subQueryPagingStartFlag, String subQueryPagingEndFlag) {
-        return subqueryPaging(true).setSubqueryPagingStartFlag(subQueryPagingStartFlag).setSubqueryPagingEndFlag(subQueryPagingEndFlag);
+    public PagingRequest<C, E> setSubqueryPaging(String subqueryPagingStartFlag, String subqueryPagingEndFlag) {
+        return setSubqueryPaging(true).setSubqueryPagingStartFlag(subqueryPagingStartFlag).setSubqueryPagingEndFlag(subqueryPagingEndFlag);
     }
 
     @Override
