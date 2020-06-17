@@ -49,4 +49,17 @@
 			<optional>true</optional>
 		</dependency>
     </dependencies>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>${basedir}/src/main/java/com/jn/easyjson/tests/cases/json</directory>
+                <includes>
+                    <include>**/*.json</include>
+                </includes>
+                <targetPath>${build.outputDirectory}/com/jn/easyjson/tests/cases/json</targetPath>
+            </resource>
+
+        </resources>
+    </build>
 </project>
