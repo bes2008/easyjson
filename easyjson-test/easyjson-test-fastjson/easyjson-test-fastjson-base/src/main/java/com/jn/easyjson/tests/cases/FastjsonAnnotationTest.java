@@ -36,8 +36,8 @@ public abstract class FastjsonAnnotationTest extends AbstractBaseTest {
         return user;
     }
 
-    protected UserEntity3 getUserEntity3Object() {
-        UserEntity3 user = new UserEntity3();
+    protected UserEntity3UseIgnores getUserEntity3Object() {
+        UserEntity3UseIgnores user = new UserEntity3UseIgnores();
         user.setId("1001");
         user.setName("Test1");
         user.setPassword("a@b@c");
@@ -45,8 +45,8 @@ public abstract class FastjsonAnnotationTest extends AbstractBaseTest {
         return user;
     }
 
-    protected UserEntity4 getUserEntity4Object() {
-        UserEntity4 user = new UserEntity4();
+    protected UserEntity4UseIncludes getUserEntity4Object() {
+        UserEntity4UseIncludes user = new UserEntity4UseIncludes();
         user.setId("1001");
         user.setName("Test1");
         user.setPassword("a@b@c");
@@ -99,36 +99,36 @@ public abstract class FastjsonAnnotationTest extends AbstractBaseTest {
     }
 
     @Test(priority = 10005)
-    public void testSerialize10005() {
-        UserEntity3 user = getUserEntity3Object();
+    public void testSerializeUseIgnores10005() {
+        UserEntity3UseIgnores user = getUserEntity3Object();
         String jsonString = JSONObject.toJSONString(user);
         System.out.println(jsonString);
         Assert.assertEquals(jsonString, getUserEntityIgnorePasswordString());
     }
 
     @Test(priority = 10006)
-    public void testDeserialize10006() {
+    public void testDeserializeUseIgnores10006() {
         String jsonString = getUserEntityString();
-        UserEntity3 actual = JSONObject.parseObject(jsonString, UserEntity3.class);
-        UserEntity3 expected = getUserEntity3Object();
+        UserEntity3UseIgnores actual = JSONObject.parseObject(jsonString, UserEntity3UseIgnores.class);
+        UserEntity3UseIgnores expected = getUserEntity3Object();
         expected.setPassword(null);
         expected.setBirthday(new Date(1577808000000L));
         CompareTools.assertDeepEquals(actual, expected);
     }
 
     @Test(priority = 10007)
-    public void testSerialize10007() {
-        UserEntity4 user = getUserEntity4Object();
+    public void testSerializeUseIncludes10007() {
+        UserEntity4UseIncludes user = getUserEntity4Object();
         String jsonString = JSONObject.toJSONString(user);
         System.out.println(jsonString);
         Assert.assertEquals(jsonString, getUserEntityIgnorePasswordString());
     }
 
     @Test(priority = 10008)
-    public void testDeserialize10008() {
+    public void testDeserializeUseIncludes10008() {
         String jsonString = getUserEntityString();
-        UserEntity4 actual = JSONObject.parseObject(jsonString, UserEntity4.class);
-        UserEntity4 expected = getUserEntity4Object();
+        UserEntity4UseIncludes actual = JSONObject.parseObject(jsonString, UserEntity4UseIncludes.class);
+        UserEntity4UseIncludes expected = getUserEntity4Object();
         expected.setPassword(null);
         expected.setBirthday(new Date(1577808000000L));
         CompareTools.assertDeepEquals(actual, expected);
@@ -222,7 +222,7 @@ public abstract class FastjsonAnnotationTest extends AbstractBaseTest {
     }
 
     @JSONType(ignores = "password")
-    protected static class UserEntity3 {
+    protected static class UserEntity3UseIgnores {
 
 
         @JSONField(format = "yyyy-MM-dd")
@@ -266,7 +266,7 @@ public abstract class FastjsonAnnotationTest extends AbstractBaseTest {
     }
 
     @JSONType(includes = { "id", "name", "birthday" })
-    protected static class UserEntity4 {
+    protected static class UserEntity4UseIncludes {
 
 
         @JSONField(format = "yyyy-MM-dd")
