@@ -63,11 +63,11 @@ public class FastjsonAnnotationExclusion implements Exclusion {
         if (propertyCodeConfiguration == null) {
             ClassCodecConfiguration classCodecConfiguration = configurationRepository.getClassCodecConfiguration(beanClass);
             if(classCodecConfiguration!=null){
-                if(Emptys.isNotEmpty(classCodecConfiguration.getExcludedPropertyNames())){
-                    return classCodecConfiguration.getExcludedPropertyNames().contains(propertyName);
-                }
                 if(Emptys.isNotEmpty(classCodecConfiguration.getIncludedPropertyNames())){
                     return !classCodecConfiguration.getIncludedPropertyNames().contains(propertyName);
+                }
+                if(Emptys.isNotEmpty(classCodecConfiguration.getExcludedPropertyNames())){
+                    return classCodecConfiguration.getExcludedPropertyNames().contains(propertyName);
                 }
             }
             return false;
