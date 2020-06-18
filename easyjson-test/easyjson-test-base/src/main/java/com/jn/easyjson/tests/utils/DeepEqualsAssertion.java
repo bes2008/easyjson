@@ -13,6 +13,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
+
+import com.jn.langx.util.Numbers;
 import com.jn.langx.util.reflect.Reflects;
 
 /**
@@ -171,6 +173,9 @@ public class DeepEqualsAssertion {
         }
         Class<?> eClass = expected.getClass();
         Class<?> aClass = actual.getClass();
+        if(Reflects.isSubClass(Number.class, aClass) && Reflects.isSubClass(Number.class, eClass)){
+            assertValueEquals(Numbers.toDouble((Number) actual), Numbers.toDouble((Number)expected), owner);
+        }else
 //        if (isIntegralNumber(eClass) && isIntegralNumber(aClass)) { // 整形的数字
 //            assertValueEquals(((Number) actual).longValue(), ((Number) expected).longValue(), owner);
 //        } else if (Number.class.isAssignableFrom(eClass) && Number.class.isAssignableFrom(aClass)) { // 数字类
