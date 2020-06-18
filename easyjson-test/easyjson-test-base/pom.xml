@@ -53,15 +53,20 @@
     <build>
         <resources>
             <resource>
-                <directory>${basedir}/src/main/java/com/jn/easyjson/tests/cases/json</directory>
+                <directory>${basedir}/src/main/java</directory>
                 <includes>
                     <include>**/*.json</include>
                 </includes>
-                <targetPath>${build.outputDirectory}/com/jn/easyjson/tests/cases/json</targetPath>
             </resource>
-
         </resources>
-
+        <testResources>
+            <testResource>
+                <directory>${basedir}/src/test/java</directory>
+                <includes>
+                    <include>**/*.json</include>
+                </includes>
+            </testResource>
+        </testResources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
