@@ -53,7 +53,8 @@ public abstract class EasyJsonNumberTest extends AbstractBaseTest {
         JSONBuilder jsonBuilder = JSONBuilderProvider.create();
         jsonBuilder.serializeNumberAsString(false);
         JSON json = jsonBuilder.build();
-        String actual = json.toJson(getDoubleMap2Object());
+        Map<String, Double> map = getDoubleMap2Object();
+        String actual = json.toJson(map);
         System.out.println(actual);
         String expected = getOritinalNumberMap2String();
         CompareTools.assertJsonEquals(actual, expected);
