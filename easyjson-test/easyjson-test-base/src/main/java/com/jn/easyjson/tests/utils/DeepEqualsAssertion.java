@@ -38,6 +38,7 @@ public class DeepEqualsAssertion {
         return errors;
     }
 
+    // TODO 优化ToString, 判断list/map/超长字符串等
     private String objectToString(Object object) {
         if (object instanceof NotExist) {
             return "#NotExist#";
@@ -170,11 +171,12 @@ public class DeepEqualsAssertion {
         }
         Class<?> eClass = expected.getClass();
         Class<?> aClass = actual.getClass();
-        if (isIntegralNumber(eClass) && isIntegralNumber(aClass)) { // 整形的数字
-            assertValueEquals(((Number) actual).longValue(), ((Number) expected).longValue(), owner);
-        } else if (Number.class.isAssignableFrom(eClass) && Number.class.isAssignableFrom(aClass)) { // 数字类
-            assertValueEquals(((Number) actual).doubleValue(), ((Number) expected).doubleValue(), owner);
-        } else if (isPrimitive(eClass) && isPrimitive(aClass)) { // 基本类型
+//        if (isIntegralNumber(eClass) && isIntegralNumber(aClass)) { // 整形的数字
+//            assertValueEquals(((Number) actual).longValue(), ((Number) expected).longValue(), owner);
+//        } else if (Number.class.isAssignableFrom(eClass) && Number.class.isAssignableFrom(aClass)) { // 数字类
+//            assertValueEquals(((Number) actual).doubleValue(), ((Number) expected).doubleValue(), owner);
+//        } else 
+        if (isPrimitive(eClass) && isPrimitive(aClass)) { // 基本类型
             assertValueEquals(actual, expected, owner);
         } else if (Map.class.isAssignableFrom(eClass) && Map.class.isAssignableFrom(aClass)) { // MAP类
             Map<?, ?> aMap = (Map<?, ?>) actual;
@@ -314,6 +316,7 @@ public class DeepEqualsAssertion {
     }
 
     /** 是不是整形的数字 **/
+    @SuppressWarnings("unused")
     private static boolean isIntegralNumber(Class<?> clazz) {
         // @formatter:off
         return clazz == byte.class || clazz == Byte.class
