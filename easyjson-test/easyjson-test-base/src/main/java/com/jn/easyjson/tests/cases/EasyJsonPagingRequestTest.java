@@ -15,7 +15,7 @@ import com.jn.easyjson.tests.entity.struct.PagingRequestContext;
 import com.jn.easyjson.tests.entity.struct.PagingResult;
 import com.jn.easyjson.tests.entity.struct.Person;
 import com.jn.easyjson.tests.entity.user.Gender;
-import com.jn.easyjson.tests.utils.CompareTools;
+import com.jn.easyjson.tests.utils.Asserts;
 import com.jn.langx.util.reflect.type.Types;
 
 /**
@@ -128,7 +128,7 @@ public abstract class EasyJsonPagingRequestTest extends AbstractBaseTest {
         PagingRequest<Map<String, Object>, Person> object = getPagingRequestObject();
         String jsonString = json.toJson(object);
         System.out.println(jsonString);
-        CompareTools.assertJsonEquals(jsonString, getPagingRequestStringIncludeNulls());
+        Asserts.assertJsonEquals(jsonString, getPagingRequestStringIncludeNulls());
     }
 
     @Test(priority = 10002)
@@ -139,7 +139,7 @@ public abstract class EasyJsonPagingRequestTest extends AbstractBaseTest {
         PagingRequest<Map<String, Object>, Person> object = getPagingRequestObject();
         String jsonString = json.toJson(object);
         System.out.println(jsonString);
-        CompareTools.assertJsonEquals(jsonString, getPagingRequestStringExcludeNulls());
+        Asserts.assertJsonEquals(jsonString, getPagingRequestStringExcludeNulls());
     }
 
     @Test(priority = 10003)
@@ -150,7 +150,7 @@ public abstract class EasyJsonPagingRequestTest extends AbstractBaseTest {
         PagingRequest<Map<String, Object>, Person> object = getPagingRequestObject();
         String jsonString = json.toJson(object);
         System.out.println(jsonString);
-        CompareTools.assertJsonEquals(jsonString, getPagingRequestStringNumberAsString());
+        Asserts.assertJsonEquals(jsonString, getPagingRequestStringNumberAsString());
     }
 
     @Test(priority = 10101)
@@ -158,7 +158,7 @@ public abstract class EasyJsonPagingRequestTest extends AbstractBaseTest {
         Person object = getPersonObject();
         String jsonString = json.toJson(object);
         System.out.println(jsonString);
-        CompareTools.assertJsonEquals(jsonString, getPersonString());
+        Asserts.assertJsonEquals(jsonString, getPersonString());
     }
 
     @Test(priority = 10102)
@@ -166,7 +166,7 @@ public abstract class EasyJsonPagingRequestTest extends AbstractBaseTest {
         String jsonString = getPersonString();
         Person actual = json.fromJson(jsonString, Person.class);
         Person expected = getPersonObject();
-        CompareTools.assertDeepEquals(actual, expected);
+        Asserts.assertDeepEquals(actual, expected);
     }
 
     @Test(priority = 10201)
@@ -174,7 +174,7 @@ public abstract class EasyJsonPagingRequestTest extends AbstractBaseTest {
         List<Person> object = getPersonsObject();
         String jsonString = json.toJson(object);
         System.out.println(jsonString);
-        CompareTools.assertJsonEquals(jsonString, getPersonsString());
+        Asserts.assertJsonEquals(jsonString, getPersonsString());
     }
 
     @Test(priority = 10202)
@@ -182,6 +182,6 @@ public abstract class EasyJsonPagingRequestTest extends AbstractBaseTest {
         String jsonString = getPersonsString();
         List<Person> actual = json.fromJson(jsonString, Types.getListParameterizedType(Person.class));
         List<Person> expected = getPersonsObject();
-        CompareTools.assertDeepEquals(actual, expected);
+        Asserts.assertDeepEquals(actual, expected);
     }
 }

@@ -5,7 +5,7 @@ import org.testng.annotations.Test;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.annotation.JSONType;
-import com.jn.easyjson.tests.utils.CompareTools;
+import com.jn.easyjson.tests.utils.Asserts;
 
 import java.util.Date;
 
@@ -77,7 +77,7 @@ public abstract class FastjsonAnnotationTest extends AbstractBaseTest {
         UserEntity1UseMethodIgnore expected = getUserEntity1Object();
         expected.setPassword(null);
         expected.setBirthday(new Date(1577808000000L));
-        CompareTools.assertDeepEquals(actual, expected);
+        Asserts.assertDeepEquals(actual, expected);
     }
 
     @Test(priority = 10003)
@@ -95,7 +95,7 @@ public abstract class FastjsonAnnotationTest extends AbstractBaseTest {
         UserEntity2UseFieldIgnore expected = getUserEntity2Object();
         expected.setPassword(null);
         expected.setBirthday(new Date(1577808000000L));
-        CompareTools.assertDeepEquals(actual, expected);
+        Asserts.assertDeepEquals(actual, expected);
     }
 
     @Test(priority = 10005)
@@ -113,7 +113,7 @@ public abstract class FastjsonAnnotationTest extends AbstractBaseTest {
         UserEntity3UseIgnores expected = getUserEntity3Object();
         expected.setPassword(null);
         expected.setBirthday(new Date(1577808000000L));
-        CompareTools.assertDeepEquals(actual, expected);
+        Asserts.assertDeepEquals(actual, expected);
     }
 
     @Test(priority = 10007)
@@ -131,7 +131,7 @@ public abstract class FastjsonAnnotationTest extends AbstractBaseTest {
         UserEntity4UseIncludes expected = getUserEntity4Object();
         expected.setPassword(null);
         expected.setBirthday(new Date(1577808000000L));
-        CompareTools.assertDeepEquals(actual, expected);
+        Asserts.assertDeepEquals(actual, expected);
     }
 
     protected static class UserEntity1UseMethodIgnore {

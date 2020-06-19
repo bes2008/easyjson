@@ -10,7 +10,7 @@ import com.jn.easyjson.core.JSONBuilderProvider;
  * @author zhaohuihua
  * @version 20200614
  */
-public class CompareTools {
+public class Asserts {
 
     /** 比较两个JSON字符串是否一致 **/
     public static void assertJsonEquals(String actual, String expected) {
@@ -43,6 +43,11 @@ public class CompareTools {
             throw new RuntimeException("Can't find any supported JSON libraries : [gson, jackson, fastjson]");
         }
         throw new IllegalArgumentException("Unsupported json string: " + jsonString);
+    }
+
+    /** 比对两个对象是否一致 **/
+    public static void assertEquals(Object actual, Object expected) {
+        assertDeepEquals(actual, expected);
     }
 
     /** 比对两个对象是否深度一致 **/
