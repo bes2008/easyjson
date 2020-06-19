@@ -42,6 +42,11 @@ public abstract class EasyJsonNumberTest extends AbstractBaseTest {
         Asserts.assertEquals(json.toJson(-1.0), "-1.0");
         Asserts.assertEquals(json.toJson(999999999.0), "999999999.0");
         Asserts.assertEquals(json.toJson(-999999999.0), "-999999999.0");
+        Asserts.assertEquals(json.toJson(0.99999999), "0.99999999");
+        Asserts.assertEquals(json.toJson(1.99999999), "1.99999999");
+        Asserts.assertEquals(json.toJson(-1.99999999), "-1.99999999");
+        Asserts.assertEquals(json.toJson(999999999.99999999), "999999999.99999999");
+        Asserts.assertEquals(json.toJson(-999999999.99999999), "-999999999.99999999");
         Asserts.assertEquals(json.toJson(Double.MAX_VALUE), String.valueOf(Double.MAX_VALUE));
         Asserts.assertEquals(json.toJson(Double.MIN_VALUE), String.valueOf(Double.MIN_VALUE));
     }
@@ -53,6 +58,11 @@ public abstract class EasyJsonNumberTest extends AbstractBaseTest {
         Asserts.assertEquals(json.fromJson("-1.0", double.class), -1.0);
         Asserts.assertEquals(json.fromJson("999999999.0", double.class), 999999999.0);
         Asserts.assertEquals(json.fromJson("-999999999.0", double.class), -999999999.0);
+        Asserts.assertEquals(json.fromJson("0.99999999", double.class), 0.99999999);
+        Asserts.assertEquals(json.fromJson("1.99999999", double.class), 1.99999999);
+        Asserts.assertEquals(json.fromJson("-1.99999999", double.class), -1.99999999);
+        Asserts.assertEquals(json.fromJson("999999999.99999999", double.class), 999999999.99999999);
+        Asserts.assertEquals(json.fromJson("-999999999.99999999", double.class), -999999999.99999999);
         Asserts.assertEquals(json.fromJson(String.valueOf(Double.MAX_VALUE), double.class), Double.MAX_VALUE);
         Asserts.assertEquals(json.fromJson(String.valueOf(Double.MIN_VALUE), double.class), Double.MIN_VALUE);
     }
