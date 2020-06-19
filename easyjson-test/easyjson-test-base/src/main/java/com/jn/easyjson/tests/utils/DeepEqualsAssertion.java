@@ -13,8 +13,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
-
-import com.jn.langx.util.Numbers;
 import com.jn.langx.util.reflect.Reflects;
 
 /**
@@ -173,14 +171,12 @@ public class DeepEqualsAssertion {
         }
         Class<?> eClass = expected.getClass();
         Class<?> aClass = actual.getClass();
-        if(Reflects.isSubClass(Number.class, aClass) && Reflects.isSubClass(Number.class, eClass)){
-            assertValueEquals(Numbers.toDouble((Number) actual), Numbers.toDouble((Number)expected), owner);
-        }else
-//        if (isIntegralNumber(eClass) && isIntegralNumber(aClass)) { // 整形的数字
-//            assertValueEquals(((Number) actual).longValue(), ((Number) expected).longValue(), owner);
-//        } else if (Number.class.isAssignableFrom(eClass) && Number.class.isAssignableFrom(aClass)) { // 数字类
-//            assertValueEquals(((Number) actual).doubleValue(), ((Number) expected).doubleValue(), owner);
-//        } else 
+        // 自我反思: 不能为了让用例通过, 在校验工具中作转换, 不通过就是不通过
+        // if (isIntegralNumber(eClass) && isIntegralNumber(aClass)) { // 整形的数字
+        //     assertValueEquals(((Number) actual).longValue(), ((Number) expected).longValue(), owner);
+        // } else if (Number.class.isAssignableFrom(eClass) && Number.class.isAssignableFrom(aClass)) { // 其他数字
+        //     assertValueEquals(((Number) actual).doubleValue(), ((Number) expected).doubleValue(), owner);
+        // } else 
         if (isPrimitive(eClass) && isPrimitive(aClass)) { // 基本类型
             assertValueEquals(actual, expected, owner);
         } else if (Map.class.isAssignableFrom(eClass) && Map.class.isAssignableFrom(aClass)) { // MAP类
