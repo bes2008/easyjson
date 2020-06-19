@@ -1,7 +1,10 @@
 package com.jn.easyjson.tests.cases;
 
 import java.lang.reflect.ParameterizedType;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.testng.annotations.Test;
 import com.jn.easyjson.core.JSON;
@@ -13,58 +16,72 @@ public abstract class EasyJsonNumberTest extends AbstractBaseTest {
 
     private static JSON json = JSONBuilderProvider.simplest();
 
+    protected List<Integer> getIntegralNumbers() {
+        // @formatter:off
+        return Arrays.asList(0, 1, -1, 
+            999999999, -999999999, Integer.MAX_VALUE, Integer.MIN_VALUE);
+        // @formatter:on
+    }
+
     @Test(priority = 10001)
     public void testSerializeIntegralNumber10001() {
-        Asserts.assertEquals(json.toJson(0), "0");
-        Asserts.assertEquals(json.toJson(1), "1");
-        Asserts.assertEquals(json.toJson(-1), "-1");
-        Asserts.assertEquals(json.toJson(999999999), "999999999");
-        Asserts.assertEquals(json.toJson(-999999999), "-999999999");
-        Asserts.assertEquals(json.toJson(Integer.MAX_VALUE), String.valueOf(Integer.MAX_VALUE));
-        Asserts.assertEquals(json.toJson(Integer.MIN_VALUE), String.valueOf(Integer.MIN_VALUE));
+        List<Integer> numbers = getIntegralNumbers();
+        List<String> expected = new ArrayList<>();
+        List<String> actual = new ArrayList<>();
+        for (Integer number : numbers) {
+            expected.add(String.valueOf(number));
+            // 数字转字符串
+            actual.add(json.toJson(number));
+        }
+        Asserts.assertDeepEquals(actual, expected);
     }
 
     @Test(priority = 10002)
     public void testDeserializeIntegralNumber10002() {
-        Asserts.assertEquals(json.fromJson("0", int.class), 0);
-        Asserts.assertEquals(json.fromJson("1", int.class), 1);
-        Asserts.assertEquals(json.fromJson("-1", int.class), -1);
-        Asserts.assertEquals(json.fromJson("999999999", int.class), 999999999);
-        Asserts.assertEquals(json.fromJson("-999999999", int.class), -999999999);
-        Asserts.assertEquals(json.fromJson(String.valueOf(Integer.MAX_VALUE), int.class), Integer.MAX_VALUE);
-        Asserts.assertEquals(json.fromJson(String.valueOf(Integer.MIN_VALUE), int.class), Integer.MIN_VALUE);
+        List<Integer> numbers = getIntegralNumbers();
+        List<Integer> expected = new ArrayList<>();
+        List<Integer> actual = new ArrayList<>();
+        for (Integer number : numbers) {
+            expected.add(number);
+            // 字符串转数字
+            actual.add(json.fromJson(String.valueOf(number), int.class));
+        }
+        Asserts.assertDeepEquals(actual, expected);
+    }
+
+    protected List<Double> getDoubleNumbers() {
+        // @formatter:off
+        return Arrays.asList(0.0, 1.0, -1.0, 
+            999999999.0, -999999999.0, 0.99999999, 1.99999999, -1.99999999, 
+            999999999.99999999, -999999999.99999999, 
+            Double.MAX_VALUE, Double.MIN_VALUE);
+        // @formatter:on
     }
 
     @Test(priority = 10003)
     public void testSerializeDoubleNumber10003() {
-        Asserts.assertEquals(json.toJson(0.0), "0.0");
-        Asserts.assertEquals(json.toJson(1.0), "1.0");
-        Asserts.assertEquals(json.toJson(-1.0), "-1.0");
-        Asserts.assertEquals(json.toJson(999999999.0), "999999999.0");
-        Asserts.assertEquals(json.toJson(-999999999.0), "-999999999.0");
-        Asserts.assertEquals(json.toJson(0.99999999), "0.99999999");
-        Asserts.assertEquals(json.toJson(1.99999999), "1.99999999");
-        Asserts.assertEquals(json.toJson(-1.99999999), "-1.99999999");
-        Asserts.assertEquals(json.toJson(999999999.99999999), "999999999.99999999");
-        Asserts.assertEquals(json.toJson(-999999999.99999999), "-999999999.99999999");
-        Asserts.assertEquals(json.toJson(Double.MAX_VALUE), String.valueOf(Double.MAX_VALUE));
-        Asserts.assertEquals(json.toJson(Double.MIN_VALUE), String.valueOf(Double.MIN_VALUE));
+        List<Double> numbers = getDoubleNumbers();
+        List<String> expected = new ArrayList<>();
+        List<String> actual = new ArrayList<>();
+        for (Double number : numbers) {
+            expected.add(String.valueOf(number));
+            // 数字转字符串
+            actual.add(json.toJson(number));
+        }
+        Asserts.assertDeepEquals(actual, expected);
     }
 
     @Test(priority = 10004)
     public void testDeserializeDoubleNumber10004() {
-        Asserts.assertEquals(json.fromJson("0.0", double.class), 0.0);
-        Asserts.assertEquals(json.fromJson("1.0", double.class), 1.0);
-        Asserts.assertEquals(json.fromJson("-1.0", double.class), -1.0);
-        Asserts.assertEquals(json.fromJson("999999999.0", double.class), 999999999.0);
-        Asserts.assertEquals(json.fromJson("-999999999.0", double.class), -999999999.0);
-        Asserts.assertEquals(json.fromJson("0.99999999", double.class), 0.99999999);
-        Asserts.assertEquals(json.fromJson("1.99999999", double.class), 1.99999999);
-        Asserts.assertEquals(json.fromJson("-1.99999999", double.class), -1.99999999);
-        Asserts.assertEquals(json.fromJson("999999999.99999999", double.class), 999999999.99999999);
-        Asserts.assertEquals(json.fromJson("-999999999.99999999", double.class), -999999999.99999999);
-        Asserts.assertEquals(json.fromJson(String.valueOf(Double.MAX_VALUE), double.class), Double.MAX_VALUE);
-        Asserts.assertEquals(json.fromJson(String.valueOf(Double.MIN_VALUE), double.class), Double.MIN_VALUE);
+        List<Double> numbers = getDoubleNumbers();
+        List<Double> expected = new ArrayList<>();
+        List<Double> actual = new ArrayList<>();
+        for (Double number : numbers) {
+            expected.add(number);
+            // 字符串转数字
+            actual.add(json.fromJson(String.valueOf(number), double.class));
+        }
+        Asserts.assertDeepEquals(actual, expected);
     }
 
     protected String getStringNumberMap1String() {
