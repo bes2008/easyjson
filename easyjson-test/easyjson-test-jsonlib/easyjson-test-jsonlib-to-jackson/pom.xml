@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>easyjson-test-jsonlib</artifactId>
+        <groupId>com.github.fangjinuo.easyjson</groupId>
+        <version>2.4.0</version>
+    </parent>
+
+    <artifactId>easyjson-test-jsonlib-to-jackson</artifactId>
+	<packaging>jar</packaging>
+	<description>
+		使用easyjson或jsonlib的API, 以jackson作为实现框架的测试场景
+		(引用jsonlib-to-easyjson作为jsonlib的API的桥接, 引用easyjson-jackson作为json的实现框架)
+	</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.github.fangjinuo.easyjson</groupId>
+            <artifactId>easyjson-core</artifactId>
+        </dependency>
+		<dependency>
+			<groupId>com.github.fangjinuo.easyjson</groupId>
+			<artifactId>jsonlib-to-easyjson</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.fangjinuo.easyjson</groupId>
+			<artifactId>easyjson-jackson</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+        <dependency>
+            <groupId>com.github.fangjinuo.easyjson</groupId>
+            <artifactId>easyjson-test-jsonlib-base</artifactId>
+			<version>${project.version}</version>
+        </dependency>
+    </dependencies>
+</project>
