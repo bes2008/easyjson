@@ -8,7 +8,7 @@ import com.google.gson.annotations.Expose;
 import com.jn.easyjson.tests.utils.Asserts;
 
 /**
- * FastJson注解测试类
+ * Gson注解测试类
  *
  * @author zhaohuihua
  * @version 20200614
