@@ -151,7 +151,7 @@ public class DeepEqualsAssertion {
 
     /** 判断class是否相同 **/
     private Exit assertClassEquals(Class<?> actual, Class<?> expected, String owner) {
-        if (actual != expected) {
+        if (actual == expected) {
             return Exit.NO;
         }
         String aClass = actual.getSimpleName();

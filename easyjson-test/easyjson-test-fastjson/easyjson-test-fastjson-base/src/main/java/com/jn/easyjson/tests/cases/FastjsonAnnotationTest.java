@@ -1,6 +1,5 @@
 package com.jn.easyjson.tests.cases;
 
-import org.testng.Assert;
 import org.testng.annotations.Test;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
@@ -17,6 +16,14 @@ import java.util.Date;
  */
 @Test
 public abstract class FastjsonAnnotationTest extends AbstractBaseTest {
+
+    protected String javaBeanToJsonString(Object javaBean) {
+        return JSONObject.toJSONString(javaBean);
+    }
+
+    protected <T> T jsonStringToJavaBean(String jsonString, Class<T> clazz) {
+        return JSONObject.parseObject(jsonString, clazz);
+    }
 
     protected UserEntity1UseMethodIgnore getUserEntity1Object() {
         UserEntity1UseMethodIgnore user = new UserEntity1UseMethodIgnore();
@@ -65,15 +72,17 @@ public abstract class FastjsonAnnotationTest extends AbstractBaseTest {
     @Test(priority = 10001)
     public void testSerializeUseMethodIgnore10001() {
         UserEntity1UseMethodIgnore user = getUserEntity1Object();
-        String jsonString = JSONObject.toJSONString(user);
-        System.out.println(jsonString);
-        Assert.assertEquals(jsonString, getUserEntityIgnorePasswordString());
+        String actual = javaBeanToJsonString(user);
+        System.out.println(actual);
+        String expected = getUserEntityIgnorePasswordString();
+        System.out.println(expected);
+        Asserts.assertJsonEquals(actual, expected);
     }
 
     @Test(priority = 10002)
     public void testDeserializeUseMethodIgnore10002() {
         String jsonString = getUserEntityString();
-        UserEntity1UseMethodIgnore actual = JSONObject.parseObject(jsonString, UserEntity1UseMethodIgnore.class);
+        UserEntity1UseMethodIgnore actual = jsonStringToJavaBean(jsonString, UserEntity1UseMethodIgnore.class);
         UserEntity1UseMethodIgnore expected = getUserEntity1Object();
         expected.setPassword(null);
         expected.setBirthday(new Date(1577808000000L));
@@ -83,15 +92,17 @@ public abstract class FastjsonAnnotationTest extends AbstractBaseTest {
     @Test(priority = 10003)
     public void testSerializeUseFieldIgnore10003() {
         UserEntity2UseFieldIgnore user = getUserEntity2Object();
-        String jsonString = JSONObject.toJSONString(user);
-        System.out.println(jsonString);
-        Assert.assertEquals(jsonString, getUserEntityIgnorePasswordString());
+        String actual = javaBeanToJsonString(user);
+        System.out.println(actual);
+        String expected = getUserEntityIgnorePasswordString();
+        System.out.println(expected);
+        Asserts.assertJsonEquals(actual, expected);
     }
 
     @Test(priority = 10004)
     public void testDeserializeUseFieldIgnore10004() {
         String jsonString = getUserEntityString();
-        UserEntity2UseFieldIgnore actual = JSONObject.parseObject(jsonString, UserEntity2UseFieldIgnore.class);
+        UserEntity2UseFieldIgnore actual = jsonStringToJavaBean(jsonString, UserEntity2UseFieldIgnore.class);
         UserEntity2UseFieldIgnore expected = getUserEntity2Object();
         expected.setPassword(null);
         expected.setBirthday(new Date(1577808000000L));
@@ -101,15 +112,17 @@ public abstract class FastjsonAnnotationTest extends AbstractBaseTest {
     @Test(priority = 10005)
     public void testSerializeUseIgnores10005() {
         UserEntity3UseIgnores user = getUserEntity3Object();
-        String jsonString = JSONObject.toJSONString(user);
-        System.out.println(jsonString);
-        Assert.assertEquals(jsonString, getUserEntityIgnorePasswordString());
+        String actual = javaBeanToJsonString(user);
+        System.out.println(actual);
+        String expected = getUserEntityIgnorePasswordString();
+        System.out.println(expected);
+        Asserts.assertJsonEquals(actual, expected);
     }
 
     @Test(priority = 10006)
     public void testDeserializeUseIgnores10006() {
         String jsonString = getUserEntityString();
-        UserEntity3UseIgnores actual = JSONObject.parseObject(jsonString, UserEntity3UseIgnores.class);
+        UserEntity3UseIgnores actual = jsonStringToJavaBean(jsonString, UserEntity3UseIgnores.class);
         UserEntity3UseIgnores expected = getUserEntity3Object();
         expected.setPassword(null);
         expected.setBirthday(new Date(1577808000000L));
@@ -119,15 +132,17 @@ public abstract class FastjsonAnnotationTest extends AbstractBaseTest {
     @Test(priority = 10007)
     public void testSerializeUseIncludes10007() {
         UserEntity4UseIncludes user = getUserEntity4Object();
-        String jsonString = JSONObject.toJSONString(user);
-        System.out.println(jsonString);
-        Assert.assertEquals(jsonString, getUserEntityIgnorePasswordString());
+        String actual = javaBeanToJsonString(user);
+        System.out.println(actual);
+        String expected = getUserEntityIgnorePasswordString();
+        System.out.println(expected);
+        Asserts.assertJsonEquals(actual, expected);
     }
 
     @Test(priority = 10008)
     public void testDeserializeUseIncludes10008() {
         String jsonString = getUserEntityString();
-        UserEntity4UseIncludes actual = JSONObject.parseObject(jsonString, UserEntity4UseIncludes.class);
+        UserEntity4UseIncludes actual = jsonStringToJavaBean(jsonString, UserEntity4UseIncludes.class);
         UserEntity4UseIncludes expected = getUserEntity4Object();
         expected.setPassword(null);
         expected.setBirthday(new Date(1577808000000L));

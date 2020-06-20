@@ -45,11 +45,6 @@ public class Asserts {
         throw new IllegalArgumentException("Unsupported json string: " + jsonString);
     }
 
-    /** 比对两个对象是否一致 **/
-    public static void assertEquals(Object actual, Object expected) {
-        assertDeepEquals(actual, expected);
-    }
-
     /** 比对两个对象是否深度一致 **/
     public static void assertDeepEquals(Object actual, Object expected) {
         String owner = "Root object";
