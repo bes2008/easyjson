@@ -4,7 +4,6 @@ import java.util.Date;
 
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
-import com.jn.langx.util.reflect.Reflects;
 import org.testng.annotations.Test;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -20,19 +19,27 @@ import com.jn.easyjson.tests.utils.Asserts;
 @Test
 public abstract class GsonAnnotationTest extends AbstractBaseTest {
 
-    public static class WithoutExposeExclusionStrategy implements ExclusionStrategy{
+    /**
+     * 定制排除策略, 如果没有Expose注解, 既参与serialize也参与deserialize; 如果有Expose注解就看注解的声明<br>
+     * Gson默认的excludeFieldsWithoutExposeAnnotation排除策略是如果没有Expose注解就不参与serialize和deserialize
+     *
+     * @version 20200621
+     */
+    public static class WithoutExposeExclusionStrategy implements ExclusionStrategy {
+
         private boolean serialize = true;
 
-        public WithoutExposeExclusionStrategy(boolean serialize){
-            this.serialize =serialize;
+        public WithoutExposeExclusionStrategy(boolean serialize) {
+            this.serialize = serialize;
         }
+
         @Override
         public boolean shouldSkipField(FieldAttributes f) {
             Expose expose = f.getAnnotation(Expose.class);
-            if(expose!=null){
-                if(serialize) {
+            if (expose != null) {
+                if (serialize) {
                     return !expose.serialize();
-                }else{
+                } else {
                     return !expose.deserialize();
                 }
             }
@@ -44,7 +51,6 @@ public abstract class GsonAnnotationTest extends AbstractBaseTest {
             return false;
         }
     }
-
 
     private static Gson gson;
     static {
@@ -101,6 +107,7 @@ public abstract class GsonAnnotationTest extends AbstractBaseTest {
     }
 
     protected static class UserEntity2UseFieldIgnore {
+
         @Expose
         private Date birthday;
         @Expose
