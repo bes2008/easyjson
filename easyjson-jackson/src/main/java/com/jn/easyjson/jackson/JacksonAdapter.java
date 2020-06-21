@@ -81,7 +81,7 @@ public class JacksonAdapter implements JsonHandler {
             JsonNode jsonNode = objectMapper.readTree(json);
             return treeNodeMapper.create(jsonNode);
         } catch (Throwable ex) {
-            throw new RuntimeException(ex);
+            throw new JsonException(ex);
         }
     }
 

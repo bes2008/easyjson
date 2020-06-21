@@ -16,6 +16,7 @@ package com.jn.easyjson.core.node;
 
 import com.jn.easyjson.core.JSON;
 import com.jn.easyjson.core.JSONBuilderProvider;
+import com.jn.easyjson.core.JsonException;
 import com.jn.easyjson.core.JsonTreeNode;
 import com.jn.langx.util.reflect.type.Primitives;
 
@@ -89,7 +90,11 @@ public class JsonTreeNodes {
         else{
             jsonString = json.toJson(object);
         }
-        return json.fromJson(jsonString);
+        try {
+            return json.fromJson(jsonString);
+        }catch (JsonException ex){
+            return new JsonPrimitiveNode(jsonString);
+        }
     }
 
     public static Object toJavaObject(JsonTreeNode node) {
