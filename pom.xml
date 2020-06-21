@@ -15,15 +15,16 @@
         <module>fastjson-to-easyjson</module>
         <module>progsbase-to-easyjson</module>
         <module>easyjson-examples</module>
-        <module>jsonsmart-to-easyjson</module>
         <module>jsonlib-to-easyjson</module>
+        <module>easyjson-test</module>
+        <module>jsonsmart-to-easyjson</module>
         <module>orgjson-to-easyjson</module>
         <module>simplejson-to-easyjson</module>
         <module>minimaljson-to-easyjson</module>
         <module>androidjson-to-easyjson</module>
         <module>moshi-to-easyjson</module>
         <module>boonjson-to-easyjson</module>
-        <module>easyjson-test</module>
+
     </modules>
     <name>easyjson</name>
     <packaging>pom</packaging>
