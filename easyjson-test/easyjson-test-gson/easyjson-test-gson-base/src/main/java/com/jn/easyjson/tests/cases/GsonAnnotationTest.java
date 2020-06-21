@@ -70,9 +70,11 @@ public abstract class GsonAnnotationTest extends AbstractBaseTest {
     }
 
     protected static class UserEntity2UseFieldIgnore {
-
+        @Expose
         private Date birthday;
+        @Expose
         private String id;
+        @Expose
         private String name;
         @Expose(serialize = false, deserialize = false)
         private String password;
