@@ -1,9 +1,10 @@
-package net.sf.json;
+package net.sf.json.easyjson;
 
 import com.jn.easyjson.core.JSONBuilder;
 import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.easyjson.core.JsonTreeNode;
 import com.jn.easyjson.core.node.*;
+import net.sf.json.*;
 import net.sf.json.util.JSONTokener;
 
 import java.lang.reflect.Modifier;

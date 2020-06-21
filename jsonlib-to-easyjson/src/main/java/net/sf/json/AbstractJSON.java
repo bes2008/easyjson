@@ -15,6 +15,8 @@
 package net.sf.json;
 
 
+import net.sf.json.easyjson.JsonMapper;
+
 import java.lang.ref.SoftReference;
 import java.util.HashSet;
 import java.util.Set;

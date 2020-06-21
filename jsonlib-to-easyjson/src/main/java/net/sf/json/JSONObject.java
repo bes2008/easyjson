@@ -19,6 +19,7 @@ import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.easyjson.core.JsonTreeNode;
 import com.jn.easyjson.core.node.JsonTreeNodes;
 import com.jn.langx.util.reflect.type.Primitives;
+import net.sf.json.easyjson.JsonMapper;
 import net.sf.json.processors.JsonVerifier;
 import net.sf.json.util.JSONUtils;
 import net.sf.json.util.PropertySetStrategy;
