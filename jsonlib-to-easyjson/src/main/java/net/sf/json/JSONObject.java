@@ -174,7 +174,7 @@ public final class JSONObject extends AbstractJSON implements JSON, Map, Compara
      * Creates a bean from a JSONObject, with the specific configuration.
      */
     public static Object toBean(JSONObject jsonObject, Object root, JsonConfig jsonConfig) {
-        Class clazz = root.getClass();
+        Class clazz = root !=null ? root.getClass() : null;
         if (clazz == null) {
             clazz = jsonConfig.getRootClass();
         }
@@ -185,7 +185,7 @@ public final class JSONObject extends AbstractJSON implements JSON, Map, Compara
         if (clazz == null) {
             return JsonTreeNodes.toJavaObject(JsonTreeNodes.combine(node1, node2));
         }
-        return json.fromJson(json.toJson(JsonTreeNodes.combine(node1, node2)), root.getClass());
+        return json.fromJson(json.toJson(JsonTreeNodes.combine(node1, node2)), clazz);
     }
 
 
