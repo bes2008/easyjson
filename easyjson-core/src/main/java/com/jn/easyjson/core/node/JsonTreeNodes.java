@@ -82,7 +82,13 @@ public class JsonTreeNodes {
         }
 
         JSON json = JSONBuilderProvider.create().build();
-        String jsonString = json.toJson(object);
+        String jsonString = null;
+        if(object instanceof String){
+            jsonString = (String)object;
+        }
+        else{
+            jsonString = json.toJson(object);
+        }
         return json.fromJson(jsonString);
     }
 
