@@ -21,7 +21,7 @@
 	
     <modules>
         <module>easyjson-test-base</module>
-        <module>easyjson-test-Jsonlib</module>
+        <module>easyjson-test-fastjson</module>
         <module>easyjson-test-gson</module>
         <module>easyjson-test-jackson</module>
         <module>easyjson-test-jsonlib</module>
