@@ -330,5 +330,7 @@ public abstract class JSONBuilder implements Cloneable {
         builder.serializeBooleanUsingOnOff(this.serializeBooleanUsingOnOff);
         builder.serializeBooleanUsing1_0(this.serializeBooleanUsing1_0);
         builder.enableCustomConfiguration(this.enableCustomConfiguration);
+        builder.dialectIdentify(this.dialectIdentify());
+        builder.proxyDialectIdentify(this.proxyDialectIdentify());
     }
 }
