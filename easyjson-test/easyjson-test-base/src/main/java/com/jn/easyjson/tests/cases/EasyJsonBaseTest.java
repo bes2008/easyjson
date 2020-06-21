@@ -1,7 +1,14 @@
 package com.jn.easyjson.tests.cases;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.Date;
 import org.testng.annotations.Test;
+import com.gitee.qdbp.tools.files.PathTools;
 import com.jn.easyjson.core.JSON;
 import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.easyjson.tests.entity.user.Address;
@@ -16,8 +23,9 @@ import com.jn.easyjson.tests.utils.Asserts;
  * @version 20200614
  */
 public abstract class EasyJsonBaseTest extends AbstractBaseTest {
-    
+
     private static JSON json = JSONBuilderProvider.simplest();
+    private static Charset UTF8 = Charset.forName("UTF-8");
 
     protected UserEntity getUserEntityObject() {
         UserEntity user = new UserEntity();
@@ -52,5 +60,16 @@ public abstract class EasyJsonBaseTest extends AbstractBaseTest {
         UserEntity actual = json.fromJson(jsonString, UserEntity.class);
         UserEntity expected = getUserEntityObject();
         Asserts.assertDeepEquals(actual, expected);
+    }
+
+    @Test(priority = 10003)
+    public void testReader10003() throws IOException {
+        URL url = PathTools.findClassResource(EasyJsonBaseTest.class, "json/BaseTestUserEntityString.json");
+        try (InputStream input = url.openStream();
+                Reader reader = new InputStreamReader(input, UTF8)) {
+            UserEntity actual = json.fromJson(reader, UserEntity.class);
+            UserEntity expected = getUserEntityObject();
+            Asserts.assertDeepEquals(actual, expected);
+        }
     }
 }
