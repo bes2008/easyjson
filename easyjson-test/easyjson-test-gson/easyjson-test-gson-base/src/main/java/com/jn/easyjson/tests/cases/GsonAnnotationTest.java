@@ -1,6 +1,10 @@
 package com.jn.easyjson.tests.cases;
 
 import java.util.Date;
+
+import com.google.gson.ExclusionStrategy;
+import com.google.gson.FieldAttributes;
+import com.jn.langx.util.reflect.Reflects;
 import org.testng.annotations.Test;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -16,10 +20,37 @@ import com.jn.easyjson.tests.utils.Asserts;
 @Test
 public abstract class GsonAnnotationTest extends AbstractBaseTest {
 
+    public static class WithoutExposeExclusionStrategy implements ExclusionStrategy{
+        private boolean serialize = true;
+
+        public WithoutExposeExclusionStrategy(boolean serialize){
+            this.serialize =serialize;
+        }
+        @Override
+        public boolean shouldSkipField(FieldAttributes f) {
+            Expose expose = f.getAnnotation(Expose.class);
+            if(expose!=null){
+                if(serialize) {
+                    return !expose.serialize();
+                }else{
+                    return !expose.deserialize();
+                }
+            }
+            return false;
+        }
+
+        @Override
+        public boolean shouldSkipClass(Class<?> clazz) {
+            return false;
+        }
+    }
+
+
     private static Gson gson;
     static {
         GsonBuilder builder = new GsonBuilder();
-        builder.excludeFieldsWithoutExposeAnnotation();
+        builder.addSerializationExclusionStrategy(new WithoutExposeExclusionStrategy(true));
+        builder.addDeserializationExclusionStrategy(new WithoutExposeExclusionStrategy(false));
         builder.setDateFormat("yyyy-MM-dd");
         gson = builder.create();
     }
