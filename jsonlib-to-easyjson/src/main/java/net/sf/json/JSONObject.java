@@ -132,7 +132,7 @@ public final class JSONObject extends AbstractJSON implements JSON, Map, Compara
         if (jsonObj instanceof JSONArray) {
             throw new JSONException("JSONArray is not a JSONObject");
         }
-        return (JSONObject) object;
+        return (JSONObject) jsonObj;
     }
 
 
