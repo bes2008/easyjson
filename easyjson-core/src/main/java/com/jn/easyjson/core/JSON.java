@@ -17,6 +17,7 @@ package com.jn.easyjson.core;
 import com.jn.easyjson.core.node.JsonNullNode;
 import com.jn.langx.util.reflect.type.Primitives;
 
+import java.io.Reader;
 import java.lang.reflect.Type;
 
 public class JSON {
@@ -95,6 +96,13 @@ public class JSON {
             return null;
         }
         return jsonHandler.deserialize(json, typeOfT);
+    }
+
+    public <T> T fromJson(Reader reader, Type typeOfT) throws JsonException {
+        if(reader==null){
+            return null;
+        }
+        return jsonHandler.deserialize(reader, typeOfT);
     }
 
     public JsonTreeNode fromJson(String json) throws JsonException {

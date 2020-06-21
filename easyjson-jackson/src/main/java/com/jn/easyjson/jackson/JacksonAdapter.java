@@ -24,6 +24,7 @@ import com.jn.easyjson.core.JsonTreeNode;
 import com.jn.easyjson.jackson.node.JacksonBasedJsonTreeNodeMapper;
 import com.jn.langx.util.reflect.type.Types;
 
+import java.io.Reader;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
@@ -35,6 +36,15 @@ public class JacksonAdapter implements JsonHandler {
     public <T> T deserialize(String json, Type typeOfT) throws JsonException {
         try {
             return objectMapper.readValue(json, toJavaType(typeOfT));
+        } catch (Throwable ex) {
+            throw new JsonException(ex);
+        }
+    }
+
+    @Override
+    public <T> T deserialize(Reader reader, Type typeOfT) throws JsonException {
+        try {
+            return objectMapper.readValue(reader, toJavaType(typeOfT));
         } catch (Throwable ex) {
             throw new JsonException(ex);
         }

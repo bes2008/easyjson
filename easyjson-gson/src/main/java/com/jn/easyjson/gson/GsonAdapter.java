@@ -22,6 +22,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
+import java.io.Reader;
 import java.lang.reflect.Type;
 
 public class GsonAdapter implements JsonHandler {
@@ -40,6 +41,11 @@ public class GsonAdapter implements JsonHandler {
     @Override
     public <T> T deserialize(String json, Type typeOfT) throws JsonException {
         return gson.fromJson(json, typeOfT);
+    }
+
+    @Override
+    public <T> T deserialize(Reader reader, Type typeOfT) throws JsonException {
+        return gson.fromJson(reader, typeOfT);
     }
 
     @Override

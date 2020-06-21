@@ -14,13 +14,16 @@
 
 package com.jn.easyjson.fastjson;
 
+import com.alibaba.fastjson.JSONReader;
 import com.alibaba.fastjson.parser.DefaultJSONParser;
+import com.alibaba.fastjson.parser.JSONReaderScanner;
 import com.alibaba.fastjson.serializer.JSONSerializer;
 import com.jn.easyjson.core.JsonException;
 import com.jn.easyjson.core.JsonHandler;
 import com.jn.easyjson.core.JsonTreeNode;
 import com.jn.easyjson.core.tree.JsonTreeDeserializer;
 
+import java.io.Reader;
 import java.lang.reflect.Type;
 
 public class FastJsonAdapter implements JsonHandler {
@@ -33,6 +36,13 @@ public class FastJsonAdapter implements JsonHandler {
         parser.handleResovleTask(value);
         parser.close();
         return value;
+    }
+
+    @Override
+    public <T> T deserialize(Reader reader, Type typeOfT) throws JsonException {
+        JSONReaderScanner jsonReaderScanner = new JSONReaderScanner(reader, fastJson.getDeserializerBuilder().getFeatures());
+        JSONReader jsonReader = new JSONReader(jsonReaderScanner);
+        return jsonReader.readObject(typeOfT);
     }
 
     @Override
