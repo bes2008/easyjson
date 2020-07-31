@@ -13,16 +13,14 @@ import java.io.IOException;
 import java.io.Reader;
 import java.lang.reflect.Type;
 
-import static feign.Util.UTF_8;
-
 public class EasyjsonDecoder implements Decoder {
     private JSONFactory jsonFactory;
 
-    public EasyjsonDecoder(){
+    public EasyjsonDecoder() {
         setJsonFactory(JsonFactorys.getJSONFactory(JsonScope.SINGLETON));
     }
 
-    public EasyjsonDecoder(JSONFactory jsonFactory){
+    public EasyjsonDecoder(JSONFactory jsonFactory) {
         setJsonFactory(jsonFactory);
     }
 
@@ -32,7 +30,7 @@ public class EasyjsonDecoder implements Decoder {
 
     @Override
     public Object decode(Response response, Type type) throws IOException, DecodeException, FeignException {
-        if(response == null || response.body()==null){
+        if (response == null || response.body() == null) {
             return null;
         }
         Reader reader = response.body().asReader(Charsets.UTF_8);

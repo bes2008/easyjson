@@ -145,6 +145,28 @@ public abstract class JSONBuilder implements Cloneable {
         return serializeEnumUsingValue;
     }
 
+    /**
+     * 该方法已废弃，原因是方法名不够明确，由 serializeEnumUsingIndex来代替
+     * @param value
+     * @return
+     * @deprecated
+     *
+     */
+    @Deprecated
+    public JSONBuilder serializeEnumUsingValue(boolean value) {
+        return this.serializeEnumUsingIndex(value);
+    }
+
+    /**
+     *
+     * @return
+     * @deprecated
+     */
+    @Deprecated
+    public boolean serializeEnumUsingValue() {
+        return serializeEnumUsingIndex();
+    }
+
     public JSONBuilder serializeEnumUsingField(String field) {
         if (field != null && !field.trim().isEmpty()) {
             this.serializeEnumUsingField = field.trim();

@@ -16,7 +16,7 @@
 [Github](https://github.com/fangjinuo/easyjson)： https://github.com/fangjinuo/easyjson
 [Gitee](https://gitee.com/fangjinuo/easyjson)： https://gitee.com/fangjinuo/easyjson
 
-[![maven](https://img.shields.io/badge/maven-2.4.0-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.easyjson%20AND%20v:2.4.0)
+[![maven](https://img.shields.io/badge/maven-3.0.0-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.easyjson%20AND%20v:3.0.0)
 
 
 
@@ -24,12 +24,15 @@
 Provides a unified JSON access API, you can adapter any JSON library to Gson, Jackson, FastJson with easyjson.
 
 ## Modules
-1. **easyjson-gson**: use it, you can adapter any json library to Google gson.
-2. **easyjson-jackson**: use it, you can adapter any json library to jackson. If you working in a spring application, this is recommend.
-3. **easyjson-fastjson**: use it, you can adapter any json library to Alibaba fastjson.
-4. **easyjson-core**: the core module. use it you can adapter any json library to easyjson,the other wary round, you can adapter any a json library to any json library.
-5. **XXXX-to-easyjson**: adapter some JSON library (android-json, json-simple, json-lib, ... etc) to easyjson (gson, jackson)
+1. **easyjson-gson**: 使用它可以将其他的JSON库适配给Gson
+2. **easyjson-jackson**: 使用它可以将其他的JSON库适配给Jackson
+3. **easyjson-fastjson**: 使用它可以将其他的JSON库适配给 Fastjson
+4. **easyjson-core**: 这是个核心模块，可以直接去用这个模块的API，就像使用slf4j的logger API一样。
+5. **XXXX-to-easyjson**: 有很多这样的模块，它们是用于将xxx JSON库通过easyjson-core，适配给底层JSON实现库。
+6. **easyjson-supports-XX** 对于其他非JSON库的支持，例如openfeign等
 7. **easyjson-examples**: test cases
+8. **easyjson-examples**: test cases v2
+
 
 ## Usage
 ### Key Features
