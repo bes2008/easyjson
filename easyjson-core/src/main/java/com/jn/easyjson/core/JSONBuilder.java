@@ -104,6 +104,11 @@ public abstract class JSONBuilder implements Cloneable {
         isLenient = lenient;
     }
 
+    public JSONBuilder lenient(boolean lenient) {
+        isLenient = lenient;
+        return this;
+    }
+
     public JSONBuilder serializeNulls(boolean serializeNulls) {
         this.serializeNulls = serializeNulls;
         return this;
