@@ -71,7 +71,7 @@ public class JSONBuilderProvider {
                 logger.error("Can't create a default json builder, {}", defaultJsonBuilderClass.getCanonicalName());
             }
         }
-        throw new RuntimeException("Can't find any supported JSON libraries : [gson, jackson, fastjson], check you classpath has one of these jar pairs: [fastjson, easyjson-fastjson], [gson, easyjson-gson], [jackson, easyjson-jackson]");
+        throw new RuntimeException("Can't find any supported JSON libraries : [gson, jackson, fastjson], \n 1) check you classpath has one of these jar pairs: [fastjson, easyjson-fastjson], [gson, easyjson-gson], [jackson, easyjson-jackson]. \n 2) if any pair found in your classpath, check the jdk version whether is compatible or not");
     }
 
     private static void findJSONBuilderImplClasses() {
