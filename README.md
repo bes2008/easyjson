@@ -9,9 +9,7 @@
 
 [![gson](https://img.shields.io/badge/gson-2.x-green.svg)](https://github.com/google/gson)
 [![fastjson](https://img.shields.io/badge/fastjson-1.2.x-green.svg)](https://github.com/alibaba/fastjson)
-[![jackson](https://img.shields.io/badge/jackson-2.9.x-green.svg)](https://github.com/FasterXML/jackson)
-[![jackson](https://img.shields.io/badge/jackson-2.10.x-green.svg)](https://github.com/FasterXML/jackson)
-[![jackson](https://img.shields.io/badge/jackson-2.11.x-green.svg)](https://github.com/FasterXML/jackson)
+[![jackson](https://img.shields.io/badge/jackson-2.6.x+-green.svg)](https://github.com/FasterXML/jackson)
 
 [![JDK](https://img.shields.io/badge/JDK-1.6+-green.svg)](https://www.oracle.com/technetwork/java/javase/downloads/index.html)
 
