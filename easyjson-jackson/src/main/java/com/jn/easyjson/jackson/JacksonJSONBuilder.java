@@ -14,6 +14,7 @@
 
 package com.jn.easyjson.jackson;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.module.SimpleDeserializers;
 import com.fasterxml.jackson.databind.module.SimpleModule;
@@ -89,7 +90,7 @@ public class JacksonJSONBuilder extends JSONBuilder {
         deserializationConfig = deserializationConfig.withoutAttribute(JacksonConstants.SERIALIZE_ENUM_USING_FIELD_ATTR_KEY);
 
         // ordinal()
-        if(serializeEnumUsingIndex()) {
+        if (serializeEnumUsingIndex()) {
             serializationConfig = serializationConfig.with(SerializationFeature.WRITE_ENUMS_USING_INDEX);
         }
         serializationConfig = serializationConfig.withAttribute(JacksonConstants.SERIALIZE_ENUM_USING_INDEX_ATTR_KEY, serializeEnumUsingIndex());
@@ -97,7 +98,7 @@ public class JacksonJSONBuilder extends JSONBuilder {
 
 
         // toString()
-        if(serializeEnumUsingToString()){
+        if (serializeEnumUsingToString()) {
             serializationConfig = serializationConfig.with(SerializationFeature.WRITE_ENUMS_USING_TO_STRING);
             deserializationConfig = deserializationConfig.with(DeserializationFeature.READ_ENUMS_USING_TO_STRING);
         }
@@ -155,11 +156,13 @@ public class JacksonJSONBuilder extends JSONBuilder {
 
     private void configNulls(EasyJsonObjectMapper objectMapper) {
         if (serializeNulls()) {
-            objectMapper.configure(SerializationFeature.WRITE_NULL_MAP_VALUES,true);
+            objectMapper.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, true);
             objectMapper.setConfig(objectMapper.getSerializationConfig()
                     .withAppendedAnnotationIntrospector(new EasyJsonJacksonAnnotationIntrospector())
-                    .withAttribute(JacksonConstants.SERIALIZE_NULLS_ATTR_KEY,true)
+                    .withAttribute(JacksonConstants.SERIALIZE_NULLS_ATTR_KEY, true)
             );
+        } else {
+            objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         }
 
     }
@@ -180,7 +183,7 @@ public class JacksonJSONBuilder extends JSONBuilder {
         configNumber(mapper);
         configEnum(mapper);
         configDate(mapper);
-        if(!serializeNonFieldGetter()){
+        if (!serializeNonFieldGetter()) {
             mapper.configure(MapperFeature.REQUIRE_SETTERS_FOR_GETTERS, true);
         }
         mapper.configure(SerializationFeature.INDENT_OUTPUT, prettyFormat());
