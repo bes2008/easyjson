@@ -167,7 +167,7 @@ public class JacksonBasedJsonTreeNodeMapper implements JsonTreeNodeFactory<JsonN
         // array
         if (jsonNode.isJsonArrayNode()) {
             JsonArrayNode jsonArrayNode = jsonNode.getAsJsonArrayNode();
-            ArrayNode arrayNode = jsonNodeFactory.arrayNode(jsonArrayNode.size());
+            ArrayNode arrayNode = jsonNodeFactory.arrayNode();
             for (JsonTreeNode element : jsonArrayNode) {
                 arrayNode.add(mapping(element));
             }

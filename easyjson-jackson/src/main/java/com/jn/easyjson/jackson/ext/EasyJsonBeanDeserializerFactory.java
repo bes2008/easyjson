@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.deser.DeserializerFactory;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 import com.fasterxml.jackson.databind.util.ClassUtil;
 import com.jn.easyjson.core.exclusion.ExclusionConfiguration;
+import com.jn.easyjson.jackson.JacksonMigrates;
 import com.jn.easyjson.jackson.deserializer.DateDeserializer;
 import com.jn.easyjson.jackson.deserializer.NumberDeserializer;
 import com.jn.langx.util.Throwables;
@@ -49,14 +50,7 @@ public class EasyJsonBeanDeserializerFactory extends BeanDeserializerFactory {
             return this;
         }
 
-        Method verifyMustOverrideMethod = Reflects.getAnyMethod(ClassUtil.class, "verifyMustOverride", Class.class, Object.class, String.class);
-        if(verifyMustOverrideMethod!=null){
-            try {
-                verifyMustOverrideMethod.invoke(null, EasyJsonBeanDeserializerFactory.class, this, "withConfig");
-            }catch (Throwable ex){
-                Throwables.wrapAsRuntimeException(ex);
-            }
-        }
+        JacksonMigrates.verifyMustOverride(EasyJsonBeanDeserializerFactory.class, this, "withConfig");
         return new EasyJsonBeanDeserializerFactory(config, objectMapper);
     }
 
