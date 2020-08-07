@@ -70,7 +70,7 @@ public class EnumDeserializer<T extends Enum> extends JsonDeserializer<T> implem
         Class<T> enumClass = clazz;
         if (enumClass == null) {
             Object currentOwner = p.getCurrentValue();
-            String currentName = p.currentName();
+            String currentName = p.getCurrentName();
 
             // enum is bean's field
             if (currentName != null && currentOwner != null) {

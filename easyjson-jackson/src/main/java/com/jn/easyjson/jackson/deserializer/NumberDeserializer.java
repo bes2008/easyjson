@@ -76,7 +76,7 @@ public class NumberDeserializer extends JsonDeserializer<Number> implements Cont
                 return p.getBigIntegerValue();
             }
         }
-        if (p.isNaN()) {
+        if (!curr.isNumeric()) {
             return 0;
         }
         Number n = null;
