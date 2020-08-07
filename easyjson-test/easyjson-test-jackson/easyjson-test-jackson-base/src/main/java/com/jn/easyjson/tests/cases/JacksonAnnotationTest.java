@@ -30,7 +30,7 @@ public abstract class JacksonAnnotationTest extends AbstractBaseTest {
         ObjectMapper mapper = new ObjectMapper();
         try {
             return mapper.readValue(jsonString, clazz);
-        } catch (JsonProcessingException e) {
+        } catch (Throwable e) {
             throw new RuntimeException(e);
         }
     }

@@ -23,18 +23,18 @@ import com.fasterxml.jackson.databind.ser.BeanPropertyWriter;
 import com.fasterxml.jackson.databind.ser.PropertyBuilder;
 import com.fasterxml.jackson.databind.util.ArrayBuilders;
 import com.fasterxml.jackson.databind.util.BeanUtil;
-import com.fasterxml.jackson.databind.util.ClassUtil;
 import com.fasterxml.jackson.databind.util.NameTransformer;
+import com.jn.easyjson.jackson.JacksonMigrates;
 
 public class EasyjsonPropertyBuilder extends PropertyBuilder {
     private EasyJsonObjectMapper objectMapper;
 
-    public void setObjectMapper(EasyJsonObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
-    }
-
     public EasyjsonPropertyBuilder(SerializationConfig config, BeanDescription beanDesc) {
         super(config, beanDesc);
+    }
+
+    public void setObjectMapper(EasyJsonObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
     }
 
     @Override
@@ -44,9 +44,9 @@ public class EasyjsonPropertyBuilder extends PropertyBuilder {
             serializationType = findSerializationType(am, defaultUseStaticTyping, declaredType);
         } catch (JsonMappingException e) {
             if (propDef == null) {
-                return prov.reportBadDefinition(declaredType, ClassUtil.exceptionMessage(e));
+                return prov.reportBadDefinition(declaredType, JacksonMigrates.exceptionMessage(e));
             }
-            return prov.reportBadPropertyDefinition(_beanDesc, propDef, ClassUtil.exceptionMessage(e));
+            return prov.reportBadPropertyDefinition(_beanDesc, propDef, JacksonMigrates.exceptionMessage(e));
         }
 
         // Container types can have separate type serializers for content (value / element) type
@@ -172,7 +172,7 @@ public class EasyjsonPropertyBuilder extends PropertyBuilder {
         }
 
         // ***************************EasyJson patch start*******************************//
-        if(!suppressNulls && objectMapper!=null && objectMapper.getJsonBuilder()!=null){
+        if (!suppressNulls && objectMapper != null && objectMapper.getJsonBuilder() != null) {
             suppressNulls = !objectMapper.getJsonBuilder().serializeNulls();
         }
         // ***************************EasyJson patch end*********************************//
