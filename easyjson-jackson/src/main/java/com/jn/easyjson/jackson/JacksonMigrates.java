@@ -19,8 +19,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 public class JacksonMigrates {
     /**
      * 迁移自 ClassUtil ，从高版本迁移
-     * @param t
-     * @return
      */
     public static String exceptionMessage(Throwable t) {
         if (t instanceof JsonProcessingException) {
@@ -31,8 +29,6 @@ public class JacksonMigrates {
 
     /**
      * 迁移自 ClassUtil ，从高版本迁移
-     * @param t
-     * @return
      */
     public static void verifyMustOverride(Class<?> expType, Object instance,
                                           String method)

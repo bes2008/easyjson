@@ -32,7 +32,7 @@ public class ParseJsonUseJackson {
         }
         try {
             JsonNode node = new ObjectMapper().readTree(jsonString);
-            if (node == null || node.isEmpty()) {
+            if (node == null) {
                 return null;
             }
             if (node instanceof NullNode) {
@@ -55,7 +55,7 @@ public class ParseJsonUseJackson {
         }
         try {
             JsonNode node = new ObjectMapper().readTree(jsonString);
-            if (node == null || node.isEmpty()) {
+            if (node == null) {
                 return null;
             }
             if (node instanceof NullNode) {
@@ -71,7 +71,7 @@ public class ParseJsonUseJackson {
     }
 
     private static Object unwrapJsonNode(JsonNode node) {
-        if (node == null || node.isEmpty()) {
+        if (node == null) {
             return null;
         } else if (node instanceof ValueNode) {
             return unwrapJsonPrimitive((ValueNode) node);
