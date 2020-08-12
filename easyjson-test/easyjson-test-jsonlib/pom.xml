@@ -7,7 +7,7 @@
     <parent>
         <artifactId>easyjson-test</artifactId>
         <groupId>com.github.fangjinuo.easyjson</groupId>
-        <version>3.0.1</version>
+        <version>3.0.2</version>
     </parent>
 
     <artifactId>easyjson-test-jsonlib</artifactId>
