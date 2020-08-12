@@ -60,6 +60,9 @@ public abstract class JSONBuilder implements Cloneable {
     private boolean prettyFormat = false;
     private boolean isLenient;
 
+    // 用谷歌的Gson 把集合转换为字符串,当集合中数据有特殊字符时 转换完毕 会变为类似\u0027的编码
+    private boolean disableHtmlEscaping = false;
+
     /**
      * 是否使用全局配置项
      */
@@ -112,6 +115,10 @@ public abstract class JSONBuilder implements Cloneable {
     public JSONBuilder serializeNulls(boolean serializeNulls) {
         this.serializeNulls = serializeNulls;
         return this;
+    }
+
+    public boolean isDisableHtmlEscaping() {
+        return disableHtmlEscaping;
     }
 
     public boolean serializeNulls() {

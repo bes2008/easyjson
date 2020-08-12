@@ -88,6 +88,11 @@ public class GsonJSONBuilder extends JSONBuilder {
             gsonBuilder.setPrettyPrinting();
         }
 
+        // 避免特殊字符转换成了类似\u0027的编码
+        if(isDisableHtmlEscaping()){
+            gsonBuilder.disableHtmlEscaping();
+        }
+
         // exclusion
         List<Integer> modifiers = getExclusionConfiguration().getModifiers();
         int[] modifiers0 = new int[modifiers.size()];
