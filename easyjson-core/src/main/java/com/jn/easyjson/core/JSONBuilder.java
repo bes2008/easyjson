@@ -117,6 +117,10 @@ public abstract class JSONBuilder implements Cloneable {
         return this;
     }
 
+    public void setDisableHtmlEscaping(boolean disableHtmlEscaping) {
+        this.disableHtmlEscaping = disableHtmlEscaping;
+    }
+
     public boolean isDisableHtmlEscaping() {
         return disableHtmlEscaping;
     }
