@@ -51,9 +51,20 @@ public class GsonJSONBuilder extends JSONBuilder {
 
     public static final DialectIdentify GSON = new DialectIdentify();
 
+    // 用谷歌的Gson 把集合转换为字符串,当集合中数据有特殊字符时 转换完毕 会变为类似\u0027的编码
+    private boolean disableHtmlEscaping = true;
+
     static {
         GSON.setId("gson");
         GSON.setLibUrl(Reflects.getCodeLocation(Gson.class).toString());
+    }
+
+    public void setDisableHtmlEscaping(boolean disableHtmlEscaping) {
+        this.disableHtmlEscaping = disableHtmlEscaping;
+    }
+
+    public boolean isDisableHtmlEscaping() {
+        return disableHtmlEscaping;
     }
 
     public GsonJSONBuilder() {
