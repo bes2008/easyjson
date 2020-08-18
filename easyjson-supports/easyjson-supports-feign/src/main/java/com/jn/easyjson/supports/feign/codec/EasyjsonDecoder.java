@@ -33,7 +33,7 @@ public class EasyjsonDecoder implements Decoder {
         if (response == null || response.body() == null) {
             return null;
         }
-        Reader reader = response.body().asReader(Charsets.UTF_8);
+        Reader reader = response.body().asReader();
         return jsonFactory.get().fromJson(reader, type);
     }
 }
