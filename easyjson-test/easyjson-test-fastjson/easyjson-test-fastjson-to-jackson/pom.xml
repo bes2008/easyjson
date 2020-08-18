@@ -7,7 +7,7 @@
     <parent>
         <artifactId>easyjson-test-fastjson</artifactId>
         <groupId>com.github.fangjinuo.easyjson</groupId>
-        <version>3.0.2</version>
+        <version>3.0.3</version>
     </parent>
 
     <artifactId>easyjson-test-fastjson-to-jackson</artifactId>
