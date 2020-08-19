@@ -19,6 +19,7 @@
 [![maven](https://img.shields.io/badge/maven-3.0.2-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.easyjson%20AND%20v:3.0.2)
 
 
+![访问统计](https://visitor-badge.glitch.me/badge?page_id=fangjinuo)
 
 # easyjson
 Provides a unified JSON access API, you can adapter any JSON library to Gson, Jackson, FastJson with easyjson.
