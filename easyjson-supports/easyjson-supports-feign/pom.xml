@@ -16,6 +16,7 @@
             <groupId>io.github.openfeign</groupId>
             <artifactId>feign-core</artifactId>
             <version>9.7.0</version>
+            <optional>true</optional>
         </dependency>
 
         <dependency>
