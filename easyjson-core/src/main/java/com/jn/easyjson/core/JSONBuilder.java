@@ -19,6 +19,7 @@ import com.jn.easyjson.core.codec.dialect.DialectIdentify;
 import com.jn.easyjson.core.exclusion.Exclusion;
 import com.jn.easyjson.core.exclusion.ExclusionConfiguration;
 import com.jn.easyjson.core.exclusion.IgnoreAnnotationExclusion;
+import com.jn.langx.util.Strings;
 import com.jn.langx.util.function.Consumer2;
 
 import java.text.DateFormat;
@@ -168,7 +169,7 @@ public abstract class JSONBuilder implements Cloneable {
     }
 
     public JSONBuilder serializeEnumUsingField(String field) {
-        if (field != null && !field.trim().isEmpty()) {
+        if (Strings.isNotBlank(field)) {
             this.serializeEnumUsingField = field.trim();
         }
         return this;

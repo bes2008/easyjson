@@ -19,4 +19,16 @@ public class JsonFactorys {
             return new PrototypeJSONFactory(jsonBuilder);
         }
     }
+
+    public static JSONFactory getJSONFactory(JsonFactoryProperties properties) {
+        JSONBuilder jsonBuilder = JSONBuilderProvider.create();
+        jsonBuilder.prettyFormat(properties.isPrettyFormat())
+                .serializeNulls(properties.isSerializeNulls())
+                .serializeEnumUsingIndex(properties.isSerializeEnumUsingIndex())
+                .serializeEnumUsingToString(properties.isSerializeEnumUsingToString())
+                .serializeDateUsingPattern(properties.getDatePattern())
+                .serializeDateUsingToString(properties.getSerializeDateUsingToString())
+                .serializeLongAsString(properties.isSerializeLongAsString());
+        return getJSONFactory(jsonBuilder, properties.getJsonScope());
+    }
 }
