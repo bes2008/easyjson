@@ -84,17 +84,17 @@ public class JSONBuilderProvider {
                 String name = parseName(jsonBuildClass);
                 String dependency = parseDependencyClass(jsonBuildClass);
                 if (dependency == null || dependency.trim().isEmpty()) {
-                    logger.warn("Won't registry json builder {}, because of can't find its dependency class {}", jsonBuildClass.getCanonicalName(), "NULL");
+                    logger.warn("Won't register json builder {}, because of can't find its dependency class {}", jsonBuildClass.getCanonicalName(), "NULL");
                     continue;
                 }
                 if (hasClass(dependency)) {
-                    logger.info("Registry a json builder {} for {}", jsonBuildClass.getCanonicalName(), name);
+                    logger.info("Register a json builder {} for {}", jsonBuildClass.getCanonicalName(), name);
                     registry.put(name, jsonBuildClass);
                     if (defaultJsonBuilderClass == null) {
                         defaultJsonBuilderClass = jsonBuildClass;
                     }
                 } else {
-                    logger.warn("Won't registry json builder {}, because of can't find its dependency class {}", jsonBuildClass.getCanonicalName(), dependency);
+                    logger.warn("Won't register json builder {}, because of can't find its dependency class {}", jsonBuildClass.getCanonicalName(), dependency);
                 }
             } catch (Throwable ex) {
                 logger.error(ex.getMessage(), ex);
