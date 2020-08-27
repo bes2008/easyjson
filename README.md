@@ -12,8 +12,8 @@
 
 [![JDK](https://img.shields.io/badge/JDK-1.6+-green.svg)](https://www.oracle.com/technetwork/java/javase/downloads/index.html)
 
-[Github](https://github.com/fangjinuo/easyjson)： https://github.com/fangjinuo/easyjson
-[Gitee](https://gitee.com/fangjinuo/easyjson)： https://gitee.com/fangjinuo/easyjson
+## [Github地址](https://github.com/fangjinuo/easyjson)
+## [Gitee地址](https://gitee.com/fangjinuo/easyjson)
 
 [![maven](https://img.shields.io/badge/maven-3.0.2-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.easyjson%20AND%20v:3.0.2)
 
