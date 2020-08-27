@@ -23,14 +23,26 @@
 Provides a unified JSON access API, you can adapter any JSON library to Gson, Jackson, FastJson with easyjson.
 
 ## Modules
-1. **easyjson-gson**: 使用它可以将其他的JSON库适配给Gson
-2. **easyjson-jackson**: 使用它可以将其他的JSON库适配给Jackson
-3. **easyjson-fastjson**: 使用它可以将其他的JSON库适配给 Fastjson
-4. **easyjson-core**: 这是个核心模块，可以直接去用这个模块的API，就像使用slf4j的logger API一样。
-5. **XXXX-to-easyjson**: 有很多这样的模块，它们是用于将xxx JSON库通过easyjson-core，适配给底层JSON实现库。
-6. **easyjson-supports-XX** 对于其他非JSON库的支持，例如openfeign等
-7. **easyjson-examples**: test cases
-8. **easyjson-examples**: test cases v2
+
++ **easyjson-core**: 这是个核心模块，可以直接去用这个模块的API，就像使用slf4j的logger API一样。
++ **easyjson-XXX**: 使用它可以将其他的JSON库适配给XXX，由XXX来做具体的json操作。
+    1. **easyjson-gson**: 使用它可以将其他的JSON库适配给Gson
+    2. **easyjson-jackson**: 使用它可以将其他的JSON库适配给Jackson
+    3. **easyjson-fastjson**: 使用它可以将其他的JSON库适配给 Fastjson
++ **XXXX-to-easyjson**: 有很多这样的模块，它们是用于将xxx JSON库通过easyjson-core，适配给底层JSON实现库。
+    1. **fast-to-easyjson**: 使用它可以将其他的安卓下的org.json库通过easyjson适配给 gson, jackson
+    2. **android-to-easyjson**: 使用它可以将其他的Android下的org.json库通过easyjson适配给fastjson, gson, jackson
+    3. **boonjson-to-easyjson**: 使用它可以将安卓下的boon-json（io.advantageous.boon.json）库通过easyjson适配给fastjson, gson, jackson
+    4. **jsonlib-to-easyjson**: 使用它可以将json-lib （net.sf.json）通过easyjson适配给fastjson, gson, jackson
+    5. **jsonsmart-to-easyjson**: 使用它可以将json-smart （net.minidev.json）通过easyjson适配给fastjson, gson, jackson
+    6. **minimaljson-to-easyjson**: 使用它可以将minimal-json （com.eclipsesource.json）通过easyjson适配给fastjson, gson, jackson
+    7. **moshi-to-easyjson**: 使用它可以将moshi-json （com.squareup.moshi）通过easyjson适配给fastjson, gson, jackson
+    8. **orgjson-to-easyjson**: 使用它可以将org.json通过easyjson适配给fastjson, gson, jackson
+    9. **progsbase-to-easyjson**: 使用它可以将progsbase json通过easyjson适配给fastjson, gson, jackson
+    10. **simplejson-to-easyjson**: 使用它可以将json-simple通过easyjson适配给fastjson, gson, jackson
++ **easyjson-supports-XX** 对于其他非JSON库的支持，例如openfeign等
++ **easyjson-examples**: test cases
++ **easyjson-test**: test cases v2
 
 
 ## Usage
