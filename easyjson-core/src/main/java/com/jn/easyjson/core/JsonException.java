@@ -35,4 +35,12 @@ public class JsonException extends RuntimeException {
     public JsonException(Throwable cause) {
         super(cause);
     }
+
+    public static JsonException wrapAsJsonException(Throwable ex){
+        if(ex instanceof JsonException){
+            return  (JsonException)ex;
+        }
+        return new JsonException(ex.getMessage(), ex);
+    }
+
 }
