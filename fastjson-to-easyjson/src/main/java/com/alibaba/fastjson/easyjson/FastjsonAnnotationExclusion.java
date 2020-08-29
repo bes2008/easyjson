@@ -19,10 +19,10 @@ import com.jn.easyjson.core.codec.dialect.CodecConfigurationRepository;
 import com.jn.easyjson.core.codec.dialect.CodecConfigurationRepositoryService;
 import com.jn.easyjson.core.codec.dialect.PropertyCodecConfiguration;
 import com.jn.easyjson.core.exclusion.Exclusion;
-import com.jn.easyjson.core.util.Members;
 import com.jn.langx.util.Emptys;
 import com.jn.langx.util.reflect.FieldAttributes;
 import com.jn.langx.util.reflect.MethodAttributes;
+import com.jn.langx.util.reflect.Reflects;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
@@ -51,7 +51,7 @@ public class FastjsonAnnotationExclusion implements Exclusion {
     private boolean skipProperty(Member member, boolean serializePhrase) {
         if (member instanceof Field || member instanceof Method) {
             Class beanClass = member.getDeclaringClass();
-            String name = Members.extractFieldName(member);
+            String name = Reflects.extractFieldName(member);
             return skipProperty(beanClass, name, serializePhrase);
         }
         return true;

@@ -21,7 +21,6 @@ import com.jn.easyjson.core.codec.dialect.BeanPropertyAnnotatedCodecConfiguratio
 import com.jn.easyjson.core.codec.dialect.BeanPropertyIdGenerator;
 import com.jn.easyjson.core.codec.dialect.PropertyCodecConfiguration;
 import com.jn.easyjson.core.codec.dialect.PropertyConfigurationSourceType;
-import com.jn.easyjson.core.util.Members;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.reflect.Reflects;
 
@@ -45,14 +44,14 @@ public class JsonFieldParser implements BeanPropertyAnnotatedCodecConfigurationP
             }
 
             if(member instanceof Method){
-                if(!Members.isGetterOrSetter((Method)member)){
+                if(!Reflects.isGetterOrSetter((Method)member)){
                     return null;
                 }
             }
 
             PropertyCodecConfiguration configuration = new PropertyCodecConfiguration();
             configuration.setClazz(beanClass);
-            configuration.setName(Members.extractFieldName(member));
+            configuration.setName(Reflects.extractFieldName(member));
 
             if(annotatedElement instanceof Field) {
                 configuration.setSourceType(PropertyConfigurationSourceType.FIELD);
@@ -65,7 +64,7 @@ public class JsonFieldParser implements BeanPropertyAnnotatedCodecConfigurationP
                 }
             }
 
-            String propertyName = annotatedElement instanceof Field ? ((Field)annotatedElement).getName() : Members.extractFieldName((Method) member);
+            String propertyName = annotatedElement instanceof Field ? ((Field)annotatedElement).getName() : Reflects.extractFieldName((Method) member);
 
             configuration.setId(idGenerator.withBeanClass(beanClass).withPropertyName(propertyName).get());
 
