@@ -40,7 +40,6 @@ Provides a unified JSON access API, you can adapter any JSON library to Gson, Ja
     8. **orgjson-to-easyjson**: 使用它可以将org.json通过easyjson适配给fastjson, gson, jackson
     9. **progsbase-to-easyjson**: 使用它可以将progsbase json通过easyjson适配给fastjson, gson, jackson
     10. **simplejson-to-easyjson**: 使用它可以将json-simple通过easyjson适配给fastjson, gson, jackson
-+ **easyjson-supports-XX** 对于其他非JSON库的支持，例如openfeign等
 + **easyjson-examples**: test cases
 + **easyjson-test**: test cases v2
 

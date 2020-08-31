@@ -24,7 +24,6 @@
         <module>androidjson-to-easyjson</module>
         <module>moshi-to-easyjson</module>
         <module>boonjson-to-easyjson</module>
-        <module>easyjson-supports</module>
 
     </modules>
     <name>easyjson</name>
