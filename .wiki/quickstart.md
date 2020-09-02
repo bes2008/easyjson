@@ -62,4 +62,22 @@ JSONBuilder用于构建JSON对象，提供了类似于Gson的里的GsonBuilder�
 树结构的API抽象。提供了 ObjectNode, ArrayNode, NullNode, PrimitiveNode等基本结构。
 
 
+## 安装说明
+
+由于easyjson本身不提供JSON解析、序列化操作，而是依赖于其他JSON库实现。
+所以要选择好你要用的JSON实现库，然后引入相应的适配器包即可，easyjson-core会被自动的引入。
+
+```text
+如果是 要使用jackson， 那么项目中肯定要自行引入 jackson相关的jar，另外需要引入 easyjson-jackson。
+如果是 要使用fastjson，那么项目中肯定要自行引入fastjson相关的jar，另外需要引入 easyjson-fastjson。
+如果是 要使用gson，那么项目中肯定要自行引入gson相关的jar，另外需要引入 easyjson-gson。
+```
+
+如果项目中已经用了一个json库，想要在不修改代码的情况下，切换底层实现的话，需要在上面的基础上，额外引入 xxx-to-easyjson。
+```text
+例如，fastjson可能在某一段时间内，爆出来的漏洞比较多，你想要切换为gson，或者jackson。
+那么就先引入 gson（或者jackson）、 easyjon-gson （或者easyjson-jackson）,然后引入 fastjson-to-easyjson，最后移除fastjson本身的包。
+```
+
+
 
