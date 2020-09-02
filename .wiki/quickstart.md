@@ -17,7 +17,17 @@ easyjson 致力于打造JSON界的slf4j，为了方便JSON相关的开发而生�
     + easyjson-gson: 使用gson作为底层实现
     + easyjson-fastjson: 使用fastjson作为底层实现
     + easyjson-jackson: 使用jackson作为底层实现
-3. 
+3. XXX-to-easyjson: 提供了将XXX json库通过easyjson适配给其他的JSON库。
+    + fastjson-to-easyjson: 将fastjson 适配给其他的JSON库
+    + androidjson-to-easyjson: 将Android下常用的JSON库适配给其他的JSON库
+    + boonjson-to-easyjson: 将boon json适配给其他的JSON库
+    + jsonlib-to-easyjson: 将json-lib适配给其他的JSON库
+    + jsonsmart-to-easyjson: 将json smart适配给其他的JSON库
+    + minimaljson-to-easyjson: 将minimal json适配给其他的JSON库
+    + moshi-to-easyjson: 将moshi 适配给其他的JSON库
+    + orgjson-to-easyjson: 将org.json适配给其他的JSON库
+    + progsbase-to-easyjson: 将progsbase适配给其他的JSON库
+    + simplejson-to-easyjson: 将simple json适配给其他的JSON库
 
 ## Core API
 
@@ -49,7 +59,7 @@ JSONBuilder用于构建JSON对象，提供了类似于Gson的里的GsonBuilder�
 在JSONFactory API的基础上，又提供了更为简便的JSONFactory API，支持创建singleton, prototype 两种模式的JSON对象。
 
 ### JsonTreeNode
-树结构的API抽象。提供了 
+树结构的API抽象。提供了 ObjectNode, ArrayNode, NullNode, PrimitiveNode等基本结构。
 
 
 
