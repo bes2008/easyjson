@@ -22,7 +22,7 @@ public class BytesTypeAdapterFactory implements TypeAdapterFactory, JSONBuilderA
     }
     @Override
     public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
-        if (jsonBuilder != null && jsonBuilder.serializeBytesAsString()) {
+        if (jsonBuilder != null && jsonBuilder.serializeBytesAsBase64String()) {
             if (supportedClasses.contains(type.getRawType())) {
                 BytesTypeAdapter adapter = new BytesTypeAdapter();
                 adapter.setJSONBuilder(jsonBuilder);

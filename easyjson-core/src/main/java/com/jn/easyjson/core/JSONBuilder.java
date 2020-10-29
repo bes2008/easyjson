@@ -130,12 +130,12 @@ public abstract class JSONBuilder implements Cloneable {
         return prettyFormat;
     }
 
-    public JSONBuilder serializeBytesAsString(boolean value) {
+    public JSONBuilder serializeBytesAsBase64String(boolean value) {
         this.serializeBytesAsBase64String = true;
         return this;
     }
 
-    public boolean serializeBytesAsString() {
+    public boolean serializeBytesAsBase64String() {
         return serializeBytesAsBase64String;
     }
 
@@ -371,6 +371,6 @@ public abstract class JSONBuilder implements Cloneable {
         builder.enableCustomConfiguration(this.enableCustomConfiguration);
         builder.dialectIdentify(this.dialectIdentify());
         builder.proxyDialectIdentify(this.proxyDialectIdentify());
-        builder.serializeBytesAsString(this.serializeBytesAsBase64String);
+        builder.serializeBytesAsBase64String(this.serializeBytesAsBase64String);
     }
 }
