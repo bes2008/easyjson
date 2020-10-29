@@ -53,7 +53,7 @@ import static io.advantageous.boon.core.Exceptions.die;
  * It excludes nulls and empties as well.
  */
 public class JsonSimpleSerializerImpl implements JsonSerializerInternal {
-    private final Map<Class<?>, Map<String, FieldAccess>> fieldMap = new ConcurrentHashMap<>();
+    private final Map<Class, Map<String, FieldAccess>> fieldMap = new ConcurrentHashMap<Class, Map<String, FieldAccess>>();
     private final String view;
     private final boolean encodeStrings;
 
@@ -110,7 +110,7 @@ public class JsonSimpleSerializerImpl implements JsonSerializerInternal {
         if (encodeStrings) {
 
             if (stringCache == null) {
-                stringCache = new SimpleLRUCache<>(1000);
+                stringCache = new SimpleLRUCache(1000);
                 encodedJsonChars = CharBuf.create(str.length());
 
             }
@@ -632,7 +632,7 @@ public class JsonSimpleSerializerImpl implements JsonSerializerInternal {
     private final Map<String, FieldAccess> doGetFields(Class<? extends Object> aClass) {
         Map<String, FieldAccess> fields = Maps.copy(Reflection.getPropertyFieldAccessMapFieldFirstForSerializer(aClass));
 
-        List<FieldAccess> removeFields = new ArrayList<>();
+        List<FieldAccess> removeFields = new ArrayList<FieldAccess>();
 
         for (FieldAccess field : fields.values()) {
             if (field.isWriteOnly()) {

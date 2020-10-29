@@ -676,7 +676,7 @@ public class JsonParserLax extends JsonFastParser {
         List<Object> list;
 
         if (useValues) {
-            list = new ArrayList<>();
+            list = new ArrayList();
         } else {
             list = new ValueList(lazyChop);
         }

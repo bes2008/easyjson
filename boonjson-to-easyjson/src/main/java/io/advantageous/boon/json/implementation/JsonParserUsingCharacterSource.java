@@ -125,7 +125,7 @@ public class JsonParserUsingCharacterSource extends BaseJsonParser {
             }
         } catch (Exception ex) {
             if (ex instanceof JsonException) {
-                throw ex;
+                throw (JsonException)ex;
             }
             throw new JsonException(exceptionDetails("Unable to parse JSON object"), ex);
         }
@@ -340,7 +340,7 @@ public class JsonParserUsingCharacterSource extends BaseJsonParser {
 
         } catch (Exception ex) {
             if (ex instanceof JsonException) {
-                throw ex;
+                throw (JsonException)ex;
             }
 
             throw new JsonException(exceptionDetails("Unexpected issue"), ex);
@@ -389,7 +389,7 @@ public class JsonParserUsingCharacterSource extends BaseJsonParser {
 
     @Override
     public Object parse(byte[] value, Charset charset) {
-        if (value.length < 20_000) {
+        if (value.length < 20000) {
             characterSource = new CharArrayCharacterSource(new String(value, charset));
             return this.decodeValue();
 
@@ -409,7 +409,7 @@ public class JsonParserUsingCharacterSource extends BaseJsonParser {
             return parse(new InputStreamReader(inputStream, charset));
 
         } else {
-            ioInputStream = IOInputStream.input(ioInputStream, 50_000).input(inputStream);
+            ioInputStream = IOInputStream.input(ioInputStream, 50000).input(inputStream);
             return parse(new InputStreamReader(ioInputStream, charset));
 
         }

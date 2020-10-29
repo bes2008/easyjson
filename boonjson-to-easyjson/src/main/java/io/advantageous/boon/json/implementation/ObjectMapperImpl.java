@@ -31,8 +31,10 @@ package io.advantageous.boon.json.implementation;
 import com.jn.easyjson.core.JSON;
 import com.jn.easyjson.core.JSONBuilder;
 import com.jn.easyjson.core.JSONBuilderProvider;
+import com.jn.langx.util.Throwables;
 import com.jn.langx.util.io.Charsets;
 import com.jn.langx.util.io.IOs;
+import com.jn.langx.util.io.file.Files;
 import com.jn.langx.util.reflect.type.Types;
 import io.advantageous.boon.core.Exceptions;
 import io.advantageous.boon.core.IO;
@@ -42,8 +44,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Paths;
 import java.util.*;
 
 
@@ -207,7 +207,15 @@ public class ObjectMapperImpl implements ObjectMapper {
 
     @Override
     public void writeValue(File dest, Object value) {
-        IO.write(Paths.get(dest.toString()), json.toJson(value));
+        FileOutputStream fileOutputStream = null;
+        try {
+            fileOutputStream = Files.openOutputStream(dest, true);
+            IOs.write(json.toJson(value), fileOutputStream);
+        } catch (IOException ex) {
+            Throwables.throwAsRuntimeException(ex);
+        } finally {
+            IOs.close(fileOutputStream);
+        }
     }
 
     @Override
@@ -237,7 +245,7 @@ public class ObjectMapperImpl implements ObjectMapper {
 
     @Override
     public byte[] writeValueAsBytes(Object value) {
-        return json.toJson(value).getBytes(StandardCharsets.UTF_8);
+        return json.toJson(value).getBytes(Charsets.UTF_8);
     }
 
     @Override

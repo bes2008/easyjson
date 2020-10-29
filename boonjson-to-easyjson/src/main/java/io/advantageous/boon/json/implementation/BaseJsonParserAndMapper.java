@@ -30,6 +30,8 @@ package io.advantageous.boon.json.implementation;
 
 import com.jn.easyjson.core.JSON;
 import com.jn.easyjson.core.JSONBuilderProvider;
+import com.jn.langx.io.resource.FileResource;
+import com.jn.langx.io.resource.Resources;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.PrimitiveArrays;
 import com.jn.langx.util.io.Charsets;
@@ -48,9 +50,6 @@ import java.io.*;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -689,14 +688,14 @@ public class BaseJsonParserAndMapper implements JsonParserAndMapper {
     @Override
     public Object parseFile(String fileName) {
         try {
-            Path filePath = Paths.get(fileName);
-            long size = Files.size(filePath);
+            FileResource fileResource = Resources.loadFileResource(fileName);
+            long size = fileResource.contentLength();
             size = size > 2000000000 ? 1000000 : size;
             if (copyBuf == null) {
                 copyBuf = new char[bufSize];
             }
 
-            Reader reader = Files.newBufferedReader(Paths.get(fileName), charset);
+            Reader reader = new BufferedReader(new InputStreamReader(fileResource.getInputStream(), charset));
             fileInputBuf = IO.read(reader, fileInputBuf, (int) size, copyBuf);
             return parse(fileInputBuf.readForRecycle());
         } catch (IOException ex) {
@@ -747,10 +746,10 @@ public class BaseJsonParserAndMapper implements JsonParserAndMapper {
     @Override
     public <T> T parseFile(Class<T> type, String fileName) {
         try {
-            Path filePath = Paths.get(fileName);
-            long size = Files.size(filePath);
-            size = size > 2_000_000_000 ? 1_000_000 : size;
-            Reader reader = Files.newBufferedReader(Paths.get(fileName), charset);
+            FileResource fileResource = Resources.loadFileResource(fileName);
+            long size =fileResource.contentLength();
+            size = size > 2000000000 ? 1000000 : size;
+            Reader reader = new BufferedReader(new InputStreamReader(fileResource.getInputStream(), charset));
             fileInputBuf = IO.read(reader, fileInputBuf, (int) size, copyBuf);
             return parse(type, fileInputBuf.readForRecycle());
         } catch (IOException ex) {

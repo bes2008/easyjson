@@ -28,9 +28,8 @@
 
 package io.advantageous.boon.json.implementation;
 
+import com.jn.langx.util.io.Charsets;
 import io.advantageous.boon.primitive.ByteScanner;
-
-import java.nio.charset.StandardCharsets;
 
 /**
  * Created by rick on 12/15/13.
@@ -38,7 +37,7 @@ import java.nio.charset.StandardCharsets;
 public class JsonAsciiParser extends JsonBaseByteArrayParser {
 
     public JsonAsciiParser() {
-        this.charset = StandardCharsets.US_ASCII;
+        this.charset = Charsets.US_ASCII;
     }
 
     protected final String decodeString() {

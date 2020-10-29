@@ -163,7 +163,7 @@ public class JsonSerializerFactory {
 
     public JsonSerializerFactory addFilter(FieldFilter filter) {
         if (filterProperties == null) {
-            filterProperties = new CopyOnWriteArrayList<>();
+            filterProperties = new CopyOnWriteArrayList();
         }
         filterProperties.add(filter);
         return this;
@@ -171,7 +171,7 @@ public class JsonSerializerFactory {
 
     public JsonSerializerFactory addPropertySerializer(CustomFieldSerializer serializer) {
         if (customFieldSerializers == null) {
-            customFieldSerializers = new CopyOnWriteArrayList<>();
+            customFieldSerializers = new CopyOnWriteArrayList();
         }
         customFieldSerializers.add(serializer);
         return this;
@@ -180,7 +180,7 @@ public class JsonSerializerFactory {
     public JsonSerializerFactory addTypeSerializer(Class<?> type, CustomObjectSerializer serializer) {
 
         if (customObjectSerializers == null) {
-            customObjectSerializers = new ConcurrentHashMap<>();
+            customObjectSerializers = new ConcurrentHashMap();
         }
         customObjectSerializers.put(type, serializer);
         return this;

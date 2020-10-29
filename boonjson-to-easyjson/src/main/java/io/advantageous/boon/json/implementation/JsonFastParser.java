@@ -262,7 +262,7 @@ public class JsonFastParser extends JsonParserCharArray {
         List<Object> list;
 
         if (useValues) {
-            list = new ArrayList<>();
+            list = new ArrayList();
         } else {
             list = new ValueList(lazyChop);
         }

@@ -28,6 +28,9 @@
 
 package io.advantageous.boon.json;
 
+import com.jn.langx.io.resource.FileResource;
+import com.jn.langx.io.resource.Resources;
+import com.jn.langx.util.io.Charsets;
 import io.advantageous.boon.core.Exceptions;
 import io.advantageous.boon.core.IO;
 import io.advantageous.boon.core.Typ;
@@ -41,17 +44,10 @@ import io.advantageous.boon.json.implementation.JsonParserLax;
 import io.advantageous.boon.primitive.CharBuf;
 import io.advantageous.boon.primitive.InMemoryInputStream;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.io.*;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -232,7 +228,7 @@ public class JsonMappingParser implements JsonParserAndMapper {
     public final <T> T parse(Class<T> type, byte[] value) {
 
         if (type == Object.class || type == Map.class || type == List.class || Typ.isBasicType(type)) {
-            if (value.length < 100_000) {
+            if (value.length < 100000) {
                 return this.basicParser.parse(type, value);
             } else {
                 return this.basicParser.parseAsStream(type, value);
@@ -294,20 +290,20 @@ public class JsonMappingParser implements JsonParserAndMapper {
         try {
 
 
-            Path filePath = Paths.get(fileName);
-            long size = Files.size(filePath);
+            FileResource fileResource = Resources.loadFileResource(fileName);
+            long size = fileResource.contentLength();
 
-            if (size > 10_000_000) {
+            if (size > 10000000) {
                 return this.largeFileParser.parseFile(type, fileName);
             } else {
-                size = size > 2_000_000 ? bufSize : size;
+                size = size > 2000000 ? bufSize : size;
                 this.bufSize = (int) size;
             }
 
-            if (size < 1_000_000) {
-                return parse(type, Files.newInputStream(filePath), charset);
+            if (size < 1000000) {
+                return parse(type, fileResource.getInputStream(), charset);
             } else {
-                return parse(type, Files.newBufferedReader(filePath, charset));
+                return parse(type, new BufferedReader(new InputStreamReader(fileResource.getInputStream(), charset)));
             }
         } catch (IOException ex) {
             return Exceptions.handle(type, fileName, ex);
@@ -741,7 +737,7 @@ public class JsonMappingParser implements JsonParserAndMapper {
     @Override
     public Object parse(byte[] bytes, Charset charset) {
 
-        if (bytes.length > 100_000) {
+        if (bytes.length > 100000) {
             return parse(new InMemoryInputStream(bytes), charset);
         } else {
             return basicParser.parse(bytes, charset);
@@ -750,7 +746,7 @@ public class JsonMappingParser implements JsonParserAndMapper {
 
     @Override
     public Object parseDirect(byte[] value) {
-        if (value.length < 20_000 && charset == StandardCharsets.UTF_8) {
+        if (value.length < 20000 && charset == Charsets.UTF_8) {
             CharBuf builder = CharBuf.createFromUTF8Bytes(value);
             return parse(builder.toCharArray());
         } else {
@@ -769,21 +765,20 @@ public class JsonMappingParser implements JsonParserAndMapper {
         int bufSize = this.bufSize;
         try {
 
+            FileResource fileResource = Resources.loadFileResource(fileName);
+            long size = fileResource.contentLength();
 
-            Path filePath = Paths.get(fileName);
-            long size = Files.size(filePath);
-
-            if (size > 10_000_000) {
+            if (size > 10000000) {
                 return this.largeFileParser.parseFile(fileName);
             } else {
-                size = size > 2_000_000 ? bufSize : size;
+                size = size > 2000000 ? bufSize : size;
                 this.bufSize = (int) size;
             }
 
-            if (size < 1_000_000) {
-                return parse(Files.newInputStream(filePath), charset);
+            if (size < 1000000) {
+                return parse(fileResource.getInputStream(), charset);
             } else {
-                return parse(Files.newBufferedReader(filePath, charset));
+                return parse(new BufferedReader(new InputStreamReader(fileResource.getInputStream(), charset)));
             }
         } catch (IOException ex) {
             return Exceptions.handle(Typ.object, fileName, ex);
@@ -822,7 +817,7 @@ public class JsonMappingParser implements JsonParserAndMapper {
 
     @Override
     public final <T> T parseDirect(Class<T> type, byte[] value) {
-        if (value.length < 20_000 && charset == StandardCharsets.UTF_8) {
+        if (value.length < 20000 && charset == Charsets.UTF_8) {
             CharBuf builder = CharBuf.createFromUTF8Bytes(value);
             return parse(type, builder.toCharArray());
         } else {

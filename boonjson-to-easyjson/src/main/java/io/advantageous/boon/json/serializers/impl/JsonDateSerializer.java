@@ -42,7 +42,7 @@ import java.util.TimeZone;
 public class JsonDateSerializer implements DateSerializer {
 
     private final Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
-    private final SimpleLRUCache<Object, String> dateCache = new SimpleLRUCache<>(200);
+    private final SimpleLRUCache<Object, String> dateCache = new SimpleLRUCache<Object, String>(200);
 
 
     @Override
