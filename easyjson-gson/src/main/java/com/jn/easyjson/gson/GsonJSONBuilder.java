@@ -195,7 +195,7 @@ public class GsonJSONBuilder extends JSONBuilder {
 
                 factoriesField.set(gson, factories);
             } catch (Throwable ex) {
-                logger.warn(ex.getMessage(), ex);
+                // ignore it
             }
         }
     }
