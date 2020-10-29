@@ -136,6 +136,7 @@ public class DateTypeAdapter extends TypeAdapter<Date> implements JSONBuilderAwa
         }
         out.value(value.getTime());
     }
+
     private static List<JsonToken> invalidValueTokens = Collects.newArrayList(
             JsonToken.BEGIN_ARRAY,
             JsonToken.END_ARRAY,
@@ -144,13 +145,14 @@ public class DateTypeAdapter extends TypeAdapter<Date> implements JSONBuilderAwa
             JsonToken.END_DOCUMENT,
             JsonToken.NAME
     );
+
     @Override
     public Date read(JsonReader in) throws IOException {
         JsonToken jsonToken = in.peek();
         if (jsonToken == JsonToken.NULL) {
             return null;
         }
-        if(invalidValueTokens.contains(jsonToken)){
+        if (invalidValueTokens.contains(jsonToken)) {
             return null;
         }
         PropertyCodecConfiguration propertyCodecConfiguration = null;
@@ -158,7 +160,7 @@ public class DateTypeAdapter extends TypeAdapter<Date> implements JSONBuilderAwa
             propertyCodecConfiguration = PropertyCodecConfiguration.getPropertyCodecConfiguration(jsonBuilder.proxyDialectIdentify(), currentField.getDeclaringClass(), currentField.getName());
         }
 
-        if(jsonToken==JsonToken.STRING){
+        if (jsonToken == JsonToken.STRING) {
             String value = in.nextString();
             try {
                 if (propertyCodecConfiguration != null) {
@@ -171,12 +173,12 @@ public class DateTypeAdapter extends TypeAdapter<Date> implements JSONBuilderAwa
                 }
 
                 if (df != null) {
-                  return df.parse(value);
+                    return df.parse(value);
                 }
-            }catch (ParseException e){
+            } catch (ParseException e) {
                 logger.error("Can't parse {} to a Date", value);
                 return null;
-            }catch (RuntimeException ex){
+            } catch (RuntimeException ex) {
                 logger.error("Can't parse {} to a Date", value);
                 return null;
             }

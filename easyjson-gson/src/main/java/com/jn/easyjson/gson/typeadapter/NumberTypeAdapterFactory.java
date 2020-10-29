@@ -26,14 +26,14 @@ public class NumberTypeAdapterFactory implements TypeAdapterFactory {
 
     private GsonJSONBuilder jsonBuilder;
 
-    public NumberTypeAdapterFactory(GsonJSONBuilder jsonBuilder){
+    public NumberTypeAdapterFactory(GsonJSONBuilder jsonBuilder) {
         Preconditions.checkNotNull(jsonBuilder);
         this.jsonBuilder = jsonBuilder;
     }
 
     @Override
     public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
-        if(Reflects.isSubClass(Number.class,type.getRawType()) ) {
+        if (Reflects.isSubClass(Number.class, type.getRawType())) {
             NumberTypeAdapter numberTypeAdapter = new NumberTypeAdapter();
             numberTypeAdapter.setLongUsingString(jsonBuilder.serializeLongAsString());
             numberTypeAdapter.setUsingString(jsonBuilder.serializeNumberAsString());

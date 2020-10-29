@@ -26,20 +26,21 @@ import java.util.Date;
 
 public class DateTypeAdapterFactory implements TypeAdapterFactory {
     private GsonJSONBuilder jsonBuilder;
-    public DateTypeAdapterFactory(GsonJSONBuilder jsonBuilder){
+
+    public DateTypeAdapterFactory(GsonJSONBuilder jsonBuilder) {
         Preconditions.checkNotNull(jsonBuilder);
         this.jsonBuilder = jsonBuilder;
     }
 
     @Override
     public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
-        if(Reflects.isSubClassOrEquals(Date.class,type.getRawType())){
+        if (Reflects.isSubClassOrEquals(Date.class, type.getRawType())) {
             DateTypeAdapter dateTypeAdapter = new DateTypeAdapter();
             dateTypeAdapter.setDateFormat(jsonBuilder.serializeUseDateFormat());
             dateTypeAdapter.setPattern(jsonBuilder.serializeDateUsingPattern());
             dateTypeAdapter.setUsingToString(jsonBuilder.serializeDateUsingToString());
             dateTypeAdapter.setJSONBuilder(jsonBuilder);
-            return (TypeAdapter<T>)dateTypeAdapter;
+            return (TypeAdapter<T>) dateTypeAdapter;
         }
         return null;
     }

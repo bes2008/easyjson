@@ -310,7 +310,7 @@ public class EnumTypeAdapter extends TypeAdapter<Enum> implements JSONBuilderAwa
                 if (propertyCodecConfiguration.getEnumUsingToString()) {
                     if (Emptys.isNotEmpty(stringValue)) {
                         for (Object obj : es) {
-                            Enum e= (Enum)obj;
+                            Enum e = (Enum) obj;
                             if (e.toString().equals(stringValue)) {
                                 return e;
                             }

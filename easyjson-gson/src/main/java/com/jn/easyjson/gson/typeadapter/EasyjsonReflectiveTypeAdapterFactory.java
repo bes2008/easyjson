@@ -16,7 +16,6 @@ import com.jn.langx.util.reflect.type.Types;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.*;
 
@@ -92,13 +91,13 @@ public class EasyjsonReflectiveTypeAdapterFactory implements TypeAdapterFactory 
                     constructorConstructor, context, fieldType, annotation);
         }
         final boolean jsonAdapterPresent = mapped != null;
-        if (mapped == null){
+        if (mapped == null) {
             mapped = context.getAdapter(fieldType);
         }
 
         final TypeAdapter<?> typeAdapter = mapped;
 
-        if(typeAdapter instanceof FieldAware){
+        if (typeAdapter instanceof FieldAware) {
             ((FieldAware) typeAdapter).setField(field);
         }
 

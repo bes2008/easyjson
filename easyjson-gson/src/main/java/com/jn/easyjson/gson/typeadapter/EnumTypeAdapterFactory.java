@@ -24,20 +24,22 @@ import com.jn.langx.util.Preconditions;
 public class EnumTypeAdapterFactory implements TypeAdapterFactory {
 
     private GsonJSONBuilder jsonBuilder;
-    public EnumTypeAdapterFactory(GsonJSONBuilder jsonBuilder){
+
+    public EnumTypeAdapterFactory(GsonJSONBuilder jsonBuilder) {
         Preconditions.checkNotNull(jsonBuilder);
         this.jsonBuilder = jsonBuilder;
     }
+
     @Override
     public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
-        if(type.getRawType().isEnum()) {
+        if (type.getRawType().isEnum()) {
             EnumTypeAdapter enumTypeAdapter = new EnumTypeAdapter();
             enumTypeAdapter.setUsingValue(jsonBuilder.serializeEnumUsingIndex());
             enumTypeAdapter.setUsingField(jsonBuilder.serializeEnumUsingField());
             enumTypeAdapter.setUsingToString(jsonBuilder.serializeEnumUsingToString());
             enumTypeAdapter.setJSONBuilder(jsonBuilder);
             enumTypeAdapter.setEnumClass(type.getRawType());
-            return (TypeAdapter<T>)enumTypeAdapter;
+            return (TypeAdapter<T>) enumTypeAdapter;
         }
         return null;
     }

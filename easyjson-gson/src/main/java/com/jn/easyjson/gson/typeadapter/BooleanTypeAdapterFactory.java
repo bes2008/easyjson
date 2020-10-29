@@ -24,21 +24,23 @@ import com.jn.langx.util.Preconditions;
 
 public class BooleanTypeAdapterFactory implements TypeAdapterFactory, JSONBuilderAware<GsonJSONBuilder> {
     private GsonJSONBuilder jsonBuilder;
-    public BooleanTypeAdapterFactory(){
+
+    public BooleanTypeAdapterFactory() {
     }
-    public BooleanTypeAdapterFactory(GsonJSONBuilder jsonBuilder){
+
+    public BooleanTypeAdapterFactory(GsonJSONBuilder jsonBuilder) {
         Preconditions.checkNotNull(jsonBuilder);
         this.jsonBuilder = jsonBuilder;
     }
 
     @Override
     public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
-        if(type.getRawType()==boolean.class || type.getRawType()==Boolean.class){
+        if (type.getRawType() == boolean.class || type.getRawType() == Boolean.class) {
             BooleanTypeAdapter booleanTypeAdapter = new BooleanTypeAdapter();
             booleanTypeAdapter.setUsing1_0(jsonBuilder.serializeBooleanUsing1_0());
             booleanTypeAdapter.setUsingOnOff(jsonBuilder.serializeBooleanUsingOnOff());
             booleanTypeAdapter.setJSONBuilder(jsonBuilder);
-            return (TypeAdapter<T>)booleanTypeAdapter;
+            return (TypeAdapter<T>) booleanTypeAdapter;
         }
         return null;
     }

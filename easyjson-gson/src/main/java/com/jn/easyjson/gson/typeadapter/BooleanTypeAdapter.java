@@ -100,12 +100,12 @@ public class BooleanTypeAdapter extends TypeAdapter<Boolean> implements JSONBuil
 
         if (jsonBuilder != null && currentField != null) {
             PropertyCodecConfiguration propertyCodecConfiguration = PropertyCodecConfiguration.getPropertyCodecConfiguration(jsonBuilder.proxyDialectIdentify(), currentField.getDeclaringClass(), currentField.getName());
-            if(propertyCodecConfiguration!=null){
-                if(propertyCodecConfiguration.getBooleanUsingONOFF()){
-                    out.value(value?"on" : "off");
+            if (propertyCodecConfiguration != null) {
+                if (propertyCodecConfiguration.getBooleanUsingONOFF()) {
+                    out.value(value ? "on" : "off");
                     return;
                 }
-                if(propertyCodecConfiguration.getBooleanUsing01()){
+                if (propertyCodecConfiguration.getBooleanUsing01()) {
                     out.value(value ? 1 : 0);
                     return;
                 }
@@ -138,17 +138,17 @@ public class BooleanTypeAdapter extends TypeAdapter<Boolean> implements JSONBuil
         if (jsonToken == JsonToken.NULL) {
             return null;
         }
-        if(invalidValueTokens.contains(jsonToken)){
+        if (invalidValueTokens.contains(jsonToken)) {
             return null;
         }
-        if(jsonToken==JsonToken.STRING){
+        if (jsonToken == JsonToken.STRING) {
             String vstring = in.nextString().toLowerCase();
             return evalTrues.contains(vstring);
         }
-        if(jsonToken==JsonToken.NUMBER){
-            return in.nextInt()==1;
+        if (jsonToken == JsonToken.NUMBER) {
+            return in.nextInt() == 1;
         }
-        if(jsonToken==JsonToken.BOOLEAN){
+        if (jsonToken == JsonToken.BOOLEAN) {
             return in.nextBoolean();
         }
         return false;
