@@ -7,6 +7,7 @@ import com.google.gson.stream.JsonWriter;
 import com.jn.easyjson.core.JSONBuilderAware;
 import com.jn.easyjson.gson.GsonJSONBuilder;
 import com.jn.langx.annotation.NonNull;
+import com.jn.langx.codec.base64.Base64;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.PrimitiveArrays;
 import com.jn.langx.util.io.Charsets;
@@ -44,6 +45,7 @@ public class BytesTypeAdapter extends TypeAdapter implements JSONBuilderAware<Gs
         }
 
         byte[] bytes = toBytes(value);
+        bytes = Base64.encodeBase64(bytes);
         String bytesString = new String(bytes, Charsets.UTF_8);
         out.value(bytesString);
     }
@@ -57,10 +59,12 @@ public class BytesTypeAdapter extends TypeAdapter implements JSONBuilderAware<Gs
         }
 
         String str = in.nextString();
+        byte[] bytes = str.getBytes(Charsets.UTF_8);
+        bytes = Base64.decodeBase64(bytes);
         if (field != null && field.getType() == Byte[].class) {
-            return PrimitiveArrays.wrap(str.getBytes(Charsets.UTF_8), true);
+            return PrimitiveArrays.wrap(bytes, true);
         }
-        return str.getBytes(Charsets.UTF_8);
+        return bytes;
     }
 
     private static List<JsonToken> invalidValueTokens = Collects.newArrayList(

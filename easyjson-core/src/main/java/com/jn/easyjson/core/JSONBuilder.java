@@ -61,7 +61,7 @@ public abstract class JSONBuilder implements Cloneable {
     private boolean prettyFormat = false;
     private boolean isLenient;
 
-    private boolean serializeBytesAsString = true;
+    private boolean serializeBytesAsBase64String = true;
 
     /**
      * 是否使用全局配置项
@@ -131,12 +131,12 @@ public abstract class JSONBuilder implements Cloneable {
     }
 
     public JSONBuilder serializeBytesAsString(boolean value) {
-        this.serializeBytesAsString = true;
+        this.serializeBytesAsBase64String = true;
         return this;
     }
 
     public boolean serializeBytesAsString() {
-        return serializeBytesAsString;
+        return serializeBytesAsBase64String;
     }
 
     public JSONBuilder serializeEnumUsingToString(boolean value) {
@@ -371,6 +371,6 @@ public abstract class JSONBuilder implements Cloneable {
         builder.enableCustomConfiguration(this.enableCustomConfiguration);
         builder.dialectIdentify(this.dialectIdentify());
         builder.proxyDialectIdentify(this.proxyDialectIdentify());
-        builder.serializeBytesAsString(this.serializeBytesAsString);
+        builder.serializeBytesAsString(this.serializeBytesAsBase64String);
     }
 }
