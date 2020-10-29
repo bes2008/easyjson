@@ -10,7 +10,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 public class GsonBytesTest {
-    private static String message = "{\"success\":true,\"statusCode\":200,\"timestamp\":1603951506731,\"errorCode\":\"\",\"errorMessage\":\"\",\"data\":[{\"serialNumer\":\"ABCD-EDFG-HIJK-LMNO\",\"licDataBytes\":\"NGtkUxIRL3RabDk4ZTJ6e\"}]}";
+    private static String message = "{\"success\":true,\"statusCode\":200,\"timestamp\":1603951506731,\"errorCode\":\"\",\"errorMessage\":\"\",\"data\":[{\"serialNumber\":\"ABCD-EDFG-HIJK-LMNO\",\"licDataBytes\":\"NGtkUxIRL3RabDk4ZTJ6e\"}]}";
 
     public static void main(String[] args) {
         Type t = Types.getParameterizedType(RestRespBody.class, Types.getListParameterizedType(Lic.class));

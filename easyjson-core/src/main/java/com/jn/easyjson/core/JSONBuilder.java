@@ -61,6 +61,8 @@ public abstract class JSONBuilder implements Cloneable {
     private boolean prettyFormat = false;
     private boolean isLenient;
 
+    private boolean serializeBytesAsString = true;
+
     /**
      * 是否使用全局配置项
      */
@@ -128,6 +130,15 @@ public abstract class JSONBuilder implements Cloneable {
         return prettyFormat;
     }
 
+    public JSONBuilder serializeBytesAsString(boolean value) {
+        this.serializeBytesAsString = true;
+        return this;
+    }
+
+    public boolean serializeBytesAsString() {
+        return serializeBytesAsString;
+    }
+
     public JSONBuilder serializeEnumUsingToString(boolean value) {
         this.serializeEnumUsingToString = value;
         return this;
@@ -148,10 +159,10 @@ public abstract class JSONBuilder implements Cloneable {
 
     /**
      * 该方法已废弃，原因是方法名不够明确，由 serializeEnumUsingIndex来代替
+     *
      * @param value
      * @return
      * @deprecated
-     *
      */
     @Deprecated
     public JSONBuilder serializeEnumUsingValue(boolean value) {
@@ -159,7 +170,6 @@ public abstract class JSONBuilder implements Cloneable {
     }
 
     /**
-     *
      * @return
      * @deprecated
      */
@@ -314,22 +324,23 @@ public abstract class JSONBuilder implements Cloneable {
     public boolean isEnableCustomConfiguration() {
         return this.enableCustomConfiguration;
     }
-    public JSONBuilder proxyDialectIdentify(DialectIdentify dialectId){
+
+    public JSONBuilder proxyDialectIdentify(DialectIdentify dialectId) {
         this.proxyDialectId = dialectId;
         return this;
     }
 
-    public DialectIdentify proxyDialectIdentify(){
-        return this.proxyDialectId ;
+    public DialectIdentify proxyDialectIdentify() {
+        return this.proxyDialectId;
     }
 
-    public JSONBuilder dialectIdentify(DialectIdentify dialectId){
+    public JSONBuilder dialectIdentify(DialectIdentify dialectId) {
         this.dialectId = dialectId;
         return this;
     }
 
-    public DialectIdentify dialectIdentify(){
-        return this.dialectId ;
+    public DialectIdentify dialectIdentify() {
+        return this.dialectId;
     }
 
     public JSONBuilder withTargetClass(Class clazz) {
@@ -360,5 +371,6 @@ public abstract class JSONBuilder implements Cloneable {
         builder.enableCustomConfiguration(this.enableCustomConfiguration);
         builder.dialectIdentify(this.dialectIdentify());
         builder.proxyDialectIdentify(this.proxyDialectIdentify());
+        builder.serializeBytesAsString(this.serializeBytesAsString);
     }
 }
