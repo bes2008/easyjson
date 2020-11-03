@@ -26,6 +26,10 @@
 			<groupId>com.github.fangjinuo.easyjson</groupId>
 			<artifactId>easyjson-fastjson</artifactId>
 		</dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>com.github.fangjinuo.easyjson</groupId>
