@@ -22,7 +22,6 @@ public class GsonImplBytesTest {
         List<Lic> d = Collects.newArrayList(lic);
         RestRespBody restRespBody = RestRespBody.success(d);
 
-
         String message = json.toJson(restRespBody);
         System.out.println(message);
 
