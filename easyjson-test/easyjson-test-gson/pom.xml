@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>easyjson-test</artifactId>
         <groupId>com.github.fangjinuo.easyjson</groupId>
-        <version>3.0.4</version>
+        <artifactId>easyjson-test</artifactId>
+        <version>3.1.0</version>
     </parent>
 
     <artifactId>easyjson-test-gson</artifactId>

@@ -6,7 +6,7 @@
 
     <groupId>com.github.fangjinuo.easyjson</groupId>
     <artifactId>easyjson</artifactId>
-    <version>3.0.4</version>
+    <version>3.1.0</version>
     <modules>
         <module>easyjson-core</module>
         <module>easyjson-gson</module>
@@ -24,7 +24,7 @@
         <module>androidjson-to-easyjson</module>
         <module>moshi-to-easyjson</module>
         <module>boonjson-to-easyjson</module>
-
+        <module>gson-to-easyjson</module>
     </modules>
     <name>easyjson</name>
     <packaging>pom</packaging>
