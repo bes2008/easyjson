@@ -679,6 +679,7 @@ public final class Gson {
       try {
         String jsonString = this.json.toJson(src, typeOfSrc);
         Streams.writerForAppendable(writer).write(jsonString);
+        return;
       } catch (IOException ex) {
         throw new JsonIOException(ex);
       }
@@ -703,6 +704,7 @@ public final class Gson {
       try {
         String jsonString = this.json.toJson(src, typeOfSrc);
         writer.out.write(jsonString);
+        return;
       } catch (IOException ex) {
         throw new JsonIOException(ex);
       }

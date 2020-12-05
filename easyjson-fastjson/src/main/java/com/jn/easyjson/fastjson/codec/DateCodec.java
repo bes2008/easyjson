@@ -45,7 +45,9 @@ public class DateCodec implements ObjectSerializer, ObjectDeserializer, Typed {
     }
 
     public void setDateFormat(DateFormat dateFormat) {
-        this.dateFormat = dateFormat;
+        if (dateFormat != null) {
+            this.dateFormat = dateFormat;
+        }
     }
 
     public void setUsingToString(boolean usingToString) {
@@ -111,11 +113,12 @@ public class DateCodec implements ObjectSerializer, ObjectDeserializer, Typed {
 
         Date date = (object instanceof Date) ? (Date) object : TypeUtils.castToDate(object);
         if (dateFormat != null) {
-            out.write(dateFormat.format(date));
+            String str = dateFormat.format(date);
+            out.writeString(str);
             return;
         }
         if (usingToString) {
-            out.write(date.toString());
+            out.writeString(date.toString());
             return;
         }
 

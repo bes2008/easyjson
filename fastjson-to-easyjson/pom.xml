@@ -13,7 +13,7 @@
     <artifactId>fastjson-to-easyjson</artifactId>
 
     <description>
-        Adapter alibaba fastjson to easyjson
+        Adapter alibaba fastjson to other json libraries. the fastjson version: 1.2.58
     </description>
 
     <dependencies>

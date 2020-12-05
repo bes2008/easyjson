@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>com.github.fangjinuo.easyjson</groupId>
+        <artifactId>easyjson-test-gson</artifactId>
+        <version>3.1.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>easysjon-test-gson-to-fastjson</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.github.fangjinuo.easyjson</groupId>
+            <artifactId>easyjson-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.fangjinuo.easyjson</groupId>
+            <artifactId>easyjson-fastjson</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.58</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.fangjinuo.easyjson</groupId>
+            <artifactId>easyjson-test-gson-base</artifactId>
+            <version>${project.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.google.code.gson</groupId>
+                    <artifactId>gson</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.fangjinuo.easyjson</groupId>
+            <artifactId>gson-to-easyjson</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+</project>

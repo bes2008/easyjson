@@ -17,5 +17,6 @@
     <modules>
         <module>easyjson-test-gson-base</module>
 		<module>easyjson-test-gson-impl</module>
+        <module>easysjon-test-gson-to-fastjson</module>
 	</modules>
 </project>
