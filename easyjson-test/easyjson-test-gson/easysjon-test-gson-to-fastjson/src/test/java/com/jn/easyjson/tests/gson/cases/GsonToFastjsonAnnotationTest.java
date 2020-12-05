@@ -10,5 +10,5 @@ import org.testng.annotations.Test;
  * @version 20200614
  */
 @Test
-public class GsonImplAnnotationTest extends GsonAnnotationTest {
+public class GsonToFastjsonAnnotationTest extends GsonAnnotationTest {
 }

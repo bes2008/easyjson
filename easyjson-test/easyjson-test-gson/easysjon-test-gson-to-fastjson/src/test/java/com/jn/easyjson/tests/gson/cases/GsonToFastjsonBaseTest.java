@@ -10,5 +10,5 @@ import org.testng.annotations.Test;
  * @version 20200614
  */
 @Test
-public class GsonImplBaseTest extends EasyJsonBaseTest {
+public class GsonToFastjsonBaseTest extends EasyJsonBaseTest {
 }

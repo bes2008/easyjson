@@ -1,14 +1,14 @@
 package com.jn.easyjson.test.gson.jackson.cases;
 
-import com.jn.easyjson.tests.cases.GsonAnnotationTest;
+import com.jn.easyjson.tests.cases.EasyJsonBaseTest;
 import org.testng.annotations.Test;
 
 /**
- * Gson注解测试类
+ * GsonToGsonBaseTest基础测试
  *
  * @author zhaohuihua
  * @version 20200614
  */
 @Test
-public class GsonImplAnnotationTest extends GsonAnnotationTest {
+public class GsonToJacksonBaseTest extends EasyJsonBaseTest {
 }
