@@ -17,6 +17,7 @@
 package com.google.gson;
 
 import com.google.gson.easyjson.GsonEasyJsons;
+import com.google.gson.easyjson.GsonExcluderExclusion;
 import com.google.gson.internal.*;
 import com.google.gson.internal.bind.*;
 import com.google.gson.reflect.TypeToken;
@@ -263,13 +264,14 @@ public final class Gson {
 
 
     JSONBuilder jsonBuilder = JSONBuilderProvider.adapter(GsonEasyJsons.JSON_IDENTIFY_STRING);
-    if(jsonBuilder!=null){
+    if (jsonBuilder != null) {
       jsonBuilder.serializeNulls(this.serializeNulls);
       jsonBuilder.prettyFormat(this.prettyPrinting);
       jsonBuilder.lenient(this.lenient);
       jsonBuilder.serializeDateUsingPattern(this.datePattern);
-      this.json=jsonBuilder.build();
-    }else{
+      jsonBuilder.addExclusionStrategies(new GsonExcluderExclusion(this.excluder()));
+      this.json = jsonBuilder.build();
+    } else {
       this.json = null;
     }
 
