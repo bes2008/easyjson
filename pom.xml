@@ -75,25 +75,21 @@
                 <groupId>com.github.fangjinuo.easyjson</groupId>
                 <artifactId>easyjson-core</artifactId>
                 <version>${project.version}</version>
-                <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>com.github.fangjinuo.easyjson</groupId>
                 <artifactId>easyjson-gson</artifactId>
                 <version>${project.version}</version>
-                <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>com.github.fangjinuo.easyjson</groupId>
                 <artifactId>easyjson-fastjson</artifactId>
                 <version>${project.version}</version>
-                <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>com.github.fangjinuo.easyjson</groupId>
                 <artifactId>easyjson-jackson</artifactId>
                 <version>${project.version}</version>
-                <scope>provided</scope>
             </dependency>
 
             <dependency>
