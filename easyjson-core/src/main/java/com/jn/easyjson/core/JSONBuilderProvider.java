@@ -17,6 +17,8 @@ package com.jn.easyjson.core;
 import com.jn.easyjson.core.annotation.DependOn;
 import com.jn.easyjson.core.codec.dialect.DialectIdentify;
 import com.jn.langx.annotation.Name;
+import com.jn.langx.util.Emptys;
+import com.jn.langx.util.Strings;
 import com.jn.langx.util.reflect.Reflects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -83,7 +85,7 @@ public class JSONBuilderProvider {
                 Class<? extends JSONBuilder> jsonBuildClass = jsonBuilder.getClass();
                 String name = parseName(jsonBuildClass);
                 String dependency = parseDependencyClass(jsonBuildClass);
-                if (dependency == null || dependency.trim().isEmpty()) {
+                if (Emptys.isEmpty(dependency)) {
                     logger.warn("Won't register json builder {}, because of can't find its dependency class {}", jsonBuildClass.getCanonicalName(), "NULL");
                     continue;
                 }
@@ -113,12 +115,12 @@ public class JSONBuilderProvider {
     private static String parseName(Class<? extends JSONBuilder> clazz) {
         Name nameAnno = (Name) Reflects.getAnnotation(clazz, Name.class);
         String name = null;
-        if (nameAnno != null && nameAnno.value() != null && !nameAnno.value().trim().isEmpty()) {
+        if (nameAnno != null && Strings.isNotBlank(nameAnno.value())) {
             return nameAnno.value().trim();
         }
         name = clazz.getName();
         String name2 = name.replaceFirst("jsonbuilder", "");
-        if (!name2.trim().isEmpty()) {
+        if (Strings.isNotBlank(name2)) {
             return name2;
         }
         return name;
