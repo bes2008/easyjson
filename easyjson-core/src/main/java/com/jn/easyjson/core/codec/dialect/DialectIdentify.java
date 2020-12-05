@@ -14,29 +14,30 @@
 
 package com.jn.easyjson.core.codec.dialect;
 
-import com.jn.langx.util.Objects;
+import com.jn.langx.util.Objs;
 import com.jn.langx.util.hash.HashCodeBuilder;
 
 public final class DialectIdentify {
     private String id;
     private String libUrl;
 
-    public DialectIdentify(){}
+    public DialectIdentify() {
+    }
 
-    public DialectIdentify(String id, String libUrl){
+    public DialectIdentify(String id, String libUrl) {
         setId(id);
         setLibUrl(libUrl);
     }
 
-    public boolean isFastjson(){
+    public boolean isFastjson() {
         return "fastjson".equals(id);
     }
 
-    public boolean isGson(){
+    public boolean isGson() {
         return "gson".equals(id);
     }
 
-    public boolean isJackson(){
+    public boolean isJackson() {
         return "jackson".equals(id);
     }
 
@@ -63,11 +64,11 @@ public final class DialectIdentify {
 
         DialectIdentify that = (DialectIdentify) o;
 
-        if (!Objects.equals(id, that.id)) {
+        if (!Objs.equals(id, that.id)) {
             return false;
         }
 
-        if (!Objects.equals(libUrl, that.libUrl)) {
+        if (!Objs.equals(libUrl, that.libUrl)) {
             return false;
         }
         return true;

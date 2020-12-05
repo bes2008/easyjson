@@ -17,8 +17,12 @@ package com.jn.easyjson.core;
 import com.jn.easyjson.core.annotation.DependOn;
 import com.jn.easyjson.core.codec.dialect.DialectIdentify;
 import com.jn.langx.annotation.Name;
+import com.jn.langx.annotation.Nullable;
 import com.jn.langx.util.Emptys;
+import com.jn.langx.util.Objs;
 import com.jn.langx.util.Strings;
+import com.jn.langx.util.collection.Collects;
+import com.jn.langx.util.function.Predicate;
 import com.jn.langx.util.reflect.Reflects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,19 +35,55 @@ import java.util.ServiceLoader;
 public class JSONBuilderProvider {
     private static final Logger logger = LoggerFactory.getLogger(JSONBuilderProvider.class);
     private static Class<? extends JSONBuilder> defaultJsonBuilderClass;
+    /**
+     * key: @Name of the JSON Builder Implement class
+     * value: the json builder class
+     */
     private static final Map<String, Class<? extends JSONBuilder>> registry = new HashMap<String, Class<? extends JSONBuilder>>();
 
     static {
         findJSONBuilderImplClasses();
     }
 
-    public static JSONBuilder create(String name) {
+    /**
+     * 基于指定的JSON Builder name 创建
+     *
+     * @param name
+     * @return
+     */
+    public static JSONBuilder create(@Nullable String name) {
         if (name == null) {
             return create();
         }
         Class<? extends JSONBuilder> clazz = registry.get(name);
+        if (clazz == null) {
+            logger.warn("Can't find the JSONBuilder: {}", name);
+            return null;
+        }
         return create(clazz);
     }
+
+
+    /**
+     * 当处于一个JSON，要适配到其他的JSON库时，可以调用这个方法
+     *
+     * @param name the caller json library name
+     * @return
+     */
+    public static JSONBuilder adapter(final String name) {
+        String found = Collects.findFirst(registry.keySet(), new Predicate<String>() {
+            @Override
+            public boolean test(String value) {
+                return !Objs.equals(value, name);
+            }
+        });
+        if (Emptys.isNotEmpty(found)) {
+            return create(found);
+        }
+        logger.warn("Can't find a suitable JSONBuilder, current json library: {}", name);
+        return null;
+    }
+
 
     public static JSONBuilder create() {
         return create(defaultJsonBuilderClass);
@@ -65,12 +105,12 @@ public class JSONBuilderProvider {
         return create().enableIgnoreAnnotation().serializeNulls(true).build();
     }
 
-    private static JSONBuilder create(Class<? extends JSONBuilder> defaultJsonBuilderClass) {
-        if (defaultJsonBuilderClass != null) {
+    private static JSONBuilder create(Class<? extends JSONBuilder> jsonBuilderClass) {
+        if (jsonBuilderClass != null) {
             try {
-                return defaultJsonBuilderClass.newInstance();
+                return jsonBuilderClass.newInstance();
             } catch (Throwable e) {
-                logger.error("Can't create a default json builder, {}", defaultJsonBuilderClass.getCanonicalName());
+                logger.error("Can't create a default json builder, {}", jsonBuilderClass.getCanonicalName());
             }
         }
         throw new RuntimeException("Can't find any supported JSON libraries : [gson, jackson, fastjson], \n 1) check you classpath has one of these jar pairs: [fastjson, easyjson-fastjson], [gson, easyjson-gson], [jackson, easyjson-jackson]. \n 2) if any pair found in your classpath, check the jdk version whether is compatible or not");
