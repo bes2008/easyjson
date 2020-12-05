@@ -18,6 +18,7 @@ import com.jn.easyjson.core.annotation.DependOn;
 import com.jn.easyjson.core.codec.dialect.DialectIdentify;
 import com.jn.langx.annotation.Name;
 import com.jn.langx.annotation.Nullable;
+import com.jn.langx.util.ClassLoaders;
 import com.jn.langx.util.Emptys;
 import com.jn.langx.util.Objs;
 import com.jn.langx.util.Strings;
@@ -47,9 +48,6 @@ public class JSONBuilderProvider {
 
     /**
      * 基于指定的JSON Builder name 创建
-     *
-     * @param name
-     * @return
      */
     public static JSONBuilder create(@Nullable String name) {
         if (name == null) {
@@ -68,7 +66,6 @@ public class JSONBuilderProvider {
      * 当处于一个JSON，要适配到其他的JSON库时，可以调用这个方法
      *
      * @param name the caller json library name
-     * @return
      */
     public static JSONBuilder adapter(final String name) {
         String found = Collects.findFirst(registry.keySet(), new Predicate<String>() {
@@ -89,7 +86,7 @@ public class JSONBuilderProvider {
         return create(defaultJsonBuilderClass);
     }
 
-    public static final DialectIdentify getDefaultDialectIdentify() {
+    public static DialectIdentify getDefaultDialectIdentify() {
         try {
             return getDefaultDialectIdentifyOrException();
         } catch (Throwable ex) {
@@ -97,7 +94,7 @@ public class JSONBuilderProvider {
         }
     }
 
-    public static final DialectIdentify getDefaultDialectIdentifyOrException() {
+    public static DialectIdentify getDefaultDialectIdentifyOrException() {
         return create().dialectIdentify();
     }
 
@@ -146,15 +143,15 @@ public class JSONBuilderProvider {
 
     private static String parseDependencyClass(Class<? extends JSONBuilder> jsonBuilderClass) {
         DependOn dependOn = (DependOn) Reflects.getAnnotation(jsonBuilderClass, DependOn.class);
-        if (dependOn != null && dependOn.value() != null && !dependOn.value().trim().isEmpty()) {
+        if (dependOn != null && Emptys.isNotEmpty(dependOn.value())) {
             return dependOn.value().trim();
         }
         return null;
     }
 
     private static String parseName(Class<? extends JSONBuilder> clazz) {
-        Name nameAnno = (Name) Reflects.getAnnotation(clazz, Name.class);
-        String name = null;
+        Name nameAnno = Reflects.getAnnotation(clazz, Name.class);
+        String name;
         if (nameAnno != null && Strings.isNotBlank(nameAnno.value())) {
             return nameAnno.value().trim();
         }
@@ -166,9 +163,10 @@ public class JSONBuilderProvider {
         return name;
     }
 
+    @SuppressWarnings("rawtypes")
     private static Class loadClass(String clazz) {
         try {
-            return Class.forName(clazz);
+            return ClassLoaders.loadClass(clazz);
         } catch (ClassNotFoundException e) {
             return null;
         }

@@ -23,17 +23,18 @@ import com.jn.langx.util.reflect.Reflects;
 import java.lang.reflect.Modifier;
 
 public class FastEasyJsons {
+    public static final String JSON_IDENTIFY_STRING = "fastjson";
     public static final DialectIdentify FASTJSON;
 
     static {
-        FASTJSON = new DialectIdentify("fastjson", Reflects.getCodeLocation(FastEasyJsons.class).toString());
+        FASTJSON = new DialectIdentify(JSON_IDENTIFY_STRING, Reflects.getCodeLocation(FastEasyJsons.class).toString());
     }
 
     private FastEasyJsons() {
     }
 
     public static JSONBuilder getJsonBuilder(int features, SerializerFeature... features2) {
-        JSONBuilder jsonBuilder = JSONBuilderProvider.create();
+        JSONBuilder jsonBuilder = JSONBuilderProvider.adapter(JSON_IDENTIFY_STRING);
         if (features2 != null) {
             for (SerializerFeature feature : features2) {
                 features |= feature.getMask();
