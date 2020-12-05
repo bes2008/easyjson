@@ -225,7 +225,7 @@ public class JsonReader implements Closeable {
   private static final int NUMBER_CHAR_EXP_DIGIT = 7;
 
   /** The input JSON. */
-  private final Reader in;
+  public final Reader in;
 
   /** True to accept non-spec compliant JSON */
   private boolean lenient = false;

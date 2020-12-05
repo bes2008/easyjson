@@ -163,7 +163,7 @@ public class JsonWriter implements Closeable, Flushable {
   }
 
   /** The output data, containing at most one top-level array or object. */
-  private final Writer out;
+  public final Writer out;
 
   private int[] stack = new int[32];
   private int stackSize = 0;
