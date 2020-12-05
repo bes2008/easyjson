@@ -26,7 +26,7 @@ import com.jn.langx.util.reflect.type.Types;
  */
 public abstract class EasyJsonPagingRequestTest extends AbstractBaseTest {
 
-    private JSON json;
+    protected JSON json;
     private Person person;
     private List<Person> persons = new ArrayList<Person>();
     private Map<String, Person> nameToPersonMap = new HashMap<String, Person>();
