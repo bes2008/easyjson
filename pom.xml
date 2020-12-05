@@ -60,7 +60,7 @@
     </scm>
     <licenses>
         <license>
-            <name>LGPL 3.0</name>
+            <name>Apache 2.0</name>
             <url>https://github.com/fangjinuo/easyjson/blob/master/LICENSE</url>
             <distribution>manual</distribution>
         </license>
