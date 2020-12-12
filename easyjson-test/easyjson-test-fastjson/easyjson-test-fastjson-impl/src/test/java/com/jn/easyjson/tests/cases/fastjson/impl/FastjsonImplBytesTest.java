@@ -1,4 +1,4 @@
-package com.jn.easyjson.tests.cases;
+package com.jn.easyjson.tests.cases.fastjson.impl;
 
 import com.jn.easyjson.core.JSON;
 import com.jn.easyjson.core.JSONBuilderProvider;
