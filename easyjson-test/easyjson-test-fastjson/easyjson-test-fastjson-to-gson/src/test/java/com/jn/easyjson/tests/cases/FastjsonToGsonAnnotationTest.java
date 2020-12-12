@@ -1,5 +1,6 @@
 package com.jn.easyjson.tests.cases;
 
+import com.jn.easyjson.tests.cases.fastjson.FastjsonAnnotationTest;
 import org.testng.annotations.Test;
 
 /**
