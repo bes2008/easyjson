@@ -317,7 +317,17 @@ public abstract class JsonTreeNode {
             return null;
         }
         if (isJsonPrimitiveNode()) {
-            return getAsString();
+            JsonPrimitiveNode primitiveNode = getAsJsonPrimitiveNode();
+            if (primitiveNode.isNumber()) {
+                return this.getAsNumber()+"";
+            }
+            if (primitiveNode.isString()) {
+                return "\""+this.getAsString()+"\"";
+            }
+            if (primitiveNode.isBoolean()) {
+                return this.getAsBoolean()+"";
+            }
+            return primitiveNode.getAsString();
         }
         if (isJsonArrayNode()) {
             JsonArrayNode arrayNode = getAsJsonArrayNode();
