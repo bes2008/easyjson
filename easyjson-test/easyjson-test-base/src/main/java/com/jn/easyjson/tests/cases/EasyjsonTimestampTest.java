@@ -14,9 +14,11 @@ public abstract class EasyjsonTimestampTest extends AbstractBaseTest {
     @Test(priority = 10001)
     public void testCase1() {
         BusEntity busEntity1 = getBusBean();
-        String jsonstring = json.toJson(busEntity1);
-        System.out.println(jsonstring);
-        BusEntity busEntity2 = json.fromJson(jsonstring, BusEntity.class);
+        String jsonstring1= json.toJson(busEntity1);
+        System.out.println(jsonstring1);
+        BusEntity busEntity2 = json.fromJson(jsonstring1, BusEntity.class);
+        String jsonstring2 = json.toJson(busEntity2);
+        System.out.println(jsonstring2);
         System.out.println(busEntity1.equals(busEntity2));
     }
 
