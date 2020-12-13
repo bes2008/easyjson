@@ -19,7 +19,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.util.ClassUtil;
 import com.jn.easyjson.core.codec.dialect.PropertyCodecConfiguration;
 import com.jn.easyjson.jackson.JacksonConstants;
 import com.jn.easyjson.jackson.Jacksons;
@@ -67,15 +66,17 @@ public class DateDeserializer extends JsonDeserializer {
             Calendar c = null;
             if (defaultCtor == null || !Modifiers.isPublic(defaultCtor)) {
                 c = Calendar.getInstance(tz);
-            }else {
+            } else {
                 try {
                     c = (Calendar) defaultCtor.newInstance();
                 } catch (Exception e) {
                     return (Calendar) ctx.handleInstantiationProblem(handledType(), date, e);
                 }
             }
-            c.setTimeZone(tz);
-            c.setTimeInMillis(date.getTime());
+            if (c != null) {
+                c.setTimeZone(tz);
+                c.setTimeInMillis(date.getTime());
+            }
             return c;
         }
         return null;
