@@ -25,6 +25,7 @@ import com.jn.easyjson.jackson.JacksonConstants;
 import com.jn.easyjson.jackson.Jacksons;
 import com.jn.langx.util.Dates;
 import com.jn.langx.util.Strings;
+import com.jn.langx.util.reflect.Modifiers;
 import com.jn.langx.util.reflect.Reflects;
 
 import java.io.IOException;
@@ -61,21 +62,21 @@ public class DateDeserializer extends JsonDeserializer {
             return new Timestamp(date.getTime());
         }
         if (Reflects.isSubClassOrEquals(Calendar.class, type)) {
-            Constructor _defaultCtor = (Constructor<Calendar>) ClassUtil.findConstructor(type, false);
-            if (_defaultCtor == null) {
-                return ctx.constructCalendar(date);
-            }
-            try {
-                Calendar c = (Calendar) _defaultCtor.newInstance();
-                c.setTimeInMillis(date.getTime());
-                TimeZone tz = ctx.getTimeZone();
-                if (tz != null) {
-                    c.setTimeZone(tz);
+            Constructor _defaultCtor = (Constructor<Calendar>) ClassUtil.findConstructor(type, true);
+            TimeZone tz = Jacksons.getTimeZone(ctx);
+            Calendar c = null;
+            if (_defaultCtor == null || !Modifiers.isPublic(_defaultCtor)) {
+                c = Calendar.getInstance(tz);
+            }else {
+                try {
+                    c = (Calendar) _defaultCtor.newInstance();
+                } catch (Exception e) {
+                    return (Calendar) ctx.handleInstantiationProblem(handledType(), date, e);
                 }
-                return c;
-            } catch (Exception e) {
-                return (Calendar) ctx.handleInstantiationProblem(handledType(), date, e);
             }
+            c.setTimeZone(tz);
+            c.setTimeInMillis(date.getTime());
+            return c;
         }
         return null;
     }

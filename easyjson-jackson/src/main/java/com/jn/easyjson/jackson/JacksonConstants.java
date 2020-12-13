@@ -38,5 +38,6 @@ public class JacksonConstants {
     public static final String SERIALIZE_DATE_USING_DATE_FORMAT_ATTR_KEY = "SERIALIZE_DATE_USING_DATE_FORMAT";
     public static final String SERIALIZE_DATE_USING_TO_STRING_ATTR_KEY = "SERIALIZE_DATE_USING_TO_STRING";
 
-
+    public static final String SERIALIZE_LOCALE="SERIALIZE_LOCALE";
+    public static final String SERIALIZE_TIMEZONE="SERIALIZE_TIMEZONE";
 }

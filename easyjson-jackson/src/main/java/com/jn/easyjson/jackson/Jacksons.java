@@ -30,13 +30,16 @@ import com.jn.easyjson.core.codec.dialect.DialectIdentify;
 import com.jn.easyjson.core.codec.dialect.PropertyCodecConfiguration;
 import com.jn.easyjson.jackson.ext.EasyJsonObjectMapper;
 import com.jn.langx.annotation.NonNull;
+import com.jn.langx.util.Objs;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.reflect.Reflects;
 
 import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.util.Collection;
+import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 public class Jacksons {
     public static boolean isJacksonJavaType(Type type) {
@@ -66,6 +69,14 @@ public class Jacksons {
             return false;
         }
         return obj.toString().toLowerCase().equals("true");
+    }
+
+    public static TimeZone getTimeZone(DeserializationContext ctx){
+        return Objs.useValueIfNull((TimeZone)ctx.getAttribute(JacksonConstants.SERIALIZE_TIMEZONE), TimeZone.getDefault());
+    }
+
+    public static Locale getLocale(DeserializationContext ctx){
+        return Objs.useValueIfNull((Locale)ctx.getAttribute(JacksonConstants.SERIALIZE_LOCALE), Locale.getDefault());
     }
 
     public static DateFormat getDateFormatAttr(DeserializationContext ctx, String key) {

@@ -129,11 +129,16 @@ public class JacksonJSONBuilder extends JSONBuilder {
         SerializationConfig serializationConfig = objectMapper.getSerializationConfig();
         serializationConfig = serializationConfig.withAttribute(JacksonConstants.SERIALIZE_DATE_USING_DATE_FORMAT_ATTR_KEY, serializeUseDateFormat());
         serializationConfig = serializationConfig.withAttribute(JacksonConstants.SERIALIZE_DATE_USING_TO_STRING_ATTR_KEY, serializeDateUsingToString());
+        serializationConfig = serializationConfig.withAttribute(JacksonConstants.SERIALIZE_LOCALE, serializeUsingLocale());
+        serializationConfig = serializationConfig.withAttribute(JacksonConstants.SERIALIZE_TIMEZONE, serializeUsingTimeZone());
 
         DeserializationConfig deserializationConfig = objectMapper.getDeserializationConfig();
         deserializationConfig = deserializationConfig.withAttribute(JacksonConstants.SERIALIZE_DATE_USING_DATE_FORMAT_ATTR_KEY, serializeUseDateFormat());
         deserializationConfig = deserializationConfig.withAttribute(JacksonConstants.SERIALIZE_DATE_USING_TO_STRING_ATTR_KEY, serializeDateUsingToString());
-
+        deserializationConfig = deserializationConfig.with(serializeUsingTimeZone());
+        deserializationConfig = deserializationConfig.with(serializeUsingLocale());
+        deserializationConfig = deserializationConfig.withAttribute(JacksonConstants.SERIALIZE_LOCALE, serializeUsingLocale());
+        deserializationConfig = deserializationConfig.withAttribute(JacksonConstants.SERIALIZE_TIMEZONE, serializeUsingTimeZone());
 
         objectMapper.setSerializationConfig(serializationConfig);
         objectMapper.setDescrializationConfig(deserializationConfig);

@@ -37,7 +37,6 @@ public class DateTypeAdapterFactory implements TypeAdapterFactory {
         if (Reflects.isSubClassOrEquals(Date.class, type.getRawType())) {
             DateTypeAdapter dateTypeAdapter = new DateTypeAdapter();
             dateTypeAdapter.setDateFormat(jsonBuilder.serializeUseDateFormat());
-            dateTypeAdapter.setPattern(jsonBuilder.serializeDateUsingPattern());
             dateTypeAdapter.setUsingToString(jsonBuilder.serializeDateUsingToString());
             dateTypeAdapter.setJSONBuilder(jsonBuilder);
             return (TypeAdapter<T>) dateTypeAdapter;

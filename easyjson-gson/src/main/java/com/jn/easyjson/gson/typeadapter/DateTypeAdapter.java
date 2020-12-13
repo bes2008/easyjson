@@ -20,7 +20,6 @@ import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 import com.jn.easyjson.core.codec.dialect.PropertyCodecConfiguration;
 import com.jn.langx.util.Dates;
-import com.jn.langx.util.Emptys;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.collection.Collects;
 import org.slf4j.Logger;
@@ -38,12 +37,6 @@ public class DateTypeAdapter extends EasyjsonAbstractTypeAdapter<Date> implement
     private static final Logger logger = LoggerFactory.getLogger(DateTypeAdapter.class);
     private DateFormat df = null;
     private boolean usingToString = false;
-
-    public void setPattern(String pattern) {
-        if (df != null && Emptys.isNotEmpty(pattern)) {
-            df = Dates.getSimpleDateFormat(pattern);
-        }
-    }
 
     public void setDateFormat(DateFormat df) {
         this.df = df;
@@ -101,7 +94,7 @@ public class DateTypeAdapter extends EasyjsonAbstractTypeAdapter<Date> implement
                     return;
                 }
                 if (Strings.isNotBlank(propertyCodecConfiguration.getDatePattern())) {
-                    out.value(Dates.format(value, propertyCodecConfiguration.getDatePattern()));
+                    out.value(Dates.getSimpleDateFormat(propertyCodecConfiguration.getDatePattern(), jsonBuilder.serializeUsingTimeZone()).format(value));
                     return;
                 }
             }

@@ -15,25 +15,37 @@
 package com.jn.easyjson.jackson.serializer;
 
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.SerializerProvider;
 import com.jn.easyjson.core.codec.dialect.PropertyCodecConfiguration;
 import com.jn.easyjson.jackson.JacksonConstants;
 import com.jn.easyjson.jackson.Jacksons;
+import com.jn.langx.annotation.NonNull;
 import com.jn.langx.util.Dates;
-import com.jn.langx.util.Emptys;
 import com.jn.langx.util.Strings;
 
 import java.io.IOException;
 import java.text.DateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
-public class DateSerializer<T extends Date> extends JsonSerializer<T> implements ContextualSerializer {
+public class DateSerializer extends JsonSerializer {
     @Override
-    public void serialize(T value, JsonGenerator gen, SerializerProvider ctx) throws IOException {
+    public void serialize(Object value, JsonGenerator gen, SerializerProvider ctx) throws IOException {
         if (value == null) {
             gen.writeNull();
             return;
         }
+        Date date = null;
+        if (value instanceof Date) {
+            date = (Date) value;
+        } else if (value instanceof Calendar) {
+            date = ((Calendar) value).getTime();
+        }
+        serializeDate(date, gen, ctx);
+    }
+
+    private void serializeDate(@NonNull Date value, JsonGenerator gen, SerializerProvider ctx)  throws IOException {
         DateFormat df = null;
         String pattern = null;
 
@@ -65,11 +77,4 @@ public class DateSerializer<T extends Date> extends JsonSerializer<T> implements
         gen.writeNumber(value.getTime());
     }
 
-    @Override
-    public JsonSerializer<?> createContextual(SerializerProvider prov, BeanProperty property, JavaType type) throws JsonMappingException {
-        if (type.getRawClass() == Date.class) {
-            return this;
-        }
-        return null;
-    }
 }
