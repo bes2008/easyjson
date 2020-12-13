@@ -16,20 +16,16 @@ package com.jn.easyjson.gson.typeadapter;
 
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
-import com.google.gson.TypeAdapterFactory;
 import com.google.gson.reflect.TypeToken;
 import com.jn.easyjson.gson.GsonJSONBuilder;
-import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.reflect.Reflects;
 
 import java.util.Date;
 
-public class DateTypeAdapterFactory implements TypeAdapterFactory {
-    private GsonJSONBuilder jsonBuilder;
+public class DateTypeAdapterFactory extends EasyjsonAbstractTypeAdapterFactory {
 
     public DateTypeAdapterFactory(GsonJSONBuilder jsonBuilder) {
-        Preconditions.checkNotNull(jsonBuilder);
-        this.jsonBuilder = jsonBuilder;
+        super(jsonBuilder);
     }
 
     @Override

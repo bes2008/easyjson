@@ -62,14 +62,14 @@ public class DateDeserializer extends JsonDeserializer {
             return new Timestamp(date.getTime());
         }
         if (Reflects.isSubClassOrEquals(Calendar.class, type)) {
-            Constructor _defaultCtor = (Constructor<Calendar>) ClassUtil.findConstructor(type, true);
+            Constructor defaultCtor = (Constructor<Calendar>) Reflects.getConstructor(type);
             TimeZone tz = Jacksons.getTimeZone(ctx);
             Calendar c = null;
-            if (_defaultCtor == null || !Modifiers.isPublic(_defaultCtor)) {
+            if (defaultCtor == null || !Modifiers.isPublic(defaultCtor)) {
                 c = Calendar.getInstance(tz);
             }else {
                 try {
-                    c = (Calendar) _defaultCtor.newInstance();
+                    c = (Calendar) defaultCtor.newInstance();
                 } catch (Exception e) {
                     return (Calendar) ctx.handleInstantiationProblem(handledType(), date, e);
                 }

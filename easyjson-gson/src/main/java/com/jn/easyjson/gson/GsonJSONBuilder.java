@@ -94,7 +94,12 @@ public class GsonJSONBuilder extends JSONBuilder {
         // Enum
         gsonBuilder.registerTypeAdapterFactory(new EnumTypeAdapterFactory(this));
 
+        // bytes
         gsonBuilder.registerTypeAdapterFactory(new BytesTypeAdapterFactory(this));
+
+        // calender
+        gsonBuilder.registerTypeAdapterFactory(new CalendarTypeAdapterFactory(this));
+
 
         // pretty printing
         if (prettyFormat()) {

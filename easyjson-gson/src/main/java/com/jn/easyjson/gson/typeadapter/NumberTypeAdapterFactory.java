@@ -16,19 +16,15 @@ package com.jn.easyjson.gson.typeadapter;
 
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
-import com.google.gson.TypeAdapterFactory;
 import com.google.gson.reflect.TypeToken;
 import com.jn.easyjson.gson.GsonJSONBuilder;
-import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.reflect.Reflects;
 
-public class NumberTypeAdapterFactory implements TypeAdapterFactory {
+public class NumberTypeAdapterFactory extends EasyjsonAbstractTypeAdapterFactory {
 
-    private GsonJSONBuilder jsonBuilder;
 
     public NumberTypeAdapterFactory(GsonJSONBuilder jsonBuilder) {
-        Preconditions.checkNotNull(jsonBuilder);
-        this.jsonBuilder = jsonBuilder;
+        super(jsonBuilder);
     }
 
     @Override

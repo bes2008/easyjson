@@ -16,21 +16,13 @@ package com.jn.easyjson.gson.typeadapter;
 
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
-import com.google.gson.TypeAdapterFactory;
 import com.google.gson.reflect.TypeToken;
-import com.jn.easyjson.core.JSONBuilderAware;
 import com.jn.easyjson.gson.GsonJSONBuilder;
-import com.jn.langx.util.Preconditions;
 
-public class BooleanTypeAdapterFactory implements TypeAdapterFactory, JSONBuilderAware<GsonJSONBuilder> {
-    private GsonJSONBuilder jsonBuilder;
-
-    public BooleanTypeAdapterFactory() {
-    }
+public class BooleanTypeAdapterFactory extends EasyjsonAbstractTypeAdapterFactory {
 
     public BooleanTypeAdapterFactory(GsonJSONBuilder jsonBuilder) {
-        Preconditions.checkNotNull(jsonBuilder);
-        this.jsonBuilder = jsonBuilder;
+        super(jsonBuilder);
     }
 
     @Override
@@ -45,13 +37,4 @@ public class BooleanTypeAdapterFactory implements TypeAdapterFactory, JSONBuilde
         return null;
     }
 
-    @Override
-    public void setJSONBuilder(GsonJSONBuilder jsonBuilder) {
-        this.jsonBuilder = jsonBuilder;
-    }
-
-    @Override
-    public GsonJSONBuilder getJSONBuilder() {
-        return this.jsonBuilder;
-    }
 }
