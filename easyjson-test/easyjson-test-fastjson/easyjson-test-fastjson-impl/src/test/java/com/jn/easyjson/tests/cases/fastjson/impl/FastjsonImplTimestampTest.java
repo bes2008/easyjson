@@ -4,5 +4,6 @@ import com.jn.easyjson.tests.cases.EasyjsonTimestampTest;
 import org.testng.annotations.Test;
 
 @Test
-public class FastjsonImpleTimestampTest extends EasyjsonTimestampTest {
+public class FastjsonImplTimestampTest extends EasyjsonTimestampTest {
+
 }

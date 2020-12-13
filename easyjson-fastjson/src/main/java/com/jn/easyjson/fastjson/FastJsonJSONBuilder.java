@@ -25,6 +25,7 @@ import com.jn.easyjson.core.codec.dialect.DialectIdentify;
 import com.jn.easyjson.core.exclusion.ExclusionConfiguration;
 import com.jn.easyjson.core.tree.JsonTreeSerializerBuilder;
 import com.jn.easyjson.fastjson.codec.BooleanCodec;
+import com.jn.easyjson.fastjson.codec.CalendarCodec;
 import com.jn.easyjson.fastjson.codec.DateCodec;
 import com.jn.easyjson.fastjson.codec.NumberCodec;
 import com.jn.easyjson.fastjson.ext.EasyJsonParserConfig;
@@ -82,6 +83,12 @@ public class FastJsonJSONBuilder extends JSONBuilder {
         dateCodec.setUsingToString(serializeDateUsingToString());
         serializerBuilder.apply(dateCodec);
         deserializerBuilder.apply(dateCodec);
+
+        // Calendar
+        CalendarCodec calendarCodec = new CalendarCodec();
+        calendarCodec.setDateCodec(dateCodec);
+        calendarCodec.setTimeZone(this.serializeUsingTimeZone());
+        calendarCodec.setDateFormat(this.serializeUseDateFormat());
 
         FastJson fastJson = new FastJson(serializerBuilder, deserializerBuilder, jsonTreeSerializerBuilder);
         FastJsonAdapter jsonHandler = new FastJsonAdapter();

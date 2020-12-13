@@ -26,8 +26,8 @@ import com.alibaba.fastjson.util.TypeUtils;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.sql.Timestamp;
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class DateCodec implements ObjectSerializer, ObjectDeserializer, Typed {
@@ -48,25 +48,39 @@ public class DateCodec implements ObjectSerializer, ObjectDeserializer, Typed {
 
     @Override
     public <T> T deserialze(DefaultJSONParser parser, Type clazz, Object fieldName) {
+        Date date = parseDate(parser, fieldName);
+        if(date==null){
+            return null;
+        }
+        if(clazz == java.sql.Date.class){
+            return (T)new java.sql.Date(date.getTime());
+        }
+        if(clazz == Timestamp.class){
+            return (T)new Timestamp(date.getTime());
+        }
+        return (T)date;
+    }
+
+    private Date parseDate(DefaultJSONParser parser, Object fieldName){
         JSONLexer lexer = parser.lexer;
 
-        Object val;
+        Date val;
         if (lexer.token() == JSONToken.LITERAL_STRING) {
             String strVal = lexer.stringVal();
             if (dateFormat != null) {
                 try {
                     val = dateFormat.parse(strVal);
-                    return (T) val;
+                    return val;
                 } catch (Throwable ex) {
                     val = null;
                 }
             }
             if (usingToString) {
                 lexer.nextToken(JSONToken.COMMA);
-                return (T) new Date(strVal);
+                return new Date(strVal);
             }
         }
-        T r = (T) new Date(lexer.longValue());
+        Date r =  new Date(lexer.longValue());
         lexer.nextToken(JSONToken.COMMA);
         return r;
     }
@@ -120,6 +134,6 @@ public class DateCodec implements ObjectSerializer, ObjectDeserializer, Typed {
 
     @Override
     public List<Type> applyTo() {
-        return Arrays.asList(new Type[]{Date.class, Calendar.class});
+        return Arrays.asList(new Type[]{Date.class, java.sql.Date.class, Timestamp.class});
     }
 }
