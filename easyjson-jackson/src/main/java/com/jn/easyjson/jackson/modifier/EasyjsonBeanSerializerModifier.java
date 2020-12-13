@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializationConfig;
 import com.fasterxml.jackson.databind.ser.BeanPropertyWriter;
 import com.fasterxml.jackson.databind.ser.BeanSerializerModifier;
+import com.jn.easyjson.jackson.DateSeries;
 import com.jn.easyjson.jackson.serializer.BooleanSerializer;
 import com.jn.easyjson.jackson.serializer.DateSerializer;
 import com.jn.easyjson.jackson.serializer.EnumSerializer;
@@ -53,7 +54,7 @@ public class EasyjsonBeanSerializerModifier extends BeanSerializerModifier {
                 return new NumberSerializer();
             }
         }
-        if (Date.class.isAssignableFrom(beanClass)) {
+        if (DateSeries.isSupported(beanClass)) {
              return new DateSerializer();
         }
         if(beanClass.isEnum()){

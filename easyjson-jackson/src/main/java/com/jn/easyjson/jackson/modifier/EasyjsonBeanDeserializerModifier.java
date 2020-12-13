@@ -18,13 +18,17 @@ import com.fasterxml.jackson.databind.BeanDescription;
 import com.fasterxml.jackson.databind.DeserializationConfig;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.deser.BeanDeserializerModifier;
+import com.jn.easyjson.jackson.DateSeries;
 import com.jn.easyjson.jackson.deserializer.BooleanDeserializer;
 import com.jn.easyjson.jackson.deserializer.DateDeserializer;
 import com.jn.easyjson.jackson.deserializer.EnumDeserializer;
 import com.jn.easyjson.jackson.deserializer.NumberDeserializer;
 import com.jn.langx.util.reflect.type.Types;
 
+import javax.xml.datatype.XMLGregorianCalendar;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class EasyjsonBeanDeserializerModifier extends BeanDeserializerModifier {
 
@@ -39,8 +43,8 @@ public class EasyjsonBeanDeserializerModifier extends BeanDeserializerModifier {
                 return new NumberDeserializer(beanClass);
             }
         }
-        if (Date.class.isAssignableFrom(beanClass)) {
-            return new DateDeserializer();
+        if (DateSeries.isSupported(beanClass)) {
+            return new DateDeserializer(beanClass);
         }
         if (beanClass.isEnum()) {
             return new EnumDeserializer(beanClass);

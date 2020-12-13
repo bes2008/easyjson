@@ -55,35 +55,6 @@ public class EasyJsonBeanDeserializerFactory extends BeanDeserializerFactory {
     }
 
     @Override
-    protected JsonDeserializer<?> findStdDeserializer(DeserializationContext ctxt,
-                                                      JavaType type, BeanDescription beanDesc)
-            throws JsonMappingException {
-        // note: we do NOT check for custom deserializers here, caller has already
-        // done that
-        Class<?> rawType = type.getRawClass();
-        String clsName = rawType.getName();
-        if (Types.isPrimitive(rawType) || clsName.startsWith("java.")) {
-            // Primitives/wrappers, other Numbers:
-            JsonDeserializer<?> deser = null;
-            // code block append by easyjson [start]
-            if (Number.class.isAssignableFrom(rawType)) {
-                deser = new NumberDeserializer().createContextual(ctxt, null, Types.getPrimitiveWrapClass(rawType));
-                if (deser != null) {
-                    return deser;
-                }
-            }
-            // code block append by easyjson [end]
-        }
-        if (Date.class.isAssignableFrom(rawType)) {
-            JsonDeserializer<?> deser = new DateDeserializer().createContextual(ctxt, null, rawType);
-            if (deser != null) {
-                return deser;
-            }
-        }
-        return super.findStdDeserializer(ctxt, type, beanDesc);
-    }
-
-    @Override
     protected List<BeanPropertyDefinition> filterBeanProps(DeserializationContext ctxt,
                                                            BeanDescription beanDesc, BeanDeserializerBuilder builder,
                                                            List<BeanPropertyDefinition> propDefsIn,
@@ -91,6 +62,7 @@ public class EasyJsonBeanDeserializerFactory extends BeanDeserializerFactory {
             throws JsonMappingException {
         List<BeanPropertyDefinition> propertyDefinitions = super.filterBeanProps(ctxt, beanDesc, builder, propDefsIn, ignored);
         if (objectMapper != null) {
+            // 应用排除规则
             ExclusionConfiguration exclusionConfiguration = objectMapper.getJsonBuilder().getExclusionConfiguration();
             Class clazz = beanDesc.getType().getRawClass();
             if (!exclusionConfiguration.isExcludedClass(clazz, false)) {
