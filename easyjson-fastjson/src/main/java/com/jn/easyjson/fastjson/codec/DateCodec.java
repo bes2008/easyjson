@@ -35,14 +35,6 @@ public class DateCodec implements ObjectSerializer, ObjectDeserializer, Typed {
     private DateFormat dateFormat;
     private boolean usingToString;
 
-    public void setDatePattern(String pattern) {
-        if (pattern == null || pattern.trim().isEmpty()) {
-            return;
-        }
-        if (dateFormat == null) {
-            dateFormat = new SimpleDateFormat(pattern);
-        }
-    }
 
     public void setDateFormat(DateFormat dateFormat) {
         if (dateFormat != null) {

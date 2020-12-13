@@ -78,7 +78,6 @@ public class FastJsonJSONBuilder extends JSONBuilder {
 
         // date
         DateCodec dateCodec = new DateCodec();
-        dateCodec.setDatePattern(serializeDateUsingPattern());
         dateCodec.setDateFormat(serializeUseDateFormat());
         dateCodec.setUsingToString(serializeDateUsingToString());
         serializerBuilder.apply(dateCodec);

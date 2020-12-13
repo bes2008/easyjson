@@ -50,9 +50,6 @@ public class DateSerializer<T extends Date> extends JsonSerializer<T> implements
         if (df == null) {
             df = Jacksons.getDateFormatAttr(ctx, JacksonConstants.SERIALIZE_DATE_USING_DATE_FORMAT_ATTR_KEY);
         }
-        if (Emptys.isEmpty(pattern)) {
-            pattern = Jacksons.getStringAttr(ctx, JacksonConstants.SERIALIZE_DATE_USING_PATTERN_ATTR_KEY);
-        }
         boolean usingToString = Jacksons.getBooleanAttr(ctx, JacksonConstants.SERIALIZE_DATE_USING_TO_STRING_ATTR_KEY);
         if (df == null && Strings.isNotBlank(pattern)) {
             df = Dates.getSimpleDateFormat(pattern);

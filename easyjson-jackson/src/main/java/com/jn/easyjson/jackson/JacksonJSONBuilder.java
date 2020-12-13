@@ -128,12 +128,10 @@ public class JacksonJSONBuilder extends JSONBuilder {
     private void configDate(EasyJsonObjectMapper objectMapper) {
         SerializationConfig serializationConfig = objectMapper.getSerializationConfig();
         serializationConfig = serializationConfig.withAttribute(JacksonConstants.SERIALIZE_DATE_USING_DATE_FORMAT_ATTR_KEY, serializeUseDateFormat());
-        serializationConfig = serializationConfig.withAttribute(JacksonConstants.SERIALIZE_DATE_USING_PATTERN_ATTR_KEY, serializeDateUsingPattern());
         serializationConfig = serializationConfig.withAttribute(JacksonConstants.SERIALIZE_DATE_USING_TO_STRING_ATTR_KEY, serializeDateUsingToString());
 
         DeserializationConfig deserializationConfig = objectMapper.getDeserializationConfig();
         deserializationConfig = deserializationConfig.withAttribute(JacksonConstants.SERIALIZE_DATE_USING_DATE_FORMAT_ATTR_KEY, serializeUseDateFormat());
-        deserializationConfig = deserializationConfig.withAttribute(JacksonConstants.SERIALIZE_DATE_USING_PATTERN_ATTR_KEY, serializeDateUsingPattern());
         deserializationConfig = deserializationConfig.withAttribute(JacksonConstants.SERIALIZE_DATE_USING_TO_STRING_ATTR_KEY, serializeDateUsingToString());
 
 

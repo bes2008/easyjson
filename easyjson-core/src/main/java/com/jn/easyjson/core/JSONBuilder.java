@@ -19,10 +19,13 @@ import com.jn.easyjson.core.codec.dialect.DialectIdentify;
 import com.jn.easyjson.core.exclusion.Exclusion;
 import com.jn.easyjson.core.exclusion.ExclusionConfiguration;
 import com.jn.easyjson.core.exclusion.IgnoreAnnotationExclusion;
+import com.jn.langx.util.Dates;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.function.Consumer2;
 
 import java.text.DateFormat;
+import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * 代表单次 JSON 转换请求的 JSON 构建器。
@@ -46,10 +49,13 @@ public abstract class JSONBuilder implements Cloneable {
     private boolean serializeEnumUsingToString = false; // default using name()
     private boolean serializeEnumUsingValue = false;
     private String serializeEnumUsingField = null;
-    // date priority: dateFormat > pattern > toString() > timestamp []
+    // date priority: dateFormat > pattern > toString() > timestamp
+    // 只有 timestamp 会损失时区信息
     private DateFormat dateFormat = null;
     private String serializeDateUsingPattern = null;// default : using timestamp
     private boolean serializeDateUsingToString = false;
+    private TimeZone timeZone = TimeZone.getDefault();
+    private Locale locale = Locale.getDefault();
     // number priority: longAsString > numberAsString > number
     private boolean serializeLongAsString = false;
     private boolean serializeNumberAsString = false;
@@ -222,9 +228,21 @@ public abstract class JSONBuilder implements Cloneable {
     }
 
     public DateFormat serializeUseDateFormat() {
+        if (dateFormat != null) {
+            return dateFormat;
+        }
+        if (Strings.isNotBlank(serializeDateUsingPattern)) {
+            this.dateFormat = Dates.getSimpleDateFormat(serializeDateUsingPattern, timeZone, locale);
+        }
         return dateFormat;
     }
 
+    /**
+     * 用默认时区，当地语言
+     *
+     * @param datePattern
+     * @return
+     */
     public JSONBuilder serializeDateUsingPattern(String datePattern) {
         this.serializeDateUsingPattern = datePattern;
         return this;
@@ -241,6 +259,29 @@ public abstract class JSONBuilder implements Cloneable {
 
     public boolean serializeDateUsingToString() {
         return serializeDateUsingToString;
+    }
+
+    public JSONBuilder serializeUsingTimeZone(TimeZone timeZone) {
+        if (timeZone != null) {
+            this.timeZone = timeZone;
+        }
+        return this;
+    }
+
+    public TimeZone serializeUsingTimeZone() {
+        return this.timeZone;
+    }
+
+
+    public JSONBuilder serializeUsingLocale(Locale locale) {
+        if (locale != null) {
+            this.locale = locale;
+        }
+        return this;
+    }
+
+    public Locale serializeUsingLocale() {
+        return this.locale;
     }
 
     public JSONBuilder serializeBooleanUsingOnOff(boolean value) {
@@ -365,12 +406,15 @@ public abstract class JSONBuilder implements Cloneable {
         builder.serializeNumberAsString(this.serializeNumberAsString);
         builder.serializeUseDateFormat(this.dateFormat);
         builder.serializeDateUsingPattern(this.serializeDateUsingPattern);
+        builder.serializeUsingTimeZone(this.timeZone);
         builder.serializeDateUsingToString(this.serializeDateUsingToString);
+        builder.serializeUsingLocale(this.serializeUsingLocale());
         builder.serializeBooleanUsingOnOff(this.serializeBooleanUsingOnOff);
         builder.serializeBooleanUsing1_0(this.serializeBooleanUsing1_0);
         builder.enableCustomConfiguration(this.enableCustomConfiguration);
         builder.dialectIdentify(this.dialectIdentify());
         builder.proxyDialectIdentify(this.proxyDialectIdentify());
         builder.serializeBytesAsBase64String(this.serializeBytesAsBase64String);
+
     }
 }

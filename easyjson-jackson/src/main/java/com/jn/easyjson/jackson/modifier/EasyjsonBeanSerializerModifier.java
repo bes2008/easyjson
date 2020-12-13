@@ -28,7 +28,6 @@ import com.jn.easyjson.jackson.serializer.NumberSerializer;
 import com.jn.langx.util.reflect.Reflects;
 import com.jn.langx.util.reflect.type.Types;
 
-import java.util.Date;
 import java.util.List;
 
 public class EasyjsonBeanSerializerModifier extends BeanSerializerModifier {

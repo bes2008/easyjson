@@ -36,7 +36,6 @@ public class JacksonConstants {
 
     // date priority attribute keys:
     public static final String SERIALIZE_DATE_USING_DATE_FORMAT_ATTR_KEY = "SERIALIZE_DATE_USING_DATE_FORMAT";
-    public static final String SERIALIZE_DATE_USING_PATTERN_ATTR_KEY = "SERIALIZE_DATE_USING_PATTERN";
     public static final String SERIALIZE_DATE_USING_TO_STRING_ATTR_KEY = "SERIALIZE_DATE_USING_TO_STRING";
 
 
