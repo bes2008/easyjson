@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Date;
@@ -148,6 +149,24 @@ public class DateTypeAdapter extends TypeAdapter<Date> implements JSONBuilderAwa
 
     @Override
     public Date read(JsonReader in) throws IOException {
+       Date date = readDate(in);
+       if(date==null){
+           return null;
+       }
+       Class type = null;
+       if(currentField!=null){
+           type = currentField.getType();
+       }
+       if(type == java.sql.Date.class){
+           return new java.sql.Date(date.getTime());
+       }
+       if(type == Timestamp.class){
+           return new Timestamp(date.getTime());
+       }
+       return date;
+    }
+
+    private Date readDate(JsonReader in) throws IOException {
         JsonToken jsonToken = in.peek();
         if (jsonToken == JsonToken.NULL) {
             return null;
