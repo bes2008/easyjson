@@ -84,7 +84,7 @@ Provides a unified JSON access API, you can adapter any JSON library to Gson, Ja
 &lt;dependency>
     &lt;groupId>com.github.fangjinuo.easyjson&lt;/groupId>
     &lt;artifactId>easyjson-gson&lt;/artifactId>
-    &lt;version>${version}/version>
+    &lt;version>${version}</version>
 &lt;/dependency>
                 </pre>     
                 <pre>
