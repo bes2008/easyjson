@@ -35,7 +35,6 @@
                     <artifactId>easyjson-fastjson</artifactId>
                 </exclusion>
             </exclusions>
-            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>com.github.fangjinuo.easyjson</groupId>

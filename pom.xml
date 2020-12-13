@@ -25,6 +25,7 @@
         <module>moshi-to-easyjson</module>
         <module>boonjson-to-easyjson</module>
         <module>gson-to-easyjson</module>
+
     </modules>
     <name>easyjson</name>
     <packaging>pom</packaging>
