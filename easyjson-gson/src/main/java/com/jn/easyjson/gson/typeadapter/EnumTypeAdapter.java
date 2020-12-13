@@ -18,9 +18,7 @@ import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
-import com.jn.easyjson.core.JSONBuilderAware;
 import com.jn.easyjson.core.codec.dialect.PropertyCodecConfiguration;
-import com.jn.easyjson.gson.GsonJSONBuilder;
 import com.jn.langx.util.Emptys;
 import com.jn.langx.util.Numbers;
 import com.jn.langx.util.collection.Collects;
@@ -36,7 +34,7 @@ import java.util.List;
 /**
  * priority : ordinal() > toString() > field > name()
  */
-public class EnumTypeAdapter extends TypeAdapter<Enum> implements JSONBuilderAware<GsonJSONBuilder>, FieldAware, JsonSerializer<Enum>, JsonDeserializer<Enum> {
+public class EnumTypeAdapter extends EasyjsonAbstractTypeAdapter<Enum> implements JsonSerializer<Enum>, JsonDeserializer<Enum> {
     private static List<JsonToken> invalidValueTokens = Collects.newArrayList(
             JsonToken.BEGIN_ARRAY,
             JsonToken.END_ARRAY,
@@ -49,30 +47,7 @@ public class EnumTypeAdapter extends TypeAdapter<Enum> implements JSONBuilderAwa
     private boolean usingValue = false; // using ordinal()
     private boolean usingToString = false;
     private String usingField = null;
-    /**
-     * 当使用 TypeAdapter API时，不能为 null
-     */
-    private Class<Enum> enumClass;
-    private Field currentField;
-    private GsonJSONBuilder jsonBuilder;
 
-    public void setEnumClass(Class enumClass) {
-        this.enumClass = enumClass;
-    }
-
-    @Override
-    public GsonJSONBuilder getJSONBuilder() {
-        return this.jsonBuilder;
-    }
-
-    @Override
-    public void setJSONBuilder(GsonJSONBuilder jsonBuilder) {
-        this.jsonBuilder = jsonBuilder;
-    }
-
-    public void setField(Field currentField) {
-        this.currentField = currentField;
-    }
 
     public boolean isUsingValue() {
         return usingValue;
@@ -224,8 +199,8 @@ public class EnumTypeAdapter extends TypeAdapter<Enum> implements JSONBuilderAwa
             return;
         }
 
-        if (jsonBuilder != null && currentField != null) {
-            PropertyCodecConfiguration propertyCodecConfiguration = PropertyCodecConfiguration.getPropertyCodecConfiguration(jsonBuilder.proxyDialectIdentify(), currentField.getDeclaringClass(), currentField.getName());
+        if (jsonBuilder != null && isField()) {
+            PropertyCodecConfiguration propertyCodecConfiguration = PropertyCodecConfiguration.getPropertyCodecConfiguration(jsonBuilder.proxyDialectIdentify(), getDeclaringClass(), this.currentFieldOrClass.getFieldName());
             if (propertyCodecConfiguration != null) {
                 if (propertyCodecConfiguration.getEnumUsingIndex()) {
                     out.value(value.ordinal());
@@ -299,13 +274,13 @@ public class EnumTypeAdapter extends TypeAdapter<Enum> implements JSONBuilderAwa
         Double doubleValue = jsonToken == JsonToken.NUMBER ? in.nextDouble() : null;
         Boolean booleanValue = jsonToken == JsonToken.BOOLEAN ? in.nextBoolean() : null;
 
-        EnumSet es = EnumSet.allOf(enumClass);
+        EnumSet es = EnumSet.allOf(getDataClass());
 
-        if (jsonBuilder != null && currentField != null) {
-            PropertyCodecConfiguration propertyCodecConfiguration = PropertyCodecConfiguration.getPropertyCodecConfiguration(jsonBuilder.proxyDialectIdentify(), currentField.getDeclaringClass(), currentField.getName());
+        if (jsonBuilder != null && isField()) {
+            PropertyCodecConfiguration propertyCodecConfiguration = PropertyCodecConfiguration.getPropertyCodecConfiguration(jsonBuilder.proxyDialectIdentify(), getDeclaringClass(), this.currentFieldOrClass.getFieldName());
             if (propertyCodecConfiguration != null) {
                 if (propertyCodecConfiguration.getEnumUsingIndex()) {
-                    return Enums.ofValue(Numbers.toInt(doubleValue), enumClass);
+                    return Enums.ofValue(Numbers.toInt(doubleValue), getDataClass());
                 }
                 if (propertyCodecConfiguration.getEnumUsingToString()) {
                     if (Emptys.isNotEmpty(stringValue)) {
@@ -319,30 +294,30 @@ public class EnumTypeAdapter extends TypeAdapter<Enum> implements JSONBuilderAwa
                 }
 
                 if (propertyCodecConfiguration.getEnumUsingName()) {
-                    return Enums.ofName(enumClass, stringValue);
+                    return Enums.ofName(getDataClass(), stringValue);
                 }
             }
         }
 
         if (usingField != null) {
             try {
-                Field field = Reflects.getAnyField(enumClass, usingField);
+                Field field = Reflects.getAnyField(getDataClass(), usingField);
                 if (field == null) {
                     return null;
                 }
                 if (stringValue != null) {
                     if (Reflects.isSubClass(CharSequence.class, field.getType())) {
-                        return Enums.ofField(enumClass, usingField, stringValue);
+                        return Enums.ofField(getDataClass(), usingField, stringValue);
                     }
                 }
                 if (doubleValue != null) {
                     if (Reflects.isSubClass(Number.class, field.getType())) {
-                        return Enums.ofField(enumClass, usingField, doubleValue);
+                        return Enums.ofField(getDataClass(), usingField, doubleValue);
                     }
                 }
                 if (booleanValue != null) {
                     if (Boolean.class == field.getType()) {
-                        return Enums.ofField(enumClass, usingField, booleanValue);
+                        return Enums.ofField(getDataClass(), usingField, booleanValue);
                     }
                 }
             } catch (Throwable ex) {
@@ -351,7 +326,7 @@ public class EnumTypeAdapter extends TypeAdapter<Enum> implements JSONBuilderAwa
         }
 
         if (usingValue && jsonToken == JsonToken.NUMBER) {
-            return Enums.ofValue(doubleValue.intValue(), enumClass);
+            return Enums.ofValue(doubleValue.intValue(), getDataClass());
         }
         if (usingToString && jsonToken == JsonToken.STRING) {
             String value = in.nextString();
@@ -364,7 +339,7 @@ public class EnumTypeAdapter extends TypeAdapter<Enum> implements JSONBuilderAwa
         }
 
         if (usingName) {
-            return Enums.ofName(enumClass, stringValue);
+            return Enums.ofName(getDataClass(), stringValue);
         }
         return null;
     }

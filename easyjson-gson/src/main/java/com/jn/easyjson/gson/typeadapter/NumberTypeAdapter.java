@@ -36,30 +36,9 @@ import java.util.List;
 /**
  * priority: longUsingString > usingString > number
  */
-public class NumberTypeAdapter extends TypeAdapter<Number> implements JSONBuilderAware<GsonJSONBuilder>, FieldAware, JsonSerializer<Number>, JsonDeserializer<Number> {
+public class NumberTypeAdapter extends EasyjsonAbstractTypeAdapter<Number> implements JsonSerializer<Number>, JsonDeserializer<Number> {
     private boolean longUsingString;
     private boolean usingString;
-    private Field currentField;
-    private GsonJSONBuilder jsonBuilder;
-    private Class targetClass;
-
-    public void setTargetClass(Class targetClass) {
-        this.targetClass = targetClass;
-    }
-
-    @Override
-    public void setJSONBuilder(GsonJSONBuilder jsonBuilder) {
-        this.jsonBuilder = jsonBuilder;
-    }
-
-    @Override
-    public GsonJSONBuilder getJSONBuilder() {
-        return this.jsonBuilder;
-    }
-
-    public void setField(Field currentField) {
-        this.currentField = currentField;
-    }
 
     public void setLongUsingString(boolean longUsingString) {
         this.longUsingString = longUsingString;
@@ -194,7 +173,7 @@ public class NumberTypeAdapter extends TypeAdapter<Number> implements JSONBuilde
         if(invalidValueTokens.contains(jsonToken)){
             return null;
         }
-
+        Class targetClass = getDataClass();
         if (jsonToken==JsonToken.STRING) {
             String stringValue = jsonToken==JsonToken.STRING ? in.nextString():null;
             if (targetClass == Long.TYPE || targetClass == Long.class) {

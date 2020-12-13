@@ -16,6 +16,6 @@ package com.jn.easyjson.gson.typeadapter;
 
 import java.lang.reflect.Field;
 
-public interface FieldAware {
+public interface FieldAware extends ClassAware{
     void setField(Field field);
 }

@@ -1,11 +1,8 @@
 package com.jn.easyjson.gson.typeadapter;
 
-import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
-import com.jn.easyjson.core.JSONBuilderAware;
-import com.jn.easyjson.gson.GsonJSONBuilder;
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.codec.base64.Base64;
 import com.jn.langx.util.collection.Collects;
@@ -13,13 +10,9 @@ import com.jn.langx.util.collection.PrimitiveArrays;
 import com.jn.langx.util.io.Charsets;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.List;
 
-public class BytesTypeAdapter extends TypeAdapter implements JSONBuilderAware<GsonJSONBuilder>, FieldAware {
-    private GsonJSONBuilder jsonBuilder;
-
-    private Field field;
+public class BytesTypeAdapter extends EasyjsonAbstractTypeAdapter{
 
     /**
      * 参数只支持 Byte[], byte[]
@@ -61,7 +54,7 @@ public class BytesTypeAdapter extends TypeAdapter implements JSONBuilderAware<Gs
         String str = in.nextString();
         byte[] bytes = str.getBytes(Charsets.UTF_8);
         bytes = Base64.decodeBase64(bytes);
-        if (field != null && field.getType() == Byte[].class) {
+        if (getDataClass() == Byte[].class) {
             return PrimitiveArrays.wrap(bytes, true);
         }
         return bytes;
@@ -76,18 +69,5 @@ public class BytesTypeAdapter extends TypeAdapter implements JSONBuilderAware<Gs
             JsonToken.NAME
     );
 
-    @Override
-    public void setJSONBuilder(GsonJSONBuilder jsonBuilder) {
-        this.jsonBuilder = jsonBuilder;
-    }
 
-    @Override
-    public GsonJSONBuilder getJSONBuilder() {
-        return jsonBuilder;
-    }
-
-    @Override
-    public void setField(Field field) {
-        this.field = field;
-    }
 }

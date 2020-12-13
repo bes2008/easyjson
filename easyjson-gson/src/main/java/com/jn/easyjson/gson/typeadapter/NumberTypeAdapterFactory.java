@@ -38,7 +38,7 @@ public class NumberTypeAdapterFactory implements TypeAdapterFactory {
             numberTypeAdapter.setLongUsingString(jsonBuilder.serializeLongAsString());
             numberTypeAdapter.setUsingString(jsonBuilder.serializeNumberAsString());
             numberTypeAdapter.setJSONBuilder(jsonBuilder);
-            numberTypeAdapter.setTargetClass(type.getRawType());
+            numberTypeAdapter.setClass(type.getRawType());
             return (TypeAdapter<T>) numberTypeAdapter;
         }
         return null;

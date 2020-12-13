@@ -38,7 +38,7 @@ public class EnumTypeAdapterFactory implements TypeAdapterFactory {
             enumTypeAdapter.setUsingField(jsonBuilder.serializeEnumUsingField());
             enumTypeAdapter.setUsingToString(jsonBuilder.serializeEnumUsingToString());
             enumTypeAdapter.setJSONBuilder(jsonBuilder);
-            enumTypeAdapter.setEnumClass(type.getRawType());
+            enumTypeAdapter.setClass(type.getRawType());
             return (TypeAdapter<T>) enumTypeAdapter;
         }
         return null;

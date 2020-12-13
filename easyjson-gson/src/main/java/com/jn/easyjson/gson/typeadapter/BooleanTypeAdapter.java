@@ -18,37 +18,19 @@ import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
-import com.jn.easyjson.core.JSONBuilderAware;
 import com.jn.easyjson.core.codec.dialect.PropertyCodecConfiguration;
-import com.jn.easyjson.gson.GsonJSONBuilder;
 import com.jn.langx.util.collection.Collects;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;
 
-public class BooleanTypeAdapter extends TypeAdapter<Boolean> implements JSONBuilderAware<GsonJSONBuilder>, FieldAware, JsonSerializer<Boolean>, JsonDeserializer<Boolean> {
+public class BooleanTypeAdapter extends EasyjsonAbstractTypeAdapter<Boolean> implements JsonSerializer<Boolean>, JsonDeserializer<Boolean> {
     private static final List<String> evalTrues = Arrays.asList(new String[]{"true", "on", "1"});
     private boolean using1_0 = false;
     private boolean usingOnOff = false;
-    private Field currentField;
-    private GsonJSONBuilder jsonBuilder;
 
-    @Override
-    public GsonJSONBuilder getJSONBuilder() {
-        return jsonBuilder;
-    }
-
-    @Override
-    public void setJSONBuilder(GsonJSONBuilder jsonBuilder) {
-        this.jsonBuilder = jsonBuilder;
-    }
-
-    public void setField(Field currentField) {
-        this.currentField = currentField;
-    }
 
     public void setUsing1_0(boolean using1_0) {
         this.using1_0 = using1_0;
@@ -98,8 +80,8 @@ public class BooleanTypeAdapter extends TypeAdapter<Boolean> implements JSONBuil
             return;
         }
 
-        if (jsonBuilder != null && currentField != null) {
-            PropertyCodecConfiguration propertyCodecConfiguration = PropertyCodecConfiguration.getPropertyCodecConfiguration(jsonBuilder.proxyDialectIdentify(), currentField.getDeclaringClass(), currentField.getName());
+        if (jsonBuilder != null && isField()) {
+            PropertyCodecConfiguration propertyCodecConfiguration = PropertyCodecConfiguration.getPropertyCodecConfiguration(jsonBuilder.proxyDialectIdentify(), getDeclaringClass(), this.currentFieldOrClass.getFieldName());
             if (propertyCodecConfiguration != null) {
                 if (propertyCodecConfiguration.getBooleanUsingONOFF()) {
                     out.value(value ? "on" : "off");

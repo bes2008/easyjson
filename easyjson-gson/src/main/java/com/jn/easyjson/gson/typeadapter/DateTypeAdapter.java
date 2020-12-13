@@ -18,9 +18,7 @@ import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
-import com.jn.easyjson.core.JSONBuilderAware;
 import com.jn.easyjson.core.codec.dialect.PropertyCodecConfiguration;
-import com.jn.easyjson.gson.GsonJSONBuilder;
 import com.jn.langx.util.Dates;
 import com.jn.langx.util.Emptys;
 import com.jn.langx.util.Strings;
@@ -29,7 +27,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.sql.Timestamp;
 import java.text.DateFormat;
@@ -37,27 +34,10 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
-public class DateTypeAdapter extends TypeAdapter<Date> implements JSONBuilderAware<GsonJSONBuilder>, FieldAware, JsonSerializer<Date>, JsonDeserializer<Date> {
+public class DateTypeAdapter extends EasyjsonAbstractTypeAdapter<Date> implements JsonSerializer<Date>, JsonDeserializer<Date> {
     private static final Logger logger = LoggerFactory.getLogger(DateTypeAdapter.class);
     private DateFormat df = null;
     private boolean usingToString = false;
-    // 使用 TypeAdapter API 时需要
-    private Field currentField;
-    private GsonJSONBuilder jsonBuilder;
-
-    @Override
-    public GsonJSONBuilder getJSONBuilder() {
-        return this.jsonBuilder;
-    }
-
-    @Override
-    public void setJSONBuilder(GsonJSONBuilder jsonBuilder) {
-        this.jsonBuilder = jsonBuilder;
-    }
-
-    public void setField(Field currentField) {
-        this.currentField = currentField;
-    }
 
     public void setPattern(String pattern) {
         if (df != null && Emptys.isNotEmpty(pattern)) {
@@ -113,8 +93,8 @@ public class DateTypeAdapter extends TypeAdapter<Date> implements JSONBuilderAwa
             return;
         }
 
-        if (jsonBuilder != null && currentField != null) {
-            PropertyCodecConfiguration propertyCodecConfiguration = PropertyCodecConfiguration.getPropertyCodecConfiguration(jsonBuilder.proxyDialectIdentify(), currentField.getDeclaringClass(), currentField.getName());
+        if (jsonBuilder != null && isField()) {
+            PropertyCodecConfiguration propertyCodecConfiguration = PropertyCodecConfiguration.getPropertyCodecConfiguration(jsonBuilder.proxyDialectIdentify(), getDeclaringClass(), currentFieldOrClass.getFieldName());
             if (propertyCodecConfiguration != null) {
                 if (propertyCodecConfiguration.getDateFormat() != null) {
                     out.value(propertyCodecConfiguration.getDateFormat().format(value));
@@ -153,10 +133,7 @@ public class DateTypeAdapter extends TypeAdapter<Date> implements JSONBuilderAwa
        if(date==null){
            return null;
        }
-       Class type = null;
-       if(currentField!=null){
-           type = currentField.getType();
-       }
+       Class type = getDataClass();
        if(type == java.sql.Date.class){
            return new java.sql.Date(date.getTime());
        }
@@ -175,8 +152,8 @@ public class DateTypeAdapter extends TypeAdapter<Date> implements JSONBuilderAwa
             return null;
         }
         PropertyCodecConfiguration propertyCodecConfiguration = null;
-        if (jsonBuilder != null && currentField != null) {
-            propertyCodecConfiguration = PropertyCodecConfiguration.getPropertyCodecConfiguration(jsonBuilder.proxyDialectIdentify(), currentField.getDeclaringClass(), currentField.getName());
+        if (jsonBuilder != null && isField()) {
+            propertyCodecConfiguration = PropertyCodecConfiguration.getPropertyCodecConfiguration(jsonBuilder.proxyDialectIdentify(), getDeclaringClass(), currentFieldOrClass.getFieldName());
         }
 
         if (jsonToken == JsonToken.STRING) {
