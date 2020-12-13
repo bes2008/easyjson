@@ -1,13 +1,18 @@
 package com.jn.easyjson.tests.entity;
 
 import java.sql.Timestamp;
+import java.util.Calendar;
+import java.util.Locale;
 
 public class BusEntity {
     private String id;
     private String name;
     private long createTime;
     private Timestamp updateTime;
-
+    private Calendar calendar;
+    private byte dd = (byte)33;
+    private char a = 'z';
+    private Locale.Category oneEnum = Locale.Category.DISPLAY;
     public String getId() {
         return id;
     }
@@ -40,6 +45,38 @@ public class BusEntity {
         this.updateTime = updateTime;
     }
 
+    public Calendar getCalendar() {
+        return calendar;
+    }
+
+    public void setCalendar(Calendar calendar) {
+        this.calendar = calendar;
+    }
+
+    public byte getDd() {
+        return dd;
+    }
+
+    public void setDd(byte dd) {
+        this.dd = dd;
+    }
+
+    public char getA() {
+        return a;
+    }
+
+    public void setA(char a) {
+        this.a = a;
+    }
+
+    public Locale.Category getOneEnum() {
+        return oneEnum;
+    }
+
+    public void setOneEnum(Locale.Category oneEnum) {
+        this.oneEnum = oneEnum;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -48,17 +85,25 @@ public class BusEntity {
         BusEntity busEntity = (BusEntity) o;
 
         if (createTime != busEntity.createTime) return false;
-        if (id != null ? !id.equals(busEntity.id) : busEntity.id != null) return false;
-        if (name != null ? !name.equals(busEntity.name) : busEntity.name != null) return false;
-        return updateTime != null ? updateTime.equals(busEntity.updateTime) : busEntity.updateTime == null;
+        if (dd != busEntity.dd) return false;
+        if (a != busEntity.a) return false;
+        if (!id.equals(busEntity.id)) return false;
+        if (!name.equals(busEntity.name)) return false;
+        if (!updateTime.equals(busEntity.updateTime)) return false;
+        if (!calendar.equals(busEntity.calendar)) return false;
+        return oneEnum == busEntity.oneEnum;
     }
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
+        int result = id.hashCode();
+        result = 31 * result + name.hashCode();
         result = 31 * result + (int) (createTime ^ (createTime >>> 32));
-        result = 31 * result + (updateTime != null ? updateTime.hashCode() : 0);
+        result = 31 * result + updateTime.hashCode();
+        result = 31 * result + calendar.hashCode();
+        result = 31 * result + (int) dd;
+        result = 31 * result + (int) a;
+        result = 31 * result + oneEnum.hashCode();
         return result;
     }
 }
