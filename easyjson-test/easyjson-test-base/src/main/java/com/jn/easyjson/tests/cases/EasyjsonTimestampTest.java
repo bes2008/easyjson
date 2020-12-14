@@ -3,7 +3,9 @@ package com.jn.easyjson.tests.cases;
 import com.jn.easyjson.core.JSON;
 import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.easyjson.tests.entity.BusEntity;
+import com.jn.easyjson.tests.utils.Asserts;
 import org.testng.annotations.Test;
+import org.testng.asserts.Assertion;
 
 import java.sql.Timestamp;
 import java.util.Calendar;
@@ -19,7 +21,7 @@ public abstract class EasyjsonTimestampTest extends AbstractBaseTest {
         BusEntity busEntity2 = json.fromJson(jsonstring1, BusEntity.class);
         String jsonstring2 = json.toJson(busEntity2);
         System.out.println(jsonstring2);
-        System.out.println(busEntity1.equals(busEntity2));
+        Asserts.assertDeepEquals(busEntity1,busEntity2);
     }
 
     protected BusEntity getBusBean() {

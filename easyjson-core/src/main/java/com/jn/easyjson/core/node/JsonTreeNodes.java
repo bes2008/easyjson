@@ -18,6 +18,7 @@ import com.jn.easyjson.core.JSON;
 import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.easyjson.core.JsonException;
 import com.jn.easyjson.core.JsonTreeNode;
+import com.jn.easyjson.core.util.JSONs;
 import com.jn.langx.util.reflect.type.Primitives;
 
 import java.util.*;
@@ -36,14 +37,14 @@ public class JsonTreeNodes {
         }
 
         JsonTreeNode node = null;
-        if (mapper != null) {
+        if (mapper != null && mapper.isAcceptable(object)) {
             node = mapper.mapping(object);
-        }
-        if (node != null) {
-            return node;
+            if (node != null) {
+                return node;
+            }
         }
 
-        if (Primitives.isPrimitive(object.getClass())) {
+        if (Primitives.isPrimitiveOrPrimitiveWrapperType(object.getClass())) {
             return new JsonPrimitiveNode(object);
         }
 
@@ -91,7 +92,11 @@ public class JsonTreeNodes {
             jsonString = json.toJson(object);
         }
         try {
-            return json.fromJson(jsonString);
+            if(JSONs.isJsonString(jsonString) || JSONs.isJsonArrayOrObject(jsonString)) {
+                return json.fromJson(jsonString);
+            }else{
+                return new JsonPrimitiveNode(jsonString);
+            }
         }catch (JsonException ex){
             return new JsonPrimitiveNode(jsonString);
         }
