@@ -15,7 +15,15 @@
 package com.jn.easyjson.core.node;
 
 import com.jn.easyjson.core.JsonTreeNode;
+import com.jn.langx.annotation.NonNull;
+import com.jn.langx.annotation.Nullable;
 
+/**
+ * 和JsonTreeNodes 配合使用，用来自定义如何将一个对象转换为JsonTreeNode
+ */
 public interface ToJsonTreeNodeMapper {
-    JsonTreeNode mapping(Object object);
+
+    JsonTreeNode mapping(@Nullable Object object);
+
+    boolean isAcceptable(@NonNull Object object);
 }

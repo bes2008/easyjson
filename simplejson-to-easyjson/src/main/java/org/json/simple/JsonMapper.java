@@ -17,10 +17,15 @@ package org.json.simple;
 import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.easyjson.core.JsonTreeNode;
 import com.jn.easyjson.core.node.*;
+import com.jn.langx.annotation.NonNull;
+import com.jn.langx.util.collection.Collects;
+import com.jn.langx.util.function.Predicate;
+import com.jn.langx.util.reflect.Reflects;
 
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 public class JsonMapper {
@@ -66,8 +71,24 @@ public class JsonMapper {
         });
     }
 
+    private static final List<Class> supportedTypes = Collects.<Class>newArrayList(
+            JSONArray.class,
+            JSONObject.class,
+            JSONAware.class,
+            JSONStreamAware.class
+    );
     public static JsonTreeNode toJsonTreeNode(Object object) {
         return JsonTreeNodes.fromJavaObject(object, new ToJsonTreeNodeMapper() {
+            @Override
+            public boolean isAcceptable(@NonNull final Object object) {
+                return Collects.anyMatch(supportedTypes, new Predicate<Class>() {
+                    @Override
+                    public boolean test(Class value) {
+                        return Reflects.isSubClassOrEquals(value, object.getClass());
+                    }
+                });
+            }
+
             @Override
             public JsonTreeNode mapping(Object object) {
                 if (object instanceof JSONArray) {

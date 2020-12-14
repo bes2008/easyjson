@@ -17,6 +17,7 @@ package net.sf.json;
 
 import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.easyjson.core.JsonTreeNode;
+import com.jn.easyjson.core.node.JsonNullNode;
 import com.jn.easyjson.core.node.JsonTreeNodes;
 import com.jn.langx.util.reflect.type.Primitives;
 import net.sf.json.easyjson.JsonMapper;
@@ -126,7 +127,7 @@ public final class JSONObject extends AbstractJSON implements JSON, Map, Compara
             return new JSONObject(true);
         }
 
-        if (Primitives.isPrimitive(jsonObj.getClass())) {
+        if (Primitives.isPrimitiveOrPrimitiveWrapperType(jsonObj.getClass())) {
             throw new JSONException("primitive type value " + jsonObj + " is not a JSONObject");
         }
 
@@ -180,7 +181,7 @@ public final class JSONObject extends AbstractJSON implements JSON, Map, Compara
             clazz = jsonConfig.getRootClass();
         }
         com.jn.easyjson.core.JSON json = JsonMapper.buildJSON(jsonConfig);
-        JsonTreeNode node1 = json.fromJson(json.toJson(root));
+        JsonTreeNode node1 = root == null ? JsonNullNode.INSTANCE : json.fromJson(json.toJson(root));
         JsonTreeNode node2 = JsonMapper.toJsonTreeNode(jsonObject);
 
         if (clazz == null) {

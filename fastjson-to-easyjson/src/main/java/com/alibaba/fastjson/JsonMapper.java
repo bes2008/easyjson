@@ -18,21 +18,38 @@ import com.alibaba.fastjson.serializer.JSONSerializable;
 import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.easyjson.core.JsonTreeNode;
 import com.jn.easyjson.core.node.*;
+import com.jn.langx.annotation.NonNull;
+import com.jn.langx.util.collection.Collects;
+import com.jn.langx.util.function.Predicate;
+import com.jn.langx.util.reflect.Reflects;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 public class JsonMapper {
 
+    private static final List<Class> supportedTypes = Collects.<Class>newArrayList(
+            JSONSerializable.class,
+            JSONArray.class,
+            JSONObject.class,
+            JSONAware.class
+    );
+
     public static JsonTreeNode toJsonTreeNode(Object object) {
         return JsonTreeNodes.fromJavaObject(object, new ToJsonTreeNodeMapper() {
             @Override
-            public JsonTreeNode mapping(Object object) {
-                if (object instanceof JSONSerializable) {
-                    String json = JSON.toJSONString(object);
-                    return JSONBuilderProvider.simplest().fromJson(json);
-                }
+            public boolean isAcceptable(@NonNull final Object object) {
+                return Collects.anyMatch(supportedTypes, new Predicate<Class>() {
+                    @Override
+                    public boolean test(Class value) {
+                        return Reflects.isSubClassOrEquals(value, object.getClass());
+                    }
+                });
+            }
 
+            @Override
+            public JsonTreeNode mapping(Object object) {
                 if (object instanceof JSONArray) {
                     JSONArray jsonArray = (JSONArray) object;
                     JsonArrayNode arrayNode = new JsonArrayNode();

@@ -4,11 +4,15 @@ import com.jn.easyjson.core.JSONBuilder;
 import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.easyjson.core.JsonTreeNode;
 import com.jn.easyjson.core.node.*;
+import com.jn.langx.util.collection.Collects;
+import com.jn.langx.util.function.Predicate;
+import com.jn.langx.util.reflect.Reflects;
 import net.sf.json.*;
 import net.sf.json.util.JSONTokener;
 
 import java.lang.reflect.Modifier;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 public class JsonMapper {
@@ -103,6 +107,23 @@ public class JsonMapper {
 
         private JsonTreeNodeMapper(JsonConfig jsonConfig) {
             this.jsonConfig = jsonConfig;
+        }
+        private static final List<Class> supportedTypes = Collects.<Class>newArrayList(
+                JSONNull.class,
+                JSONArray.class,
+                JSONObject.class,
+                JSONString.class,
+                JSON.class,
+                JSONTokener.class
+        );
+        @Override
+        public boolean isAcceptable(final Object object) {
+            return Collects.anyMatch(supportedTypes, new Predicate<Class>() {
+                @Override
+                public boolean test(Class cls) {
+                    return Reflects.isSubClassOrEquals(cls, object.getClass());
+                }
+            });
         }
 
         @Override
