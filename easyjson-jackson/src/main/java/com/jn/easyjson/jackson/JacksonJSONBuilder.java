@@ -15,6 +15,7 @@
 package com.jn.easyjson.jackson;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.module.SimpleDeserializers;
 import com.fasterxml.jackson.databind.module.SimpleModule;
@@ -191,6 +192,7 @@ public class JacksonJSONBuilder extends JSONBuilder {
         }
         mapper.configure(SerializationFeature.INDENT_OUTPUT, prettyFormat());
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        mapper.configure(JsonParser.Feature.IGNORE_UNDEFINED, true);
 
         JacksonAdapter jsonHandler = new JacksonAdapter();
         jsonHandler.setObjectMapper(mapper);
