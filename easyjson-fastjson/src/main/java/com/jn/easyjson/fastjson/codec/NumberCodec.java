@@ -22,6 +22,8 @@ import com.alibaba.fastjson.parser.deserializer.ObjectDeserializer;
 import com.alibaba.fastjson.serializer.JSONSerializer;
 import com.alibaba.fastjson.serializer.ObjectSerializer;
 import com.alibaba.fastjson.serializer.SerializeWriter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -30,6 +32,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class NumberCodec implements ObjectSerializer, ObjectDeserializer, Typed {
+    private static final Logger logger = LoggerFactory.getLogger(NumberCodec.class);
     private boolean longUsingString;
     private boolean usingString;
 
@@ -49,41 +52,42 @@ public class NumberCodec implements ObjectSerializer, ObjectDeserializer, Typed 
                     try {
                         n = Integer.parseInt(value);
                     } catch (NumberFormatException ex) {
+                        logger.error(ex.getMessage(),ex);
                     }
                 }
                 if (n == null) {
                     try {
                         n = Long.parseLong(value);
                     } catch (NumberFormatException ex) {
-
+                        logger.error(ex.getMessage(),ex);
                     }
                 }
                 if (n == null) {
                     try {
                         n = Float.parseFloat(value);
                     } catch (NumberFormatException ex) {
-
+                        logger.error(ex.getMessage(),ex);
                     }
                 }
                 if (n == null) {
                     try {
                         n = Double.parseDouble(value);
                     } catch (NumberFormatException ex) {
-
+                        logger.error(ex.getMessage(),ex);
                     }
                 }
                 if (n == null) {
                     try {
                         n = Byte.parseByte(value);
                     } catch (NumberFormatException ex) {
-
+                        logger.error(ex.getMessage(),ex);
                     }
                 }
                 if (n == null) {
                     try {
                         n = Short.parseShort(value);
                     } catch (NumberFormatException ex) {
-
+                        logger.error(ex.getMessage(),ex);
                     }
                 }
             } else {
@@ -152,15 +156,15 @@ public class NumberCodec implements ObjectSerializer, ObjectDeserializer, Typed 
         if (asInt.contains(fieldType)) {
             out.writeInt(n.intValue());
             return;
-        }
+        }else
         if (asFloat.contains(fieldType)) {
             out.writeFloat(n.floatValue(), false);
             return;
-        }
+        }else
         if (asDouble.contains(fieldType)) {
             out.writeDouble(n.doubleValue(), false);
             return;
-        }
+        }else
         if (asLong.contains(fieldType)) {
             out.writeLong(n.longValue());
             return;
