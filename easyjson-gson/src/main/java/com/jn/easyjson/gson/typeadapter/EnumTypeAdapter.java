@@ -296,7 +296,7 @@ public class EnumTypeAdapter extends EasyjsonAbstractTypeAdapter<Enum> implement
                     }
                 }
             } catch (Throwable ex) {
-                ex.printStackTrace();
+                logger.error(ex.getMessage(),ex);
             }
         }
 
@@ -305,12 +305,7 @@ public class EnumTypeAdapter extends EasyjsonAbstractTypeAdapter<Enum> implement
         }
         if (usingToString && jsonToken == JsonToken.STRING) {
             String value = in.nextString();
-            for (Object obj : es) {
-                Enum e = (Enum) obj;
-                if (e.toString().equals(value)) {
-                    return e;
-                }
-            }
+            return Enums.ofToString(getDataClass(), value);
         }
 
         if (usingName) {
