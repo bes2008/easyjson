@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.*;
 import com.jn.easyjson.core.codec.dialect.PropertyCodecConfiguration;
 import com.jn.easyjson.jackson.Jacksons;
 import com.jn.langx.util.Emptys;
+import com.jn.langx.util.Throwables;
 import com.jn.langx.util.enums.Enums;
 import com.jn.langx.util.function.Supplier0;
 import org.slf4j.Logger;
@@ -82,30 +83,28 @@ public class EnumDeserializer<T extends Enum> extends JsonDeserializer<T> implem
                     Field field = currentOwner.getClass().getDeclaredField(currentName);
                     enumClass = (Class<T>) field.getType();
                 } catch (NoSuchFieldException e) {
-                    e.printStackTrace();
+                   throw Throwables.wrapAsRuntimeException(e);
                 }
             }
         }
-
-        EnumSet es = EnumSet.allOf(enumClass);
 
         final JsonToken jtoken = p.getCurrentToken();
 
         if (usingIndex && jtoken == JsonToken.VALUE_NUMBER_INT) {
             int index = p.getIntValue();
-            return Enums.ofCode(enumClass, index);
+            return (T)Enums.ofCode(enumClass, index);
         }
 
         if (usingToString && jtoken == JsonToken.VALUE_STRING) {
             String string = p.getValueAsString();
-            return Enums.ofToString(enumClass, string);
+            return (T)Enums.ofToString(enumClass, string);
         }
 
         if (usingField != null) {
             try {
                 Field field = enumClass.getDeclaredField(usingField);
                 final Class fieldType = field.getType();
-                return Enums.ofField(enumClass, usingField, new Supplier0<Object>() {
+                return (T)Enums.ofField(enumClass, usingField, new Supplier0<Object>() {
                     @Override
                     public Object get() {
                         try {
@@ -135,7 +134,7 @@ public class EnumDeserializer<T extends Enum> extends JsonDeserializer<T> implem
 
         if (jtoken == JsonToken.VALUE_STRING) {
             String enumName = p.getValueAsString();
-            return Enums.ofName(enumClass, enumName);
+            return (T)Enums.ofName(enumClass, enumName);
         }
         return null;
     }
