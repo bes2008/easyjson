@@ -23,7 +23,10 @@ import com.jn.langx.util.Emptys;
 import com.jn.langx.util.Numbers;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.enums.Enums;
+import com.jn.langx.util.function.Supplier0;
 import com.jn.langx.util.reflect.Reflects;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -35,6 +38,7 @@ import java.util.List;
  * priority : ordinal() > toString() > field > name()
  */
 public class EnumTypeAdapter extends EasyjsonAbstractTypeAdapter<Enum> implements JsonSerializer<Enum>, JsonDeserializer<Enum> {
+    private static Logger logger = LoggerFactory.getLogger(EnumTypeAdapter.class);
     private static List<JsonToken> invalidValueTokens = Collects.newArrayList(
             JsonToken.BEGIN_ARRAY,
             JsonToken.END_ARRAY,
@@ -78,76 +82,47 @@ public class EnumTypeAdapter extends EasyjsonAbstractTypeAdapter<Enum> implement
         if (json.isJsonNull() || json.isJsonArray() || json.isJsonObject()) {
             return null;
         }
-        JsonPrimitive jsonPrimitive = json.getAsJsonPrimitive();
-        EnumSet es = EnumSet.allOf((Class<Enum>) typeOfT);
+        final JsonPrimitive jsonPrimitive = json.getAsJsonPrimitive();
         if (usingValue && jsonPrimitive.isNumber()) {
-            for (Object obj : es) {
-                Enum e = (Enum) obj;
-                if (e.ordinal() == jsonPrimitive.getAsInt()) {
-                    return e;
-                }
-            }
+            return Enums.ofCode((Class<? extends Enum>) typeOfT, jsonPrimitive.getAsInt());
         }
         if (usingToString && jsonPrimitive.isString()) {
-            for (Object obj : es) {
-                Enum e = (Enum) obj;
-                if (e.toString().equals(jsonPrimitive.getAsString())) {
-                    return e;
-                }
-            }
+            return Enums.ofToString((Class<? extends Enum>) typeOfT, jsonPrimitive.getAsString());
         }
         if (usingField != null) {
             try {
                 Field field = ((Class<Enum>) typeOfT).getDeclaredField(usingField);
-                Class fieldType = field.getType();
-                if (String.class == fieldType) {
-                    for (Object obj : es) {
-                        Enum e = (Enum) obj;
-                        String v = (String) field.get(e);
-                        if (v.equals(jsonPrimitive.getAsString())) {
-                            return e;
+                final Class fieldType = field.getType();
+
+                return Enums.ofField((Class<? extends Enum>) typeOfT, usingField, new Supplier0<Object>() {
+                    @Override
+                    public Object get() {
+                        try {
+                            if (String.class == fieldType) {
+                                return jsonPrimitive.getAsString();
+                            }
+                            if (Character.class == fieldType) {
+                                return jsonPrimitive.getAsCharacter();
+                            }
+                            if (Boolean.class == fieldType) {
+                                return jsonPrimitive.getAsBoolean();
+                            }
+                            if (Number.class == fieldType) {
+                                return jsonPrimitive.getAsNumber();
+                            }
+                        } catch (Throwable ex) {
+                            logger.error(ex.getMessage(), ex);
                         }
+                        return null;
                     }
-                }
-                if (Character.class == fieldType) {
-                    for (Object obj : es) {
-                        Enum e = (Enum) obj;
-                        Character v = (Character) field.get(e);
-                        if (v.equals(jsonPrimitive.getAsCharacter())) {
-                            return e;
-                        }
-                    }
-                }
-                if (Boolean.class == fieldType) {
-                    for (Object obj : es) {
-                        Enum e = (Enum) obj;
-                        Boolean v = (Boolean) field.get(e);
-                        if (v.equals(jsonPrimitive.getAsBoolean())) {
-                            return e;
-                        }
-                    }
-                }
-                if (Number.class == fieldType) {
-                    for (Object obj : es) {
-                        Enum e = (Enum) obj;
-                        Number v = (Number) field.get(e);
-                        if (v.equals(jsonPrimitive.getAsNumber())) {
-                            return e;
-                        }
-                    }
-                }
+                });
             } catch (Throwable ex) {
-                ex.printStackTrace();
+                logger.error(ex.getMessage(), ex);
             }
         }
 
         if (usingName) {
-            for (Object obj : es) {
-                Enum e = (Enum) obj;
-                if (e.name().equals(jsonPrimitive.getAsString())) {
-                    return e;
-                }
-            }
+            return Enums.ofName((Class<? extends Enum>) typeOfT, jsonPrimitive.getAsString());
         }
         return null;
     }
@@ -189,7 +164,7 @@ public class EnumTypeAdapter extends EasyjsonAbstractTypeAdapter<Enum> implement
                 // ignore it
             }
         }
-        return new JsonPrimitive(e.name());
+        return new JsonPrimitive(Enums.getName(e));
     }
 
     @Override
@@ -256,7 +231,7 @@ public class EnumTypeAdapter extends EasyjsonAbstractTypeAdapter<Enum> implement
                 // ignore it
             }
         }
-        out.value(value.name());
+        out.value(Enums.getName(value));
     }
 
     @Override
