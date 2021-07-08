@@ -21,6 +21,10 @@ import com.fasterxml.jackson.databind.*;
 import com.jn.easyjson.core.codec.dialect.PropertyCodecConfiguration;
 import com.jn.easyjson.jackson.Jacksons;
 import com.jn.langx.util.Emptys;
+import com.jn.langx.util.enums.Enums;
+import com.jn.langx.util.function.Supplier0;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -29,7 +33,7 @@ import java.util.EnumSet;
 import static com.jn.easyjson.jackson.JacksonConstants.*;
 
 public class EnumDeserializer<T extends Enum> extends JsonDeserializer<T> implements ContextualDeserializer {
-
+    private static final Logger logger = LoggerFactory.getLogger(EnumDeserializer.class);
     private Class<T> clazz;
 
     @Override
@@ -46,7 +50,7 @@ public class EnumDeserializer<T extends Enum> extends JsonDeserializer<T> implem
 
 
     @Override
-    public T deserialize(JsonParser p, DeserializationContext ctx) throws IOException, JsonProcessingException {
+    public T deserialize(final JsonParser p, DeserializationContext ctx) throws IOException, JsonProcessingException {
 
         Boolean usingIndex = null;
         Boolean usingToString = null;
@@ -85,85 +89,53 @@ public class EnumDeserializer<T extends Enum> extends JsonDeserializer<T> implem
 
         EnumSet es = EnumSet.allOf(enumClass);
 
-        JsonToken jtoken = p.getCurrentToken();
+        final JsonToken jtoken = p.getCurrentToken();
 
         if (usingIndex && jtoken == JsonToken.VALUE_NUMBER_INT) {
             int index = p.getIntValue();
-            for (Object obj : es) {
-                T e = (T) obj;
-                if (e.ordinal() == index) {
-                    return e;
-                }
-            }
+            return Enums.ofCode(enumClass, index);
         }
 
         if (usingToString && jtoken == JsonToken.VALUE_STRING) {
             String string = p.getValueAsString();
-            for (Object obj : es) {
-                T e = (T) obj;
-                if (e.toString().equals(string)) {
-                    return e;
-                }
-            }
+            return Enums.ofToString(enumClass, string);
         }
 
         if (usingField != null) {
             try {
                 Field field = enumClass.getDeclaredField(usingField);
-                Class fieldType = field.getType();
-                if (String.class == fieldType && jtoken == JsonToken.VALUE_STRING) {
-                    String str = p.getValueAsString();
-                    for (Object obj : es) {
-                        T e = (T) obj;
-                        String v = (String) field.get(e);
-                        if (v.equals(str)) {
-                            return e;
+                final Class fieldType = field.getType();
+                return Enums.ofField(enumClass, usingField, new Supplier0<Object>() {
+                    @Override
+                    public Object get() {
+                        try {
+                            if (String.class == fieldType && jtoken == JsonToken.VALUE_STRING) {
+                                return p.getValueAsString();
+                            }
+                            if (Character.class == fieldType) {
+                                return p.getTextCharacters()[0];
+
+                            }
+                            if (Boolean.class == fieldType) {
+                                return p.getBooleanValue();
+                            }
+                            if (Number.class == fieldType) {
+                                return p.getNumberValue();
+                            }
+                        } catch (Throwable ex) {
+                            logger.error(ex.getMessage(), ex);
                         }
+                        return null;
                     }
-                }
-                if (Character.class == fieldType) {
-                    char ch = p.getTextCharacters()[0];
-                    for (Object obj : es) {
-                        T e = (T) obj;
-                        Character v = (Character) field.get(e);
-                        if (v.equals(ch)) {
-                            return e;
-                        }
-                    }
-                }
-                if (Boolean.class == fieldType) {
-                    boolean bool = p.getBooleanValue();
-                    for (Object obj : es) {
-                        T e = (T) obj;
-                        Boolean v = (Boolean) field.get(e);
-                        if (v.equals(bool)) {
-                            return e;
-                        }
-                    }
-                }
-                if (Number.class == fieldType) {
-                    Number number = p.getNumberValue();
-                    for (Object obj : es) {
-                        T e = (T) obj;
-                        Number v = (Number) field.get(e);
-                        if (v.equals(number)) {
-                            return e;
-                        }
-                    }
-                }
+                });
             } catch (Throwable ex) {
-                ex.printStackTrace();
+                logger.error(ex.getMessage(), ex);
             }
         }
 
         if (jtoken == JsonToken.VALUE_STRING) {
             String enumName = p.getValueAsString();
-            for (Object obj : es) {
-                T e = (T) obj;
-                if (e.name().equals(enumName)) {
-                    return e;
-                }
-            }
+            return Enums.ofName(enumClass, enumName);
         }
         return null;
     }
