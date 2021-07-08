@@ -16,7 +16,7 @@ import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.util.*;
 
-public class CalendarCodec  implements ObjectSerializer, ObjectDeserializer, Typed  {
+public class CalendarCodec implements ObjectSerializer, ObjectDeserializer, Typed  {
     private DateCodec dateCodec;
     private DateFormat dateFormat;
     private TimeZone timeZone = TimeZone.getDefault();

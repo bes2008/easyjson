@@ -16,6 +16,7 @@ package com.jn.easyjson.fastjson;
 
 import com.alibaba.fastjson.serializer.*;
 import com.jn.easyjson.fastjson.codec.Typed;
+import com.jn.langx.util.Emptys;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -48,7 +49,7 @@ public class FastJsonSerializerBuilder {
     public FastJsonSerializerBuilder apply(ObjectSerializer serializer) {
         if (serializer instanceof Typed) {
             List<Type> applyTo = ((Typed) serializer).applyTo();
-            if (applyTo != null && !applyTo.isEmpty()) {
+            if (Emptys.isNotEmpty(applyTo)) {
                 for (Type type : applyTo) {
                     apply(type, serializer);
                 }

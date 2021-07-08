@@ -24,10 +24,7 @@ import com.jn.easyjson.core.annotation.DependOn;
 import com.jn.easyjson.core.codec.dialect.DialectIdentify;
 import com.jn.easyjson.core.exclusion.ExclusionConfiguration;
 import com.jn.easyjson.core.tree.JsonTreeSerializerBuilder;
-import com.jn.easyjson.fastjson.codec.BooleanCodec;
-import com.jn.easyjson.fastjson.codec.CalendarCodec;
-import com.jn.easyjson.fastjson.codec.DateCodec;
-import com.jn.easyjson.fastjson.codec.NumberCodec;
+import com.jn.easyjson.fastjson.codec.*;
 import com.jn.easyjson.fastjson.ext.EasyJsonParserConfig;
 import com.jn.easyjson.fastjson.ext.EasyJsonSerializeConfig;
 import com.jn.langx.annotation.Name;
@@ -38,15 +35,17 @@ import com.jn.langx.util.reflect.Reflects;
 public class FastJsonJSONBuilder extends JSONBuilder {
 
     public static final DialectIdentify FASTJSON = new DialectIdentify();
+
     static {
         FASTJSON.setId("fastjson");
         try {
             Class clazz = Class.forName("com.alibaba.fastjson.JSON");
             FASTJSON.setLibUrl(Reflects.getCodeLocation(clazz).toString());
-        }catch (Throwable ex){
+        } catch (Throwable ex) {
             // ignore it
         }
     }
+
     public FastJsonJSONBuilder() {
         super();
         dialectIdentify(FASTJSON);
@@ -90,6 +89,14 @@ public class FastJsonJSONBuilder extends JSONBuilder {
         calendarCodec.setTimeZone(this.serializeUsingTimeZone());
         calendarCodec.setDateFormat(this.serializeUseDateFormat());
 
+        // Enum
+        EnumCodec enumCodec = new EnumCodec();
+        enumCodec.setSerialUseIndex(this.serializeEnumUsingIndex());
+        enumCodec.setSerialUseField(this.serializeEnumUsingField());
+        enumCodec.setSerialUseToString(this.serializeEnumUsingToString());
+        deserializerBuilder.apply(enumCodec);
+        serializerBuilder.apply(enumCodec);
+
         FastJson fastJson = new FastJson(serializerBuilder, deserializerBuilder, jsonTreeSerializerBuilder);
         FastJsonAdapter jsonHandler = new FastJsonAdapter();
         jsonHandler.setFastJson(fastJson);
@@ -107,7 +114,7 @@ public class FastJsonJSONBuilder extends JSONBuilder {
         builder.addFeature(SerializerFeature.DisableCircularReferenceDetect);
         builder.addFeature(SerializerFeature.SkipTransientField);
         builder.addFeature(SerializerFeature.IgnoreErrorGetter);
-        if(!serializeNonFieldGetter()) {
+        if (!serializeNonFieldGetter()) {
             builder.addFeature(SerializerFeature.IgnoreNonFieldGetter);
         }
 

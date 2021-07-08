@@ -159,9 +159,9 @@ public class EnumTypeAdapter extends EasyjsonAbstractTypeAdapter<Enum> implement
                     return new JsonPrimitive((Number) field.get(e));
                 }
             } catch (NoSuchFieldException e1) {
-                // ignore it
+                logger.error(e1.getMessage(),e1);
             } catch (IllegalAccessException e1) {
-                // ignore it
+                logger.error(e1.getMessage(),e1);
             }
         }
         return new JsonPrimitive(Enums.getName(e));
