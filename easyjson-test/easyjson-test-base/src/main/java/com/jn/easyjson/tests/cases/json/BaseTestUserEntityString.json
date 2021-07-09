@@ -16,5 +16,7 @@
 			"name": "office",
 			"details": "Beijing China"
 		}
-	]
+	],
+	"simpleEnumExample": "EXAMPLE_3",
+	"commonEnumExample": "example2"
 }

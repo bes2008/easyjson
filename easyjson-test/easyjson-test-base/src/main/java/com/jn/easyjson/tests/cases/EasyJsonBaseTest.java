@@ -7,6 +7,9 @@ import java.io.Reader;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Date;
+
+import com.jn.easyjson.tests.entity.enums.CommonEnumExample;
+import com.jn.easyjson.tests.entity.enums.SimpleEnumExample;
 import org.testng.annotations.Test;
 import com.gitee.qdbp.tools.files.PathTools;
 import com.jn.easyjson.core.JSON;
@@ -39,6 +42,8 @@ public abstract class EasyJsonBaseTest extends AbstractBaseTest {
         user.addAddress(new Address("home", "Nanjing China"));
         user.addAddress(new Address("office", "Beijing China"));
         user.setIntro("This's a test user entity. \"EasyJson\"");
+        user.setCommonEnumExample(CommonEnumExample.EXAMPLE_2);
+        user.setSimpleEnumExample(SimpleEnumExample.EXAMPLE_3);
         return user;
     }
 

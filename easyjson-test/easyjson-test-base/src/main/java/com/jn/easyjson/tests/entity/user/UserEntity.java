@@ -1,5 +1,8 @@
 package com.jn.easyjson.tests.entity.user;
 
+import com.jn.easyjson.tests.entity.enums.CommonEnumExample;
+import com.jn.easyjson.tests.entity.enums.SimpleEnumExample;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,6 +22,8 @@ public class UserEntity implements Serializable {
     private Date birthday;
     private String intro;
     private List<Address> addresses;
+    private SimpleEnumExample simpleEnumExample;
+    private CommonEnumExample commonEnumExample;
 
     public String getId() {
         return id;
@@ -99,4 +104,19 @@ public class UserEntity implements Serializable {
         this.addresses.add(address);
     }
 
+    public SimpleEnumExample getSimpleEnumExample() {
+        return simpleEnumExample;
+    }
+
+    public void setSimpleEnumExample(SimpleEnumExample simpleEnumExample) {
+        this.simpleEnumExample = simpleEnumExample;
+    }
+
+    public CommonEnumExample getCommonEnumExample() {
+        return commonEnumExample;
+    }
+
+    public void setCommonEnumExample(CommonEnumExample commonEnumExample) {
+        this.commonEnumExample = commonEnumExample;
+    }
 }

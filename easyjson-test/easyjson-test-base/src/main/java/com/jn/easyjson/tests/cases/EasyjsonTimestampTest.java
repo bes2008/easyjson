@@ -5,7 +5,6 @@ import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.easyjson.tests.entity.BusEntity;
 import com.jn.easyjson.tests.utils.Asserts;
 import org.testng.annotations.Test;
-import org.testng.asserts.Assertion;
 
 import java.sql.Timestamp;
 import java.util.Calendar;
