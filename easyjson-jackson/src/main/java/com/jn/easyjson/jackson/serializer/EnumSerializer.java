@@ -20,6 +20,8 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.jn.easyjson.core.codec.dialect.PropertyCodecConfiguration;
 import com.jn.easyjson.jackson.Jacksons;
+import com.jn.langx.util.Strings;
+import com.jn.langx.util.enums.Enums;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -62,7 +64,7 @@ public class EnumSerializer<T extends Enum> extends JsonSerializer<T> {
             return;
         }
 
-        if (usingField != null && !usingField.trim().isEmpty()) {
+        if (Strings.isNotEmpty(usingField)) {
             usingField = usingField.trim();
             try {
                 Field field = e.getClass().getDeclaredField(usingField);
@@ -93,7 +95,7 @@ public class EnumSerializer<T extends Enum> extends JsonSerializer<T> {
                 // ignore it
             }
         }
-        gen.writeString(e.name());
+        gen.writeString(Enums.getName(e));
     }
 
 }
