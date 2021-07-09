@@ -35,6 +35,10 @@ public class FastJsonParserBuilder {
         return this;
     }
 
+    public ParserConfig config(){
+        return config;
+    }
+
     public FastJsonParserBuilder defaultFeatureValues(int value) {
         defaultFeatureValues = value;
         return this;

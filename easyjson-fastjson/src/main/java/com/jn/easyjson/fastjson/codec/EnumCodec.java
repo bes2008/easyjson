@@ -113,13 +113,13 @@ public class EnumCodec implements ObjectSerializer, ObjectDeserializer, Typed {
         if (object == null) {
             out.writeNull();
         } else if (serialUseIndex) {
-            out.write(Enums.getIndex((Enum) object));
+            out.writeInt(Enums.getIndex((Enum) object));
         } else if (serialUseToString) {
-            out.write(object.toString());
+            out.writeString(object.toString());
         } else if (Strings.isNotBlank(serialUseField)) {
             out.write(Reflects.<char[]>getAnyFieldValue(object, serialUseField, true, true));
         } else {
-            out.write(Enums.getName((Enum) object));
+            out.writeString(Enums.getName((Enum) object));
         }
     }
 

@@ -32,6 +32,10 @@ public class FastJsonSerializerBuilder {
         return this;
     }
 
+    public SerializeConfig config() {
+        return this.config;
+    }
+
     public FastJsonSerializerBuilder addFilter(SerializeFilter filter) {
         if (filter != null) {
             this.filters.add(filter);

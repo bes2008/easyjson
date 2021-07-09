@@ -97,6 +97,10 @@ public class FastJsonJSONBuilder extends JSONBuilder {
         deserializerBuilder.apply(enumCodec);
         serializerBuilder.apply(enumCodec);
 
+        EasyjsonFastjsonModule extModule = new EasyjsonFastjsonModule();
+        serializerBuilder.config().register(extModule);
+        deserializerBuilder.config().register(extModule);
+
         FastJson fastJson = new FastJson(serializerBuilder, deserializerBuilder, jsonTreeSerializerBuilder);
         FastJsonAdapter jsonHandler = new FastJsonAdapter();
         jsonHandler.setFastJson(fastJson);
