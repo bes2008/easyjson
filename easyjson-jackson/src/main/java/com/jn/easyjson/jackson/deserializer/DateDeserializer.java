@@ -26,6 +26,8 @@ import com.jn.langx.util.Dates;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.reflect.Modifiers;
 import com.jn.langx.util.reflect.Reflects;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;
@@ -39,6 +41,7 @@ import java.util.TimeZone;
 import static com.jn.easyjson.jackson.JacksonConstants.ENABLE_CUSTOM_CONFIGURATION;
 
 public class DateDeserializer extends JsonDeserializer {
+    private static Logger logger = LoggerFactory.getLogger(DateDeserializer.class);
     private Class type;
 
     public DateDeserializer(Class type) {
@@ -70,7 +73,7 @@ public class DateDeserializer extends JsonDeserializer {
                 try {
                     c = (Calendar) defaultCtor.newInstance();
                 } catch (Exception e) {
-                    return (Calendar) ctx.handleInstantiationProblem(handledType(), date, e);
+                    throw ctx.instantiationException(type, e);
                 }
             }
             if (c != null) {
@@ -115,7 +118,7 @@ public class DateDeserializer extends JsonDeserializer {
                 try {
                     return df.parse(p.getValueAsString());
                 } catch (ParseException e) {
-                    e.printStackTrace();
+                    logger.error(e.getMessage(),e);
                     return null;
                 }
             } else if (usingToString) {
@@ -131,4 +134,8 @@ public class DateDeserializer extends JsonDeserializer {
         return null;
     }
 
+    @Override
+    public Class<?> handledType() {
+        return type;
+    }
 }

@@ -43,16 +43,16 @@ public class BeanPropertyId {
             return true;
         }
 
-        if(o==null || o.getClass()!=BeanPropertyId.class){
+        if(o==null || o.getClass()!=this.getClass()){
             return false;
         }
-        BeanPropertyId ID = (BeanPropertyId)o;
+        BeanPropertyId id = (BeanPropertyId)o;
 
-        if(!Objects.equals(ID.beanClass, beanClass)){
+        if(!Objects.equals(id.beanClass, beanClass)){
             return false;
         }
 
-        if(!Objects.equals(ID.propertyName, propertyName)){
+        if(!Objects.equals(id.propertyName, propertyName)){
             return false;
         }
         return true;
