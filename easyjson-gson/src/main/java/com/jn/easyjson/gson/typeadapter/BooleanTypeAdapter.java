@@ -19,6 +19,7 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 import com.jn.easyjson.core.codec.dialect.PropertyCodecConfiguration;
+import com.jn.langx.util.Booleans;
 import com.jn.langx.util.collection.Collects;
 
 import java.io.IOException;
@@ -64,30 +65,31 @@ public class BooleanTypeAdapter extends EasyjsonAbstractTypeAdapter<Boolean> imp
         if (src == null) {
             return JsonNull.INSTANCE;
         }
+        boolean value = src;
         if (usingOnOff) {
-            return new JsonPrimitive(src ? "on" : "off");
+            return new JsonPrimitive(value ? "on" : "off");
         }
         if (using1_0) {
-            return new JsonPrimitive(src ? 1 : 0);
+            return new JsonPrimitive(value ? 1 : 0);
         }
-        return new JsonPrimitive(src);
+        return new JsonPrimitive(value);
     }
 
     @Override
-    public void write(JsonWriter out, Boolean value) throws IOException {
-        if (value == null) {
+    public void write(JsonWriter out, Boolean _value) throws IOException {
+        if (_value == null) {
             out.nullValue();
             return;
         }
-
+        boolean value = _value;
         if (jsonBuilder != null && isField()) {
             PropertyCodecConfiguration propertyCodecConfiguration = PropertyCodecConfiguration.getPropertyCodecConfiguration(jsonBuilder.proxyDialectIdentify(), getDeclaringClass(), this.currentFieldOrClass.getFieldName());
             if (propertyCodecConfiguration != null) {
-                if (propertyCodecConfiguration.getBooleanUsingONOFF()) {
+                if (Booleans.truth(propertyCodecConfiguration.getBooleanUsingONOFF())) {
                     out.value(value ? "on" : "off");
                     return;
                 }
-                if (propertyCodecConfiguration.getBooleanUsing01()) {
+                if (Booleans.truth(propertyCodecConfiguration.getBooleanUsing01())) {
                     out.value(value ? 1 : 0);
                     return;
                 }
