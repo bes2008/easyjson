@@ -69,10 +69,9 @@ public class EnumCodec implements ObjectSerializer, ObjectDeserializer, Typed {
                 @Override
                 public Object get() {
                     Field field = Reflects.getDeclaredField(Types.toClass(type), serialUseField);
-                    Class fieldClazz = field.getType();
                     if (field != null) {
                         field.setAccessible(true);
-                        fieldClazz = field.getType();
+                        Class fieldClazz  = field.getType();
 
                         if (fieldClazz == String.class) {
                             return lexer.stringVal();

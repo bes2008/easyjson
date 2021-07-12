@@ -18,6 +18,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.*;
 import com.jn.easyjson.core.JsonTreeNode;
 import com.jn.easyjson.core.node.*;
+import com.jn.langx.util.collection.Collects;
+import com.jn.langx.util.function.Consumer2;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -52,11 +54,14 @@ public class JacksonBasedJsonTreeNodeMapper implements JsonTreeNodeFactory<JsonN
         }
         if (object instanceof Map) {
             Map map = (Map) object;
-            JsonObjectNode jsonObjectNode = new JsonObjectNode();
-            Set<Object> keys = map.keySet();
-            for (Object key : keys) {
-                jsonObjectNode.addProperty(key.toString(), createFromPojo(map.get(key)));
-            }
+           final JsonObjectNode jsonObjectNode = new JsonObjectNode();
+            Collects.forEach(map, new Consumer2<Object, Object>() {
+                @Override
+                public void accept(Object key, Object value) {
+                    jsonObjectNode.addProperty(key.toString(), createFromPojo(value));
+                }
+            });
+
             return jsonObjectNode;
         }
         return new JsonPrimitiveNode(object.toString());

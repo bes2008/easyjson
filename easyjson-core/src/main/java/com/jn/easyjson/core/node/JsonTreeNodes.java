@@ -19,6 +19,8 @@ import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.easyjson.core.JsonException;
 import com.jn.easyjson.core.JsonTreeNode;
 import com.jn.easyjson.core.util.JSONs;
+import com.jn.langx.util.collection.Collects;
+import com.jn.langx.util.function.Consumer2;
 import com.jn.langx.util.reflect.type.Primitives;
 
 import java.util.*;
@@ -28,7 +30,7 @@ public class JsonTreeNodes {
         return fromJavaObject(object, null);
     }
 
-    public static JsonTreeNode fromJavaObject(Object object, ToJsonTreeNodeMapper mapper) {
+    public static JsonTreeNode fromJavaObject(Object object, final ToJsonTreeNodeMapper mapper) {
         if (object == null) {
             return JsonNullNode.INSTANCE;
         }
@@ -70,12 +72,18 @@ public class JsonTreeNodes {
         }
 
         if (object instanceof Map) {
-            JsonObjectNode objectNode = new JsonObjectNode();
+            final JsonObjectNode objectNode = new JsonObjectNode();
             Map map = (Map) object;
             Set keySet = map.keySet();
             for (Object key : keySet) {
                 objectNode.addProperty(key.toString(), fromJavaObject(map.get(key), mapper));
             }
+            Collects.forEach(map, new Consumer2<Object, Object>() {
+                @Override
+                public void accept(Object key, Object value) {
+                    objectNode.addProperty(key.toString(), fromJavaObject(value, mapper));
+                }
+            });
             return objectNode;
         }
 
@@ -85,19 +93,18 @@ public class JsonTreeNodes {
 
         JSON json = JSONBuilderProvider.create().build();
         String jsonString = null;
-        if(object instanceof String){
-            jsonString = (String)object;
-        }
-        else{
+        if (object instanceof String) {
+            jsonString = (String) object;
+        } else {
             jsonString = json.toJson(object);
         }
         try {
-            if(JSONs.isJsonString(jsonString) || JSONs.isJsonArrayOrObject(jsonString)) {
+            if (JSONs.isJsonString(jsonString) || JSONs.isJsonArrayOrObject(jsonString)) {
                 return json.fromJson(jsonString);
-            }else{
+            } else {
                 return new JsonPrimitiveNode(jsonString);
             }
-        }catch (JsonException ex){
+        } catch (JsonException ex) {
             return new JsonPrimitiveNode(jsonString);
         }
     }
