@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.deser.std.NumberDeserializers;
 import com.jn.easyjson.jackson.Jacksons;
+import com.jn.langx.util.reflect.type.Primitives;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -51,22 +52,22 @@ public class NumberDeserializer extends JsonDeserializer<Number> implements Cont
         JsonToken curr = p.getCurrentToken();
         if (curr == JsonToken.VALUE_STRING) {
             String v = p.getValueAsString();
-            if (clazz == long.class || clazz == Long.class) {
+            if (Primitives.isLong(clazz)) {
                 return Long.parseLong(v);
             }
-            if (clazz == double.class || clazz == Double.class) {
+            if (Primitives.isDouble(clazz)) {
                 return Double.parseDouble(v);
             }
-            if (clazz == int.class || clazz == Integer.class) {
+            if (Primitives.isInteger(clazz)) {
                 return Integer.parseInt(v);
             }
-            if (clazz == float.class || clazz == Float.class) {
+            if (Primitives.isFloat(clazz)) {
                 return Float.parseFloat(v);
             }
-            if (clazz == short.class || clazz == Short.class) {
+            if (Primitives.isShort(clazz)) {
                 return Short.parseShort(v);
             }
-            if (clazz == byte.class || clazz == Byte.class) {
+            if (Primitives.isByte(clazz)) {
                 return Byte.parseByte(v);
             }
             if (clazz == BigDecimal.class) {
@@ -80,17 +81,17 @@ public class NumberDeserializer extends JsonDeserializer<Number> implements Cont
             return 0;
         }
         Number n = null;
-        if (clazz == double.class || clazz == Double.class) {
+        if (Primitives.isDouble(clazz)) {
             n = p.getDoubleValue();
-        } else if (clazz == long.class || clazz == Long.class) {
+        } else if (Primitives.isLong(clazz)) {
             n = p.getLongValue();
-        } else if (clazz == float.class || clazz == Float.class) {
-            n = p.getLongValue();
-        } else if (clazz == int.class || clazz == Integer.class) {
+        } else if (Primitives.isFloat(clazz)) {
+            n = p.getFloatValue();
+        } else if (Primitives.isInteger(clazz)) {
             n = p.getIntValue();
-        } else if (clazz == short.class || clazz == Short.class) {
+        } else if (Primitives.isShort(clazz)) {
             n = p.getShortValue();
-        } else if (clazz == byte.class || clazz == Byte.class) {
+        } else if (Primitives.isByte(clazz)) {
             n = p.getByteValue();
         } else if (clazz == BigDecimal.class) {
             n = p.getDecimalValue();
