@@ -74,10 +74,6 @@ public class JsonTreeNodes {
         if (object instanceof Map) {
             final JsonObjectNode objectNode = new JsonObjectNode();
             Map map = (Map) object;
-            Set keySet = map.keySet();
-            for (Object key : keySet) {
-                objectNode.addProperty(key.toString(), fromJavaObject(map.get(key), mapper));
-            }
             Collects.forEach(map, new Consumer2<Object, Object>() {
                 @Override
                 public void accept(Object key, Object value) {

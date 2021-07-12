@@ -57,23 +57,21 @@ public class JacksonJSONBuilder extends JSONBuilder {
     private static void makesureEasyJsonBaseModuleRegisted() {
         if (!moduleInited) {
             synchronized (JacksonJSONBuilder.class) {
-                if (!moduleInited) {
-                    SimpleDeserializers simpleDeserializers = new Deserializers();
-                    module.setDeserializers(simpleDeserializers);
+                SimpleDeserializers simpleDeserializers = new Deserializers();
+                module.setDeserializers(simpleDeserializers);
 
-                    // boolean
-                    module.addSerializer(Boolean.class, new BooleanSerializer());
-                    module.addDeserializer(Boolean.class, new BooleanDeserializer());
+                // boolean
+                module.addSerializer(Boolean.class, new BooleanSerializer());
+                module.addDeserializer(Boolean.class, new BooleanDeserializer());
 
-                    // enum
-                    module.addDeserializer(Enum.class, new EnumDeserializer<Enum>());
-                    module.addSerializer(Enum.class, new EnumSerializer<Enum>());
+                // enum
+                module.addDeserializer(Enum.class, new EnumDeserializer<Enum>());
+                module.addSerializer(Enum.class, new EnumSerializer<Enum>());
 
-                    module.setSerializerModifier(new EasyjsonBeanSerializerModifier());
-                    module.setDeserializerModifier(new EasyjsonBeanDeserializerModifier());
+                module.setSerializerModifier(new EasyjsonBeanSerializerModifier());
+                module.setDeserializerModifier(new EasyjsonBeanDeserializerModifier());
 
-                    moduleInited = true;
-                }
+                moduleInited = true;
             }
         }
     }
