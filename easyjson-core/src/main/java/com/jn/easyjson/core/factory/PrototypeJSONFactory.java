@@ -7,16 +7,18 @@ import com.jn.easyjson.core.JSONFactory;
 public class PrototypeJSONFactory implements JSONFactory {
     private JSONBuilder jsonBuilder;
 
-    public PrototypeJSONFactory(){
-
-    }
-
     public PrototypeJSONFactory(JSONBuilder jsonBuilder){
-        setJsonBuilder(jsonBuilder);
+        setJSONBuilder(jsonBuilder);
     }
 
-    public void setJsonBuilder(JSONBuilder jsonBuilder) {
+    @Override
+    public void setJSONBuilder(JSONBuilder jsonBuilder) {
         this.jsonBuilder = jsonBuilder;
+    }
+
+    @Override
+    public JSONBuilder getJSONBuilder() {
+        return jsonBuilder;
     }
 
     @Override

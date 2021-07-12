@@ -8,22 +8,23 @@ public class SingletonJSONFactory implements JSONFactory {
     private JSONBuilder jsonBuilder;
     private JSON json;
 
-    public SingletonJSONFactory() {
-    }
-
     public SingletonJSONFactory(JSONBuilder jsonBuilder) {
-        setJsonBuilder(jsonBuilder);
+        setJSONBuilder(jsonBuilder);
     }
 
-    public void setJsonBuilder(JSONBuilder jsonBuilder) {
+    @Override
+    public void setJSONBuilder(JSONBuilder jsonBuilder) {
         this.jsonBuilder = jsonBuilder;
     }
 
     @Override
+    public JSONBuilder getJSONBuilder() {
+        return jsonBuilder;
+    }
+
+    @Override
     public JSON get() {
-        if (json != null) {
-            return json;
-        } else {
+        if (json == null) {
             synchronized (this) {
                 if (json == null) {
                     json = this.jsonBuilder.build();
