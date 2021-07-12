@@ -18,4 +18,14 @@
         <module>easyjson-test-jackson-base</module>
 		<module>easyjson-test-jackson-impl</module>
 	</modules>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.11.4</version>
+        </dependency>
+
+    </dependencies>
+
 </project>

@@ -33,6 +33,11 @@ import com.jn.easyjson.jackson.modifier.EasyjsonBeanSerializerModifier;
 import com.jn.easyjson.jackson.serializer.BooleanSerializer;
 import com.jn.easyjson.jackson.serializer.EnumSerializer;
 import com.jn.langx.annotation.Name;
+import com.jn.langx.util.reflect.Reflects;
+
+import java.lang.reflect.Method;
+import java.util.Locale;
+import java.util.TimeZone;
 
 @Name("jackson")
 @DependOn("com.fasterxml.jackson.databind.ObjectMapper")
@@ -134,8 +139,11 @@ public class JacksonJSONBuilder extends JSONBuilder {
         DeserializationConfig deserializationConfig = objectMapper.getDeserializationConfig();
         deserializationConfig = deserializationConfig.withAttribute(JacksonConstants.SERIALIZE_DATE_USING_DATE_FORMAT_ATTR_KEY, serializeUseDateFormat());
         deserializationConfig = deserializationConfig.withAttribute(JacksonConstants.SERIALIZE_DATE_USING_TO_STRING_ATTR_KEY, serializeDateUsingToString());
-        deserializationConfig = deserializationConfig.with(serializeUsingTimeZone());
-        deserializationConfig = deserializationConfig.with(serializeUsingLocale());
+
+        // deserializationConfig = deserializationConfig.with(serializeUsingTimeZone());
+        deserializationConfig = Reflects.invokeAnyMethod(deserializationConfig, "with", new Class[]{TimeZone.class}, new Object[]{serializeUsingTimeZone()}, true, true);
+        // deserializationConfig = deserializationConfig.with(serializeUsingLocale());
+        deserializationConfig = Reflects.invokeAnyMethod(deserializationConfig, "with", new Class[]{Locale.class}, new Object[]{serializeUsingLocale()}, true, true);
         deserializationConfig = deserializationConfig.withAttribute(JacksonConstants.SERIALIZE_LOCALE, serializeUsingLocale());
         deserializationConfig = deserializationConfig.withAttribute(JacksonConstants.SERIALIZE_TIMEZONE, serializeUsingTimeZone());
 
@@ -159,10 +167,14 @@ public class JacksonJSONBuilder extends JSONBuilder {
     private void configNulls(EasyJsonObjectMapper objectMapper) {
         if (serializeNulls()) {
             objectMapper.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, true);
-            objectMapper.setConfig(objectMapper.getSerializationConfig()
-                    .withAppendedAnnotationIntrospector(new EasyJsonJacksonAnnotationIntrospector())
-                    .withAttribute(JacksonConstants.SERIALIZE_NULLS_ATTR_KEY, true)
-            );
+
+            SerializationConfig config = objectMapper.getSerializationConfig();
+            Method withAppendedAnnotationIntrospector = Reflects.getAnyMethod(SerializationConfig.class, "withAppendedAnnotationIntrospector", AnnotationIntrospector.class);
+            if (withAppendedAnnotationIntrospector != null) {
+                config = Reflects.invoke(withAppendedAnnotationIntrospector, config, new Object[]{new EasyJsonJacksonAnnotationIntrospector()}, true, true);
+            }
+            config = config.withAttribute(JacksonConstants.SERIALIZE_NULLS_ATTR_KEY, true);
+            objectMapper.setConfig(config);
         } else {
             objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         }
