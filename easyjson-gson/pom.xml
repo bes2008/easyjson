@@ -11,7 +11,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>easyjson-gson</artifactId>
-
+    <name>${groupId}:${artifactId}:${version}</name>
     <description>
         Adapter easyjson to Google Gson
     </description>

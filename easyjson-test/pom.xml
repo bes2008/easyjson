@@ -11,6 +11,7 @@
     </parent>
 
     <artifactId>easyjson-test</artifactId>
+    <name>${groupId}:${artifactId}:${version}</name>
     <packaging>pom</packaging>
     <description>
     	测试用例包.

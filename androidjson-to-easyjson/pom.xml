@@ -10,6 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>androidjson-to-easyjson</artifactId>
+    <name>${groupId}:${artifactId}:${version}</name>
     <description>
         Adapter android json library to easyjson
     </description>

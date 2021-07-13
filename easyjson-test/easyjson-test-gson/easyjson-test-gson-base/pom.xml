@@ -11,6 +11,7 @@
     </parent>
 
     <artifactId>easyjson-test-gson-base</artifactId>
+    <name>${groupId}:${artifactId}:${version}</name>
 	<packaging>jar</packaging>
 	<description>存放使用gson的API的所有测试用例, 只提供给其他工程引用, 不能直接运行</description>
 

@@ -11,6 +11,7 @@
     </parent>
 
     <artifactId>easyjson-test-gson</artifactId>
+    <name>${groupId}:${artifactId}:${version}</name>
     <packaging>pom</packaging>
     <description>gson测试用例包</description>
 	

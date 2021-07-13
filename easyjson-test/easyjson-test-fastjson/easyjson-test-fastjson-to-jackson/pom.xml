@@ -11,6 +11,7 @@
     </parent>
 
     <artifactId>easyjson-test-fastjson-to-jackson</artifactId>
+    <name>${groupId}:${artifactId}:${version}</name>
 	<packaging>jar</packaging>
 	<description>
 		使用easyjson或fastjson的API, 以jackson作为实现框架的测试场景

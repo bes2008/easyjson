@@ -11,7 +11,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>jsonsmart-to-easyjson</artifactId>
-
+    <name>${groupId}:${artifactId}:${version}</name>
     <description>
         Adapter net.minidev:json-smart:jar to easyjson
     </description>

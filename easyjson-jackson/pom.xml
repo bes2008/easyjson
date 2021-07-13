@@ -11,6 +11,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>easyjson-jackson</artifactId>
+    <name>${groupId}:${artifactId}:${version}</name>
 
     <description>
         Adapter easyjson to Jackson

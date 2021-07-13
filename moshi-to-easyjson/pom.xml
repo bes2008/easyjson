@@ -15,6 +15,7 @@
     </properties>
 
     <artifactId>moshi-to-easyjson</artifactId>
+    <name>${groupId}:${artifactId}:${version}</name>
     <dependencies>
         <dependency>
             <groupId>com.github.fangjinuo.easyjson</groupId>

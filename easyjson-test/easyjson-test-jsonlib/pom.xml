@@ -11,6 +11,7 @@
     </parent>
 
     <artifactId>easyjson-test-jsonlib</artifactId>
+    <name>${groupId}:${artifactId}:${version}</name>
     <packaging>pom</packaging>
     <description>jsonlib测试用例包</description>
 	

@@ -11,6 +11,7 @@
     </parent>
 
     <artifactId>easyjson-test-gson-impl</artifactId>
+    <name>${groupId}:${artifactId}:${version}</name>
 	<packaging>jar</packaging>
 	<description>
 		使用easyjson或gson的API, 以gson自身作为实现框架的测试场景
