@@ -1,7 +1,7 @@
 [![JSON](https://www.json.org/img/json160.gif)](http://www.json.org/)
 
 
-[![License](https://img.shields.io/badge/license-LGPL3.0-green.svg)](https://github.com/fangjinuo/sqlhelper/blob/master/LICENSE)
+[![License](https://img.shields.io/badge/license-Apache2.0-green.svg)](https://github.com/fangjinuo/sqlhelper/blob/master/LICENSE)
 
 [![Build Status](https://www.travis-ci.com/fangjinuo/easyjson.svg?branch=master)](https://travis-ci.com/fangjinuo/easyjson)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/dbf315b97bf443f8815c8dbaf6bbf358)](https://www.codacy.com/manual/fs1194361820/easyjson?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=fangjinuo/easyjson&amp;utm_campaign=Badge_Grade)
