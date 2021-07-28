@@ -68,7 +68,7 @@
         </license>
     </licenses>
     <properties>
-        <langx.version>3.5.8</langx.version>
+        <langx.version>3.6.4</langx.version>
         <slf4j.version>1.7.0</slf4j.version>
     </properties>
 
