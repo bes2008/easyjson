@@ -17,7 +17,9 @@
 		使用easyjson或fastjson的API, 以jackson作为实现框架的测试场景
 		(引用fastjson-to-easyjson作为fastjson的API的桥接, 引用easyjson-jackson作为json的实现框架)
 	</description>
-
+    <properties>
+        <jmh.version>1.32</jmh.version>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>com.github.fangjinuo.easyjson</groupId>
@@ -43,6 +45,19 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.openjdk.jmh</groupId>
+            <artifactId>jmh-core</artifactId>
+            <version>${jmh.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjdk.jmh</groupId>
+            <artifactId>jmh-generator-annprocess</artifactId>
+            <version>${jmh.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>
