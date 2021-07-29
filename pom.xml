@@ -6,7 +6,7 @@
 
     <groupId>com.github.fangjinuo.easyjson</groupId>
     <artifactId>easyjson</artifactId>
-    <version>3.1.5-snapshot</version>
+    <version>3.1.5</version>
     <modules>
         <module>easyjson-core</module>
         <module>easyjson-gson</module>
