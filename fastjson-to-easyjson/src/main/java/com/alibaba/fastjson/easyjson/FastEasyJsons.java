@@ -43,7 +43,8 @@ public class FastEasyJsons {
         return JsonFactorys.getJSONFactory(buildJsonFactoryProperties(features, features2));
     }
 
-    public static JsonFactoryProperties buildJsonFactoryProperties(int features, SerializerFeature... features2){
+    public static JsonFactoryProperties buildJsonFactoryProperties(int features, SerializerFeature... features2) {
+        JsonFactoryProperties properties = new JsonFactoryProperties();
         if (features2 != null) {
             for (SerializerFeature feature : features2) {
                 features |= feature.getMask();
@@ -56,7 +57,6 @@ public class FastEasyJsons {
         boolean prettyFormat = (SerializerFeature.PrettyFormat.getMask() & features) != 0;
 
 
-        JsonFactoryProperties properties = new JsonFactoryProperties();
         properties.setSerializeNulls(serializeNulls);
         properties.setPrettyFormat(prettyFormat);
         properties.setSerializeEnumUsingToString(serializeEnumUsingToString);
@@ -67,6 +67,7 @@ public class FastEasyJsons {
         properties.setEnableCustomConfiguration(true);
         properties.setProxyDialectIdentify(FASTJSON);
         properties.addExclusion(FastjsonAnnotationExclusion.INSTANCE);
+
         return properties;
     }
 }

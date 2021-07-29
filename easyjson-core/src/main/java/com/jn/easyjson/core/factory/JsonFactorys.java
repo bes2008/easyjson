@@ -7,7 +7,6 @@ import com.jn.easyjson.core.exclusion.Exclusion;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.PrimitiveArrays;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -15,13 +14,7 @@ public class JsonFactorys {
     private JsonFactorys() {
     }
 
-    private static InheritableThreadLocal<Map<JsonFactoryProperties,JSONFactory>> cache = new InheritableThreadLocal<Map<JsonFactoryProperties, JSONFactory>>(){
-        @Override
-        protected Map<JsonFactoryProperties, JSONFactory> initialValue() {
-            return new HashMap<JsonFactoryProperties, JSONFactory>();
-        }
-    };
-
+    private static Map<JsonFactoryProperties,JSONFactory> cache = new ConcurrentHashMap<JsonFactoryProperties, JSONFactory>();
     public static JSONFactory getJSONFactory() {
         return getJSONFactory(JsonScope.SINGLETON);
     }
@@ -59,11 +52,11 @@ public class JsonFactorys {
                     .addExclusionStrategies(Collects.asArray(properties.getExclusions(), Exclusion.class));
             return getJSONFactory(jsonBuilder, properties.getJsonScope());
         } else {
-            JSONFactory factory = cache.get().get(properties);
+            JSONFactory factory =cache.get(properties);
             if (factory == null) {
                 properties.setJsonScope(JsonScope.SINGLETON);
                 factory = getJSONFactory(properties);
-                cache.get().put(properties, factory);
+                cache.put(properties, factory);
             }
             return factory;
         }

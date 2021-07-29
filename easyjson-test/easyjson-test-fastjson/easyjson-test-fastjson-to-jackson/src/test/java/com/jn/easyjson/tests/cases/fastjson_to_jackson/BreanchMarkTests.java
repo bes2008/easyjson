@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jn.easyjson.core.factory.JsonFactorys;
 import org.openjdk.jmh.annotations.*;
+import org.testng.annotations.Test;
 
 import java.util.concurrent.TimeUnit;
 
@@ -31,6 +32,7 @@ public class BreanchMarkTests {
     }
 
 
+    @Test
     @Benchmark
     public void testSimpleSerialize() {
         JSON.toJSONString(simpleJsonObject);

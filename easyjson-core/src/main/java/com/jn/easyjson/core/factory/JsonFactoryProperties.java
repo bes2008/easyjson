@@ -16,7 +16,6 @@ package com.jn.easyjson.core.factory;
 
 import com.jn.easyjson.core.codec.dialect.DialectIdentify;
 import com.jn.easyjson.core.exclusion.Exclusion;
-import com.jn.langx.util.Objects;
 import com.jn.langx.util.Objs;
 import com.jn.langx.util.collection.Collects;
 
@@ -179,28 +178,30 @@ public class JsonFactoryProperties {
         }
         JsonFactoryProperties that = (JsonFactoryProperties) o;
 
-        if (!Objs.equals(lenient, that.lenient)) {
+        if (serializeNulls != that.serializeNulls) {
             return false;
         }
-        if (!Objs.equals(serializeNulls, that.serializeNulls)) {
+        if (prettyFormat != that.prettyFormat) {
             return false;
         }
-        if (!Objs.equals(prettyFormat, that.prettyFormat)) {
+
+        if (serializeEnumUsingToString != that.serializeEnumUsingToString) {
             return false;
         }
-        if (!Objs.equals(serializeEnumUsingToString, that.serializeEnumUsingToString)) {
+        if (serializeEnumUsingIndex != that.serializeEnumUsingIndex) {
             return false;
         }
-        if (!Objs.equals(serializeEnumUsingIndex, that.serializeEnumUsingIndex)) {
+        if (serializeLongAsString != that.serializeLongAsString) {
             return false;
         }
-        if (!Objs.equals(serializeLongAsString, that.serializeLongAsString)) {
+        if (serializeDateUsingToString != that.serializeDateUsingToString) {
             return false;
         }
-        if (!Objs.equals(serializeDateUsingToString, that.serializeDateUsingToString)) {
+        if (enableCustomConfiguration != that.enableCustomConfiguration) {
             return false;
         }
-        if (!Objs.equals(enableCustomConfiguration, that.enableCustomConfiguration)) {
+
+        if (proxyDialectIdentify != that.proxyDialectIdentify) {
             return false;
         }
         if (!Objs.equals(dateFormat, that.dateFormat)) {
@@ -209,23 +210,24 @@ public class JsonFactoryProperties {
         if (!Objs.equals(datePattern, that.datePattern)) {
             return false;
         }
-        if (!Objects.deepEquals(exclusiveFieldModifiers, that.exclusiveFieldModifiers)) {
+        if (Collects.diff(this.exclusions, that.exclusions).hasDifference()) {
             return false;
         }
-        if (!Objs.equals(proxyDialectIdentify, that.proxyDialectIdentify)) {
-            return false;
-        }
-        if (!Objs.equals(datePattern, that.datePattern)) {
-            return false;
-        }
-        if (!Objs.equals(datePattern, that.datePattern)) {
-            return false;
-        }
-        return !Collects.diff(exclusions, that.exclusions).hasDifference();
+        return !Collects.diff(this.exclusiveFieldModifiers, that.exclusiveFieldModifiers).hasDifference();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(lenient, serializeNulls, prettyFormat, serializeEnumUsingToString, serializeEnumUsingIndex, serializeLongAsString, datePattern, serializeDateUsingToString, exclusiveFieldModifiers, enableCustomConfiguration, proxyDialectIdentify, exclusions);
+        return Objs.hash(
+                serializeNulls,
+                serializeEnumUsingToString,
+                serializeEnumUsingIndex,
+                serializeLongAsString,
+                serializeDateUsingToString,
+                enableCustomConfiguration,
+                prettyFormat,
+                datePattern,
+                proxyDialectIdentify
+        );
     }
 }

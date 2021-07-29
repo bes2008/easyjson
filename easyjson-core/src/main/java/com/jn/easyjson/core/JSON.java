@@ -139,4 +139,8 @@ public class JSON {
         this.jsonHandler = jsonHandler;
         return this;
     }
+
+    public JsonHandler getJsonHandler(){
+        return this.jsonHandler;
+    }
 }
