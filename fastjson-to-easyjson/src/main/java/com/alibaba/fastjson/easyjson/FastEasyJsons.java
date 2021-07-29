@@ -16,9 +16,10 @@ package com.alibaba.fastjson.easyjson;
 
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.jn.easyjson.core.JSONBuilder;
-import com.jn.easyjson.core.JSONBuilderProvider;
+import com.jn.easyjson.core.JSONFactory;
 import com.jn.easyjson.core.codec.dialect.DialectIdentify;
 import com.jn.easyjson.core.factory.JsonFactoryProperties;
+import com.jn.easyjson.core.factory.JsonFactorys;
 import com.jn.langx.util.reflect.Reflects;
 
 import java.lang.reflect.Modifier;
@@ -35,7 +36,14 @@ public class FastEasyJsons {
     }
 
     public static JSONBuilder getJsonBuilder(int features, SerializerFeature... features2) {
-        JSONBuilder jsonBuilder = JSONBuilderProvider.adapter(JSON_IDENTIFY_STRING);
+        return getJSONFactory(features, features2).getJSONBuilder();
+    }
+
+    public static JSONFactory getJSONFactory(int features, SerializerFeature... features2) {
+        return JsonFactorys.getJSONFactory(buildJsonFactoryProperties(features, features2));
+    }
+
+    public static JsonFactoryProperties buildJsonFactoryProperties(int features, SerializerFeature... features2){
         if (features2 != null) {
             for (SerializerFeature feature : features2) {
                 features |= feature.getMask();
@@ -59,8 +67,6 @@ public class FastEasyJsons {
         properties.setEnableCustomConfiguration(true);
         properties.setProxyDialectIdentify(FASTJSON);
         properties.addExclusion(FastjsonAnnotationExclusion.INSTANCE);
-
-        return jsonBuilder;
+        return properties;
     }
-
 }

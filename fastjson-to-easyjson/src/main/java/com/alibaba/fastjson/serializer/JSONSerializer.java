@@ -16,19 +16,18 @@ package com.alibaba.fastjson.serializer;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.easyjson.FastEasyJsons;
-import com.alibaba.fastjson.util.IOUtils;
-import com.jn.easyjson.core.JSONBuilder;
-import com.jn.easyjson.core.JSONBuilderProvider;
+import com.jn.easyjson.core.factory.JsonFactoryProperties;
+import com.jn.easyjson.core.factory.JsonFactorys;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Writer;
-import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.zip.GZIPOutputStream;
+import java.util.Collections;
+import java.util.IdentityHashMap;
+import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * @author wenshao[szujobs@hotmail.com]
@@ -272,15 +271,17 @@ public class JSONSerializer extends SerializeFilterable {
     }
 
     public final void write(Object object) {
-        String json = FastEasyJsons.getJsonBuilder(this.out.getFeatures()).serializeUseDateFormat(this.getDateFormat()).build().toJson(object);
-        this.out.write(json);
+        writeAs(object, object == null ? null : object.getClass());
     }
 
     /**
      * @since 1.2.57
      */
     public final void writeAs(Object object, Class type) {
-        String json = FastEasyJsons.getJsonBuilder(this.out.getFeatures()).serializeUseDateFormat(this.getDateFormat()).build().toJson(object, type);
+        int features = this.out.getFeatures();
+        JsonFactoryProperties properties = FastEasyJsons.buildJsonFactoryProperties(features);
+        properties.setDateFormat(this.getDateFormat());
+        String json = JsonFactorys.getJSONFactory(properties).get().toJson(object, type);
         this.out.write(json);
     }
 

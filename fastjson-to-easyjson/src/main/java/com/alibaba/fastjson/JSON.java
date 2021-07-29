@@ -29,6 +29,8 @@ import com.alibaba.fastjson.util.TypeUtils;
 import com.jn.easyjson.core.JSONBuilder;
 import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.easyjson.core.JsonTreeNode;
+import com.jn.easyjson.core.factory.JsonFactoryProperties;
+import com.jn.easyjson.core.factory.JsonFactorys;
 import com.jn.easyjson.core.node.JsonArrayNode;
 import com.jn.langx.util.reflect.type.Types;
 
@@ -164,7 +166,7 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
         if (text == null) {
             return null;
         }
-        return JsonMapper.fromJsonTreeNode(FastEasyJsons.getJsonBuilder(DEFAULT_GENERATE_FEATURE).build().fromJson(text));
+        return JsonMapper.fromJsonTreeNode(FastEasyJsons.getJSONFactory(DEFAULT_GENERATE_FEATURE).get().fromJson(text));
     }
 
     public static Object parse(String text, int features) {
@@ -318,7 +320,7 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
         if (input == null) {
             return null;
         }
-        return FastEasyJsons.getJsonBuilder(JSON.DEFAULT_GENERATE_FEATURE).build().fromJson(input, clazz);
+        return FastEasyJsons.getJSONFactory(JSON.DEFAULT_GENERATE_FEATURE).get().fromJson(input, clazz);
 
     }
 
@@ -484,7 +486,7 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
             return null;
         }
 
-        JsonTreeNode node = FastEasyJsons.getJsonBuilder(DEFAULT_GENERATE_FEATURE).build().fromJson(text);
+        JsonTreeNode node = FastEasyJsons.getJSONFactory(DEFAULT_GENERATE_FEATURE).get().fromJson(text);
         JsonArrayNode arrayNode = null;
         if (node.isJsonArrayNode()) {
             arrayNode = node.getAsJsonArrayNode();
@@ -499,7 +501,7 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
         if (text == null) {
             return null;
         }
-        return FastEasyJsons.getJsonBuilder(JSON.DEFAULT_GENERATE_FEATURE).build().fromJson(text, Types.getListParameterizedType(clazz));
+        return FastEasyJsons.getJSONFactory(JSON.DEFAULT_GENERATE_FEATURE).get().fromJson(text, Types.getListParameterizedType(clazz));
     }
 
     public static List<Object> parseArray(String text, Type[] types) {
@@ -532,7 +534,7 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
      * @since 1.2.11
      */
     public static String toJSONString(Object object, int defaultFeatures, SerializerFeature... features) {
-        return FastEasyJsons.getJsonBuilder(defaultFeatures, features).build().toJson(object);
+        return FastEasyJsons.getJSONFactory(defaultFeatures, features).get().toJson(object);
     }
 
     /**
@@ -545,7 +547,9 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
 
     public static String toJSONStringWithDateFormat(Object object, String dateFormat, int defaultFeatures,
                                                     SerializerFeature... features) {
-        return FastEasyJsons.getJsonBuilder(defaultFeatures, features).serializeDateUsingPattern(dateFormat).build().toJson(object);
+        JsonFactoryProperties properties = FastEasyJsons.buildJsonFactoryProperties(defaultFeatures, features);
+        properties.setDatePattern(dateFormat);
+        return JsonFactorys.getJSONFactory(properties).get().toJson(object);
     }
 
     public static String toJSONString(Object object, SerializeFilter filter, SerializerFeature... features) {
@@ -880,12 +884,12 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
     }
 
     public static boolean isValidObject(String str) {
-        JsonTreeNode node = FastEasyJsons.getJsonBuilder(DEFAULT_GENERATE_FEATURE).build().fromJson(str);
+        JsonTreeNode node = FastEasyJsons.getJSONFactory(DEFAULT_GENERATE_FEATURE).get().fromJson(str);
         return node != null && node.isJsonObjectNode();
     }
 
     public static boolean isValidArray(String str) {
-        JsonTreeNode node = FastEasyJsons.getJsonBuilder(DEFAULT_GENERATE_FEATURE).build().fromJson(str);
+        JsonTreeNode node = FastEasyJsons.getJSONFactory(DEFAULT_GENERATE_FEATURE).get().fromJson(str);
         return node != null && node.isJsonArrayNode();
     }
 

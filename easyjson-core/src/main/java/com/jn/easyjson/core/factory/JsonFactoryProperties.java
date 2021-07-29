@@ -20,6 +20,7 @@ import com.jn.langx.util.Objects;
 import com.jn.langx.util.Objs;
 import com.jn.langx.util.collection.Collects;
 
+import java.text.DateFormat;
 import java.util.List;
 import java.util.Set;
 
@@ -37,6 +38,7 @@ public class JsonFactoryProperties {
     private boolean serializeEnumUsingIndex = false;
     private boolean serializeLongAsString = false;
     private String datePattern = null;
+    private DateFormat dateFormat;
     private boolean serializeDateUsingToString;
     private final Set<Integer> exclusiveFieldModifiers = Collects.emptyTreeSet();
     private boolean enableCustomConfiguration;
@@ -105,6 +107,14 @@ public class JsonFactoryProperties {
 
     public void setDatePattern(String datePattern) {
         this.datePattern = datePattern;
+    }
+
+    public DateFormat getDateFormat() {
+        return dateFormat;
+    }
+
+    public void setDateFormat(DateFormat dateFormat) {
+        this.dateFormat = dateFormat;
     }
 
     public boolean getSerializeDateUsingToString() {
@@ -191,6 +201,9 @@ public class JsonFactoryProperties {
             return false;
         }
         if (!Objs.equals(enableCustomConfiguration, that.enableCustomConfiguration)) {
+            return false;
+        }
+        if (!Objs.equals(dateFormat, that.dateFormat)) {
             return false;
         }
         if (!Objs.equals(datePattern, that.datePattern)) {
