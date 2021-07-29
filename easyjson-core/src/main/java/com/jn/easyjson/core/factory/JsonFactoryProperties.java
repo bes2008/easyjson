@@ -14,11 +14,20 @@
 
 package com.jn.easyjson.core.factory;
 
+import com.jn.easyjson.core.codec.dialect.DialectIdentify;
+import com.jn.easyjson.core.exclusion.Exclusion;
+import com.jn.langx.util.Objects;
+import com.jn.langx.util.Objs;
+import com.jn.langx.util.collection.Collects;
+
+import java.util.List;
+import java.util.Set;
+
 /**
  * 用于配置 JSON Builder，可以在Spring环境下直接用
  */
 public class JsonFactoryProperties {
-    private JsonScope jsonScope;
+    private JsonScope jsonScope = null;
 
 
     private boolean lenient = false;
@@ -29,6 +38,10 @@ public class JsonFactoryProperties {
     private boolean serializeLongAsString = false;
     private String datePattern = null;
     private boolean serializeDateUsingToString;
+    private final Set<Integer> exclusiveFieldModifiers = Collects.emptyTreeSet();
+    private boolean enableCustomConfiguration;
+    private DialectIdentify proxyDialectIdentify;
+    private List<Exclusion> exclusions;
 
     public JsonScope getJsonScope() {
         return jsonScope;
@@ -100,5 +113,106 @@ public class JsonFactoryProperties {
 
     public void setSerializeDateUsingToString(boolean serializeDateUsingToString) {
         this.serializeDateUsingToString = serializeDateUsingToString;
+    }
+
+    public boolean isSerializeDateUsingToString() {
+        return serializeDateUsingToString;
+    }
+
+    public Set<Integer> getExclusiveFieldModifiers() {
+        return exclusiveFieldModifiers;
+    }
+
+    public void setExclusiveFieldModifiers(Set<Integer> exclusiveFieldModifiers) {
+        this.exclusiveFieldModifiers.addAll(exclusiveFieldModifiers);
+    }
+
+    public void addExclusiveFieldModifier(int modifier) {
+        this.exclusiveFieldModifiers.add(modifier);
+    }
+
+    public boolean isEnableCustomConfiguration() {
+        return enableCustomConfiguration;
+    }
+
+    public void setEnableCustomConfiguration(boolean enableCustomConfiguration) {
+        this.enableCustomConfiguration = enableCustomConfiguration;
+    }
+
+    public DialectIdentify getProxyDialectIdentify() {
+        return proxyDialectIdentify;
+    }
+
+    public void setProxyDialectIdentify(DialectIdentify proxyDialectIdentify) {
+        this.proxyDialectIdentify = proxyDialectIdentify;
+    }
+
+    public List<Exclusion> getExclusions() {
+        return exclusions;
+    }
+
+    public void setExclusions(List<Exclusion> exclusions) {
+        this.exclusions = exclusions;
+    }
+
+    public void addExclusion(Exclusion exclusion) {
+        this.exclusions.add(exclusion);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        JsonFactoryProperties that = (JsonFactoryProperties) o;
+
+        if (!Objs.equals(lenient, that.lenient)) {
+            return false;
+        }
+        if (!Objs.equals(serializeNulls, that.serializeNulls)) {
+            return false;
+        }
+        if (!Objs.equals(prettyFormat, that.prettyFormat)) {
+            return false;
+        }
+        if (!Objs.equals(serializeEnumUsingToString, that.serializeEnumUsingToString)) {
+            return false;
+        }
+        if (!Objs.equals(serializeEnumUsingIndex, that.serializeEnumUsingIndex)) {
+            return false;
+        }
+        if (!Objs.equals(serializeLongAsString, that.serializeLongAsString)) {
+            return false;
+        }
+        if (!Objs.equals(serializeDateUsingToString, that.serializeDateUsingToString)) {
+            return false;
+        }
+        if (!Objs.equals(enableCustomConfiguration, that.enableCustomConfiguration)) {
+            return false;
+        }
+        if (!Objs.equals(datePattern, that.datePattern)) {
+            return false;
+        }
+        if (!Objects.deepEquals(exclusiveFieldModifiers, that.exclusiveFieldModifiers)) {
+            return false;
+        }
+        if (!Objs.equals(proxyDialectIdentify, that.proxyDialectIdentify)) {
+            return false;
+        }
+        if (!Objs.equals(datePattern, that.datePattern)) {
+            return false;
+        }
+        if (!Objs.equals(datePattern, that.datePattern)) {
+            return false;
+        }
+        return !Collects.diff(exclusions, that.exclusions).hasDifference();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(jsonScope, lenient, serializeNulls, prettyFormat, serializeEnumUsingToString, serializeEnumUsingIndex, serializeLongAsString, datePattern, serializeDateUsingToString, exclusiveFieldModifiers, enableCustomConfiguration, proxyDialectIdentify, exclusions);
     }
 }

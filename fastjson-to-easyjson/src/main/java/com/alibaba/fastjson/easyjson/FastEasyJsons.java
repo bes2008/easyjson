@@ -18,6 +18,7 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.jn.easyjson.core.JSONBuilder;
 import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.easyjson.core.codec.dialect.DialectIdentify;
+import com.jn.easyjson.core.factory.JsonFactoryProperties;
 import com.jn.langx.util.reflect.Reflects;
 
 import java.lang.reflect.Modifier;
@@ -41,21 +42,24 @@ public class FastEasyJsons {
             }
         }
         boolean serializeNulls = (SerializerFeature.WriteMapNullValue.getMask() & features) != 0;
-        jsonBuilder.serializeNulls(serializeNulls);
         boolean serializeEnumUsingToString = (SerializerFeature.WriteEnumUsingToString.getMask() & features) != 0;
-        jsonBuilder.serializeEnumUsingToString(serializeEnumUsingToString);
         boolean serializeEnumUsingName = (SerializerFeature.WriteEnumUsingName.getMask() & features) != 0;
-        jsonBuilder.serializeEnumUsingIndex(!serializeEnumUsingName);
         boolean skipTransientField = (SerializerFeature.SkipTransientField.getMask() & features) != 0;
-        if (skipTransientField) {
-            jsonBuilder.excludeFieldsWithAppendModifiers(Modifier.TRANSIENT);
-        }
         boolean prettyFormat = (SerializerFeature.PrettyFormat.getMask() & features) != 0;
-        jsonBuilder.prettyFormat(prettyFormat);
-        jsonBuilder.enableCustomConfiguration(true);
-        jsonBuilder.proxyDialectIdentify(FASTJSON);
 
-        jsonBuilder.addExclusionStrategies(new FastjsonAnnotationExclusion());
+
+        JsonFactoryProperties properties = new JsonFactoryProperties();
+        properties.setSerializeNulls(serializeNulls);
+        properties.setPrettyFormat(prettyFormat);
+        properties.setSerializeEnumUsingToString(serializeEnumUsingToString);
+        properties.setSerializeEnumUsingIndex(!serializeEnumUsingName);
+        if (skipTransientField) {
+            properties.addExclusiveFieldModifier(Modifier.TRANSIENT);
+        }
+        properties.setEnableCustomConfiguration(true);
+        properties.setProxyDialectIdentify(FASTJSON);
+        properties.addExclusion(FastjsonAnnotationExclusion.INSTANCE);
+
         return jsonBuilder;
     }
 
