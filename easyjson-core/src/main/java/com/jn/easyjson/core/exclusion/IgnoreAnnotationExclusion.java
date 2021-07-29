@@ -18,7 +18,7 @@ import com.jn.easyjson.core.annotation.Ignore;
 import com.jn.langx.util.reflect.FieldAttributes;
 import com.jn.langx.util.reflect.MethodAttributes;
 
-public class IgnoreAnnotationExclusion implements Exclusion {
+public final class IgnoreAnnotationExclusion implements Exclusion {
 
     @Override
     public boolean shouldSkipMethod(MethodAttributes m, boolean serialize) {
@@ -41,5 +41,15 @@ public class IgnoreAnnotationExclusion implements Exclusion {
     @Override
     public boolean shouldSkipClass(Class<?> clazz, boolean serialize) {
         return false;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof IgnoreAnnotationExclusion;
+    }
+
+    @Override
+    public int hashCode() {
+        return 1;
     }
 }

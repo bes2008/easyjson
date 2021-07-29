@@ -14,12 +14,16 @@
 
 package com.jn.easyjson.core.exclusion;
 
+import com.jn.langx.util.Objs;
 import com.jn.langx.util.collection.Collects;
+import com.jn.langx.util.collection.Pipeline;
+import com.jn.langx.util.function.Functions;
 import com.jn.langx.util.function.Predicate;
 import com.jn.langx.util.reflect.FieldAttributes;
 import com.jn.langx.util.reflect.MethodAttributes;
 
 import java.util.List;
+import java.util.Set;
 
 public class FieldNamesExclusion implements Exclusion {
     /**
@@ -56,5 +60,22 @@ public class FieldNamesExclusion implements Exclusion {
     @Override
     public boolean shouldSkipClass(Class<?> clazz, boolean serializePhrase) {
         return false;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FieldNamesExclusion that = (FieldNamesExclusion) o;
+
+
+        Set<String> thisFieldNamesCopy = Pipeline.of(this.fieldNames).map(Functions.toLowerCase()).asSet(true);
+        Set<String> thatFieldNamesCopy = Pipeline.of(that.fieldNames).map(Functions.toLowerCase()).asSet(true);
+        return !Collects.diff(thatFieldNamesCopy, thisFieldNamesCopy).hasDifference();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objs.hash(fieldNames);
     }
 }

@@ -31,8 +31,8 @@ import java.lang.reflect.Method;
 /**
  * 处理 fastjson  JSONType, JSONField 注解
  */
-public class FastjsonAnnotationExclusion implements Exclusion {
-
+public final class FastjsonAnnotationExclusion implements Exclusion {
+    public static final FastjsonAnnotationExclusion INSTANCE = new FastjsonAnnotationExclusion();
     @Override
     public boolean shouldSkipMethod(MethodAttributes m, boolean serializePhrase) {
         return skipProperty(m.get(), serializePhrase);
@@ -80,4 +80,13 @@ public class FastjsonAnnotationExclusion implements Exclusion {
         }
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof FastjsonAnnotationExclusion;
+    }
+
+    @Override
+    public int hashCode() {
+        return 1;
+    }
 }

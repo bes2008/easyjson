@@ -3,7 +3,7 @@ package com.jn.easyjson.core.exclusion;
 import com.jn.langx.util.reflect.FieldAttributes;
 import com.jn.langx.util.reflect.MethodAttributes;
 
-public class UnderlineStartedExclusion implements Exclusion {
+public final class UnderlineStartedExclusion implements Exclusion {
     @Override
     public boolean shouldSkipMethod(MethodAttributes m, boolean serialize) {
         return false;
@@ -21,5 +21,15 @@ public class UnderlineStartedExclusion implements Exclusion {
     @Override
     public boolean shouldSkipClass(Class<?> aClass, boolean serialize) {
         return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return 2;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof UnderlineStartedExclusion;
     }
 }
