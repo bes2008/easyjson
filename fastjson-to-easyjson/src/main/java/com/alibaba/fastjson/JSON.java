@@ -540,13 +540,11 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
     /**
      * @since 1.1.14
      */
-    public static String toJSONStringWithDateFormat(Object object, String dateFormat,
-                                                    SerializerFeature... features) {
+    public static String toJSONStringWithDateFormat(Object object, String dateFormat, SerializerFeature... features) {
         return toJSONStringWithDateFormat(object, dateFormat, JSON.DEFAULT_GENERATE_FEATURE, features);
     }
 
-    public static String toJSONStringWithDateFormat(Object object, String dateFormat, int defaultFeatures,
-                                                    SerializerFeature... features) {
+    public static String toJSONStringWithDateFormat(Object object, String dateFormat, int defaultFeatures, SerializerFeature... features) {
         JsonFactoryProperties properties = FastEasyJsons.buildJsonFactoryProperties(defaultFeatures, features);
         properties.setDatePattern(dateFormat);
         return JsonFactorys.getJSONFactory(properties).get().toJson(object);

@@ -43,7 +43,7 @@ public class JsonFactoryProperties {
     private final Set<Integer> exclusiveFieldModifiers = Collects.emptyTreeSet();
     private boolean enableCustomConfiguration;
     private DialectIdentify proxyDialectIdentify;
-    private List<Exclusion> exclusions;
+    private final List<Exclusion> exclusions = Collects.emptyArrayList();
 
     public JsonScope getJsonScope() {
         return jsonScope;
@@ -162,7 +162,7 @@ public class JsonFactoryProperties {
     }
 
     public void setExclusions(List<Exclusion> exclusions) {
-        this.exclusions = exclusions;
+        this.exclusions.addAll(exclusions);
     }
 
     public void addExclusion(Exclusion exclusion) {
@@ -226,6 +226,6 @@ public class JsonFactoryProperties {
 
     @Override
     public int hashCode() {
-        return Objects.hash(jsonScope, lenient, serializeNulls, prettyFormat, serializeEnumUsingToString, serializeEnumUsingIndex, serializeLongAsString, datePattern, serializeDateUsingToString, exclusiveFieldModifiers, enableCustomConfiguration, proxyDialectIdentify, exclusions);
+        return Objects.hash(lenient, serializeNulls, prettyFormat, serializeEnumUsingToString, serializeEnumUsingIndex, serializeLongAsString, datePattern, serializeDateUsingToString, exclusiveFieldModifiers, enableCustomConfiguration, proxyDialectIdentify, exclusions);
     }
 }

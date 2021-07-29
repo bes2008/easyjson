@@ -56,6 +56,7 @@ public class JsonFactorys {
             if (factory == null) {
                 properties.setJsonScope(JsonScope.SINGLETON);
                 factory = getJSONFactory(properties);
+                cache.put(properties, factory);
             }
             return factory;
         }
