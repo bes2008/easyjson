@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.module.SimpleDeserializers;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.jn.easyjson.core.JSON;
 import com.jn.easyjson.core.JSONBuilder;
+import com.jn.easyjson.core.JsonCustomizer;
 import com.jn.easyjson.core.annotation.DependOn;
 import com.jn.easyjson.core.exclusion.ExclusionConfiguration;
 import com.jn.easyjson.jackson.deserializer.BooleanDeserializer;
@@ -208,6 +209,7 @@ public class JacksonJSONBuilder extends JSONBuilder {
         jsonHandler.setObjectMapper(mapper);
         JSON json = new JSON();
         json.setJsonHandler(jsonHandler);
+        applyCustomizer(json);
         return json;
     }
 

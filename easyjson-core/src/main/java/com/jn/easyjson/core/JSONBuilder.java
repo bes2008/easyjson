@@ -82,6 +82,8 @@ public abstract class JSONBuilder implements Cloneable {
      */
     private DialectIdentify dialectId;
 
+    private JsonCustomizer jsonHandlerCustomizer;
+
     /**
      * 全局配置项, 这里面其实是每个类每个字段的默认配置项
      */
@@ -383,6 +385,21 @@ public abstract class JSONBuilder implements Cloneable {
         return this.dialectId;
     }
 
+    public JSONBuilder jsonHandlerCustomizer(JsonCustomizer customizer) {
+        this.jsonHandlerCustomizer = customizer;
+        return this;
+    }
+
+    public JsonCustomizer jsonHandlerCustomizer() {
+        return jsonHandlerCustomizer;
+    }
+
+    protected void applyCustomizer(JSON json) {
+        if (jsonHandlerCustomizer != null) {
+            jsonHandlerCustomizer.customize(json);
+        }
+    }
+
     public abstract JSON build();
 
     protected <E extends JSONBuilder> void copyTo(E builder) {
@@ -405,6 +422,6 @@ public abstract class JSONBuilder implements Cloneable {
         builder.dialectIdentify(this.dialectIdentify());
         builder.proxyDialectIdentify(this.proxyDialectIdentify());
         builder.serializeBytesAsBase64String(this.serializeBytesAsBase64String);
-
+        builder.jsonHandlerCustomizer(this.jsonHandlerCustomizer);
     }
 }

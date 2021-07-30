@@ -104,7 +104,9 @@ public class FastJsonJSONBuilder extends JSONBuilder {
         FastJson fastJson = new FastJson(serializerBuilder, deserializerBuilder, jsonTreeSerializerBuilder);
         FastJsonAdapter jsonHandler = new FastJsonAdapter();
         jsonHandler.setFastJson(fastJson);
-        return new JSON().setJsonHandler(jsonHandler);
+        JSON json = new JSON().setJsonHandler(jsonHandler);
+        applyCustomizer(json);
+        return json;
     }
 
     private JsonTreeSerializerBuilder buildJsonTreeWriter() {
