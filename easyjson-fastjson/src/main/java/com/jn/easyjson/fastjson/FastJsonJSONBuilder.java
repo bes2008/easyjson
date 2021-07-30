@@ -103,7 +103,7 @@ public class FastJsonJSONBuilder extends JSONBuilder {
 
         FastJson fastJson = new FastJson(serializerBuilder, deserializerBuilder, jsonTreeSerializerBuilder);
         FastJsonAdapter jsonHandler = new FastJsonAdapter();
-        jsonHandler.setFastJson(fastJson);
+        jsonHandler.setDelegate(fastJson);
         JSON json = new JSON().setJsonHandler(jsonHandler);
         applyCustomizer(json);
         return json;

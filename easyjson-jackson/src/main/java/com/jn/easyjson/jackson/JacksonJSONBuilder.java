@@ -206,7 +206,7 @@ public class JacksonJSONBuilder extends JSONBuilder {
         mapper.configure(JsonParser.Feature.IGNORE_UNDEFINED, true);
 
         JacksonAdapter jsonHandler = new JacksonAdapter();
-        jsonHandler.setObjectMapper(mapper);
+        jsonHandler.setDelegate(mapper);
         JSON json = new JSON();
         json.setJsonHandler(jsonHandler);
         applyCustomizer(json);

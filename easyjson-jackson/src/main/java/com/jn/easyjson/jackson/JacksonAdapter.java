@@ -96,6 +96,7 @@ public class JacksonAdapter extends JsonHandlerAdapter<ObjectMapper> {
         }
     }
 
+    @Deprecated
     public void setObjectMapper(ObjectMapper objectMapper) {
         setDelegate(objectMapper);
     }

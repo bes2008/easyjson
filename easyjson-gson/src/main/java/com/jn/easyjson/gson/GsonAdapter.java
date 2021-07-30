@@ -53,6 +53,7 @@ public class GsonAdapter extends JsonHandlerAdapter<Gson> {
         return mapper.create(node);
     }
 
+    @Deprecated
     public void setGson(Gson gson) {
         setDelegate(gson);
     }

@@ -60,6 +60,7 @@ public class FastJsonAdapter extends JsonHandlerAdapter<FastJson> {
         return serializer.toString();
     }
 
+    @Deprecated
     public void setFastJson(FastJson fastJson) {
         setDelegate(fastJson);
     }
