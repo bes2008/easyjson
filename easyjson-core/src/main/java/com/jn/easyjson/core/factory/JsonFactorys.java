@@ -28,7 +28,7 @@ public class JsonFactorys {
     }
 
     public static JSONFactory getJSONFactory(JsonScope jsonScope) {
-        return getJSONFactory(JSONBuilderProvider.create()
+        return getJSONFactory(getJsonBuilder(null)
                         .serializeNulls(true)
                         .enableIgnoreAnnotation(),
                 jsonScope);
@@ -36,9 +36,9 @@ public class JsonFactorys {
 
     public static JSONFactory getJSONFactory(JSONBuilder jsonBuilder, JsonScope jsonScope) {
         if (jsonScope == JsonScope.SINGLETON) {
-            return new SingletonJSONFactory(jsonBuilder);
+            return new SingletonJSONFactory(getJsonBuilder(jsonBuilder));
         } else {
-            return new PrototypeJSONFactory(jsonBuilder);
+            return new PrototypeJSONFactory(getJsonBuilder(jsonBuilder));
         }
     }
 
