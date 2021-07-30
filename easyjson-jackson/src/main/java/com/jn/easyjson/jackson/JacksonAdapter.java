@@ -100,4 +100,8 @@ public class JacksonAdapter implements JsonHandler {
     public void setObjectMapper(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
     }
+
+    public ObjectMapper getObjectMapper(){
+        return objectMapper;
+    }
 }
