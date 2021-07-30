@@ -19,7 +19,7 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jn.easyjson.core.JsonException;
-import com.jn.easyjson.core.JsonHandler;
+import com.jn.easyjson.core.JsonHandlerAdapter;
 import com.jn.easyjson.core.JsonTreeNode;
 import com.jn.easyjson.jackson.node.JacksonBasedJsonTreeNodeMapper;
 import com.jn.langx.util.reflect.type.Types;
@@ -28,14 +28,13 @@ import java.io.Reader;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
-public class JacksonAdapter implements JsonHandler {
-    private ObjectMapper objectMapper;
+public class JacksonAdapter extends JsonHandlerAdapter<ObjectMapper> {
     private JacksonBasedJsonTreeNodeMapper treeNodeMapper = new JacksonBasedJsonTreeNodeMapper();
 
     @Override
     public <T> T deserialize(String json, Type typeOfT) throws JsonException {
         try {
-            return objectMapper.readValue(json, toJavaType(typeOfT));
+            return getDelegate().readValue(json, toJavaType(typeOfT));
         } catch (Throwable ex) {
             throw new JsonException(ex);
         }
@@ -44,7 +43,7 @@ public class JacksonAdapter implements JsonHandler {
     @Override
     public <T> T deserialize(Reader reader, Type typeOfT) throws JsonException {
         try {
-            return objectMapper.readValue(reader, toJavaType(typeOfT));
+            return getDelegate().readValue(reader, toJavaType(typeOfT));
         } catch (Throwable ex) {
             throw new JsonException(ex);
         }
@@ -55,11 +54,11 @@ public class JacksonAdapter implements JsonHandler {
             return Jacksons.toJavaType(typeOfT);
         }
         if (Types.isPrimitive(typeOfT)) {
-            return objectMapper.getTypeFactory().constructType(Types.getPrimitiveWrapClass(typeOfT));
+            return getDelegate().getTypeFactory().constructType(Types.getPrimitiveWrapClass(typeOfT));
         }
 
         if (Types.isClass(typeOfT)) {
-            return objectMapper.getTypeFactory().constructType(Types.toClass(typeOfT));
+            return getDelegate().getTypeFactory().constructType(Types.toClass(typeOfT));
         }
 
         if (Types.isParameterizedType(typeOfT)) {
@@ -70,7 +69,7 @@ public class JacksonAdapter implements JsonHandler {
             for (int i = 0; i < parameterTypes.length; i++) {
                 parameterClasses[i] = toJavaType(parameterTypes[i]);
             }
-            return objectMapper.getTypeFactory().constructParametricType(parametrized, parameterClasses);
+            return getDelegate().getTypeFactory().constructParametricType(parametrized, parameterClasses);
         }
         return Jacksons.toJavaType(typeOfT);
     }
@@ -78,7 +77,7 @@ public class JacksonAdapter implements JsonHandler {
     @Override
     public JsonTreeNode deserialize(String json) throws JsonException {
         try {
-            JsonNode jsonNode = objectMapper.readTree(json);
+            JsonNode jsonNode = getDelegate().readTree(json);
             return treeNodeMapper.create(jsonNode);
         } catch (Throwable ex) {
             throw new JsonException(ex);
@@ -89,19 +88,16 @@ public class JacksonAdapter implements JsonHandler {
     public String serialize(Object src, Type typeOfT) throws JsonException {
         try {
             if (src instanceof JsonTreeNode) {
-                return objectMapper.writeValueAsString(treeNodeMapper.mapping((JsonTreeNode) src));
+                return getDelegate().writeValueAsString(treeNodeMapper.mapping((JsonTreeNode) src));
             }
-            return objectMapper.writeValueAsString(src);
+            return getDelegate().writeValueAsString(src);
         } catch (JsonProcessingException e) {
             throw new JsonException(e);
         }
     }
 
     public void setObjectMapper(ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
+        setDelegate(objectMapper);
     }
 
-    public ObjectMapper getObjectMapper(){
-        return objectMapper;
-    }
 }

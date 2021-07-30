@@ -19,19 +19,18 @@ import com.alibaba.fastjson.parser.DefaultJSONParser;
 import com.alibaba.fastjson.parser.JSONReaderScanner;
 import com.alibaba.fastjson.serializer.JSONSerializer;
 import com.jn.easyjson.core.JsonException;
-import com.jn.easyjson.core.JsonHandler;
+import com.jn.easyjson.core.JsonHandlerAdapter;
 import com.jn.easyjson.core.JsonTreeNode;
 import com.jn.easyjson.core.tree.JsonTreeDeserializer;
 
 import java.io.Reader;
 import java.lang.reflect.Type;
 
-public class FastJsonAdapter implements JsonHandler {
-    private FastJson fastJson;
+public class FastJsonAdapter extends JsonHandlerAdapter<FastJson> {
 
     @Override
     public <T> T deserialize(String json, Type typeOfT) throws JsonException {
-        DefaultJSONParser parser = fastJson.getDeserializerBuilder().build(json);
+        DefaultJSONParser parser = getDelegate().getDeserializerBuilder().build(json);
         T value = parser.parseObject(typeOfT);
         parser.handleResovleTask(value);
         parser.close();
@@ -40,7 +39,7 @@ public class FastJsonAdapter implements JsonHandler {
 
     @Override
     public <T> T deserialize(Reader reader, Type typeOfT) throws JsonException {
-        JSONReaderScanner jsonReaderScanner = new JSONReaderScanner(reader, fastJson.getDeserializerBuilder().getFeatures());
+        JSONReaderScanner jsonReaderScanner = new JSONReaderScanner(reader, getDelegate().getDeserializerBuilder().getFeatures());
         JSONReader jsonReader = new JSONReader(jsonReaderScanner);
         return jsonReader.readObject(typeOfT);
     }
@@ -54,14 +53,15 @@ public class FastJsonAdapter implements JsonHandler {
     public String serialize(Object src, Type typeOfT) throws JsonException {
         if (src instanceof JsonTreeNode) {
             JsonTreeNode element = (JsonTreeNode) src;
-            return fastJson.getJsonTreeSerializerBuilder().build().toJson(element);
+            return getDelegate().getJsonTreeSerializerBuilder().build().toJson(element);
         }
-        JSONSerializer serializer = fastJson.getSerializerBuilder().build();
+        JSONSerializer serializer = getDelegate().getSerializerBuilder().build();
         serializer.write(src);
         return serializer.toString();
     }
 
     public void setFastJson(FastJson fastJson) {
-        this.fastJson = fastJson;
+        setDelegate(fastJson);
     }
+
 }

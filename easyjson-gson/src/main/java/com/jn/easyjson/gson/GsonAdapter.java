@@ -14,38 +14,37 @@
 
 package com.jn.easyjson.gson;
 
-import com.jn.easyjson.core.JsonException;
-import com.jn.easyjson.core.JsonHandler;
-import com.jn.easyjson.core.JsonTreeNode;
-import com.jn.easyjson.gson.node.GsonBasedJsonTreeNodeMapper;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import com.jn.easyjson.core.JsonException;
+import com.jn.easyjson.core.JsonHandlerAdapter;
+import com.jn.easyjson.core.JsonTreeNode;
+import com.jn.easyjson.gson.node.GsonBasedJsonTreeNodeMapper;
 
 import java.io.Reader;
 import java.lang.reflect.Type;
 
-public class GsonAdapter implements JsonHandler {
+public class GsonAdapter extends JsonHandlerAdapter<Gson> {
     private GsonBasedJsonTreeNodeMapper mapper = new GsonBasedJsonTreeNodeMapper();
-    private Gson gson;
 
     @Override
     public String serialize(Object src, Type typeOfT) throws JsonException {
         if (src instanceof JsonTreeNode) {
             JsonElement element = mapper.mapping((JsonTreeNode) src);
-            return gson.toJson(element, element.getClass());
+            return getDelegate().toJson(element, element.getClass());
         }
-        return gson.toJson(src, typeOfT);
+        return getDelegate().toJson(src, typeOfT);
     }
 
     @Override
     public <T> T deserialize(String json, Type typeOfT) throws JsonException {
-        return gson.fromJson(json, typeOfT);
+        return getDelegate().fromJson(json, typeOfT);
     }
 
     @Override
     public <T> T deserialize(Reader reader, Type typeOfT) throws JsonException {
-        return gson.fromJson(reader, typeOfT);
+        return getDelegate().fromJson(reader, typeOfT);
     }
 
     @Override
@@ -55,6 +54,6 @@ public class GsonAdapter implements JsonHandler {
     }
 
     public void setGson(Gson gson) {
-        this.gson = gson;
+        setDelegate(gson);
     }
 }

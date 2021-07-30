@@ -21,7 +21,6 @@ import com.jn.easyjson.core.exclusion.ExclusionConfiguration;
 import com.jn.easyjson.core.exclusion.IgnoreAnnotationExclusion;
 import com.jn.langx.util.Dates;
 import com.jn.langx.util.Strings;
-import com.jn.langx.util.function.Consumer2;
 
 import java.text.DateFormat;
 import java.util.Locale;
@@ -382,15 +381,6 @@ public abstract class JSONBuilder implements Cloneable {
 
     public DialectIdentify dialectIdentify() {
         return this.dialectId;
-    }
-
-    public JSONBuilder withTargetClass(Class clazz) {
-        return this;
-    }
-
-    public JSONBuilder withTargetClass(Class clazz, Consumer2<JSONBuilder, Class> consumer) {
-        consumer.accept(this, clazz);
-        return this;
     }
 
     public abstract JSON build();
