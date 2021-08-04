@@ -62,18 +62,19 @@ public class JsonFactorys {
         JsonScope jsonScope = properties.getJsonScope();
         if (jsonScope != null) {
             jsonBuilder = getJsonBuilder(jsonBuilder);
-
-            jsonBuilder.prettyFormat(properties.isPrettyFormat())
-                    .serializeNulls(properties.isSerializeNulls())
-                    .serializeEnumUsingIndex(properties.isSerializeEnumUsingIndex())
-                    .serializeEnumUsingToString(properties.isSerializeEnumUsingToString())
-                    .serializeDateUsingPattern(properties.getDatePattern())
-                    .serializeDateUsingToString(properties.getSerializeDateUsingToString())
-                    .serializeLongAsString(properties.isSerializeLongAsString())
-                    .dialectIdentify(properties.getProxyDialectIdentify())
-                    .enableCustomConfiguration(properties.isEnableCustomConfiguration())
-                    .excludeFieldsWithAppendModifiers(PrimitiveArrays.unwrap(Collects.asArray(properties.getExclusiveFieldModifiers(), Integer.class), false))
-                    .addExclusionStrategies(Collects.asArray(properties.getExclusions(), Exclusion.class));
+            if (jsonBuilder != GLOBAL_JSON_BUILDER) {
+                jsonBuilder.prettyFormat(properties.isPrettyFormat())
+                        .serializeNulls(properties.isSerializeNulls())
+                        .serializeEnumUsingIndex(properties.isSerializeEnumUsingIndex())
+                        .serializeEnumUsingToString(properties.isSerializeEnumUsingToString())
+                        .serializeDateUsingPattern(properties.getDatePattern())
+                        .serializeDateUsingToString(properties.getSerializeDateUsingToString())
+                        .serializeLongAsString(properties.isSerializeLongAsString())
+                        .dialectIdentify(properties.getProxyDialectIdentify())
+                        .enableCustomConfiguration(properties.isEnableCustomConfiguration())
+                        .excludeFieldsWithAppendModifiers(PrimitiveArrays.unwrap(Collects.asArray(properties.getExclusiveFieldModifiers(), Integer.class), false))
+                        .addExclusionStrategies(Collects.asArray(properties.getExclusions(), Exclusion.class));
+            }
             return getJSONFactory(jsonBuilder, properties.getJsonScope());
         } else {
             JSONFactory factory = cache.get(properties);

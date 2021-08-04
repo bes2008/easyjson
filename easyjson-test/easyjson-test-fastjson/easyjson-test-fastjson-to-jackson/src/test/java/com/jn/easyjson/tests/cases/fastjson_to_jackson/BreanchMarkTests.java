@@ -36,6 +36,8 @@ public class BreanchMarkTests {
     @Benchmark
     public void testSimpleSerialize() {
         JSON.toJSONString(simpleJsonObject);
+        JSON.toJSONString(simpleJsonObject);
+        JSON.parseObject(complexJson);
     }
 
     private static ObjectMapper objectMapper = new ObjectMapper();

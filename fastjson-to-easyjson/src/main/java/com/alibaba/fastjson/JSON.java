@@ -26,7 +26,6 @@ import com.alibaba.fastjson.serializer.SerializeFilter;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.util.IOUtils;
 import com.alibaba.fastjson.util.TypeUtils;
-import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.easyjson.core.JsonTreeNode;
 import com.jn.easyjson.core.factory.JsonFactoryProperties;
 import com.jn.easyjson.core.factory.JsonFactorys;
@@ -220,7 +219,7 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
     }
 
     public static JSONObject parseObject(String text) {
-        return (JSONObject) JsonMapper.fromJsonTreeNode(JSONBuilderProvider.simplest().fromJson(text));
+        return (JSONObject) JsonMapper.fromJsonTreeNode(FastEasyJsons.getJSONFactory(JSON.DEFAULT_GENERATE_FEATURE).get().fromJson(text));
     }
 
     /**
