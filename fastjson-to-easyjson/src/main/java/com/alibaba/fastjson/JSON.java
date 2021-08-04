@@ -17,6 +17,7 @@ package com.alibaba.fastjson;
 
 
 import com.alibaba.fastjson.easyjson.FastEasyJsons;
+import com.alibaba.fastjson.easyjson.JsonMapper;
 import com.alibaba.fastjson.parser.DefaultJSONParser;
 import com.alibaba.fastjson.parser.Feature;
 import com.alibaba.fastjson.parser.ParserConfig;
