@@ -61,8 +61,10 @@ public class JsonFactorys {
     public static JSONFactory getJSONFactory(JsonFactoryProperties properties, JSONBuilder jsonBuilder) {
         JsonScope jsonScope = properties.getJsonScope();
         if (jsonScope != null) {
+            // 创建新的 JSONFactory
             jsonBuilder = getJsonBuilder(jsonBuilder);
-            if (jsonBuilder != GLOBAL_JSON_BUILDER) {
+            if (jsonBuilder == GLOBAL_JSON_BUILDER) {
+                jsonBuilder = JSONBuilderProvider.create();
                 jsonBuilder.prettyFormat(properties.isPrettyFormat())
                         .serializeNulls(properties.isSerializeNulls())
                         .serializeEnumUsingIndex(properties.isSerializeEnumUsingIndex())
@@ -77,6 +79,7 @@ public class JsonFactorys {
             }
             return getJSONFactory(jsonBuilder, properties.getJsonScope());
         } else {
+            // 复用已有的 JSONFactory
             JSONFactory factory = cache.get(properties);
             if (factory == null) {
                 properties.setJsonScope(JsonScope.SINGLETON);
