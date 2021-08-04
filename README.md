@@ -30,16 +30,17 @@ Provides a unified JSON access API, you can adapter any JSON library to Gson, Ja
     2. **easyjson-jackson**: 使用它可以将其他的JSON库适配给Jackson
     3. **easyjson-fastjson**: 使用它可以将其他的JSON库适配给 Fastjson
 + **XXXX-to-easyjson**: 有很多这样的模块，它们是用于将xxx JSON库通过easyjson-core，适配给底层JSON实现库。
-    1. **fast-to-easyjson**: 使用它可以将其他的安卓下的org.json库通过easyjson适配给 gson, jackson
-    2. **android-to-easyjson**: 使用它可以将其他的Android下的org.json库通过easyjson适配给fastjson, gson, jackson
-    3. **boonjson-to-easyjson**: 使用它可以将安卓下的boon-json（io.advantageous.boon.json）库通过easyjson适配给fastjson, gson, jackson
-    4. **jsonlib-to-easyjson**: 使用它可以将json-lib （net.sf.json）通过easyjson适配给fastjson, gson, jackson
-    5. **jsonsmart-to-easyjson**: 使用它可以将json-smart （net.minidev.json）通过easyjson适配给fastjson, gson, jackson
-    6. **minimaljson-to-easyjson**: 使用它可以将minimal-json （com.eclipsesource.json）通过easyjson适配给fastjson, gson, jackson
-    7. **moshi-to-easyjson**: 使用它可以将moshi-json （com.squareup.moshi）通过easyjson适配给fastjson, gson, jackson
-    8. **orgjson-to-easyjson**: 使用它可以将org.json通过easyjson适配给fastjson, gson, jackson
-    9. **progsbase-to-easyjson**: 使用它可以将progsbase json通过easyjson适配给fastjson, gson, jackson
-    10. **simplejson-to-easyjson**: 使用它可以将json-simple通过easyjson适配给fastjson, gson, jackson
+    1. **fast-to-easyjson**: 使用它可以将fastjson库通过easyjson适配给 gson, jackson
+    2. **gson-to-easyjson**: 使用它可以将fastjson库通过easyjson适配给 fastjson, jackson
+    3. **android-to-easyjson**: 使用它可以将其他的Android下的org.json库通过easyjson适配给fastjson, gson, jackson
+    4. **boonjson-to-easyjson**: 使用它可以将安卓下的boon-json（io.advantageous.boon.json）库通过easyjson适配给fastjson, gson, jackson
+    5. **jsonlib-to-easyjson**: 使用它可以将json-lib （net.sf.json）通过easyjson适配给fastjson, gson, jackson
+    6. **jsonsmart-to-easyjson**: 使用它可以将json-smart （net.minidev.json）通过easyjson适配给fastjson, gson, jackson
+    7. **minimaljson-to-easyjson**: 使用它可以将minimal-json （com.eclipsesource.json）通过easyjson适配给fastjson, gson, jackson
+    8. **moshi-to-easyjson**: 使用它可以将moshi-json （com.squareup.moshi）通过easyjson适配给fastjson, gson, jackson
+    9. **orgjson-to-easyjson**: 使用它可以将org.json通过easyjson适配给fastjson, gson, jackson
+    10. **progsbase-to-easyjson**: 使用它可以将progsbase json通过easyjson适配给fastjson, gson, jackson
+    11. **simplejson-to-easyjson**: 使用它可以将json-simple通过easyjson适配给fastjson, gson, jackson
 + **easyjson-examples**: test cases
 + **easyjson-test**: test cases v2
 
