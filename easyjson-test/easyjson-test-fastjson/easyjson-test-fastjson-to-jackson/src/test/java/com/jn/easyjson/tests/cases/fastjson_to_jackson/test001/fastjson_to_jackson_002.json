@@ -1,0 +1,32 @@
+{
+  "message": "",
+  "result": {
+    "seriesgrouplist": [
+      {
+        "datatimelist": [
+          {"id": 14},
+          {"id": 11}
+        ],
+        "groupname": "市",
+        "id": 0
+      },
+      {
+        "datatimelist": [
+          {"id": 14},
+          {"id": 11}
+        ],
+        "groupname": "8月",
+        "id": 8
+      },
+      {
+        "datatimelist": [
+          {"id": 14},
+          {"id": 11}
+        ],
+        "groupname": "9日",
+        "id": 9
+      }
+    ]
+  },
+  "returncode": 0
+}

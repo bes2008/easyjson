@@ -115,7 +115,7 @@ public class JacksonBasedJsonTreeNodeMapper implements JsonTreeNodeFactory<JsonN
             Iterator<String> iter = jsonNode.fieldNames();
             while (iter.hasNext()) {
                 String fieldName = iter.next();
-                jsonObjectNode.addProperty(fieldName, create(jsonNode.findValue(fieldName)));
+                jsonObjectNode.addProperty(fieldName, create(jsonNode.get(fieldName)));
             }
             return jsonObjectNode;
         }
