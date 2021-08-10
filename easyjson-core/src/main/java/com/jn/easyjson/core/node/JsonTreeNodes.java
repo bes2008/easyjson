@@ -26,11 +26,11 @@ import com.jn.langx.util.reflect.type.Primitives;
 import java.util.*;
 
 public class JsonTreeNodes {
-    public static JsonTreeNode fromJavaObject(Object object) {
-        return fromJavaObject(object, null);
+    public static JsonTreeNode toJsonTreeNode(Object object) {
+        return toJsonTreeNode(object, null);
     }
 
-    public static JsonTreeNode fromJavaObject(Object object, final ToJsonTreeNodeMapper mapper) {
+    public static JsonTreeNode toJsonTreeNode(Object object, final ToJsonTreeNodeMapper mapper) {
         if (object == null) {
             return JsonNullNode.INSTANCE;
         }
@@ -54,7 +54,7 @@ public class JsonTreeNodes {
             JsonArrayNode arrayNode = new JsonArrayNode();
             Collection c = (Collection) object;
             for (Object e : c) {
-                JsonTreeNode element = fromJavaObject(e, mapper);
+                JsonTreeNode element = toJsonTreeNode(e, mapper);
                 arrayNode.add(element);
             }
             return arrayNode;
@@ -65,7 +65,7 @@ public class JsonTreeNodes {
             JsonArrayNode arrayNode = new JsonArrayNode();
             for (int i = 0; i < array.length; i++) {
                 Object e = array[i];
-                JsonTreeNode element = fromJavaObject(e, mapper);
+                JsonTreeNode element = toJsonTreeNode(e, mapper);
                 arrayNode.add(element);
             }
             return arrayNode;
@@ -77,7 +77,7 @@ public class JsonTreeNodes {
             Collects.forEach(map, new Consumer2<Object, Object>() {
                 @Override
                 public void accept(Object key, Object value) {
-                    objectNode.addProperty(key.toString(), fromJavaObject(value, mapper));
+                    objectNode.addProperty(key.toString(), toJsonTreeNode(value, mapper));
                 }
             });
             return objectNode;
@@ -106,10 +106,10 @@ public class JsonTreeNodes {
     }
 
     public static Object toJavaObject(JsonTreeNode node) {
-        return toXxxJSON(node, null);
+        return fromJsonTreeNode(node, null);
     }
 
-    public static Object toXxxJSON(JsonTreeNode node, ToJSONMapper mapper) {
+    public static Object fromJsonTreeNode(JsonTreeNode node, ToJSONMapper mapper) {
         if (node == null || JsonNullNode.INSTANCE == node) {
             if (mapper != null) {
                 return mapper.mappingNull(JsonNullNode.INSTANCE);

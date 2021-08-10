@@ -41,7 +41,7 @@ public class JsonMapper {
     );
 
     public static JsonTreeNode toJsonTreeNode(Object object) {
-        return JsonTreeNodes.fromJavaObject(object, new ToJsonTreeNodeMapper() {
+        return JsonTreeNodes.toJsonTreeNode(object, new ToJsonTreeNodeMapper() {
             @Override
             public boolean isAcceptable(@NonNull final Object object) {
                 return Collects.anyMatch(supportedTypes, new Predicate<Class>() {
@@ -58,7 +58,7 @@ public class JsonMapper {
                     JSONArray jsonArray = (JSONArray) object;
                     JsonArrayNode arrayNode = new JsonArrayNode();
                     for (Object item : jsonArray) {
-                        arrayNode.add(JsonTreeNodes.fromJavaObject(item, this));
+                        arrayNode.add(JsonTreeNodes.toJsonTreeNode(item, this));
                     }
                     return arrayNode;
                 }
@@ -69,7 +69,7 @@ public class JsonMapper {
                     Iterator<Map.Entry<String, Object>> iter = jsonObject.entrySet().iterator();
                     while (iter.hasNext()) {
                         Map.Entry<String, Object> entry = iter.next();
-                        JsonTreeNode value = JsonTreeNodes.fromJavaObject(entry.getValue(), this);
+                        JsonTreeNode value = JsonTreeNodes.toJsonTreeNode(entry.getValue(), this);
                         objectNode.addProperty(entry.getKey(), value);
                     }
                     return objectNode;
@@ -90,7 +90,7 @@ public class JsonMapper {
     }
 
     public static Object fromJsonTreeNode(JsonTreeNode treeNode) {
-        return JsonTreeNodes.toXxxJSON(treeNode, new ToJSONMapper<JSONObject, JSONArray, Object, JSON>() {
+        return JsonTreeNodes.fromJsonTreeNode(treeNode, new ToJSONMapper<JSONObject, JSONArray, Object, JSON>() {
             @Override
             public JSON mappingNull(JsonNullNode node) {
                 return null;
@@ -114,7 +114,7 @@ public class JsonMapper {
             public JSONArray mappingArray(JsonArrayNode arrayNode) {
                 JSONArray array = new JSONArray();
                 for (int i = 0; i < arrayNode.size(); i++) {
-                    array.add(JsonTreeNodes.toXxxJSON(arrayNode.get(i), this));
+                    array.add(JsonTreeNodes.fromJsonTreeNode(arrayNode.get(i), this));
                 }
                 return array;
             }
@@ -126,7 +126,7 @@ public class JsonMapper {
                 JSONObject map = new JSONObject();
                 while (iter.hasNext()) {
                     Map.Entry<String, JsonTreeNode> entry = iter.next();
-                    map.put(entry.getKey(), JsonTreeNodes.toXxxJSON(entry.getValue(), this));
+                    map.put(entry.getKey(), JsonTreeNodes.fromJsonTreeNode(entry.getValue(), this));
                 }
                 return map;
             }

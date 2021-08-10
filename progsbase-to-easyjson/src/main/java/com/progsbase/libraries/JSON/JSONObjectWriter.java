@@ -47,7 +47,7 @@ public class JSONObjectWriter {
     );
 
     public static JsonTreeNode toJsonTreeNode(Object object) {
-        return JsonTreeNodes.fromJavaObject(object, new ToJsonTreeNodeMapper() {
+        return JsonTreeNodes.toJsonTreeNode(object, new ToJsonTreeNodeMapper() {
 
             @Override
             public boolean isAcceptable(@NonNull final Object object) {

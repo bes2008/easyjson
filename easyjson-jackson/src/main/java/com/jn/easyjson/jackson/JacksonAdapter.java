@@ -21,9 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jn.easyjson.core.JsonException;
 import com.jn.easyjson.core.JsonHandlerAdapter;
 import com.jn.easyjson.core.JsonTreeNode;
-import com.jn.easyjson.core.node.JsonTreeNodes;
-import com.jn.easyjson.jackson.node.JacksonToJsonMapper;
-import com.jn.easyjson.jackson.node.JacksonToTreeNodeMapper;
+import com.jn.easyjson.jackson.node.JacksonJsonMapper;
 import com.jn.langx.util.reflect.type.Types;
 
 import java.io.Reader;
@@ -79,7 +77,7 @@ public class JacksonAdapter extends JsonHandlerAdapter<ObjectMapper> {
     public JsonTreeNode deserialize(String json) throws JsonException {
         try {
             JsonNode jsonNode = getDelegate().readTree(json);
-            return JsonTreeNodes.fromJavaObject(jsonNode, new JacksonToTreeNodeMapper());
+            return JacksonJsonMapper.toJsonTreeNode(jsonNode);
         } catch (Throwable ex) {
             throw new JsonException(ex);
         }
@@ -89,7 +87,7 @@ public class JacksonAdapter extends JsonHandlerAdapter<ObjectMapper> {
     public String serialize(Object src, Type typeOfT) throws JsonException {
         try {
             if (src instanceof JsonTreeNode) {
-                JsonNode jsonNode = (JsonNode) JsonTreeNodes.toXxxJSON((JsonTreeNode) src, new JacksonToJsonMapper());
+                JsonNode jsonNode = JacksonJsonMapper.fromJsonTreeNode((JsonTreeNode) src);
                 return getDelegate().writeValueAsString(jsonNode);
             }
             return getDelegate().writeValueAsString(src);

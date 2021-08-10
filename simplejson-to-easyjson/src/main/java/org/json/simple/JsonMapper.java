@@ -31,7 +31,7 @@ import java.util.Map;
 public class JsonMapper {
 
     public static Object fromJsonTreeNode(JsonTreeNode treeNode) {
-        return JsonTreeNodes.toXxxJSON(treeNode, new ToJSONMapper<JSONObject, JSONArray, Object, Object>() {
+        return JsonTreeNodes.fromJsonTreeNode(treeNode, new ToJSONMapper<JSONObject, JSONArray, Object, Object>() {
             @Override
             public Object mappingNull(JsonNullNode node) {
                 return null;
@@ -55,7 +55,7 @@ public class JsonMapper {
             public JSONArray mappingArray(JsonArrayNode node) {
                 JSONArray jsonArray = new JSONArray();
                 for (JsonTreeNode item : node) {
-                    jsonArray.add(JsonTreeNodes.toXxxJSON(item, this));
+                    jsonArray.add(JsonTreeNodes.fromJsonTreeNode(item, this));
                 }
                 return jsonArray;
             }
@@ -64,7 +64,7 @@ public class JsonMapper {
             public JSONObject mappingObject(JsonObjectNode node) {
                 JSONObject jsonObject = new JSONObject();
                 for (Map.Entry<String, JsonTreeNode> entry : node.propertySet()) {
-                    jsonObject.put(entry.getKey(), JsonTreeNodes.toXxxJSON(entry.getValue(), this));
+                    jsonObject.put(entry.getKey(), JsonTreeNodes.fromJsonTreeNode(entry.getValue(), this));
                 }
                 return jsonObject;
             }
@@ -78,7 +78,7 @@ public class JsonMapper {
             JSONStreamAware.class
     );
     public static JsonTreeNode toJsonTreeNode(Object object) {
-        return JsonTreeNodes.fromJavaObject(object, new ToJsonTreeNodeMapper() {
+        return JsonTreeNodes.toJsonTreeNode(object, new ToJsonTreeNodeMapper() {
             @Override
             public boolean isAcceptable(@NonNull final Object object) {
                 return Collects.anyMatch(supportedTypes, new Predicate<Class>() {
@@ -94,7 +94,7 @@ public class JsonMapper {
                 if (object instanceof JSONArray) {
                     JsonArrayNode arrayNode = new JsonArrayNode();
                     for (Object item : (JSONArray) object) {
-                        arrayNode.add(JsonTreeNodes.fromJavaObject(item, this));
+                        arrayNode.add(JsonTreeNodes.toJsonTreeNode(item, this));
                     }
                     return arrayNode;
                 }
@@ -104,7 +104,7 @@ public class JsonMapper {
                     Iterator<Map.Entry<String, Object>> iter = ((JSONObject) object).entrySet().iterator();
                     while (iter.hasNext()) {
                         Map.Entry<String, Object> entry = iter.next();
-                        objectNode.addProperty(entry.getKey(), JsonTreeNodes.fromJavaObject(entry.getValue(), this));
+                        objectNode.addProperty(entry.getKey(), JsonTreeNodes.toJsonTreeNode(entry.getValue(), this));
                     }
                     return objectNode;
                 }

@@ -11,7 +11,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 
-public class JacksonToTreeNodeMapper implements ToJsonTreeNodeMapper {
+class JacksonToTreeNodeMapper implements ToJsonTreeNodeMapper {
     @Override
     public JsonTreeNode mapping(Object object) {
         return create((JsonNode) object);

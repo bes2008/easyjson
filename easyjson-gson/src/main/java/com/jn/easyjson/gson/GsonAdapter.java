@@ -20,9 +20,7 @@ import com.google.gson.JsonParser;
 import com.jn.easyjson.core.JsonException;
 import com.jn.easyjson.core.JsonHandlerAdapter;
 import com.jn.easyjson.core.JsonTreeNode;
-import com.jn.easyjson.core.node.JsonTreeNodes;
-import com.jn.easyjson.gson.node.GsonToJsonMapper;
-import com.jn.easyjson.gson.node.GsonToJsonTreeNodeMapper;
+import com.jn.easyjson.gson.node.GsonJsonMapper;
 
 import java.io.Reader;
 import java.lang.reflect.Type;
@@ -33,7 +31,7 @@ public class GsonAdapter extends JsonHandlerAdapter<Gson> {
     @Override
     public String serialize(Object src, Type typeOfT) throws JsonException {
         if (src instanceof JsonTreeNode) {
-            JsonElement element = (JsonElement) JsonTreeNodes.toXxxJSON((JsonTreeNode) src, new GsonToJsonMapper());
+            JsonElement element = GsonJsonMapper.fromJsonTreeNode((JsonTreeNode) src);
             return getDelegate().toJson(element, element.getClass());
         }
         return getDelegate().toJson(src, typeOfT);
@@ -52,7 +50,7 @@ public class GsonAdapter extends JsonHandlerAdapter<Gson> {
     @Override
     public JsonTreeNode deserialize(String json) throws JsonException {
         JsonElement node = new JsonParser().parse(json);
-        return JsonTreeNodes.fromJavaObject(node, new GsonToJsonTreeNodeMapper());
+        return GsonJsonMapper.toJsonTreeNode(node);
     }
 
     @Deprecated

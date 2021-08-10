@@ -11,8 +11,8 @@ import java.util.Map;
 
 public class JsonMapper {
 
-    public static JsonTreeNode fromJsonValue(Object object) {
-        return JsonTreeNodes.fromJavaObject(object, new ToJsonTreeNodeMapper() {
+    public static JsonTreeNode toJsonTreeNode(Object object) {
+        return JsonTreeNodes.toJsonTreeNode(object, new ToJsonTreeNodeMapper() {
             @Override
             public JsonTreeNode mapping(Object object) {
                 return doMapping((JsonValue) object);
@@ -69,8 +69,8 @@ public class JsonMapper {
         });
     }
 
-    public static JsonValue toJsonValue(JsonTreeNode treeNode) {
-        return (JsonValue) JsonTreeNodes.toXxxJSON(treeNode, new ToJSONMapper<JsonObject, JsonArray, JsonValue, JsonValue>() {
+    public static JsonValue fromJsonTreeNode(JsonTreeNode treeNode) {
+        return (JsonValue) JsonTreeNodes.fromJsonTreeNode(treeNode, new ToJSONMapper<JsonObject, JsonArray, JsonValue, JsonValue>() {
             @Override
             public JsonValue mappingNull(JsonNullNode node) {
                 return JsonValue.NULL;
@@ -108,7 +108,7 @@ public class JsonMapper {
             public JsonArray mappingArray(JsonArrayNode node) {
                 JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
                 for (JsonTreeNode treeNode : node) {
-                    arrayBuilder.add((JsonValue) JsonTreeNodes.toXxxJSON(treeNode, this));
+                    arrayBuilder.add((JsonValue) JsonTreeNodes.fromJsonTreeNode(treeNode, this));
                 }
                 return arrayBuilder.build();
             }
@@ -118,7 +118,7 @@ public class JsonMapper {
                 JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
                 for (Map.Entry<String, JsonTreeNode> entry : node.propertySet()) {
                     String name = entry.getKey();
-                    JsonValue value = (JsonValue) JsonTreeNodes.toXxxJSON(entry.getValue(), this);
+                    JsonValue value = (JsonValue) JsonTreeNodes.fromJsonTreeNode(entry.getValue(), this);
                     objectBuilder.add(name, value);
                 }
                 return objectBuilder.build();

@@ -20,7 +20,7 @@ public class JavaxJsonHandler extends JsonHandlerAdapter {
     public JsonTreeNode deserialize(String json) throws JsonException {
         JsonReader jsonReader = Json.createReader(new StringReader(json));
         JsonValue jsonValue = jsonReader.readValue();
-        return JsonMapper.fromJsonValue(jsonValue);
+        return JsonMapper.toJsonTreeNode(jsonValue);
     }
 
     @Override
@@ -37,8 +37,8 @@ public class JavaxJsonHandler extends JsonHandlerAdapter {
     public String serialize(Object src, Type typeOfT) throws JsonException {
         StringWriter writer = new StringWriter();
         JsonWriter jsonWriter = Json.createWriter(writer);
-        JsonTreeNode jsonTreeNode = JsonMapper.fromJsonValue(src);
-        jsonWriter.write(JsonMapper.toJsonValue(jsonTreeNode));
+        JsonTreeNode jsonTreeNode = JsonMapper.toJsonTreeNode(src);
+        jsonWriter.write(JsonMapper.fromJsonTreeNode(jsonTreeNode));
 
         String jsonString = jsonWriter.toString();
         IOs.close(jsonWriter);

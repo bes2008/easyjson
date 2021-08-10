@@ -7,7 +7,7 @@ import com.jn.easyjson.core.node.*;
 
 import java.util.Iterator;
 
-public class JacksonToJsonMapper implements ToJSONMapper<ObjectNode, ArrayNode, ValueNode, NullNode> {
+class JacksonToJsonMapper implements ToJSONMapper<ObjectNode, ArrayNode, ValueNode, NullNode> {
     JsonNodeFactory jsonNodeFactory = new JsonNodeFactory(true);
 
     @Override
@@ -58,7 +58,7 @@ public class JacksonToJsonMapper implements ToJSONMapper<ObjectNode, ArrayNode, 
         JsonArrayNode jsonArrayNode = node.getAsJsonArrayNode();
         ArrayNode arrayNode = jsonNodeFactory.arrayNode();
         for (JsonTreeNode element : jsonArrayNode) {
-            arrayNode.add((JsonNode) JsonTreeNodes.toXxxJSON(element, this));
+            arrayNode.add((JsonNode) JsonTreeNodes.fromJsonTreeNode(element, this));
         }
         return arrayNode;
     }
@@ -70,7 +70,7 @@ public class JacksonToJsonMapper implements ToJSONMapper<ObjectNode, ArrayNode, 
         Iterator<String> iter = jsonObjectNode.propertyNames().iterator();
         while (iter.hasNext()) {
             String fieldName = iter.next();
-            objectNode.set(fieldName, (JsonNode) JsonTreeNodes.toXxxJSON(jsonObjectNode.getProperty(fieldName), this));
+            objectNode.set(fieldName, (JsonNode) JsonTreeNodes.fromJsonTreeNode(jsonObjectNode.getProperty(fieldName), this));
         }
         return objectNode;
     }
