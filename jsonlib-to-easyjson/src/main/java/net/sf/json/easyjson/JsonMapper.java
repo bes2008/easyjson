@@ -46,7 +46,7 @@ public class JsonMapper {
      * from json tree node to JSON-lib JSON object
      */
     public static Object fromJsonTreeNode(JsonTreeNode treeNode) {
-        return JsonTreeNodes.toJSON(treeNode, new ToJSONMapper<JSONObject, JSONArray, Object, JSONNull>() {
+        return JsonTreeNodes.toXxxJSON(treeNode, new ToJSONMapper<JSONObject, JSONArray, Object, JSONNull>() {
             @Override
             public JSONNull mappingNull(JsonNullNode node) {
                 return JSONNull.getInstance();
@@ -70,7 +70,7 @@ public class JsonMapper {
             public JSONArray mappingArray(JsonArrayNode arrayNode) {
                 JSONArray jsonArray = new JSONArray();
                 for (JsonTreeNode jsonTreeNode : arrayNode) {
-                    jsonArray.element(JsonTreeNodes.toJSON(jsonTreeNode, this));
+                    jsonArray.element(JsonTreeNodes.toXxxJSON(jsonTreeNode, this));
                 }
                 return jsonArray;
             }
@@ -79,7 +79,7 @@ public class JsonMapper {
             public JSONObject mappingObject(JsonObjectNode objectNode) {
                 JSONObject jsonObject = new JSONObject();
                 for (Map.Entry<String, JsonTreeNode> entry : objectNode.propertySet()) {
-                    jsonObject.put(entry.getKey(), JsonTreeNodes.toJSON(entry.getValue(), this));
+                    jsonObject.put(entry.getKey(), JsonTreeNodes.toXxxJSON(entry.getValue(), this));
                 }
                 return jsonObject;
             }

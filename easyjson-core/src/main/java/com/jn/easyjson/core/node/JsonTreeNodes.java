@@ -106,19 +106,19 @@ public class JsonTreeNodes {
     }
 
     public static Object toJavaObject(JsonTreeNode node) {
-        return toJSON(node, null);
+        return toXxxJSON(node, null);
     }
 
-    public static Object toJSON(JsonTreeNode node, ToJSONMapper mapping) {
+    public static Object toXxxJSON(JsonTreeNode node, ToJSONMapper mapper) {
         if (node == null || JsonNullNode.INSTANCE == node) {
-            if (mapping != null) {
-                return mapping.mappingNull(JsonNullNode.INSTANCE);
+            if (mapper != null) {
+                return mapper.mappingNull(JsonNullNode.INSTANCE);
             }
             return null;
         }
         if (node.isJsonPrimitiveNode()) {
-            if (mapping != null) {
-                Object obj = mapping.mappingPrimitive(node.getAsJsonPrimitiveNode());
+            if (mapper != null) {
+                Object obj = mapper.mappingPrimitive(node.getAsJsonPrimitiveNode());
                 if (obj != null) {
                     return obj;
                 }
@@ -136,8 +136,8 @@ public class JsonTreeNodes {
             return primitiveNode.getValue();
         }
         if (node.isJsonArrayNode()) {
-            if (mapping != null) {
-                Object obj = mapping.mappingArray(node.getAsJsonArrayNode());
+            if (mapper != null) {
+                Object obj = mapper.mappingArray(node.getAsJsonArrayNode());
                 if (obj != null) {
                     return obj;
                 }
@@ -150,8 +150,8 @@ public class JsonTreeNodes {
             return array;
         }
         if (node.isJsonObjectNode()) {
-            if (mapping != null) {
-                Object obj = mapping.mappingObject(node.getAsJsonObjectNode());
+            if (mapper != null) {
+                Object obj = mapper.mappingObject(node.getAsJsonObjectNode());
                 if (obj != null) {
                     return obj;
                 }
