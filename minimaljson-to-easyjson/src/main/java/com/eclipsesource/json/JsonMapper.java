@@ -22,7 +22,7 @@ import java.util.Map;
 public class JsonMapper {
 
     public static JsonValue fromJsonTreeNode(JsonTreeNode treeNode) {
-        return (JsonValue) JsonTreeNodes.fromJsonTreeNode(treeNode, new ToJSONMapper<JsonObject, JsonArray, JsonValue, JsonValue>() {
+        return (JsonValue) JsonTreeNodes.toXxxJson(treeNode, new ToXxxJsonMapper<JsonObject, JsonArray, JsonValue, JsonValue>() {
             @Override
             public JsonValue mappingNull(JsonNullNode node) {
                 return Json.NULL;
@@ -46,7 +46,7 @@ public class JsonMapper {
             public JsonArray mappingArray(JsonArrayNode arrayNode) {
                 JsonArray jsonArray = new JsonArray();
                 for (JsonTreeNode node : arrayNode) {
-                    jsonArray.add((JsonValue) JsonTreeNodes.fromJsonTreeNode(node, this));
+                    jsonArray.add((JsonValue) JsonTreeNodes.toXxxJson(node, this));
                 }
                 return jsonArray;
             }
@@ -55,7 +55,7 @@ public class JsonMapper {
             public JsonObject mappingObject(JsonObjectNode objectNode) {
                 JsonObject jsonObject = new JsonObject();
                 for (Map.Entry<String, JsonTreeNode> entry : objectNode.propertySet()) {
-                    jsonObject.add(entry.getKey(), (JsonValue) JsonTreeNodes.fromJsonTreeNode(entry.getValue(), this));
+                    jsonObject.add(entry.getKey(), (JsonValue) JsonTreeNodes.toXxxJson(entry.getValue(), this));
                 }
                 return jsonObject;
             }

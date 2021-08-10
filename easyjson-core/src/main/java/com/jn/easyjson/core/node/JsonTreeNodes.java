@@ -106,10 +106,10 @@ public class JsonTreeNodes {
     }
 
     public static Object toJavaObject(JsonTreeNode node) {
-        return fromJsonTreeNode(node, null);
+        return toXxxJson(node, null);
     }
 
-    public static Object fromJsonTreeNode(JsonTreeNode node, ToJSONMapper mapper) {
+    public static Object toXxxJson(JsonTreeNode node, ToXxxJsonMapper mapper) {
         if (node == null || JsonNullNode.INSTANCE == node) {
             if (mapper != null) {
                 return mapper.mappingNull(JsonNullNode.INSTANCE);

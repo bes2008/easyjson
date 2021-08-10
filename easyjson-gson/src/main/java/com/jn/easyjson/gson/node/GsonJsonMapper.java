@@ -13,10 +13,10 @@ public class GsonJsonMapper {
     }
 
     public static JsonElement fromJsonTreeNode(JsonTreeNode jsonTreeNode) {
-        return (JsonElement) JsonTreeNodes.fromJsonTreeNode(jsonTreeNode, new GsonToJsonMapper());
+        return (JsonElement) JsonTreeNodes.toXxxJson(jsonTreeNode, new GsonToJsonMapper());
     }
 
-    static class GsonToJsonMapper implements ToJSONMapper<JsonObject, JsonArray, JsonPrimitive, JsonNull> {
+    static class GsonToJsonMapper implements ToXxxJsonMapper<JsonObject, JsonArray, JsonPrimitive, JsonNull> {
 
         @Override
         public JsonNull mappingNull(JsonNullNode node) {
@@ -41,7 +41,7 @@ public class GsonJsonMapper {
             JsonArrayNode jsonArray = node.getAsJsonArrayNode();
             JsonArray jsonArrayNode = new JsonArray(jsonArray.size());
             for (JsonTreeNode je : jsonArray) {
-                jsonArrayNode.add((JsonElement) JsonTreeNodes.fromJsonTreeNode(je, this));
+                jsonArrayNode.add((JsonElement) JsonTreeNodes.toXxxJson(je, this));
             }
             return jsonArrayNode;
         }
@@ -53,7 +53,7 @@ public class GsonJsonMapper {
             for (Map.Entry<String, JsonTreeNode> property : jsonObject.propertySet()) {
                 String propertyName = property.getKey();
                 JsonTreeNode propertyValue = property.getValue();
-                jsonObjectNode.add(propertyName, (JsonElement) JsonTreeNodes.fromJsonTreeNode(propertyValue, this));
+                jsonObjectNode.add(propertyName, (JsonElement) JsonTreeNodes.toXxxJson(propertyValue, this));
             }
             return jsonObjectNode;
         }

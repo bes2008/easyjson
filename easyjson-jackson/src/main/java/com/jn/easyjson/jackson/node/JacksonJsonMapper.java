@@ -11,7 +11,7 @@ public class JacksonJsonMapper {
     }
 
     public static JsonNode fromJsonTreeNode(JsonTreeNode treeNode) {
-        return (JsonNode) JsonTreeNodes.fromJsonTreeNode(treeNode, new JacksonToJsonMapper());
+        return (JsonNode) JsonTreeNodes.toXxxJson(treeNode, new JacksonToJsonMapper());
     }
 
 }
