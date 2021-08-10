@@ -16,6 +16,7 @@ package com.jn.easyjson.core.node;
 
 import com.jn.easyjson.core.JsonTreeNode;
 
+@Deprecated
 public interface JsonTreeNodeFactory<JsonNode> {
     JsonTreeNode create(JsonNode node);
 }
