@@ -21,9 +21,11 @@ import com.fasterxml.jackson.databind.module.SimpleDeserializers;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.jn.easyjson.core.JSON;
 import com.jn.easyjson.core.JSONBuilder;
-import com.jn.easyjson.core.JsonCustomizer;
 import com.jn.easyjson.core.annotation.DependOn;
+import com.jn.easyjson.core.bean.propertynaming.BeanPropertyNamingPolicy;
+import com.jn.easyjson.core.bean.propertynaming.BeanPropertyNamingPolicyRegistry;
 import com.jn.easyjson.core.exclusion.ExclusionConfiguration;
+import com.jn.easyjson.jackson.bean.propertynaming.JacksonPropertyNamingStrategy;
 import com.jn.easyjson.jackson.deserializer.BooleanDeserializer;
 import com.jn.easyjson.jackson.deserializer.Deserializers;
 import com.jn.easyjson.jackson.deserializer.EnumDeserializer;
@@ -34,6 +36,7 @@ import com.jn.easyjson.jackson.modifier.EasyjsonBeanSerializerModifier;
 import com.jn.easyjson.jackson.serializer.BooleanSerializer;
 import com.jn.easyjson.jackson.serializer.EnumSerializer;
 import com.jn.langx.annotation.Name;
+import com.jn.langx.util.Strings;
 import com.jn.langx.util.reflect.Reflects;
 
 import java.lang.reflect.Method;
@@ -204,6 +207,11 @@ public class JacksonJSONBuilder extends JSONBuilder {
         mapper.configure(SerializationFeature.INDENT_OUTPUT, prettyFormat());
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         mapper.configure(JsonParser.Feature.IGNORE_UNDEFINED, true);
+
+        if (Strings.isNotBlank(this.beanPropertyNamingPolicy())) {
+            BeanPropertyNamingPolicy policy = BeanPropertyNamingPolicyRegistry.INSTANCE.get(this.beanPropertyNamingPolicy());
+            mapper.setPropertyNamingStrategy(new JacksonPropertyNamingStrategy(policy));
+        }
 
         JacksonAdapter jsonHandler = new JacksonAdapter();
         jsonHandler.setDelegate(mapper);

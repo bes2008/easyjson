@@ -25,11 +25,6 @@ import com.jn.easyjson.jackson.deserializer.EnumDeserializer;
 import com.jn.easyjson.jackson.deserializer.NumberDeserializer;
 import com.jn.langx.util.reflect.type.Types;
 
-import javax.xml.datatype.XMLGregorianCalendar;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-
 public class EasyjsonBeanDeserializerModifier extends BeanDeserializerModifier {
 
     @Override

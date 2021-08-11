@@ -11,6 +11,7 @@ import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
+import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.reflect.type.Primitives;
 import com.jn.langx.util.reflect.type.Types;
 
@@ -50,21 +51,20 @@ public class EasyjsonReflectiveTypeAdapterFactory implements TypeAdapterFactory 
         SerializedName annotation = f.getAnnotation(SerializedName.class);
         if (annotation == null) {
             String name = fieldNamingPolicy.translateName(f);
-            return Collections.singletonList(name);
+            return Collects.asList(Collects.newLinkedHashSet(name, f.getName()));
         }
 
         String serializedName = annotation.value();
         String[] alternates = annotation.alternate();
-        if (alternates.length == 0) {
-            return Collections.singletonList(serializedName);
-        }
 
-        List<String> fieldNames = new ArrayList<String>(alternates.length + 1);
+        Set<String> fieldNames = new LinkedHashSet<String>(alternates.length + 2);
         fieldNames.add(serializedName);
+        fieldNames.add(f.getName());
         for (String alternate : alternates) {
             fieldNames.add(alternate);
         }
-        return fieldNames;
+
+        return Collects.asList(fieldNames);
     }
 
     @Override

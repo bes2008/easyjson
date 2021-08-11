@@ -1,0 +1,2 @@
+com.jn.easyjson.core.bean.propertynaming.IdentityPropertyNamingPolicy
+com.jn.easyjson.core.bean.propertynaming.UpperCamelCasePropertyNamingPolicy

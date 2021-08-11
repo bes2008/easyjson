@@ -14,24 +14,18 @@
 
 package com.jn.easyjson.jackson.ext;
 
-import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.BeanDescription;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.cfg.DeserializerFactoryConfig;
 import com.fasterxml.jackson.databind.deser.BeanDeserializerBuilder;
 import com.fasterxml.jackson.databind.deser.BeanDeserializerFactory;
 import com.fasterxml.jackson.databind.deser.DeserializerFactory;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
-import com.fasterxml.jackson.databind.util.ClassUtil;
 import com.jn.easyjson.core.exclusion.ExclusionConfiguration;
 import com.jn.easyjson.jackson.JacksonMigrates;
-import com.jn.easyjson.jackson.deserializer.DateDeserializer;
-import com.jn.easyjson.jackson.deserializer.NumberDeserializer;
-import com.jn.langx.util.Throwables;
-import com.jn.langx.util.reflect.Reflects;
-import com.jn.langx.util.reflect.type.Types;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -81,5 +75,10 @@ public class EasyJsonBeanDeserializerFactory extends BeanDeserializerFactory {
             }
         }
         return propertyDefinitions;
+    }
+
+    @Override
+    protected BeanDeserializerBuilder constructBeanDeserializerBuilder(DeserializationContext ctxt, BeanDescription beanDesc) {
+        return new EasyJsonBeanDeserializerBuilder(beanDesc, ctxt.getConfig());
     }
 }

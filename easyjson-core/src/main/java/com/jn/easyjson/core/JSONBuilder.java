@@ -14,6 +14,7 @@
 
 package com.jn.easyjson.core;
 
+import com.jn.easyjson.core.bean.propertynaming.BeanPropertyNamingPolicyRegistry;
 import com.jn.easyjson.core.codec.dialect.CodecConfigurationRepositoryService;
 import com.jn.easyjson.core.codec.dialect.DialectIdentify;
 import com.jn.easyjson.core.exclusion.Exclusion;
@@ -68,6 +69,8 @@ public abstract class JSONBuilder implements Cloneable {
 
     private boolean serializeBytesAsBase64String = true;
 
+    private String beanPropertyNamingPolicy;
+
     /**
      * 是否使用全局配置项
      */
@@ -104,6 +107,17 @@ public abstract class JSONBuilder implements Cloneable {
         } catch (CloneNotSupportedException ex) {
             throw new RuntimeException(ex);
         }
+    }
+
+    public String beanPropertyNamingPolicy() {
+        return this.beanPropertyNamingPolicy;
+    }
+
+    public JSONBuilder beanPropertyNamingPolicy(String fieldNamingPolicy) {
+        if (BeanPropertyNamingPolicyRegistry.INSTANCE.get(fieldNamingPolicy) != null) {
+            this.beanPropertyNamingPolicy = fieldNamingPolicy;
+        }
+        return this;
     }
 
     public boolean isLenient() {
@@ -423,5 +437,6 @@ public abstract class JSONBuilder implements Cloneable {
         builder.proxyDialectIdentify(this.proxyDialectIdentify());
         builder.serializeBytesAsBase64String(this.serializeBytesAsBase64String);
         builder.jsonHandlerCustomizer(this.jsonHandlerCustomizer);
+        builder.beanPropertyNamingPolicy(this.beanPropertyNamingPolicy);
     }
 }

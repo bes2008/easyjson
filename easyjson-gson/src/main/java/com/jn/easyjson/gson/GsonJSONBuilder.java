@@ -24,23 +24,24 @@ import com.google.gson.internal.bind.ReflectiveTypeAdapterFactory;
 import com.jn.easyjson.core.JSON;
 import com.jn.easyjson.core.JSONBuilder;
 import com.jn.easyjson.core.annotation.DependOn;
+import com.jn.easyjson.core.bean.propertynaming.BeanPropertyNamingPolicy;
+import com.jn.easyjson.core.bean.propertynaming.BeanPropertyNamingPolicyRegistry;
 import com.jn.easyjson.core.codec.dialect.DialectIdentify;
 import com.jn.easyjson.core.exclusion.Exclusion;
 import com.jn.easyjson.core.exclusion.ExclusionConfiguration;
+import com.jn.easyjson.gson.bean.fieldnaming.GsonFieldNamingStrategyAdapter;
 import com.jn.easyjson.gson.exclusion.DelegateExclusionStrategy;
 import com.jn.easyjson.gson.typeadapter.*;
 import com.jn.langx.annotation.Name;
-import com.jn.langx.util.collection.Collects;
+import com.jn.langx.util.Strings;
 import com.jn.langx.util.collection.iter.ReverseListIterator;
 import com.jn.langx.util.reflect.Reflects;
-import com.jn.langx.util.struct.Holder;
 import com.jn.langx.util.struct.counter.SimpleIntegerCounter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -107,7 +108,7 @@ public class GsonJSONBuilder extends JSONBuilder {
         }
 
         // 避免特殊字符转换成了类似\u0027的编码
-        if(isDisableHtmlEscaping()){
+        if (isDisableHtmlEscaping()) {
             gsonBuilder.disableHtmlEscaping();
         }
 
@@ -126,6 +127,11 @@ public class GsonJSONBuilder extends JSONBuilder {
         }
         if (getExclusionConfiguration().isSerializeInnerClasses()) {
             gsonBuilder.disableInnerClassSerialization();
+        }
+
+        if (Strings.isNotBlank(beanPropertyNamingPolicy())) {
+            BeanPropertyNamingPolicy policy = BeanPropertyNamingPolicyRegistry.INSTANCE.get(beanPropertyNamingPolicy());
+            gsonBuilder.setFieldNamingStrategy(new GsonFieldNamingStrategyAdapter(policy));
         }
 
         Gson gson = gsonBuilder.create();
@@ -178,15 +184,15 @@ public class GsonJSONBuilder extends JSONBuilder {
                     // 替换 reflectiveTypeAdapterFactory
                     Iterator<TypeAdapterFactory> iterator = new ReverseListIterator(factories);
                     SimpleIntegerCounter reflectiveTypeAdapterFactoryIndex = new SimpleIntegerCounter(factories.size());
-                    while (iterator.hasNext()){
+                    while (iterator.hasNext()) {
                         reflectiveTypeAdapterFactoryIndex.decrement();
-                        TypeAdapterFactory typeAdapterFactory  = iterator.next();
-                        if(typeAdapterFactory instanceof ReflectiveTypeAdapterFactory){
+                        TypeAdapterFactory typeAdapterFactory = iterator.next();
+                        if (typeAdapterFactory instanceof ReflectiveTypeAdapterFactory) {
                             break;
                         }
                     }
                     index = reflectiveTypeAdapterFactoryIndex.get();
-                    if(index>=0 && index<factories.size()){
+                    if (index >= 0 && index < factories.size()) {
                         FieldNamingStrategy fieldNamingStrategy = Reflects.getFieldValue(fieldNamingStrategyField, gson, true, false);
                         EasyjsonReflectiveTypeAdapterFactory reflectiveTypeAdapterFactory = new EasyjsonReflectiveTypeAdapterFactory(
                                 constructorConstructor,
