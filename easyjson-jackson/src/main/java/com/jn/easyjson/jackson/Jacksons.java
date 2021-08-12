@@ -14,34 +14,30 @@
 
 package com.jn.easyjson.jackson;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonStreamContext;
-import com.fasterxml.jackson.core.ObjectCodec;
+import com.fasterxml.jackson.core.*;
 import com.fasterxml.jackson.core.json.JsonReadContext;
 import com.fasterxml.jackson.core.json.JsonWriteContext;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
-import com.jn.easyjson.core.codec.dialect.CodecConfigurationRepository;
-import com.jn.easyjson.core.codec.dialect.CodecConfigurationRepositoryService;
 import com.jn.easyjson.core.codec.dialect.DialectIdentify;
 import com.jn.easyjson.core.codec.dialect.PropertyCodecConfiguration;
 import com.jn.easyjson.jackson.ext.EasyJsonObjectMapper;
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.util.Objs;
-import com.jn.langx.util.Preconditions;
+import com.jn.langx.util.collection.Pipeline;
 import com.jn.langx.util.reflect.Reflects;
 
 import java.lang.reflect.Type;
 import java.text.DateFormat;
-import java.util.Collection;
 import java.util.Locale;
-import java.util.Map;
+import java.util.ServiceLoader;
 import java.util.TimeZone;
 
 public class Jacksons {
+    private static final Version CURRENT_VERSION;
+
     public static boolean isJacksonJavaType(Type type) {
         return type instanceof JavaType;
     }
@@ -71,12 +67,12 @@ public class Jacksons {
         return obj.toString().toLowerCase().equals("true");
     }
 
-    public static TimeZone getTimeZone(DeserializationContext ctx){
-        return Objs.useValueIfNull((TimeZone)ctx.getAttribute(JacksonConstants.SERIALIZE_TIMEZONE), TimeZone.getDefault());
+    public static TimeZone getTimeZone(DeserializationContext ctx) {
+        return Objs.useValueIfNull((TimeZone) ctx.getAttribute(JacksonConstants.SERIALIZE_TIMEZONE), TimeZone.getDefault());
     }
 
-    public static Locale getLocale(DeserializationContext ctx){
-        return Objs.useValueIfNull((Locale)ctx.getAttribute(JacksonConstants.SERIALIZE_LOCALE), Locale.getDefault());
+    public static Locale getLocale(DeserializationContext ctx) {
+        return Objs.useValueIfNull((Locale) ctx.getAttribute(JacksonConstants.SERIALIZE_LOCALE), Locale.getDefault());
     }
 
     public static DateFormat getDateFormatAttr(DeserializationContext ctx, String key) {
@@ -135,14 +131,14 @@ public class Jacksons {
         JACKSON.setLibUrl(Reflects.getCodeLocation(ObjectMapper.class).toString());
     }
 
-    public static PropertyCodecConfiguration getPropertyCodecConfiguration(JsonGenerator gen){
+    public static PropertyCodecConfiguration getPropertyCodecConfiguration(JsonGenerator gen) {
         ObjectCodec objectCodec = gen.getCodec();
-        if(! (objectCodec instanceof EasyJsonObjectMapper)){
+        if (!(objectCodec instanceof EasyJsonObjectMapper)) {
             return null;
         }
         JsonStreamContext streamContext = gen.getOutputContext();
-        if(streamContext instanceof JsonWriteContext){
-            JsonWriteContext writeContext = (JsonWriteContext)streamContext;
+        if (streamContext instanceof JsonWriteContext) {
+            JsonWriteContext writeContext = (JsonWriteContext) streamContext;
             Object container = writeContext.getCurrentValue();
             String propertyName = writeContext.getCurrentName();
             EasyJsonObjectMapper objectMapper = (EasyJsonObjectMapper) objectCodec;
@@ -155,7 +151,7 @@ public class Jacksons {
 
     public static PropertyCodecConfiguration getPropertyCodecConfiguration(@NonNull JsonParser p) {
         ObjectCodec objectCodec = p.getCodec();
-        if(!(objectCodec instanceof EasyJsonObjectMapper)){
+        if (!(objectCodec instanceof EasyJsonObjectMapper)) {
             return null;
         }
         JsonStreamContext parsingContext = p.getParsingContext();
@@ -169,5 +165,22 @@ public class Jacksons {
             return PropertyCodecConfiguration.getPropertyCodecConfiguration(proxyDialectIdentify, container, propertyName);
         }
         return null;
+    }
+
+    static {
+        CURRENT_VERSION = guessCurrentVersion();
+    }
+
+    private static Version guessCurrentVersion() {
+        JsonFactory factory = Pipeline.of(ServiceLoader.<JsonFactory>load(JsonFactory.class)).findFirst();
+        Version template = factory.version();
+
+        Version version = new Version(template.getMajorVersion(), template.getMinorVersion(), template.getPatchLevel(), null, null, null);
+        return version;
+
+    }
+
+    public static Version getCurrentVersion() {
+        return CURRENT_VERSION;
     }
 }
