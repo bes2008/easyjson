@@ -43,7 +43,6 @@ public class JsonFactoryProperties {
     private boolean enableCustomConfiguration;
     private DialectIdentify proxyDialectIdentify;
     private final List<Exclusion> exclusions = Collects.emptyArrayList();
-    private boolean beanProperty;
 
     public JsonScope getJsonScope() {
         return jsonScope;

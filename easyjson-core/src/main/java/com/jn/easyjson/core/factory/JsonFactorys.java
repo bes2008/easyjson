@@ -63,7 +63,7 @@ public class JsonFactorys {
         if (jsonScope != null) {
             // 创建新的 JSONFactory
             jsonBuilder = getJsonBuilder(jsonBuilder);
-            if (jsonBuilder == GLOBAL_JSON_BUILDER) {
+            if (jsonBuilder != GLOBAL_JSON_BUILDER) {
                 jsonBuilder = JSONBuilderProvider.create();
                 jsonBuilder.prettyFormat(properties.isPrettyFormat())
                         .serializeNulls(properties.isSerializeNulls())
@@ -72,7 +72,7 @@ public class JsonFactorys {
                         .serializeDateUsingPattern(properties.getDatePattern())
                         .serializeDateUsingToString(properties.getSerializeDateUsingToString())
                         .serializeLongAsString(properties.isSerializeLongAsString())
-                        .dialectIdentify(properties.getProxyDialectIdentify())
+                        .proxyDialectIdentify(properties.getProxyDialectIdentify())
                         .enableCustomConfiguration(properties.isEnableCustomConfiguration())
                         .excludeFieldsWithAppendModifiers(PrimitiveArrays.unwrap(Collects.asArray(properties.getExclusiveFieldModifiers(), Integer.class), false))
                         .addExclusionStrategies(Collects.asArray(properties.getExclusions(), Exclusion.class));
