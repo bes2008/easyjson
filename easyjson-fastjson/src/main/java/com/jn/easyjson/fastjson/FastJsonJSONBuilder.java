@@ -21,13 +21,18 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.jn.easyjson.core.JSON;
 import com.jn.easyjson.core.JSONBuilder;
 import com.jn.easyjson.core.annotation.DependOn;
+import com.jn.easyjson.core.bean.propertynaming.BeanPropertyNamingPolicy;
+import com.jn.easyjson.core.bean.propertynaming.BeanPropertyNamingPolicyRegistry;
 import com.jn.easyjson.core.codec.dialect.DialectIdentify;
 import com.jn.easyjson.core.exclusion.ExclusionConfiguration;
 import com.jn.easyjson.core.tree.JsonTreeSerializerBuilder;
 import com.jn.easyjson.fastjson.codec.*;
 import com.jn.easyjson.fastjson.ext.EasyJsonParserConfig;
 import com.jn.easyjson.fastjson.ext.EasyJsonSerializeConfig;
+import com.jn.easyjson.fastjson.filter.namefilter.FastjsonPropertyNamingFilter;
+import com.jn.easyjson.fastjson.filter.propertyfilter.NullPropertyFilter;
 import com.jn.langx.annotation.Name;
+import com.jn.langx.util.Strings;
 import com.jn.langx.util.reflect.Reflects;
 
 @Name("fastjson")
@@ -100,6 +105,13 @@ public class FastJsonJSONBuilder extends JSONBuilder {
         EasyjsonFastjsonModule extModule = new EasyjsonFastjsonModule();
         serializerBuilder.config().register(extModule);
         deserializerBuilder.config().register(extModule);
+
+        serializerBuilder.addFilter(new NullPropertyFilter(this.serializeNulls()));
+        // filter
+        if (Strings.isNotBlank(this.beanPropertyNamingPolicy())) {
+            BeanPropertyNamingPolicy policy = BeanPropertyNamingPolicyRegistry.INSTANCE.get(this.beanPropertyNamingPolicy());
+            serializerBuilder.addFilter(new FastjsonPropertyNamingFilter(policy));
+        }
 
         FastJson fastJson = new FastJson(serializerBuilder, deserializerBuilder, jsonTreeSerializerBuilder);
         FastJsonAdapter jsonHandler = new FastJsonAdapter();

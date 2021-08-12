@@ -1,0 +1,17 @@
+package com.jn.easyjson.fastjson.filter.namefilter;
+
+import com.alibaba.fastjson.serializer.NameFilter;
+import com.jn.easyjson.core.bean.propertynaming.BeanPropertyNamingPolicy;
+
+public class FastjsonPropertyNamingFilter implements NameFilter {
+    private BeanPropertyNamingPolicy policy;
+
+    public FastjsonPropertyNamingFilter(BeanPropertyNamingPolicy propertyNamingPolicy) {
+        this.policy = propertyNamingPolicy;
+    }
+
+    @Override
+    public String process(Object object, String name, Object value) {
+        return this.policy.translateName(name);
+    }
+}

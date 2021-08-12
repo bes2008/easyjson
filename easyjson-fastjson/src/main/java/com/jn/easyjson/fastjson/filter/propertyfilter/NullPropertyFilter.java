@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.jn.easyjson.fastjson.ext;
+package com.jn.easyjson.fastjson.filter.propertyfilter;
 
 import com.alibaba.fastjson.serializer.PropertyFilter;
 
