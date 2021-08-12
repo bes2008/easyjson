@@ -79,6 +79,6 @@ public class EasyJsonBeanDeserializerFactory extends BeanDeserializerFactory {
 
     @Override
     protected BeanDeserializerBuilder constructBeanDeserializerBuilder(DeserializationContext ctxt, BeanDescription beanDesc) {
-        return new EasyJsonBeanDeserializerBuilder(beanDesc, ctxt.getConfig());
+        return new EasyJsonBeanDeserializerBuilder(beanDesc, ctxt);
     }
 }
