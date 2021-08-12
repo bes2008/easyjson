@@ -10,7 +10,7 @@ public interface BeanPropertyNamingPolicy extends Named {
      *
      * @param property the field object that we are translating
      * @return the translated field name.
-     * @since 1.3
+     * @since 3.2.0
      */
     String translateName(String property);
 }
