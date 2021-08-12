@@ -92,7 +92,7 @@ public class EasyJsonBeanDeserializerBuilder extends BeanDeserializerBuilder {
         BeanDeserializerBuilder builder = null;
         boolean greatThan_version2_9_0 = Jacksons.getCurrentVersion().compareTo(new Version(2, 9, 0, null)) >= 0;
         if (greatThan_version2_9_0) {
-            builder = Reflects.newInstance(BeanDeserializerBuilder.class, new Class[]{BeanDescription.class, DeserializationConfig.class}, beanDesc, ctx);
+            builder = Reflects.newInstance(BeanDeserializerBuilder.class, new Class[]{BeanDescription.class, DeserializationContext.class}, beanDesc, ctx);
         } else {
             builder = Reflects.newInstance(BeanDeserializerBuilder.class, new Class[]{BeanDescription.class, DeserializationConfig.class}, beanDesc, ctx.getConfig());
         }
