@@ -2,7 +2,9 @@ package com.jn.easyjson.fastjson.filter.namefilter;
 
 import com.alibaba.fastjson.serializer.NameFilter;
 import com.jn.easyjson.core.bean.propertynaming.BeanPropertyNamingPolicy;
-
+/**
+ * @since 3.2.2
+ */
 public class FastjsonPropertyNamingFilter implements NameFilter {
     private BeanPropertyNamingPolicy policy;
 

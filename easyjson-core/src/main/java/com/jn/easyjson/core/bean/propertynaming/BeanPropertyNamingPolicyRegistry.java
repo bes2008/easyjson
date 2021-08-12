@@ -7,9 +7,12 @@ import com.jn.langx.util.function.Consumer;
 
 import java.util.ServiceLoader;
 
+/**
+ * @since 3.2.2
+ */
 public class BeanPropertyNamingPolicyRegistry extends GenericRegistry<BeanPropertyNamingPolicy> {
 
-    public BeanPropertyNamingPolicyRegistry(){
+    public BeanPropertyNamingPolicyRegistry() {
         init();
     }
 

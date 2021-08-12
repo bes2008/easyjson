@@ -2,7 +2,9 @@ package com.jn.easyjson.core.bean.propertynaming;
 
 import com.jn.langx.Named;
 
-
+/**
+ * @since 3.2.2
+ */
 public interface BeanPropertyNamingPolicy extends Named {
 
     /**

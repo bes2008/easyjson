@@ -36,6 +36,9 @@ import java.util.ServiceLoader;
 import java.util.TimeZone;
 
 public class Jacksons {
+    /**
+     * @since 3.2.3
+     */
     private static final Version CURRENT_VERSION;
 
     public static boolean isJacksonJavaType(Type type) {
@@ -171,6 +174,9 @@ public class Jacksons {
         CURRENT_VERSION = guessCurrentVersion();
     }
 
+    /**
+     * @since 3.2.3
+     */
     private static Version guessCurrentVersion() {
         JsonFactory factory = Pipeline.of(ServiceLoader.<JsonFactory>load(JsonFactory.class)).findFirst();
         Version template = factory.version();
@@ -180,6 +186,9 @@ public class Jacksons {
 
     }
 
+    /**
+     * @since 3.2.3
+     */
     public static Version getCurrentVersion() {
         return CURRENT_VERSION;
     }
