@@ -41,6 +41,8 @@ public class Jacksons {
      */
     private static final Version CURRENT_VERSION;
 
+    private static final String JACKSON_CORE_PACKAGE_NAME = "com.fasterxml.jackson.core";
+
     public static boolean isJacksonJavaType(Type type) {
         return type instanceof JavaType;
     }
@@ -178,7 +180,7 @@ public class Jacksons {
      * @since 3.2.3
      */
     private static Version guessCurrentVersion() {
-        JsonFactory factory = Pipeline.of(ServiceLoader.<JsonFactory>load(JsonFactory.class)).findFirst();
+        JsonFactory factory = Pipeline.of(ServiceLoader.load(JsonFactory.class)).filter(e -> JACKSON_CORE_PACKAGE_NAME.equals(e.getClass().getPackage().getName())).findFirst();
         Version template = factory.version();
 
         Version version = new Version(template.getMajorVersion(), template.getMinorVersion(), template.getPatchLevel(), null, null, null);
