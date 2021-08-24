@@ -26,12 +26,6 @@
 			<groupId>com.github.fangjinuo.easyjson</groupId>
 			<artifactId>easyjson-jackson</artifactId>
 		</dependency>
-
-        <dependency>
-            <groupId>com.fasterxml.jackson.dataformat</groupId>
-            <artifactId>jackson-dataformat-yaml</artifactId>
-            <version>2.9.7</version>
-        </dependency>
         <dependency>
             <groupId>com.github.fangjinuo.easyjson</groupId>
             <artifactId>easyjson-test-jackson-base</artifactId>
