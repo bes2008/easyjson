@@ -8,7 +8,10 @@ import com.fasterxml.jackson.databind.deser.impl.BeanPropertyMap;
 import com.fasterxml.jackson.databind.deser.impl.ObjectIdValueProperty;
 import com.jn.easyjson.jackson.Jacksons;
 import com.jn.easyjson.jackson.deserializer.CustomizedBeanDeserializer;
+import com.jn.langx.util.jar.JarVersionMismatchedException;
 import com.jn.langx.util.reflect.Reflects;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -21,6 +24,7 @@ import java.util.Map;
  * @since 3.2.2
  */
 public class EasyJsonBeanDeserializerBuilder extends BeanDeserializerBuilder {
+    private static final Logger logger = LoggerFactory.getLogger(EasyJsonBeanDeserializerBuilder.class);
     /**
      * @since 3.2.3
      */
@@ -95,6 +99,10 @@ public class EasyJsonBeanDeserializerBuilder extends BeanDeserializerBuilder {
             builder = Reflects.newInstance(BeanDeserializerBuilder.class, new Class[]{BeanDescription.class, DeserializationContext.class}, beanDesc, ctx);
         } else {
             builder = Reflects.newInstance(BeanDeserializerBuilder.class, new Class[]{BeanDescription.class, DeserializationConfig.class}, beanDesc, ctx.getConfig());
+        }
+        if (builder == null) {
+            logger.error("please check versions of the jackson libraries: jackson-core, jackson-databind");
+            throw new JarVersionMismatchedException("jackson-*");
         }
         return builder;
     }
