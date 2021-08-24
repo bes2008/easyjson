@@ -27,6 +27,7 @@ import com.jn.easyjson.jackson.ext.EasyJsonObjectMapper;
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.util.Objs;
 import com.jn.langx.util.collection.Pipeline;
+import com.jn.langx.util.function.Predicate;
 import com.jn.langx.util.reflect.Reflects;
 
 import java.lang.reflect.Type;
@@ -180,7 +181,14 @@ public class Jacksons {
      * @since 3.2.3
      */
     private static Version guessCurrentVersion() {
-        JsonFactory factory = Pipeline.of(ServiceLoader.load(JsonFactory.class)).filter(e -> JACKSON_CORE_PACKAGE_NAME.equals(e.getClass().getPackage().getName())).findFirst();
+        JsonFactory factory = Pipeline.of(ServiceLoader.load(JsonFactory.class))
+                .filter(new Predicate<JsonFactory>() {
+                    @Override
+                    public boolean test(JsonFactory jsonFactory) {
+                        return JACKSON_CORE_PACKAGE_NAME.equals(Reflects.getPackageName(jsonFactory.getClass()));
+                    }
+                })
+                .findFirst();
         Version template = factory.version();
 
         Version version = new Version(template.getMajorVersion(), template.getMinorVersion(), template.getPatchLevel(), null, null, null);
