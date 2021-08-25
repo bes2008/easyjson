@@ -17,6 +17,7 @@ package org.codehaus.jettison.json;
 
 /**
  * The JSONException is thrown by the JSON.org classes then things are amiss.
+ *
  * @author JSON.org
  * @version 2
  */
@@ -24,14 +25,16 @@ public class JSONException extends Exception {
     private Throwable cause;
     private int line = -1;
     private int column = -1;
+
     /**
      * Constructs a JSONException with an explanatory message.
+     *
      * @param message Detail about the reason for the exception.
      */
     public JSONException(String message) {
         super(message);
     }
-    
+
     public JSONException(String message, int line, int column) {
         super(message);
         this.line = line;
@@ -47,12 +50,12 @@ public class JSONException extends Exception {
         return this.cause;
     }
 
-	public int getColumn() {
-		return column;
-	}
+    public int getColumn() {
+        return column;
+    }
 
-	public int getLine() {
-		return line;
-	}
+    public int getLine() {
+        return line;
+    }
 
 }
