@@ -25,6 +25,7 @@
         <module>boonjson-to-easyjson</module>
         <module>gson-to-easyjson</module>
         <module>easyjson-javaxjson</module>
+        <module>jettison-to-easyjson</module>
     </modules>
     <name>${groupId}:${artifactId}:${version}</name>
 
