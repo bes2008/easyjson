@@ -1,10 +1,10 @@
 package com.jn.easyjson.core.bean.propertynaming;
 
-import java.lang.reflect.Field;
+import java.lang.reflect.Member;
 
 public class AnnotatedNamingPolicy implements BeanPropertyNamingPolicy {
     @Override
-    public String translateName(Field field, String fieldName) {
+    public String translateName(Member member, String fieldName) {
         return null;
     }
 

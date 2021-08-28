@@ -13,7 +13,7 @@ public class FastjsonPropertyNamingFilter implements NameFilter {
     }
 
     @Override
-    public String process(Object object, String fieldName, Object fieldValue) {
-        return this.policy.translateName(null,fieldName);
+    public String process(Object object, String property, Object fieldValue) {
+        return this.policy.translateName(null, property);
     }
 }

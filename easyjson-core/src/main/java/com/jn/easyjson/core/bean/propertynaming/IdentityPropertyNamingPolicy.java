@@ -1,14 +1,14 @@
 package com.jn.easyjson.core.bean.propertynaming;
 
-import java.lang.reflect.Field;
+import java.lang.reflect.Member;
 
 /**
  * @since 3.2.2
  */
 public class IdentityPropertyNamingPolicy implements BeanPropertyNamingPolicy {
     @Override
-    public String translateName(Field field,String fieldName) {
-        return fieldName;
+    public String translateName(Member member, String property) {
+        return property;
     }
 
     @Override
