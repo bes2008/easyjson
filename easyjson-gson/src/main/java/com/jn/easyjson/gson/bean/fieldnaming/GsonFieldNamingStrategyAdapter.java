@@ -16,6 +16,6 @@ public class GsonFieldNamingStrategyAdapter implements FieldNamingStrategy {
 
     @Override
     public String translateName(Field f) {
-        return this.delegate.translateName(f.getName());
+        return this.delegate.translateName(f,f.getName());
     }
 }

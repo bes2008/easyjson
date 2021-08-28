@@ -15,6 +15,6 @@ public class JacksonPropertyNamingStrategy extends PropertyNamingStrategy.Proper
 
     @Override
     public String translate(String propertyName) {
-        return delegate.translateName(propertyName);
+        return delegate.translateName(null,propertyName);
     }
 }
