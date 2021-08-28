@@ -23,6 +23,7 @@ import com.jn.easyjson.core.JSONBuilder;
 import com.jn.easyjson.core.annotation.DependOn;
 import com.jn.easyjson.core.bean.propertynaming.BeanPropertyNamingPolicy;
 import com.jn.easyjson.core.bean.propertynaming.BeanPropertyNamingPolicyRegistry;
+import com.jn.easyjson.core.bean.propertynaming.ProxyDialectNamingPolicy;
 import com.jn.easyjson.core.codec.dialect.DialectIdentify;
 import com.jn.easyjson.core.exclusion.ExclusionConfiguration;
 import com.jn.easyjson.core.tree.JsonTreeSerializerBuilder;
@@ -110,6 +111,9 @@ public class FastJsonJSONBuilder extends JSONBuilder {
         // filter
         if (Strings.isNotBlank(this.beanPropertyNamingPolicy())) {
             BeanPropertyNamingPolicy policy = BeanPropertyNamingPolicyRegistry.INSTANCE.get(this.beanPropertyNamingPolicy());
+            if (proxyDialectIdentify() != null) {
+                policy = new ProxyDialectNamingPolicy(proxyDialectIdentify(), policy);
+            }
             serializerBuilder.addFilter(new FastjsonPropertyNamingFilter(policy));
         }
 

@@ -24,6 +24,7 @@ import com.jn.easyjson.core.JSONBuilder;
 import com.jn.easyjson.core.annotation.DependOn;
 import com.jn.easyjson.core.bean.propertynaming.BeanPropertyNamingPolicy;
 import com.jn.easyjson.core.bean.propertynaming.BeanPropertyNamingPolicyRegistry;
+import com.jn.easyjson.core.bean.propertynaming.ProxyDialectNamingPolicy;
 import com.jn.easyjson.core.exclusion.ExclusionConfiguration;
 import com.jn.easyjson.jackson.bean.propertynaming.JacksonPropertyNamingStrategy;
 import com.jn.easyjson.jackson.deserializer.BooleanDeserializer;
@@ -210,6 +211,9 @@ public class JacksonJSONBuilder extends JSONBuilder {
 
         if (Strings.isNotBlank(this.beanPropertyNamingPolicy())) {
             BeanPropertyNamingPolicy policy = BeanPropertyNamingPolicyRegistry.INSTANCE.get(this.beanPropertyNamingPolicy());
+            if (proxyDialectIdentify() != null) {
+                policy = new ProxyDialectNamingPolicy(proxyDialectIdentify(), policy);
+            }
             mapper.setPropertyNamingStrategy(new JacksonPropertyNamingStrategy(policy));
         }
 

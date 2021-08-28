@@ -26,6 +26,7 @@ import com.jn.easyjson.core.JSONBuilder;
 import com.jn.easyjson.core.annotation.DependOn;
 import com.jn.easyjson.core.bean.propertynaming.BeanPropertyNamingPolicy;
 import com.jn.easyjson.core.bean.propertynaming.BeanPropertyNamingPolicyRegistry;
+import com.jn.easyjson.core.bean.propertynaming.ProxyDialectNamingPolicy;
 import com.jn.easyjson.core.codec.dialect.DialectIdentify;
 import com.jn.easyjson.core.exclusion.Exclusion;
 import com.jn.easyjson.core.exclusion.ExclusionConfiguration;
@@ -131,6 +132,9 @@ public class GsonJSONBuilder extends JSONBuilder {
 
         if (Strings.isNotBlank(beanPropertyNamingPolicy())) {
             BeanPropertyNamingPolicy policy = BeanPropertyNamingPolicyRegistry.INSTANCE.get(beanPropertyNamingPolicy());
+            if (proxyDialectIdentify() != null) {
+                policy = new ProxyDialectNamingPolicy(proxyDialectIdentify(), policy);
+            }
             gsonBuilder.setFieldNamingStrategy(new GsonFieldNamingStrategyAdapter(policy));
         }
 
