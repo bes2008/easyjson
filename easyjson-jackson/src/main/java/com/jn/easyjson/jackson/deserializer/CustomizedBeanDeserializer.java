@@ -1,5 +1,6 @@
 package com.jn.easyjson.jackson.deserializer;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.BeanDescription;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -17,8 +18,11 @@ import com.jn.langx.util.Emptys;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.collection.Pipeline;
 import com.jn.langx.util.function.Predicate;
+import com.jn.langx.util.reflect.Reflects;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -71,6 +75,28 @@ public class CustomizedBeanDeserializer extends BeanDeserializer {
         }
         if (Emptys.isNotEmpty(props) && props.size() == 1) {
             prop = props.get(0);
+        }
+        if (prop == null && Strings.isNotBlank(propName2)) {
+            String fixedProperty = null;
+            Field field = Reflects.getAnyField(bean.getClass(), propName2);
+            if (field != null) {
+                JsonProperty jsonProperty = Reflects.getAnnotation(field, JsonProperty.class);
+                if (jsonProperty != null) {
+                    fixedProperty = jsonProperty.value();
+                }
+            }
+            if (Strings.isBlank(fixedProperty)) {
+                Method setter = Reflects.getSetter(bean.getClass(), propName2);
+                if (setter != null) {
+                    JsonProperty jsonProperty = Reflects.getAnnotation(setter, JsonProperty.class);
+                    if (jsonProperty != null) {
+                        fixedProperty = jsonProperty.value();
+                    }
+                }
+            }
+            if (Strings.isNotBlank(fixedProperty)) {
+                prop = _beanProperties.find(fixedProperty);
+            }
         }
         if (prop != null) { // normal case
             try {
