@@ -69,7 +69,7 @@ public abstract class JSONBuilder implements Cloneable {
 
     private boolean serializeBytesAsBase64String = true;
 
-    private String beanPropertyNamingPolicy;
+    private String beanPropertyNamingPolicy = "identity";
 
     /**
      * 是否使用全局配置项
