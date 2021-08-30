@@ -11,6 +11,9 @@ import com.fasterxml.jackson.databind.deser.SettableBeanProperty;
 import com.fasterxml.jackson.databind.deser.impl.BeanPropertyMap;
 import com.fasterxml.jackson.databind.deser.impl.ObjectIdReader;
 import com.fasterxml.jackson.databind.util.NameTransformer;
+import com.jn.easyjson.core.codec.dialect.PropertyCodecConfiguration;
+import com.jn.easyjson.jackson.Jacksons;
+import com.jn.langx.util.Emptys;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.collection.Pipeline;
 import com.jn.langx.util.function.Predicate;
@@ -47,16 +50,26 @@ public class CustomizedBeanDeserializer extends BeanDeserializer {
 
     @Override
     protected void handleUnknownVanilla(JsonParser parser, DeserializationContext ctxt, Object bean, final String propName) throws IOException {
-
-        List<SettableBeanProperty> props = Pipeline.of(_beanProperties).filter(new Predicate<SettableBeanProperty>() {
-            @Override
-            public boolean test(SettableBeanProperty settableBeanProperty) {
-                PropertyName propertyName = settableBeanProperty.getFullName();
-                return Strings.equalsIgnoreCase(propertyName.getSimpleName(), propName);
-            }
-        }).asList();
         SettableBeanProperty prop = null;
-        if (props.size() == 1) {
+        PropertyCodecConfiguration propertyCodecConfiguration = Jacksons.getPropertyCodecConfiguration(parser);
+        String propName2 = null;
+        if (propertyCodecConfiguration != null) {
+            propName2 = propertyCodecConfiguration.getName();
+        }
+        List<SettableBeanProperty> props = null;
+        if (Strings.isNotBlank(propName2)) {
+            prop = _beanProperties.find(propName2);
+        }
+        if (prop == null) {
+            props = Pipeline.of(_beanProperties).filter(new Predicate<SettableBeanProperty>() {
+                @Override
+                public boolean test(SettableBeanProperty settableBeanProperty) {
+                    PropertyName propertyName = settableBeanProperty.getFullName();
+                    return Strings.equalsIgnoreCase(propertyName.getSimpleName(), propName);
+                }
+            }).asList();
+        }
+        if (Emptys.isNotEmpty(props) && props.size() == 1) {
             prop = props.get(0);
         }
         if (prop != null) { // normal case
