@@ -209,6 +209,8 @@ public class JacksonJSONBuilder extends JSONBuilder {
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         mapper.configure(JsonParser.Feature.IGNORE_UNDEFINED, true);
 
+        mapper.enable(MapperFeature.CAN_OVERRIDE_ACCESS_MODIFIERS);
+
         if (Strings.isNotBlank(this.beanPropertyNamingPolicy())) {
             BeanPropertyNamingPolicy policy = BeanPropertyNamingPolicyRegistry.INSTANCE.get(this.beanPropertyNamingPolicy());
             if (proxyDialectIdentify() != null) {

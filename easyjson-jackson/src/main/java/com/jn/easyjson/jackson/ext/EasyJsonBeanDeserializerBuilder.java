@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.deser.BeanDeserializerBuilder;
 import com.fasterxml.jackson.databind.deser.SettableBeanProperty;
 import com.fasterxml.jackson.databind.deser.impl.BeanPropertyMap;
+import com.fasterxml.jackson.databind.deser.impl.FieldProperty;
+import com.fasterxml.jackson.databind.deser.impl.MethodProperty;
 import com.fasterxml.jackson.databind.deser.impl.ObjectIdValueProperty;
 import com.jn.easyjson.jackson.Jacksons;
 import com.jn.easyjson.jackson.deserializer.CustomizedBeanDeserializer;
@@ -204,8 +206,50 @@ public class EasyJsonBeanDeserializerBuilder extends BeanDeserializerBuilder {
      */
     protected Map<String, List<PropertyName>> constructBeanPropertyMap(Collection<SettableBeanProperty> props) {
         if (_collectAliases_method != null) {
-            return (Map<String, List<PropertyName>>) Reflects.invoke(_collectAliases_method, this, new Object[]{props}, true, true);
+            return Reflects.<Map<String, List<PropertyName>>>invoke(_collectAliases_method, this, new Object[]{props}, true, true);
         }
         return Collections.emptyMap();
+    }
+
+    /**
+     * @param prop the property
+     * @since 3.2.5
+     */
+    private void reflectInvokeSetAccessible(SettableBeanProperty prop) {
+        if (prop instanceof FieldProperty) {
+            FieldProperty fieldProperty = (FieldProperty) prop;
+            Field field = (Field) fieldProperty.getMember().getAnnotated();
+            if (__config.canOverrideAccessModifiers()) {
+                Jacksons.checkAndFixAccess(field, true);
+            }
+        } else if (prop instanceof MethodProperty) {
+            MethodProperty methodProperty = (MethodProperty) prop;
+            Method method = (Method) methodProperty.getMember().getAnnotated();
+            if (__config.canOverrideAccessModifiers()) {
+                Jacksons.checkAndFixAccess(method, true);
+            }
+        }
+    }
+
+    /**
+     * @param prop the property
+     * @since 3.2.5
+     */
+    @Override
+    public void addProperty(SettableBeanProperty prop) {
+        reflectInvokeSetAccessible(prop);
+        super.addProperty(prop);
+    }
+
+    /**
+     * @param prop the property
+     * @since 3.2.5
+     */
+    @Override
+    public void addOrReplaceProperty(SettableBeanProperty prop, boolean allowOverride) {
+        if (allowOverride) {
+            reflectInvokeSetAccessible(prop);
+        }
+        super.addOrReplaceProperty(prop, allowOverride);
     }
 }

@@ -30,6 +30,9 @@ import com.jn.langx.util.collection.Pipeline;
 import com.jn.langx.util.function.Predicate;
 import com.jn.langx.util.reflect.Reflects;
 
+import java.lang.reflect.AccessibleObject;
+import java.lang.reflect.Member;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.util.Locale;
@@ -202,4 +205,30 @@ public class Jacksons {
     public static Version getCurrentVersion() {
         return CURRENT_VERSION;
     }
+
+    /**
+     * @since 3.2.5 invoke member#setAccessiable(true)
+     *
+     * copy from jackson
+     * jackson 版本小于 2.7时，是没有这个方法的
+     *
+     * @param member
+     * @param force
+     */
+    public static void checkAndFixAccess(Member member, boolean force) {
+        AccessibleObject ao = (AccessibleObject)member;
+
+        try {
+            if (force || !Modifier.isPublic(member.getModifiers()) || !Modifier.isPublic(member.getDeclaringClass().getModifiers())) {
+                ao.setAccessible(true);
+            }
+        } catch (SecurityException var5) {
+            if (!ao.isAccessible()) {
+                Class<?> declClass = member.getDeclaringClass();
+                throw new IllegalArgumentException("Cannot access " + member + " (from class " + declClass.getName() + "; failed to set access: " + var5.getMessage());
+            }
+        }
+
+    }
+
 }
