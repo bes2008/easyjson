@@ -15,11 +15,16 @@
 package com.jn.easyjson.core.codec.dialect;
 
 import com.jn.langx.annotation.NonNull;
+import com.jn.langx.annotation.NotEmpty;
+import com.jn.langx.annotation.Nullable;
 import com.jn.langx.util.Emptys;
+import com.jn.langx.util.Strings;
+import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.reflect.Reflects;
 
 import java.lang.ref.WeakReference;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -34,12 +39,20 @@ public class PropertyCodecConfiguration extends CodecConfiguration {
     /**
      * 字段名，如果是方法，则为去掉了 get,set,is之后的
      */
+    @NotEmpty
     private String name;
 
     /**
-     * 别名
+     * 别名，若指定了别名，则序列化时采用 别名，否则用 name
      */
+    @Nullable
     private String alias;
+
+    /**
+     * 反序列化时，可以使用这些备用名
+     */
+    @Nullable
+    private List<String> alternateNames;
 
 
     private PropertyConfigurationSourceType sourceType;
@@ -112,5 +125,36 @@ public class PropertyCodecConfiguration extends CodecConfiguration {
 
     public void setSourceType(PropertyConfigurationSourceType sourceType) {
         this.sourceType = sourceType;
+    }
+
+    public List<String> getAlternateNames() {
+        return alternateNames;
+    }
+
+    public void setAlternateNames(List<String> alternateNames) {
+        this.alternateNames = alternateNames;
+    }
+
+    public void setAlternateNames(String[] alternateNames) {
+        this.alternateNames = Collects.asList(alternateNames);
+    }
+
+    public boolean hasAlias() {
+        return Strings.isNotBlank(alias);
+    }
+
+    public boolean hasAlternateName(String alternate) {
+        if (Strings.isBlank(alternate)) {
+            return false;
+        }
+        if (this.name.equals(alternate)) {
+            return true;
+        }
+        if (hasAlias()) {
+            if (this.alias.equals(alternate)) {
+                return true;
+            }
+        }
+        return Collects.contains(this.alternateNames, alternate);
     }
 }

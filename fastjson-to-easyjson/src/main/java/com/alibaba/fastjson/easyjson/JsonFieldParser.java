@@ -72,6 +72,7 @@ public class JsonFieldParser implements BeanPropertyAnnotatedCodecConfigurationP
             configuration.setSerialize(jsonField.serialize());
             configuration.setDeserialize(jsonField.deserialize());
             configuration.setDatePattern(jsonField.format());
+            configuration.setAlternateNames(jsonField.alternateNames());
 
             // serializeFeatures
             List<SerializerFeature> serializeFeatures = Collects.asList(jsonField.serialzeFeatures());
