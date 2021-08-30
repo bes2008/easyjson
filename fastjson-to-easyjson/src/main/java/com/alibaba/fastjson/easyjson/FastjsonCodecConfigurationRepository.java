@@ -23,5 +23,6 @@ public class FastjsonCodecConfigurationRepository extends CodecConfigurationRepo
         setDefaultBeanClassParser(new JsonTypeParser());
         setDefaultBeanPropertyParser(new JsonFieldParser());
         setPropertyCodecConfigurationMerger(new JsonFieldPropertyCodeConfigurationMerger());
+        setBeanPropertyFinder(new JsonFieldFinder());
     }
 }

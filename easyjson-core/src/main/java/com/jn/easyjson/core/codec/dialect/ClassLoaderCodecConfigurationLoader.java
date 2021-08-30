@@ -17,6 +17,7 @@ package com.jn.easyjson.core.codec.dialect;
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.configuration.ConfigurationLoader;
 import com.jn.langx.util.Emptys;
+import com.jn.langx.util.Strings;
 import com.jn.langx.util.reflect.Reflects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +43,7 @@ public class ClassLoaderCodecConfigurationLoader<T extends CodecConfiguration> i
     @NonNull
     private BeanPropertyIdParser beanPropertyIdParser = new BeanPropertyIdParser();
 
+    private BeanPropertyFinder propertyFinder = null;
 
     /**
      * 类字段、方法解析器
@@ -131,16 +133,55 @@ public class ClassLoaderCodecConfigurationLoader<T extends CodecConfiguration> i
                 return null;
             }
 
+
+            // 找出 field, getter, sett
+            Field field = Reflects.getAnyField(clazz, id.getPropertyName());
+            String getter = Reflects.getGetter(id.getPropertyName());
+            Method getterMethod = Reflects.getPublicMethod(clazz, getter);
+            if (getterMethod == null) {
+                getter = Reflects.getIsGetter(id.getPropertyName());
+                getterMethod = Reflects.getPublicMethod(clazz, getter);
+            }
+            Class propertyType = null;
+            if (field != null) {
+                propertyType = field.getType();
+            }
+            String setter = Reflects.getSetter(id.getPropertyName());
+            Method setterMethod = propertyType == null ? Reflects.getPublicMethod(clazz, setter) : Reflects.getPublicMethod(clazz, setter, propertyType);
+            if (field == null && setterMethod == null && getterMethod == null) {
+                // 此时说明该字段不是真实存在的，可能是个别名
+                if (propertyFinder != null) {
+                    String propertyName = propertyFinder.apply(clazz, id.getPropertyName());
+                    if (Strings.isBlank(propertyName)) {
+                        logger.warn("Can't find any field or method for {} in class {}", id.getPropertyName(), Reflects.getFQNClassName(clazz));
+                        return null;
+                    }
+
+                    field = Reflects.getAnyField(clazz, propertyName);
+                    getter = Reflects.getGetter(propertyName);
+                    getterMethod = Reflects.getPublicMethod(clazz, getter);
+                    if (getterMethod == null) {
+                        getter = Reflects.getIsGetter(propertyName);
+                        getterMethod = Reflects.getPublicMethod(clazz, getter);
+                    }
+                    if (field != null) {
+                        propertyType = field.getType();
+                    }
+                    setter = Reflects.getSetter(propertyName);
+                    setterMethod = propertyType == null ? Reflects.getPublicMethod(clazz, setter) : Reflects.getPublicMethod(clazz, setter, propertyType);
+                }
+            }
+
+
             boolean useMerged = false;
             PropertyCodecConfiguration codecConfiguration = new PropertyCodecConfiguration();
             codecConfiguration.setClazz(clazz);
             codecConfiguration.setId(qualifiedId);
 
             PropertyCodecConfiguration fieldConfiguration = null;
-            Field field = Reflects.getAnyField(clazz, id.getPropertyName());
             if (field != null) {
                 fieldConfiguration = beanPropertyCodecConfigurationParser.parse(field);
-                if(fieldConfiguration!=null){
+                if (fieldConfiguration != null) {
                     propertyCodecConfigurationMerger.merge(codecConfiguration, fieldConfiguration);
                     useMerged = true;
                 }
@@ -148,11 +189,9 @@ public class ClassLoaderCodecConfigurationLoader<T extends CodecConfiguration> i
             // getXxx
             PropertyCodecConfiguration getterConfiguration = null;
             if (getterConfiguration == null) {
-                String getter = Reflects.getGetter(id.getPropertyName());
-                Method getterMethod = Reflects.getAnyMethod(clazz, getter);
                 if (getterMethod != null) {
                     getterConfiguration = beanPropertyCodecConfigurationParser.parse(getterMethod);
-                    if(getterConfiguration!=null){
+                    if (getterConfiguration != null) {
                         propertyCodecConfigurationMerger.merge(codecConfiguration, getterConfiguration);
                         useMerged = true;
                     }
@@ -160,11 +199,9 @@ public class ClassLoaderCodecConfigurationLoader<T extends CodecConfiguration> i
             }
             // isXxx
             if (getterConfiguration == null) {
-                String getter = Reflects.getIsGetter(id.getPropertyName());
-                Method getterMethod = Reflects.getAnyMethod(clazz, getter);
                 if (getterMethod != null) {
                     getterConfiguration = beanPropertyCodecConfigurationParser.parse(getterMethod);
-                    if(getterConfiguration!=null){
+                    if (getterConfiguration != null) {
                         propertyCodecConfigurationMerger.merge(codecConfiguration, getterConfiguration);
                         useMerged = true;
                     }
@@ -173,21 +210,18 @@ public class ClassLoaderCodecConfigurationLoader<T extends CodecConfiguration> i
             // setXxx
             PropertyCodecConfiguration setterConfiguration = null;
             if (setterConfiguration == null) {
-                String setter = Reflects.getSetter(id.getPropertyName());
-                Class propertyType = null;
-                if (field != null) {
-                    propertyType = field.getType();
-                }
-                Method setterMethod = propertyType == null ? Reflects.getAnyMethod(clazz, setter) : Reflects.getAnyMethod(clazz, setter, propertyType);
                 if (setterMethod != null) {
                     setterConfiguration = beanPropertyCodecConfigurationParser.parse(setterMethod);
-                    if(setterConfiguration!=null){
+                    if (setterConfiguration != null) {
                         propertyCodecConfigurationMerger.merge(codecConfiguration, setterConfiguration);
                         useMerged = true;
                     }
                 }
             }
-            return useMerged ? (T)codecConfiguration : null;
+            if (useMerged) {
+                return (T) codecConfiguration;
+            }
+            return null;
         } catch (Throwable ex) {
             // ignore
 
@@ -197,4 +231,11 @@ public class ClassLoaderCodecConfigurationLoader<T extends CodecConfiguration> i
         return null;
     }
 
+    public void setPropertyFinder(BeanPropertyFinder propertyFinder) {
+        this.propertyFinder = propertyFinder;
+    }
+
+    public BeanPropertyFinder getPropertyFinder() {
+        return propertyFinder;
+    }
 }

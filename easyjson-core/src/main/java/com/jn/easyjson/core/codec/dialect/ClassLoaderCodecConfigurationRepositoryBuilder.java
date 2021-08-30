@@ -16,6 +16,7 @@ package com.jn.easyjson.core.codec.dialect;
 
 import com.jn.langx.Builder;
 import com.jn.langx.annotation.NonNull;
+import com.jn.langx.annotation.Nullable;
 import com.jn.langx.cache.Cache;
 import com.jn.langx.cache.CacheBuilder;
 import com.jn.langx.configuration.ConfigurationCacheLoaderAdapter;
@@ -26,7 +27,7 @@ import com.jn.langx.util.timing.timer.WheelTimers;
 
 import java.lang.ref.WeakReference;
 
-public class ClassLoaderCodeConfigurationRepositoryBuilder<T extends CodecConfiguration> implements Builder<ClassLoaderCodecConfigurationRepository<T>> {
+public class ClassLoaderCodecConfigurationRepositoryBuilder<T extends CodecConfiguration> implements Builder<ClassLoaderCodecConfigurationRepository<T>> {
     public static final Timer timer = WheelTimers.newHashedWheelTimer(new CommonThreadFactory("EasyJSON", true));
 
     /**
@@ -34,6 +35,8 @@ public class ClassLoaderCodeConfigurationRepositoryBuilder<T extends CodecConfig
      */
     @NonNull
     private BeanPropertyAnnotatedCodecConfigurationParser beanPropertyCodecConfigurationParser;
+    @Nullable
+    private BeanPropertyFinder beanPropertyFinder;
     /**
      * 用于解析类
      */
@@ -42,7 +45,8 @@ public class ClassLoaderCodeConfigurationRepositoryBuilder<T extends CodecConfig
     private WeakReference<ClassLoader> classLoaderRef;
     private PropertyCodecConfigurationMerger propertyCodecConfigurationMerger;
 
-    public ClassLoaderCodeConfigurationRepositoryBuilder<T> beanPropertyCodecConfigurationParser(BeanPropertyAnnotatedCodecConfigurationParser beanPropertyCodecConfigurationParser) {
+
+    public ClassLoaderCodecConfigurationRepositoryBuilder<T> beanPropertyCodecConfigurationParser(BeanPropertyAnnotatedCodecConfigurationParser beanPropertyCodecConfigurationParser) {
         this.beanPropertyCodecConfigurationParser = beanPropertyCodecConfigurationParser;
         return this;
     }
@@ -51,7 +55,7 @@ public class ClassLoaderCodeConfigurationRepositoryBuilder<T extends CodecConfig
         return this.beanPropertyCodecConfigurationParser;
     }
 
-    public ClassLoaderCodeConfigurationRepositoryBuilder<T> beanClassAnnotatedCodecConfigurationParser(BeanClassAnnotatedCodecConfigurationParser beanClassAnnotatedCodecConfigurationParser) {
+    public ClassLoaderCodecConfigurationRepositoryBuilder<T> beanClassAnnotatedCodecConfigurationParser(BeanClassAnnotatedCodecConfigurationParser beanClassAnnotatedCodecConfigurationParser) {
         this.beanClassAnnotatedCodecConfigurationParser = beanClassAnnotatedCodecConfigurationParser;
         return this;
     }
@@ -63,16 +67,24 @@ public class ClassLoaderCodeConfigurationRepositoryBuilder<T extends CodecConfig
         return this.propertyCodecConfigurationMerger;
     }
 
-    public ClassLoaderCodeConfigurationRepositoryBuilder<T> propertyCodecConfigurationMerger(PropertyCodecConfigurationMerger merger) {
+    public ClassLoaderCodecConfigurationRepositoryBuilder<T> propertyCodecConfigurationMerger(PropertyCodecConfigurationMerger merger) {
         this.propertyCodecConfigurationMerger = merger;
         return this;
     }
 
-    public ClassLoaderCodeConfigurationRepositoryBuilder<T> classLoader(ClassLoader classLoader) {
+    public ClassLoaderCodecConfigurationRepositoryBuilder<T> classLoader(ClassLoader classLoader) {
         this.classLoaderRef = new WeakReference<ClassLoader>(classLoader);
         return this;
     }
 
+    public BeanPropertyFinder getBeanPropertyFinder() {
+        return beanPropertyFinder;
+    }
+
+    public ClassLoaderCodecConfigurationRepositoryBuilder<T> beanPropertyFinder(BeanPropertyFinder beanPropertyFinder) {
+        this.beanPropertyFinder = beanPropertyFinder;
+        return this;
+    }
 
     public ClassLoader classLoader() {
         if (this.classLoaderRef != null) {
@@ -91,6 +103,7 @@ public class ClassLoaderCodeConfigurationRepositoryBuilder<T extends CodecConfig
         loaderCodecConfigurationLoader.setBeanClassAnnotatedCodecConfigurationParser(beanClassAnnotatedCodecConfigurationParser);
         loaderCodecConfigurationLoader.setBeanPropertyCodecConfigurationParser(beanPropertyCodecConfigurationParser);
         loaderCodecConfigurationLoader.setPropertyCodecConfigurationMerger(propertyCodecConfigurationMerger);
+        loaderCodecConfigurationLoader.setPropertyFinder(beanPropertyFinder);
         loaderCodecConfigurationLoader.setClassLoader(classLoader());
 
         // cache

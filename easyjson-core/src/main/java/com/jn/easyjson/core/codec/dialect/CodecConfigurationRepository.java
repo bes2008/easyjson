@@ -39,6 +39,7 @@ public abstract class CodecConfigurationRepository<T extends CodecConfiguration>
     private BeanClassAnnotatedCodecConfigurationParser defaultBeanClassParser;
     private BeanPropertyAnnotatedCodecConfigurationParser defaultBeanPropertyParser;
     private PropertyCodecConfigurationMerger propertyCodecConfigurationMerger;
+    private BeanPropertyFinder beanPropertyFinder;
 
     public DialectIdentify getDialectIdentify() {
         return dialectIdentify;
@@ -89,10 +90,11 @@ public abstract class CodecConfigurationRepository<T extends CodecConfiguration>
         }
         ClassLoaderCodecConfigurationRepository<T> repository = repositories.get(classLoader);
         if (repository == null) {
-            repository = new ClassLoaderCodeConfigurationRepositoryBuilder<T>()
+            repository = new ClassLoaderCodecConfigurationRepositoryBuilder<T>()
                     .beanClassAnnotatedCodecConfigurationParser(defaultBeanClassParser)
                     .beanPropertyCodecConfigurationParser(defaultBeanPropertyParser)
                     .propertyCodecConfigurationMerger(propertyCodecConfigurationMerger)
+                    .beanPropertyFinder(beanPropertyFinder)
                     .classLoader(classLoader)
                     .build();
             repositories.putIfAbsent(classLoader, repository);
@@ -122,5 +124,9 @@ public abstract class CodecConfigurationRepository<T extends CodecConfiguration>
 
     public void setPropertyCodecConfigurationMerger(PropertyCodecConfigurationMerger propertyCodecConfigurationMerger) {
         this.propertyCodecConfigurationMerger = propertyCodecConfigurationMerger;
+    }
+
+    public void setBeanPropertyFinder(BeanPropertyFinder beanPropertyFinder) {
+        this.beanPropertyFinder = beanPropertyFinder;
     }
 }
