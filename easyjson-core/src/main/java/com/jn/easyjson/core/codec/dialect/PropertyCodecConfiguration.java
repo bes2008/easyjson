@@ -23,9 +23,7 @@ import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.reflect.Reflects;
 
 import java.lang.ref.WeakReference;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 序列化，或反序列化字段、方法时的配置
@@ -52,7 +50,7 @@ public class PropertyCodecConfiguration extends CodecConfiguration {
      * 反序列化时，可以使用这些备用名
      */
     @Nullable
-    private List<String> alternateNames;
+    private Set<String> alternateNames;
 
 
     private PropertyConfigurationSourceType sourceType;
@@ -127,16 +125,30 @@ public class PropertyCodecConfiguration extends CodecConfiguration {
         this.sourceType = sourceType;
     }
 
-    public List<String> getAlternateNames() {
+    public Set<String> getAlternateNames() {
         return alternateNames;
     }
 
     public void setAlternateNames(List<String> alternateNames) {
-        this.alternateNames = alternateNames;
+        this.alternateNames = Collects.asSet(alternateNames);
     }
 
     public void setAlternateNames(String[] alternateNames) {
-        this.alternateNames = Collects.asList(alternateNames);
+        this.alternateNames = Collects.asSet(alternateNames);
+    }
+
+    public void addAlternateNames(Collection<String> alternateNames) {
+        Set<String> ret = new HashSet<String>();
+        Collects.addAll(ret, this.alternateNames);
+        Collects.addAll(ret, alternateNames);
+        this.alternateNames = ret;
+    }
+
+    public void addAlternateNames(String[] alternateNames) {
+        Set<String> ret = new HashSet<String>();
+        Collects.addAll(ret, this.alternateNames);
+        Collects.addAll(ret, alternateNames);
+        this.alternateNames = ret;
     }
 
     public boolean hasAlias() {

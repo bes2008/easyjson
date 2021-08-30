@@ -18,48 +18,50 @@ import com.jn.easyjson.core.codec.dialect.PropertyCodecConfiguration;
 import com.jn.easyjson.core.codec.dialect.PropertyCodecConfigurationMerger;
 import com.jn.easyjson.core.codec.dialect.PropertyConfigurationSourceType;
 import com.jn.langx.annotation.NonNull;
+import com.jn.langx.util.Strings;
 
 public class JsonFieldPropertyCodeConfigurationMerger implements PropertyCodecConfigurationMerger {
     @Override
     public void merge(@NonNull PropertyCodecConfiguration configuration, @NonNull PropertyCodecConfiguration newConfiguration) {
-        if(newConfiguration.getName()!=null){
+        if (newConfiguration.getName() != null) {
             configuration.setName(newConfiguration.getName());
         }
-        if(newConfiguration.getAlias()!=null){
+        if (Strings.isNotBlank(newConfiguration.getAlias())) {
             configuration.setAlias(newConfiguration.getAlias());
         }
-        if(newConfiguration.getSerialNull()!=null){
+        configuration.addAlternateNames(newConfiguration.getAlternateNames());
+        if (newConfiguration.getSerialNull() != null) {
             configuration.setSerialNull(newConfiguration.getSerialNull());
         }
-        if(newConfiguration.getSourceType()== PropertyConfigurationSourceType.GETTER || newConfiguration.getSourceType()== PropertyConfigurationSourceType.FIELD) {
+        if (newConfiguration.getSourceType() == PropertyConfigurationSourceType.GETTER || newConfiguration.getSourceType() == PropertyConfigurationSourceType.FIELD) {
             if (newConfiguration.getSerialize() != null) {
                 configuration.setSerialize(newConfiguration.getSerialize());
             }
         }
-        if(newConfiguration.getSourceType()==PropertyConfigurationSourceType.SETTER || newConfiguration.getSourceType()== PropertyConfigurationSourceType.FIELD) {
+        if (newConfiguration.getSourceType() == PropertyConfigurationSourceType.SETTER || newConfiguration.getSourceType() == PropertyConfigurationSourceType.FIELD) {
             if (newConfiguration.getDeserialize() != null) {
                 configuration.setDeserialize(newConfiguration.getDeserialize());
             }
         }
-        if(newConfiguration.getDateFormat()!=null){
+        if (newConfiguration.getDateFormat() != null) {
             configuration.setDateFormat(newConfiguration.getDateFormat());
         }
-        if(newConfiguration.getDatePattern()!=null){
+        if (newConfiguration.getDatePattern() != null) {
             configuration.setDatePattern(newConfiguration.getDatePattern());
         }
-        if(newConfiguration.getEnumUsingName()!=null){
+        if (newConfiguration.getEnumUsingName() != null) {
             configuration.setEnumUsingName(newConfiguration.getEnumUsingName());
         }
-        if(newConfiguration.getEnumUsingToString()!=null){
+        if (newConfiguration.getEnumUsingToString() != null) {
             configuration.setEnumUsingToString(newConfiguration.getEnumUsingToString());
         }
-        if(newConfiguration.getEnumUsingIndex()!=null){
+        if (newConfiguration.getEnumUsingIndex() != null) {
             configuration.setEnumUsingIndex(newConfiguration.getEnumUsingIndex());
         }
-        if(newConfiguration.getBooleanUsing01()!=null){
+        if (newConfiguration.getBooleanUsing01() != null) {
             configuration.setBooleanUsing01(newConfiguration.getBooleanUsing01());
         }
-        if(newConfiguration.getBooleanUsingONOFF()!=null){
+        if (newConfiguration.getBooleanUsingONOFF() != null) {
             configuration.setBooleanUsingONOFF(newConfiguration.getBooleanUsingONOFF());
         }
     }
