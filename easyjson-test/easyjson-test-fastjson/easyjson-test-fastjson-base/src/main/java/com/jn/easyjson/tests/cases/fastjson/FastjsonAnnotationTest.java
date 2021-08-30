@@ -62,10 +62,25 @@ public abstract class FastjsonAnnotationTest extends AbstractBaseTest {
         return user;
     }
 
+
+    protected UserEntity5UseIncludes getUserEntity5Object() {
+        UserEntity5UseIncludes user = new UserEntity5UseIncludes();
+        user.setId("1001");
+        user.setName("Test1");
+        user.setPassword("a@b@c");
+        user.setBirthday(new Date(1577845230400L));
+        return user;
+    }
+
     protected String getUserEntityString() {
         return "{\"birthday\":\"2020-01-01\",\"id\":\"1001\",\"name\":\"Test1\",\"password\":\"a@b@c\"}";
     }
-
+    protected String getUserEntity5String() {
+        return "{\"bd\":\"2020-01-01\",\"id\":\"1001\",\"name\":\"Test1\",\"password\":\"a@b@c\"}";
+    }
+    protected String getUserEntity5IgnorePasswordString() {
+        return "{\"BD\":\"2020-01-01\",\"id\":\"1001\",\"name\":\"Test1\"}";
+    }
     protected String getUserEntityIgnorePasswordString() {
         return "{\"birthday\":\"2020-01-01\",\"id\":\"1001\",\"name\":\"Test1\"}";
     }
@@ -145,6 +160,26 @@ public abstract class FastjsonAnnotationTest extends AbstractBaseTest {
         String jsonString = getUserEntityString();
         UserEntity4UseIncludes actual = jsonStringToJavaBean(jsonString, UserEntity4UseIncludes.class);
         UserEntity4UseIncludes expected = getUserEntity4Object();
+        expected.setPassword(null);
+        expected.setBirthday(new Date(1577808000000L));
+        Asserts.assertDeepEquals(actual, expected);
+    }
+
+    @Test(priority = 10009)
+    public void testSerializeUseIncludes10009() {
+        UserEntity5UseIncludes user = getUserEntity5Object();
+        String actual = javaBeanToJsonString(user);
+        System.out.println(actual);
+        String expected = getUserEntity5IgnorePasswordString();
+        System.out.println(expected);
+        Asserts.assertJsonEquals(actual, expected);
+    }
+
+    @Test(priority = 10010)
+    public void testDeserializeUseIncludes10010() {
+        String jsonString = getUserEntity5String();
+        UserEntity5UseIncludes actual = jsonStringToJavaBean(jsonString, UserEntity5UseIncludes.class);
+        UserEntity5UseIncludes expected = getUserEntity5Object();
         expected.setPassword(null);
         expected.setBirthday(new Date(1577808000000L));
         Asserts.assertDeepEquals(actual, expected);
@@ -284,6 +319,48 @@ public abstract class FastjsonAnnotationTest extends AbstractBaseTest {
     protected static class UserEntity4UseIncludes {
 
         @JSONField(format = "yyyy-MM-dd")
+        private Date birthday;
+        private String id;
+        private String name;
+        private String password;
+
+        public Date getBirthday() {
+            return birthday;
+        }
+
+        public void setBirthday(Date birthday) {
+            this.birthday = birthday;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getPassword() {
+            return password;
+        }
+
+        public void setPassword(String password) {
+            this.password = password;
+        }
+    }
+
+    @JSONType(includes = { "id", "name", "birthday" })
+    protected static class UserEntity5UseIncludes {
+
+        @JSONField(format = "yyyy-MM-dd", name="BD", alternateNames = {"birth","bd","birthday"})
         private Date birthday;
         private String id;
         private String name;
