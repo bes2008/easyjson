@@ -15,8 +15,14 @@ limitations under the License.
 */
 package org.codehaus.jettison.json;
 
+import com.jn.easyjson.core.JSON;
+import com.jn.easyjson.core.JSONBuilderProvider;
+import com.jn.easyjson.core.JsonTreeNode;
+import org.codehaus.jettison.json.easyjson.JettisonJsonMapper;
+
 import java.io.IOException;
 import java.io.Serializable;
+import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -833,11 +839,14 @@ public class JSONArray implements Serializable {
      * representation of the array.
      */
     public String toString() {
+        StringWriter stringWriter = new StringWriter();
         try {
-            return '[' + join(",") + ']';
-        } catch (Exception e) {
-            return null;
+            write(stringWriter);
+            return stringWriter.toString();
+        } catch (JSONException ex) {
+            // ignore it
         }
+        return "[]";
     }
 
 
@@ -927,26 +936,10 @@ public class JSONArray implements Serializable {
      */
     public Writer write(Writer writer) throws JSONException {
         try {
-            boolean b = false;
-            int len = length();
-
-            writer.write('[');
-
-            for (int i = 0; i < len; i += 1) {
-                if (b) {
-                    writer.write(',');
-                }
-                Object v = this.myArrayList.get(i);
-                if (v instanceof JSONObject) {
-                    ((JSONObject) v).write(writer);
-                } else if (v instanceof JSONArray) {
-                    ((JSONArray) v).write(writer);
-                } else {
-                    writer.write(JSONObject.valueToString(v, escapeForwardSlashAlways));
-                }
-                b = true;
-            }
-            writer.write(']');
+            JSON jsoner = JSONBuilderProvider.create().serializeNulls(true).build();
+            JsonTreeNode jsonTreeNode = JettisonJsonMapper.toJsonTreeNode(this);
+            String str = jsoner.toJson(jsonTreeNode);
+            writer.write(str);
             return writer;
         } catch (IOException e) {
             throw new JSONException(e);

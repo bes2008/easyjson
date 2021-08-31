@@ -26,7 +26,19 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.jn.easyjson.core.JSON;
+import com.jn.easyjson.core.JsonTreeNode;
+import com.jn.easyjson.core.exclusion.Exclusion;
+import com.jn.easyjson.core.factory.JsonFactoryProperties;
+import com.jn.easyjson.core.factory.JsonFactorys;
+import com.jn.langx.util.Objects;
+import com.jn.langx.util.Strings;
+import com.jn.langx.util.reflect.FieldAttributes;
+import com.jn.langx.util.reflect.MethodAttributes;
+import com.jn.langx.util.reflect.Reflects;
 import org.codehaus.jettison.JSONSequenceTooLargeException;
+import org.codehaus.jettison.json.easyjson.BeanPropertyNameExclusion;
+import org.codehaus.jettison.json.easyjson.JettisonJsonMapper;
 
 /**
  * A JSONObject is an unordered collection of name/value pairs. Its
@@ -144,7 +156,7 @@ public class JSONObject implements Serializable {
      */
     private LinkedHashMap myHashMap;
     private boolean dropRootElement;
-    private List ignoredElements;
+    private List<String> ignoredElements;
     private boolean writeNullAsString = true;
     private boolean escapeForwardSlashAlways = true;
 
@@ -166,13 +178,13 @@ public class JSONObject implements Serializable {
         this(false, null, true, true);
     }
 
-    public JSONObject(List ignoredElements) {
+    public JSONObject(List<String> ignoredElements) {
         this(false, ignoredElements, true, true);
     }
 
-    public JSONObject(boolean dropRootElement, List ignoredElements, boolean writeNullAsString,
+    public JSONObject(boolean dropRootElement, List<String> ignoredElements, boolean writeNullAsString,
                       boolean escapeForwardSlash) {
-        this.myHashMap = new LinkedHashMap();
+        this.myHashMap = new LinkedHashMap<String, Object>();
         this.dropRootElement = dropRootElement;
         this.ignoredElements = ignoredElements;
         this.writeNullAsString = writeNullAsString;
@@ -1369,52 +1381,18 @@ public class JSONObject implements Serializable {
      */
     public Writer write(Writer writer) throws JSONException {
         try {
-            int hashMapSize = this.myHashMap.size();
-
-            boolean dropObjectKeyName = false;
-            if (hashMapSize == 1) {
-                dropObjectKeyName = dropRootElement
-                        || ignoredElements != null && ignoredElements.contains(keys().next());
+            JsonFactoryProperties jsonFactoryProperties = new JsonFactoryProperties();
+            if (writeNullAsString) {
+                jsonFactoryProperties.setSerializeNulls(true);
+            }
+            if (Objects.isNotEmpty(ignoredElements)) {
+                jsonFactoryProperties.addExclusion(new BeanPropertyNameExclusion(ignoredElements));
             }
 
-            if (!dropObjectKeyName) {
-                writer.write('{');
-            }
-
-            boolean b = false;
-
-            Iterator keys = keys();
-            while (keys.hasNext()) {
-                if (b) {
-                    writer.write(',');
-                }
-                String k = keys.next().toString();
-                Object v = this.myHashMap.get(k);
-
-                boolean mayBeDropSimpleElement = false;
-                if (!dropObjectKeyName) {
-                    mayBeDropSimpleElement = hashMapSize > 1
-                            && ignoredElements != null && ignoredElements.contains(k);
-                    if (!mayBeDropSimpleElement) {
-                        writer.write(quote(k, escapeForwardSlashAlways));
-                        writer.write(':');
-                    }
-                }
-
-                if (v instanceof JSONObject) {
-                    ((JSONObject) v).write(writer);
-                } else if (v instanceof JSONArray) {
-                    ((JSONArray) v).write(writer);
-                } else if (!mayBeDropSimpleElement) {
-                    writer.write(valueToString(v, escapeForwardSlashAlways));
-                }
-                if (!mayBeDropSimpleElement) {
-                    b = true;
-                }
-            }
-            if (!dropObjectKeyName) {
-                writer.write('}');
-            }
+            JSON jsoner = JsonFactorys.getJSONFactory(jsonFactoryProperties).get();
+            JsonTreeNode jsonTreeNode = JettisonJsonMapper.toJsonTreeNode(this);
+            String str = jsoner.toJson(jsonTreeNode);
+            writer.write(str);
             return writer;
         } catch (IOException e) {
             throw new JSONException(e);

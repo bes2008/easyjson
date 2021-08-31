@@ -26,7 +26,7 @@ public class JsonNullNode extends JsonTreeNode {
 
     /**
      * Creates a new JsonNullNode object.
-     * Deprecated since Gson version 1.8. Use {@link #INSTANCE} instead
+     * Deprecated use #INSTANCE
      */
     @Deprecated
     public JsonNullNode() {
