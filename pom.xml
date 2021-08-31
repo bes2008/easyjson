@@ -24,8 +24,8 @@
         <module>moshi-to-easyjson</module>
         <module>boonjson-to-easyjson</module>
         <module>gson-to-easyjson</module>
-        <module>easyjson-javaxjson</module>
         <module>jettison-to-easyjson</module>
+        <module>easyjson-javaxjson</module>
     </modules>
     <name>${groupId}:${artifactId}:${version}</name>
 
