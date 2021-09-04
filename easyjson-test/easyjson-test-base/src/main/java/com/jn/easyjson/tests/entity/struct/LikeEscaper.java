@@ -15,7 +15,8 @@
 package com.jn.easyjson.tests.entity.struct;
 
 
-import com.jn.langx.escape.Escaper;
+
+import com.jn.langx.util.escape.Escaper;
 
 import java.util.List;
 
