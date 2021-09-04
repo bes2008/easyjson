@@ -70,7 +70,7 @@ public class Configuration {
 
     private Map xmlToJsonNamespaces;
     private List attributesAsElements;
-    private List ignoredElements;
+    private List<String> ignoredElements;
     private boolean supressAtAttributes; 
     private String attributeKey = "@";
     private boolean ignoreNamespaces;

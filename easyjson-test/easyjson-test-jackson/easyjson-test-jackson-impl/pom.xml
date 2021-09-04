@@ -31,5 +31,6 @@
             <artifactId>easyjson-test-jackson-base</artifactId>
 			<version>${project.version}</version>
         </dependency>
+
     </dependencies>
 </project>

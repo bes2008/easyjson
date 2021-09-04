@@ -42,7 +42,7 @@ public class MappedNamespaceConvention implements Convention, NamespaceContext {
     private Map<Object, Object> xnsToJns = new HashMap<Object, Object>();
     private Map<String, Object> jnsToXns = new HashMap<String, Object>();
     private List<?> attributesAsElements;
-    private List<?> ignoredElements;
+    private List<String> ignoredElements;
     private List<String> jsonAttributesAsElements;
     private boolean supressAtAttributes;
     private boolean ignoreNamespaces;
@@ -313,7 +313,7 @@ public class MappedNamespaceConvention implements Convention, NamespaceContext {
 	public boolean isDropRootElement() {
 		return dropRootElement;
 	}
-	public List<?> getIgnoredElements() {
+	public List<String> getIgnoredElements() {
         return ignoredElements;
     }
     public boolean isWriteNullAsString() {
