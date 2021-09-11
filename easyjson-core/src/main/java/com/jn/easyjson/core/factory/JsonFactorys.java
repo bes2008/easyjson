@@ -8,6 +8,7 @@ import com.jn.langx.annotation.Nullable;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.PrimitiveArrays;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -21,7 +22,7 @@ public class JsonFactorys {
         GLOBAL_JSON_BUILDER = jsonBuilder;
     }
 
-    private static Map<JsonFactoryProperties, JSONFactory> cache = new ConcurrentHashMap<JsonFactoryProperties, JSONFactory>();
+    private static Map<JsonFactoryProperties, JSONFactory> cache = new HashMap<JsonFactoryProperties, JSONFactory>();
 
     public static JSONFactory getJSONFactory() {
         return getJSONFactory(JsonScope.SINGLETON);
@@ -82,10 +83,16 @@ public class JsonFactorys {
             // 复用已有的 JSONFactory
             JSONFactory factory = cache.get(properties);
             if (factory == null) {
-                properties.setJsonScope(JsonScope.SINGLETON);
-                factory = getJSONFactory(properties);
-                cache.put(properties, factory);
+                synchronized (cache) {
+                    factory = cache.get(properties);
+                    if (factory == null) {
+                        properties.setJsonScope(JsonScope.SINGLETON);
+                        factory = getJSONFactory(properties);
+                        cache.put(properties, factory);
+                    }
+                }
             }
+            //System.out.println(factory);
             return factory;
         }
     }

@@ -26,7 +26,9 @@ public class SingletonJSONFactory implements JSONFactory {
     public JSON get() {
         if (json == null) {
             synchronized (this) {
-                json = this.jsonBuilder.build();
+                if (json == null) {
+                    json = this.jsonBuilder.build();
+                }
             }
         }
         return json;
