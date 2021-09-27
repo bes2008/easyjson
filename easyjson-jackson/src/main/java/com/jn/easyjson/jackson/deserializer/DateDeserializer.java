@@ -118,13 +118,15 @@ public class DateDeserializer extends JsonDeserializer {
                 try {
                     return df.parse(p.getValueAsString());
                 } catch (ParseException e) {
-                    logger.error(e.getMessage(),e);
+                    logger.error(e.getMessage(), e);
                     return null;
                 }
-            } else if (usingToString) {
-                return new Date(p.getValueAsString());
             } else {
-                return null;
+                if (usingToString) {
+                    return new Date(p.getValueAsString());
+                } else {
+                    return ctx.parseDate(p.getValueAsString());
+                }
             }
         }
         if (curr.isNumeric()) {

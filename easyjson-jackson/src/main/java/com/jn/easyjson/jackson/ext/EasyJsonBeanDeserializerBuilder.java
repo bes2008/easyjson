@@ -196,7 +196,7 @@ public class EasyJsonBeanDeserializerBuilder extends BeanDeserializerBuilder {
     private BeanPropertyMap createPropertyMap(Collection<SettableBeanProperty> props) {
         boolean caseInsensitive = getDeserializationConfig().isEnabled(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES);
         if (BeanPropertyMap_construct_3args_method != null) {
-            Reflects.invoke(BeanPropertyMap_construct_3args_method, null, new Object[]{props, caseInsensitive, constructBeanPropertyMap(props)}, true, true);
+            return Reflects.invoke(BeanPropertyMap_construct_3args_method, null, new Object[]{props, caseInsensitive, constructBeanPropertyMap(props)}, true, true);
         }
         return BeanPropertyMap.construct(props, getDeserializationConfig().isEnabled(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES));
     }
