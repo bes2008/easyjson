@@ -28,6 +28,7 @@ import com.google.gson.stream.MalformedJsonException;
 import com.jn.easyjson.core.JSON;
 import com.jn.easyjson.core.JSONBuilder;
 import com.jn.easyjson.core.JSONBuilderProvider;
+import com.jn.easyjson.core.JsonException;
 
 import java.io.*;
 import java.lang.reflect.Type;
@@ -707,6 +708,8 @@ public final class Gson {
         return;
       } catch (IOException ex) {
         throw new JsonIOException(ex);
+      } catch (JsonException ex){
+        throw new JsonIOException(ex);
       }
     }
     TypeAdapter<?> adapter = getAdapter(TypeToken.get(typeOfSrc));
@@ -942,7 +945,11 @@ public final class Gson {
   @SuppressWarnings("unchecked")
   public <T> T fromJson(JsonReader reader, Type typeOfT) throws JsonIOException, JsonSyntaxException {
     if (this.json != null) {
-      return this.json.fromJson(reader.in, typeOfT);
+      try {
+        return this.json.fromJson(reader.in, typeOfT);
+      }catch (JsonException ex){
+        throw new JsonIOException(ex);
+      }
     }
     boolean isEmpty = true;
     boolean oldLenient = reader.isLenient();
