@@ -16,6 +16,7 @@ package com.alibaba.fastjson.serializer;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.easyjson.FastEasyJsons;
+import com.jn.easyjson.core.JsonException;
 import com.jn.easyjson.core.factory.JsonFactoryProperties;
 import com.jn.easyjson.core.factory.JsonFactorys;
 
@@ -281,8 +282,12 @@ public class JSONSerializer extends SerializeFilterable {
         int features = this.out.getFeatures();
         JsonFactoryProperties properties = FastEasyJsons.buildJsonFactoryProperties(features);
         properties.setDateFormat(this.getDateFormat());
-        String json = JsonFactorys.getJSONFactory(properties).get().toJson(object, type);
-        this.out.write(json);
+        try {
+            String json = JsonFactorys.getJSONFactory(properties).get().toJson(object, type);
+            this.out.write(json);
+        }catch (JsonException ex){
+            throw new JSONException(ex.getMessage(), ex);
+        }
     }
 
     public final void writeWithFieldName(Object object, Object fieldName) {

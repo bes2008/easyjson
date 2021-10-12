@@ -27,6 +27,7 @@ import com.alibaba.fastjson.serializer.SerializeFilter;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.util.IOUtils;
 import com.alibaba.fastjson.util.TypeUtils;
+import com.jn.easyjson.core.JsonException;
 import com.jn.easyjson.core.JsonTreeNode;
 import com.jn.easyjson.core.factory.JsonFactoryProperties;
 import com.jn.easyjson.core.factory.JsonFactorys;
@@ -164,7 +165,11 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
         if (text == null) {
             return null;
         }
-        return JsonMapper.fromJsonTreeNode(FastEasyJsons.getJSONFactory(DEFAULT_GENERATE_FEATURE).get().fromJson(text));
+        try {
+            return JsonMapper.fromJsonTreeNode(FastEasyJsons.getJSONFactory(DEFAULT_GENERATE_FEATURE).get().fromJson(text));
+        }catch (JsonException ex){
+            throw new JSONException(ex.getMessage(), ex);
+        }
     }
 
     public static Object parse(String text, int features) {
@@ -220,7 +225,11 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
     }
 
     public static JSONObject parseObject(String text) {
-        return (JSONObject) JsonMapper.fromJsonTreeNode(FastEasyJsons.getJSONFactory(JSON.DEFAULT_GENERATE_FEATURE).get().fromJson(text));
+        try {
+            return (JSONObject) JsonMapper.fromJsonTreeNode(FastEasyJsons.getJSONFactory(JSON.DEFAULT_GENERATE_FEATURE).get().fromJson(text));
+        } catch (JsonException ex) {
+            throw new JSONException(ex.getMessage(), ex);
+        }
     }
 
     /**
@@ -278,8 +287,8 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
      *             {@link com.alibaba.fastjson.TypeReference} class. For example, to get the type for
      *             {@code Collection<Foo>}, you should use:
      *             <pre>
-     *                                                                                                 Type type = new TypeReference&lt;Collection&lt;Foo&gt;&gt;(){}.getType();
-     *                                                                                                 </pre>
+     *                                                                                                             Type type = new TypeReference&lt;Collection&lt;Foo&gt;&gt;(){}.getType();
+     *                                                                                                             </pre>
      * @return an object of type T from the string
      */
     @SuppressWarnings("unchecked")
@@ -313,13 +322,15 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> T parseObject(String input, Type clazz, ParserConfig config, ParseProcess processor,
-                                    int featureValues, Feature... features) {
+    public static <T> T parseObject(String input, Type clazz, ParserConfig config, ParseProcess processor, int featureValues, Feature... features) {
         if (input == null) {
             return null;
         }
-        return FastEasyJsons.getJSONFactory(JSON.DEFAULT_GENERATE_FEATURE).get().fromJson(input, clazz);
-
+        try {
+            return FastEasyJsons.getJSONFactory(JSON.DEFAULT_GENERATE_FEATURE).get().fromJson(input, clazz);
+        } catch (JsonException ex) {
+            throw new JSONException(ex.getMessage(), ex);
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -483,23 +494,30 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
         if (text == null) {
             return null;
         }
-
-        JsonTreeNode node = FastEasyJsons.getJSONFactory(DEFAULT_GENERATE_FEATURE).get().fromJson(text);
-        JsonArrayNode arrayNode = null;
-        if (node.isJsonArrayNode()) {
-            arrayNode = node.getAsJsonArrayNode();
-        } else {
-            arrayNode = new JsonArrayNode();
-            arrayNode.add(node);
+        try {
+            JsonTreeNode node = FastEasyJsons.getJSONFactory(DEFAULT_GENERATE_FEATURE).get().fromJson(text);
+            JsonArrayNode arrayNode = null;
+            if (node.isJsonArrayNode()) {
+                arrayNode = node.getAsJsonArrayNode();
+            } else {
+                arrayNode = new JsonArrayNode();
+                arrayNode.add(node);
+            }
+            return (JSONArray) JsonMapper.fromJsonTreeNode(node);
+        } catch (JsonException ex) {
+            throw new JSONException(ex.getMessage(), ex);
         }
-        return (JSONArray) JsonMapper.fromJsonTreeNode(node);
     }
 
     public static <T> List<T> parseArray(String text, Class<T> clazz) {
         if (text == null) {
             return null;
         }
-        return FastEasyJsons.getJSONFactory(JSON.DEFAULT_GENERATE_FEATURE).get().fromJson(text, Types.getListParameterizedType(clazz));
+        try {
+            return FastEasyJsons.getJSONFactory(JSON.DEFAULT_GENERATE_FEATURE).get().fromJson(text, Types.getListParameterizedType(clazz));
+        } catch (JsonException ex) {
+            throw new JSONException(ex.getMessage(), ex);
+        }
     }
 
     public static List<Object> parseArray(String text, Type[] types) {
@@ -532,7 +550,11 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
      * @since 1.2.11
      */
     public static String toJSONString(Object object, int defaultFeatures, SerializerFeature... features) {
-        return FastEasyJsons.getJSONFactory(defaultFeatures, features).get().toJson(object);
+        try {
+            return FastEasyJsons.getJSONFactory(defaultFeatures, features).get().toJson(object);
+        } catch (JsonException ex) {
+            throw new JSONException(ex.getMessage(), ex);
+        }
     }
 
     /**
@@ -545,7 +567,11 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
     public static String toJSONStringWithDateFormat(Object object, String dateFormat, int defaultFeatures, SerializerFeature... features) {
         JsonFactoryProperties properties = FastEasyJsons.buildJsonFactoryProperties(defaultFeatures, features);
         properties.setDatePattern(dateFormat);
-        return JsonFactorys.getJSONFactory(properties).get().toJson(object);
+        try {
+            return JsonFactorys.getJSONFactory(properties).get().toJson(object);
+        } catch (JsonException ex) {
+            throw new JSONException(ex.getMessage(), ex);
+        }
     }
 
     public static String toJSONString(Object object, SerializeFilter filter, SerializerFeature... features) {
@@ -880,13 +906,21 @@ public abstract class JSON implements JSONStreamAware, JSONAware {
     }
 
     public static boolean isValidObject(String str) {
-        JsonTreeNode node = FastEasyJsons.getJSONFactory(DEFAULT_GENERATE_FEATURE).get().fromJson(str);
-        return node != null && node.isJsonObjectNode();
+        try {
+            JsonTreeNode node = FastEasyJsons.getJSONFactory(DEFAULT_GENERATE_FEATURE).get().fromJson(str);
+            return node != null && node.isJsonObjectNode();
+        } catch (JsonException ex) {
+            throw new JSONException(ex.getMessage(), ex);
+        }
     }
 
     public static boolean isValidArray(String str) {
-        JsonTreeNode node = FastEasyJsons.getJSONFactory(DEFAULT_GENERATE_FEATURE).get().fromJson(str);
-        return node != null && node.isJsonArrayNode();
+        try {
+            JsonTreeNode node = FastEasyJsons.getJSONFactory(DEFAULT_GENERATE_FEATURE).get().fromJson(str);
+            return node != null && node.isJsonArrayNode();
+        } catch (JsonException ex) {
+            throw new JSONException(ex.getMessage(), ex);
+        }
     }
 
     public static <T> void handleResovleTask(DefaultJSONParser parser, T value) {
