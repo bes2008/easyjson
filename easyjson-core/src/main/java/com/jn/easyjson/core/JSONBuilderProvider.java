@@ -28,6 +28,7 @@ import com.jn.langx.util.reflect.Reflects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -119,21 +120,39 @@ public class JSONBuilderProvider {
         while (iter.hasNext()) {
             try {
                 JSONBuilder jsonBuilder = iter.next();
-                Class<? extends JSONBuilder> jsonBuildClass = jsonBuilder.getClass();
-                String name = parseName(jsonBuildClass);
-                String dependency = parseDependencyClass(jsonBuildClass);
+                Class<? extends JSONBuilder> jsonBuilderClass = jsonBuilder.getClass();
+                String jsonLibraryName = parseName(jsonBuilderClass);
+                // the dependency class name
+                String dependency = parseDependencyClass(jsonBuilderClass);
                 if (Emptys.isEmpty(dependency)) {
-                    logger.warn("Won't register json builder {}, because of can't find its dependency class {}", jsonBuildClass.getCanonicalName(), "NULL");
+                    logger.warn("Won't register json builder {}, because of can't find its dependency class {}", jsonBuilderClass.getCanonicalName(), "NULL");
                     continue;
                 }
-                if (hasClass(dependency)) {
-                    logger.info("Register a json builder {} for {}", jsonBuildClass.getCanonicalName(), name);
-                    registry.put(name, jsonBuildClass);
-                    if (defaultJsonBuilderClass == null) {
-                        defaultJsonBuilderClass = jsonBuildClass;
+                Class dependencyClass = null;
+                try {
+                    dependencyClass = ClassLoaders.loadClass(dependency);
+                } catch (ClassNotFoundException ex) {
+                    // ignore it
+                }
+                boolean dependencyClassFound = false;
+                if (dependencyClass != null) {
+                    // 避免该依赖类是从 xxxx-to-easyjson 的bridge中发现的
+                    URL codeLocation = Reflects.getCodeLocation(dependencyClass);
+                    if (codeLocation != null ) {
+                        if(!codeLocation.toString().contains("-to-easyjson")) {
+                            dependencyClassFound = true;
+                            logger.info("Register a json builder {} for {}", jsonBuilderClass.getCanonicalName(), jsonLibraryName);
+                            registry.put(jsonLibraryName, jsonBuilderClass);
+                            if (defaultJsonBuilderClass == null) {
+                                defaultJsonBuilderClass = jsonBuilderClass;
+                            }
+                        }else{
+                            logger.warn("Won't register json builder {}, because of the {}-to-easyjson.jar found", Reflects.getFQNClassName(jsonBuilderClass), jsonLibraryName);
+                        }
                     }
-                } else {
-                    logger.warn("Won't register json builder {}, because of can't find its dependency class {}", jsonBuildClass.getCanonicalName(), dependency);
+                }
+                if (!dependencyClassFound) {
+                    logger.warn("Won't register json builder {}, because of can't find its dependency class {}", Reflects.getFQNClassName(jsonBuilderClass), dependency);
                 }
             } catch (Throwable ex) {
                 logger.error(ex.getMessage(), ex);
@@ -163,19 +182,5 @@ public class JSONBuilderProvider {
         return name;
     }
 
-    @SuppressWarnings("rawtypes")
-    private static Class loadClass(String clazz) {
-        try {
-            return ClassLoaders.loadClass(clazz);
-        } catch (ClassNotFoundException e) {
-            return null;
-        }
-    }
 
-    private static boolean hasClass(String clazz) {
-        if (clazz == null) {
-            return false;
-        }
-        return loadClass(clazz) != null;
-    }
 }
