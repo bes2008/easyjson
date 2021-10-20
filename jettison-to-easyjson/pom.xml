@@ -5,12 +5,12 @@
     <parent>
         <artifactId>easyjson</artifactId>
         <groupId>com.github.fangjinuo.easyjson</groupId>
-        <version>3.2.9</version>
+        <version>3.2.10</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>jettison-to-easyjson</artifactId>
-
+    <name>${groupId}:${artifactId}:${version}</name>
     <properties>
     </properties>
 
