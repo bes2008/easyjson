@@ -231,4 +231,7 @@ public class Jacksons {
 
     }
 
+    public static final Version VERSION_2_6_0 = new Version(2,6,0,null);
+    public static final Version VERSION_2_9_0 = new Version(2,9,0,null);
+    public static final Version VERSION_2_10_0 = new Version(2,10,0,null);
 }

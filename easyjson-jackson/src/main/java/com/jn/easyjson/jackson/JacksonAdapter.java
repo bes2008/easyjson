@@ -18,15 +18,20 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.CollectionType;
 import com.jn.easyjson.core.JsonException;
 import com.jn.easyjson.core.JsonHandlerAdapter;
 import com.jn.easyjson.core.JsonTreeNode;
 import com.jn.easyjson.jackson.node.JacksonJsonMapper;
+import com.jn.langx.util.collection.multivalue.MultiValueMap;
+import com.jn.langx.util.reflect.Reflects;
 import com.jn.langx.util.reflect.type.Types;
 
 import java.io.Reader;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.Collection;
+import java.util.Map;
 
 public class JacksonAdapter extends JsonHandlerAdapter<ObjectMapper> {
 
@@ -67,6 +72,12 @@ public class JacksonAdapter extends JsonHandlerAdapter<ObjectMapper> {
             JavaType[] parameterClasses = new JavaType[parameterTypes.length];
             for (int i = 0; i < parameterTypes.length; i++) {
                 parameterClasses[i] = toJavaType(parameterTypes[i]);
+            }
+            if(parametrized.isInterface() && Reflects.isSubClassOrEquals(MultiValueMap.class, parametrized)){
+                if (Jacksons.getCurrentVersion().compareTo(Jacksons.VERSION_2_9_0) < 0) {
+                    CollectionType collectionType = getDelegate().getTypeFactory().constructCollectionType(Collection.class, parameterClasses[1]);
+                    return getDelegate().getTypeFactory().constructMapType((Class<Map<?,?>>)parametrized, parameterClasses[0], collectionType);
+                }
             }
             return getDelegate().getTypeFactory().constructParametricType(parametrized, parameterClasses);
         }

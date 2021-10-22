@@ -14,21 +14,24 @@
 
 package com.jn.easyjson.jackson.ext;
 
-import com.fasterxml.jackson.databind.BeanDescription;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.cfg.DeserializerFactoryConfig;
+import com.fasterxml.jackson.databind.deser.BasicDeserializerFactory;
 import com.fasterxml.jackson.databind.deser.BeanDeserializerBuilder;
 import com.fasterxml.jackson.databind.deser.BeanDeserializerFactory;
 import com.fasterxml.jackson.databind.deser.DeserializerFactory;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
+import com.fasterxml.jackson.databind.type.MapType;
 import com.jn.easyjson.core.exclusion.ExclusionConfiguration;
 import com.jn.easyjson.jackson.JacksonMigrates;
+import com.jn.langx.util.collection.multivalue.LinkedMultiValueMap;
+import com.jn.langx.util.collection.multivalue.MultiValueMap;
+import com.jn.langx.util.reflect.Reflects;
 
 import java.lang.reflect.Field;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 public class EasyJsonBeanDeserializerFactory extends BeanDeserializerFactory {
     private EasyJsonObjectMapper objectMapper;
@@ -36,6 +39,7 @@ public class EasyJsonBeanDeserializerFactory extends BeanDeserializerFactory {
     EasyJsonBeanDeserializerFactory(DeserializerFactoryConfig config, EasyJsonObjectMapper objectMapper) {
         super(config);
         this.objectMapper = objectMapper;
+        configureMapLikeInterfaceDefaultImplementClass();
     }
 
     @Override
@@ -77,8 +81,51 @@ public class EasyJsonBeanDeserializerFactory extends BeanDeserializerFactory {
         return propertyDefinitions;
     }
 
+    // override _mapFallbacks
+    final static HashMap<String, Class<? extends Map>> _mapFallbacks;
+    static {
+        HashMap<String, Class<? extends Map>> fallbacks = new HashMap();
+
+        final Class<? extends Map> DEFAULT_MAP = LinkedHashMap.class;
+        fallbacks.put(Map.class.getName(), DEFAULT_MAP);
+        fallbacks.put(AbstractMap.class.getName(), DEFAULT_MAP);
+        fallbacks.put(ConcurrentMap.class.getName(), ConcurrentHashMap.class);
+        fallbacks.put(SortedMap.class.getName(), TreeMap.class);
+
+        fallbacks.put(java.util.NavigableMap.class.getName(), TreeMap.class);
+        fallbacks.put(java.util.concurrent.ConcurrentNavigableMap.class.getName(), java.util.concurrent.ConcurrentSkipListMap.class);
+        fallbacks.put(MultiValueMap.class.getName(), LinkedMultiValueMap.class);
+        _mapFallbacks = fallbacks;
+    }
+
+    /**
+     * @override jackson [2.11.0, )
+     */
+    protected MapType _mapAbstractMapType(JavaType type, DeserializationConfig config){
+        final Class<?> mapClass = _mapFallbacks.get(type.getRawClass().getName());
+        if (mapClass != null) {
+            return (MapType) config.getTypeFactory().constructSpecializedType(type, mapClass);
+        }
+        return null;
+    }
+
+
+    // Jackson [2.6.0 ~ 2.11.0)
+    private void configureMapLikeInterfaceDefaultImplementClass() {
+        Field _mapFallbacksField = Reflects.getStaticField(BasicDeserializerFactory.class, "_mapFallbacks");
+        HashMap<String, Class<? extends Map>> _mapFallbacks = null;
+        if (_mapFallbacksField != null) {
+            _mapFallbacks = Reflects.getFieldValue(_mapFallbacksField, null, true, true);
+        }
+        if (_mapFallbacks != null) {
+            _mapFallbacks.put(MultiValueMap.class.getName(), LinkedMultiValueMap.class);
+        }
+    }
+
+
     @Override
     protected BeanDeserializerBuilder constructBeanDeserializerBuilder(DeserializationContext ctxt, BeanDescription beanDesc) {
         return new EasyJsonBeanDeserializerBuilder(beanDesc, ctxt);
     }
+
 }
