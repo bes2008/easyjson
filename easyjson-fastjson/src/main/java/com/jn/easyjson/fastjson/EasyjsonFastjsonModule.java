@@ -8,26 +8,46 @@ import com.alibaba.fastjson.serializer.ObjectSerializer;
 import com.alibaba.fastjson.serializer.SerializeConfig;
 import com.alibaba.fastjson.spi.Module;
 import com.alibaba.fastjson.util.TypeUtils;
+import com.jn.easyjson.fastjson.codec.MultiValueMapCodec;
+import com.jn.langx.util.collection.multivalue.MultiValueMap;
 import com.jn.langx.util.reflect.Reflects;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.TypeVariable;
 
 public class EasyjsonFastjsonModule implements Module {
     @Override
     public ObjectDeserializer createDeserializer(ParserConfig config, Class type) {
-        return createEnumDeserializer(config, type);
+        ObjectDeserializer deserializer = null;
+        if(type.isEnum()) {
+            deserializer = createEnumDeserializer(config, type);
+        }else if(Reflects.isSubClassOrEquals(MultiValueMap.class, type)){
+            config.putDeserializer(type, MultiValueMapCodec.INSTANCE);
+            deserializer = MultiValueMapCodec.INSTANCE;
+        }
+        return deserializer;
+    }
+
+    @Override
+    public ObjectSerializer createSerializer(SerializeConfig config, Class type) {
+        if (type.isEnum()) {
+            createEnumSerializer(config, type);
+        } else if (Reflects.isSubClassOrEquals(MultiValueMap.class, type)) {
+            createMultiValueMapSerializer(config, type);
+        }
+        return config.get(type);
     }
 
     private ObjectDeserializer createEnumDeserializer(ParserConfig config, Class clazz) {
-        ObjectDeserializer derializer = null;
+        ObjectDeserializer deserializer = null;
         if (clazz.isEnum()) {
             if (config.isJacksonCompatible()) {
                 Method[] methods = clazz.getMethods();
                 for (Method method : methods) {
                     if (TypeUtils.isJacksonCreator(method)) {
-                        derializer = config.createJavaBeanDeserializer(clazz, clazz);
-                        config.putDeserializer(clazz, derializer);
-                        return derializer;
+                        deserializer = config.createJavaBeanDeserializer(clazz, clazz);
+                        config.putDeserializer(clazz, deserializer);
+                        return deserializer;
                     }
                 }
             }
@@ -36,27 +56,18 @@ public class EasyjsonFastjsonModule implements Module {
             if (jsonType != null) {
                 deserClass = jsonType.deserializer();
                 try {
-                    derializer = (ObjectDeserializer) deserClass.newInstance();
-                    config.putDeserializer(clazz, derializer);
-                    return derializer;
+                    deserializer = (ObjectDeserializer) deserClass.newInstance();
+                    config.putDeserializer(clazz, deserializer);
+                    return deserializer;
                 } catch (Throwable error) {
                     // skip
                 }
             }
 
-            derializer = new EnumDeserializer(clazz);
+            deserializer = new EnumDeserializer(clazz);
         }
-        return derializer;
+        return deserializer;
     }
-
-    @Override
-    public ObjectSerializer createSerializer(SerializeConfig config, Class type) {
-        if (type.isEnum()) {
-            createEnumSerializer(config, type);
-        }
-        return config.get(type);
-    }
-
 
     private void createEnumSerializer(SerializeConfig config, Class type) {
         if (type.isEnum()) {
@@ -67,5 +78,9 @@ public class EasyjsonFastjsonModule implements Module {
                 config.put(type, config.get(Enum.class));
             }
         }
+    }
+
+    private void createMultiValueMapSerializer(SerializeConfig config, Class type) {
+        config.put(type, MultiValueMapCodec.INSTANCE);
     }
 }

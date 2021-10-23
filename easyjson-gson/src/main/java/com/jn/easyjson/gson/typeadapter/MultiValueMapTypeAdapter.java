@@ -1,14 +1,13 @@
 package com.jn.easyjson.gson.typeadapter;
 
 import com.google.gson.TypeAdapter;
-import com.google.gson.internal.ObjectConstructor;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import com.jn.langx.util.collection.Collects;
-import com.jn.langx.util.collection.multivalue.CommonMultiValueMap;
 import com.jn.langx.util.collection.multivalue.LinkedMultiValueMap;
 import com.jn.langx.util.collection.multivalue.MultiValueMap;
+import com.jn.langx.util.collection.multivalue.MultiValueMaps;
 import com.jn.langx.util.function.Consumer2;
 import com.jn.langx.util.reflect.Modifiers;
 import com.jn.langx.util.reflect.Reflects;
@@ -38,14 +37,9 @@ public class MultiValueMapTypeAdapter<K, V> extends TypeAdapter<MultiValueMap<K,
 
     @Override
     public MultiValueMap<K, V> read(JsonReader in) throws IOException {
-        Map<K, Collection<V>> map = (Map<K, Collection<V>>) mapAdapter.read(in);
+        Map<K, Collection<V>> delegate = (Map<K, Collection<V>>) mapAdapter.read(in);
         final MultiValueMap<K, V> multiValueMap = createMultiValueMap();
-        Collects.forEach(map, new Consumer2<K, Collection<V>>() {
-            @Override
-            public void accept(K key, Collection<V> value) {
-                multiValueMap.put(key, value);
-            }
-        });
+        MultiValueMaps.copy(delegate, multiValueMap);
         return multiValueMap;
     }
 
