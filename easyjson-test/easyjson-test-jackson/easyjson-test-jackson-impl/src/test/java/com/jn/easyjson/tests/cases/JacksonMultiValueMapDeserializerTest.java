@@ -8,7 +8,7 @@ import com.jn.langx.util.collection.multivalue.CommonMultiValueMap;
 import com.jn.langx.util.collection.multivalue.MultiValueMap;
 import org.junit.Test;
 
-public class MultiValueMapDeserializerTest {
+public class JacksonMultiValueMapDeserializerTest {
 
     @Test
     public void test(){
