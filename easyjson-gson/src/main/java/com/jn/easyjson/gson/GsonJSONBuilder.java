@@ -36,6 +36,7 @@ import com.jn.easyjson.gson.typeadapter.*;
 import com.jn.langx.annotation.Name;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.collection.iter.ReverseListIterator;
+import com.jn.langx.util.collection.multivalue.MultiValueMap;
 import com.jn.langx.util.reflect.Reflects;
 import com.jn.langx.util.struct.counter.SimpleIntegerCounter;
 import org.slf4j.Logger;
@@ -101,6 +102,7 @@ public class GsonJSONBuilder extends JSONBuilder {
 
         // calender
         gsonBuilder.registerTypeAdapterFactory(new CalendarTypeAdapterFactory(this));
+        gsonBuilder.registerTypeAdapterFactory(new MultiValueMapTypeAdapterFactory());
 
 
         // pretty printing
