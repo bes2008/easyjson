@@ -4,11 +4,9 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.multivalue.LinkedMultiValueMap;
 import com.jn.langx.util.collection.multivalue.MultiValueMap;
 import com.jn.langx.util.collection.multivalue.MultiValueMaps;
-import com.jn.langx.util.function.Consumer2;
 import com.jn.langx.util.reflect.Modifiers;
 import com.jn.langx.util.reflect.Reflects;
 import com.jn.langx.util.reflect.type.Types;
@@ -42,6 +40,8 @@ public class MultiValueMapTypeAdapter<K, V> extends TypeAdapter<MultiValueMap<K,
         MultiValueMaps.copy(delegate, multiValueMap);
         return multiValueMap;
     }
+
+
 
     private MultiValueMap<K, V> createMultiValueMap() {
         Type type = typeToken.getType();
