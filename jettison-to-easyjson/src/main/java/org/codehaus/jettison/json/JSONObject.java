@@ -30,7 +30,7 @@ import com.jn.easyjson.core.JSON;
 import com.jn.easyjson.core.JsonTreeNode;
 import com.jn.easyjson.core.factory.JsonFactoryProperties;
 import com.jn.easyjson.core.factory.JsonFactorys;
-import com.jn.langx.util.Objects;
+import com.jn.langx.util.Objs;
 import org.codehaus.jettison.JSONSequenceTooLargeException;
 import org.codehaus.jettison.json.easyjson.BeanPropertyNameExclusion;
 import org.codehaus.jettison.json.easyjson.JettisonJsonMapper;
@@ -1380,7 +1380,7 @@ public class JSONObject implements Serializable {
             if (writeNullAsString) {
                 jsonFactoryProperties.setSerializeNulls(true);
             }
-            if (Objects.isNotEmpty(ignoredElements)) {
+            if (Objs.isNotEmpty(ignoredElements)) {
                 jsonFactoryProperties.addExclusion(new BeanPropertyNameExclusion(ignoredElements));
             }
 

@@ -22,14 +22,16 @@ import com.jn.langx.cache.CacheBuilder;
 import com.jn.langx.configuration.ConfigurationCacheLoaderAdapter;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.concurrent.CommonThreadFactory;
+import com.jn.langx.util.logging.Loggers;
 import com.jn.langx.util.timing.timer.Timer;
 import com.jn.langx.util.timing.timer.WheelTimers;
+import org.slf4j.Logger;
 
 import java.lang.ref.WeakReference;
 
 public class ClassLoaderCodecConfigurationRepositoryBuilder<T extends CodecConfiguration> implements Builder<ClassLoaderCodecConfigurationRepository<T>> {
     public static final Timer timer = WheelTimers.newHashedWheelTimer(new CommonThreadFactory("EasyJSON", true));
-
+    private static final Logger logger = Loggers.getLogger(ClassLoaderCodecConfigurationRepositoryBuilder.class);
     /**
      * 类字段、方法解析器
      */
@@ -97,7 +99,7 @@ public class ClassLoaderCodecConfigurationRepositoryBuilder<T extends CodecConfi
     @Override
     public ClassLoaderCodecConfigurationRepository<T> build() {
         Preconditions.checkNotNull(propertyCodecConfigurationMerger);
-
+        logger.info("build a ClassLoaderCodecConfigurationRepository instance for ");
         // loader
         ClassLoaderCodecConfigurationLoader<T> loaderCodecConfigurationLoader = new ClassLoaderCodecConfigurationLoader<T>();
         loaderCodecConfigurationLoader.setBeanClassAnnotatedCodecConfigurationParser(beanClassAnnotatedCodecConfigurationParser);

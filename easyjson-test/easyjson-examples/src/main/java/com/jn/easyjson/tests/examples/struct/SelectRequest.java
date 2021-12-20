@@ -15,14 +15,14 @@
 package com.jn.easyjson.tests.examples.struct;
 
 
-import com.jn.langx.util.Objects;
+import com.jn.langx.util.Objs;
 
 public class SelectRequest<R extends SelectRequest, C extends SqlRequestContext<R>> extends SqlRequest<R, C> {
     private OrderBy orderBy;
     private int timeout;
 
     public String getOrderByAsString() {
-        return Objects.isNull(this.orderBy) ? "" : this.orderBy.toString();
+        return Objs.isNull(this.orderBy) ? "" : this.orderBy.toString();
     }
 
     public OrderBy getOrderBy() {

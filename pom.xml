@@ -6,7 +6,7 @@
 
     <groupId>com.github.fangjinuo.easyjson</groupId>
     <artifactId>easyjson</artifactId>
-    <version>3.2.11</version>
+    <version>3.2.12</version>
     <modules>
         <module>easyjson-core</module>
         <module>easyjson-gson</module>
@@ -69,7 +69,7 @@
         </license>
     </licenses>
     <properties>
-        <langx.version>4.1.0</langx.version>
+        <langx.version>4.2.2</langx.version>
         <slf4j.version>1.7.0</slf4j.version>
     </properties>
 

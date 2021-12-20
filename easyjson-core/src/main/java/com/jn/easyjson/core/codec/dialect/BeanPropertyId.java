@@ -14,7 +14,7 @@
 
 package com.jn.easyjson.core.codec.dialect;
 
-import com.jn.langx.util.Objects;
+import com.jn.langx.util.Objs;
 import com.jn.langx.util.hash.HashCodeBuilder;
 
 public class BeanPropertyId {
@@ -48,11 +48,11 @@ public class BeanPropertyId {
         }
         BeanPropertyId id = (BeanPropertyId)o;
 
-        if(!Objects.equals(id.beanClass, beanClass)){
+        if(!Objs.equals(id.beanClass, beanClass)){
             return false;
         }
 
-        if(!Objects.equals(id.propertyName, propertyName)){
+        if(!Objs.equals(id.propertyName, propertyName)){
             return false;
         }
         return true;
