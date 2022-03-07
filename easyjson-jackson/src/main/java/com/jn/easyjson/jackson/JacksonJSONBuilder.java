@@ -78,9 +78,11 @@ public class JacksonJSONBuilder extends JSONBuilder {
                 module.addDeserializer(Enum.class, new EnumDeserializer<Enum>());
                 module.addSerializer(Enum.class, new EnumSerializer<Enum>());
 
+                // beans
                 module.setSerializerModifier(new EasyjsonBeanSerializerModifier());
                 module.setDeserializerModifier(new EasyjsonBeanDeserializerModifier());
 
+            //    module.addSerializer(new MapEntrySubClassSerializer());
                 moduleInited = true;
             }
         }

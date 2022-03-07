@@ -20,15 +20,14 @@ import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializationConfig;
 import com.fasterxml.jackson.databind.ser.BeanPropertyWriter;
 import com.fasterxml.jackson.databind.ser.BeanSerializerModifier;
+import com.jn.easyjson.core.util.JSONs;
 import com.jn.easyjson.jackson.DateSeries;
-import com.jn.easyjson.jackson.serializer.BooleanSerializer;
-import com.jn.easyjson.jackson.serializer.DateSerializer;
-import com.jn.easyjson.jackson.serializer.EnumSerializer;
-import com.jn.easyjson.jackson.serializer.NumberSerializer;
+import com.jn.easyjson.jackson.serializer.*;
 import com.jn.langx.util.reflect.Reflects;
 import com.jn.langx.util.reflect.type.Types;
 
 import java.util.List;
+import java.util.Map;
 
 public class EasyjsonBeanSerializerModifier extends BeanSerializerModifier {
 
@@ -59,6 +58,14 @@ public class EasyjsonBeanSerializerModifier extends BeanSerializerModifier {
         if(beanClass.isEnum()){
             return new EnumSerializer();
         }
+
+        /*
+        if(Reflects.isSubClassOrEquals(Map.Entry.class, beanClass)){
+            if(JSONs.hasOtherPropertiesForMapEntry(beanClass)){
+                return new MapEntrySubClassSerializer();
+            }
+        }
+         */
         return super.modifySerializer(config, beanDesc, serializer);
     }
 }

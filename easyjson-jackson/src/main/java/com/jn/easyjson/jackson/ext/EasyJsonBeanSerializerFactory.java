@@ -14,9 +14,7 @@
 
 package com.jn.easyjson.jackson.ext;
 
-import com.fasterxml.jackson.databind.BeanDescription;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.cfg.SerializerFactoryConfig;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 import com.fasterxml.jackson.databind.ser.BeanPropertyWriter;
@@ -24,10 +22,13 @@ import com.fasterxml.jackson.databind.ser.BeanSerializerBuilder;
 import com.fasterxml.jackson.databind.ser.BeanSerializerFactory;
 import com.fasterxml.jackson.databind.ser.SerializerFactory;
 import com.jn.easyjson.core.exclusion.ExclusionConfiguration;
+import com.jn.easyjson.core.util.JSONs;
+import com.jn.langx.util.reflect.Reflects;
 
 import java.lang.reflect.Field;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 public class EasyJsonBeanSerializerFactory extends BeanSerializerFactory {
     private EasyJsonObjectMapper objectMapper;
@@ -48,6 +49,19 @@ public class EasyJsonBeanSerializerFactory extends BeanSerializerFactory {
                     + "additional serializer definitions");
         }
         return new EasyJsonBeanSerializerFactory(config, objectMapper);
+    }
+
+    @Override
+    public JsonSerializer<Object> createSerializer(SerializerProvider prov, JavaType origType) throws JsonMappingException {
+        Class rawClass = origType.getRawClass();
+        // Map.Entry
+        if(Reflects.isSubClassOrEquals(Map.Entry.class, rawClass)){
+            if(JSONs.hasOtherPropertiesForMapEntry(rawClass)){
+                BeanDescription beanDesc = prov.getConfig().introspect(origType);
+                return findBeanSerializer(prov, origType, beanDesc);
+            }
+        }
+        return super.createSerializer(prov, origType);
     }
 
     @Override

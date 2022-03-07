@@ -8,12 +8,14 @@ import com.alibaba.fastjson.serializer.ObjectSerializer;
 import com.alibaba.fastjson.serializer.SerializeConfig;
 import com.alibaba.fastjson.spi.Module;
 import com.alibaba.fastjson.util.TypeUtils;
+import com.jn.easyjson.core.util.JSONs;
 import com.jn.easyjson.fastjson.codec.MultiValueMapCodec;
 import com.jn.langx.util.collection.multivalue.MultiValueMap;
 import com.jn.langx.util.reflect.Reflects;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.TypeVariable;
+import java.util.Map;
 
 public class EasyjsonFastjsonModule implements Module {
     @Override
@@ -34,8 +36,15 @@ public class EasyjsonFastjsonModule implements Module {
             createEnumSerializer(config, type);
         } else if (Reflects.isSubClassOrEquals(MultiValueMap.class, type)) {
             createMultiValueMapSerializer(config, type);
+        } else if (Reflects.isSubClassOrEquals(Map.Entry.class, type) && JSONs.hasOtherPropertiesForMapEntry(type)){
+            createMapEntrySubclass(config, type);
         }
         return config.get(type);
+    }
+
+    private void createMapEntrySubclass(SerializeConfig config, Class type){
+        ObjectSerializer serializer = config.createJavaBeanSerializer(type);
+        config.put(type, serializer);
     }
 
     private ObjectDeserializer createEnumDeserializer(ParserConfig config, Class clazz) {
