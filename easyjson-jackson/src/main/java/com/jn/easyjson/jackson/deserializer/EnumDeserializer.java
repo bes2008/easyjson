@@ -14,6 +14,7 @@
 
 package com.jn.easyjson.jackson.deserializer;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.JsonToken;
@@ -22,13 +23,19 @@ import com.jn.easyjson.core.codec.dialect.PropertyCodecConfiguration;
 import com.jn.easyjson.jackson.Jacksons;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.Throwables;
+import com.jn.langx.util.collection.Collects;
+import com.jn.langx.util.collection.Pipeline;
 import com.jn.langx.util.enums.Enums;
+import com.jn.langx.util.function.Predicate;
 import com.jn.langx.util.function.Supplier0;
+import com.jn.langx.util.reflect.Reflects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.Collection;
+import java.util.List;
 
 import static com.jn.easyjson.jackson.JacksonConstants.*;
 
@@ -94,10 +101,34 @@ public class EnumDeserializer<T extends Enum> extends JsonDeserializer<T> implem
             return (T) Enums.ofCode(enumClass, index);
         }
 
-        if (usingToString && jtoken == JsonToken.VALUE_STRING) {
+        if (jtoken == JsonToken.VALUE_STRING) {
             String string = p.getValueAsString();
-            return (T) Enums.ofToString(enumClass, string);
+            if (usingToString) {
+                return (T) Enums.ofToString(enumClass, string);
+            }
+            // name
+            T t = Enums.ofName(enumClass, string);
+            if (t == null) {
+                t = Enums.ofField(enumClass, "name", string);
+            }
+            if (t == null) {
+                t = Enums.ofToString(enumClass, string);
+            }
+            if (t == null) {
+                Collection<Field> fields = Reflects.getAllDeclaredFields(enumClass, false);
+                Field field = Pipeline.of(fields)
+                        .findFirst(new Predicate<Field>() {
+                            @Override
+                            public boolean test(Field field) {
+                                return Reflects.hasAnnotation(field, JsonValue.class);
+                            }
+                        });
+                if (field != null) {
+                    usingField = field.getName();
+                }
+            }
         }
+
 
         if (Strings.isNotEmpty(usingField)) {
             try {

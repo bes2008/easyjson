@@ -14,6 +14,7 @@
 
 package com.jn.easyjson.jackson.serializer;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -21,10 +22,14 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.jn.easyjson.core.codec.dialect.PropertyCodecConfiguration;
 import com.jn.easyjson.jackson.Jacksons;
 import com.jn.langx.util.Strings;
+import com.jn.langx.util.collection.Pipeline;
 import com.jn.langx.util.enums.Enums;
+import com.jn.langx.util.function.Predicate;
+import com.jn.langx.util.reflect.Reflects;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.Collection;
 
 import static com.jn.easyjson.jackson.JacksonConstants.ENABLE_CUSTOM_CONFIGURATION;
 import static com.jn.easyjson.jackson.JacksonConstants.SERIALIZE_ENUM_USING_FIELD_ATTR_KEY;
@@ -62,6 +67,20 @@ public class EnumSerializer<T extends Enum> extends JsonSerializer<T> {
         if (usingToString) {
             gen.writeString(e.toString());
             return;
+        }
+
+        if(Strings.isEmpty(usingField)){
+            Collection<Field> fields = Reflects.getAllDeclaredFields(e.getClass(), false);
+            Field field = Pipeline.of(fields)
+                    .findFirst(new Predicate<Field>() {
+                        @Override
+                        public boolean test(Field field) {
+                            return Reflects.hasAnnotation(field, JsonValue.class);
+                        }
+                    });
+            if (field != null) {
+                usingField = field.getName();
+            }
         }
 
         if (Strings.isNotEmpty(usingField)) {
