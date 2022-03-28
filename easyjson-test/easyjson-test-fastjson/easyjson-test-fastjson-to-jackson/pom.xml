@@ -19,7 +19,7 @@
 	</description>
     <properties>
         <jmh.version>1.32</jmh.version>
-        <jackson.version>2.12.5</jackson.version>
+        <jackson.version>2.13.2.1</jackson.version>
     </properties>
     <dependencies>
         <dependency>
