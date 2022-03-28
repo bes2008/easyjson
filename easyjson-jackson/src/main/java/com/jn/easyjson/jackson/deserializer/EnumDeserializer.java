@@ -107,12 +107,12 @@ public class EnumDeserializer<T extends Enum> extends JsonDeserializer<T> implem
                 return (T) Enums.ofToString(enumClass, string);
             }
             // name
-            T t = Enums.ofName(enumClass, string);
+            T t = (T)Enums.ofName(enumClass, string);
             if (t == null) {
-                t = Enums.ofField(enumClass, "name", string);
+                t = (T)Enums.ofField(enumClass, "name", string);
             }
             if (t == null) {
-                t = Enums.ofToString(enumClass, string);
+                t = (T)Enums.ofToString(enumClass, string);
             }
             if (t == null) {
                 Collection<Field> fields = Reflects.getAllDeclaredFields(enumClass, false);
