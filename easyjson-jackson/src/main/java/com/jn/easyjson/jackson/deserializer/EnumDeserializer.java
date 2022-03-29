@@ -73,9 +73,7 @@ public class EnumDeserializer<T extends Enum> extends JsonDeserializer<T> implem
         if (usingToString == null) {
             usingToString = ctx.isEnabled(DeserializationFeature.READ_ENUMS_USING_TO_STRING);
         }
-        if (Strings.isEmpty(usingField)) {
-            usingField = (String) ctx.getAttribute(SERIALIZE_ENUM_USING_FIELD_ATTR_KEY);
-        }
+
         Class<T> enumClass = clazz;
         if (enumClass == null) {
             Object currentOwner = p.getCurrentValue();
@@ -92,6 +90,23 @@ public class EnumDeserializer<T extends Enum> extends JsonDeserializer<T> implem
             }
         }
 
+        if (Strings.isEmpty(usingField)) {
+            usingField = (String) ctx.getAttribute(SERIALIZE_ENUM_USING_FIELD_ATTR_KEY);
+
+            Collection<Field> fields = Reflects.getAllDeclaredFields(enumClass, false);
+            Field field = Pipeline.of(fields)
+                    .findFirst(new Predicate<Field>() {
+                        @Override
+                        public boolean test(Field field) {
+                            return Reflects.hasAnnotation(field, JsonValue.class);
+                        }
+                    });
+            if (field != null) {
+                usingField = field.getName();
+            }
+        }
+
+
         final JsonToken jtoken = p.getCurrentToken();
 
         if (usingIndex && jtoken == JsonToken.VALUE_NUMBER_INT) {
@@ -103,21 +118,6 @@ public class EnumDeserializer<T extends Enum> extends JsonDeserializer<T> implem
             String string = p.getValueAsString();
             if (usingToString) {
                 return (T) Enums.ofToString(enumClass, string);
-            }
-        }
-
-
-        {
-            Collection<Field> fields = Reflects.getAllDeclaredFields(enumClass, false);
-            Field field = Pipeline.of(fields)
-                    .findFirst(new Predicate<Field>() {
-                        @Override
-                        public boolean test(Field field) {
-                            return Reflects.hasAnnotation(field, JsonValue.class);
-                        }
-                    });
-            if (field != null) {
-                usingField = field.getName();
             }
         }
 
