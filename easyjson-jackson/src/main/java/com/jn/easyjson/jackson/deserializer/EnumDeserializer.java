@@ -67,13 +67,8 @@ public class EnumDeserializer<T extends Enum> extends JsonDeserializer<T> implem
                 usingToString = propertyCodecConfiguration.getEnumUsingToString();
             }
         }
-        if (usingIndex == null) {
-            usingIndex = Jacksons.getBooleanAttr(ctx, SERIALIZE_ENUM_USING_INDEX_ATTR_KEY);
-        }
-        if (usingToString == null) {
-            usingToString = ctx.isEnabled(DeserializationFeature.READ_ENUMS_USING_TO_STRING);
-        }
 
+        final JsonToken jtoken = p.getCurrentToken();
         Class<T> enumClass = clazz;
         if (enumClass == null) {
             Object currentOwner = p.getCurrentValue();
@@ -90,70 +85,78 @@ public class EnumDeserializer<T extends Enum> extends JsonDeserializer<T> implem
             }
         }
 
-        if (Strings.isEmpty(usingField)) {
-            usingField = (String) ctx.getAttribute(SERIALIZE_ENUM_USING_FIELD_ATTR_KEY);
-
-            Collection<Field> fields = Reflects.getAllDeclaredFields(enumClass, false);
-            Field field = Pipeline.of(fields)
-                    .findFirst(new Predicate<Field>() {
-                        @Override
-                        public boolean test(Field field) {
-                            return Reflects.hasAnnotation(field, JsonValue.class);
-                        }
-                    });
-            if (field != null) {
-                usingField = field.getName();
-            }
+        // index
+        if (usingIndex == null) {
+            usingIndex = Jacksons.getBooleanAttr(ctx, SERIALIZE_ENUM_USING_INDEX_ATTR_KEY);
         }
-
-
-        final JsonToken jtoken = p.getCurrentToken();
-
         if (usingIndex && jtoken == JsonToken.VALUE_NUMBER_INT) {
             int index = p.getIntValue();
             return (T) Enums.ofCode(enumClass, index);
         }
 
-        if (jtoken == JsonToken.VALUE_STRING) {
+        // to string
+        if (usingToString == null) {
+            usingToString = ctx.isEnabled(DeserializationFeature.READ_ENUMS_USING_TO_STRING);
+        }
+        if (usingToString && jtoken == JsonToken.VALUE_STRING) {
             String string = p.getValueAsString();
             if (usingToString) {
                 return (T) Enums.ofToString(enumClass, string);
             }
         }
 
+        // custom field
+        if (Strings.isEmpty(usingField)) {
+            usingField = (String) ctx.getAttribute(SERIALIZE_ENUM_USING_FIELD_ATTR_KEY);
 
-        if (Strings.isNotEmpty(usingField)) {
-            try {
-                Field field = enumClass.getDeclaredField(usingField);
-                final Class fieldType = field.getType();
-                return (T) Enums.ofField(enumClass, usingField, new Supplier0<Object>() {
-                    @Override
-                    public Object get() {
-                        try {
-                            if (String.class == fieldType && jtoken == JsonToken.VALUE_STRING) {
-                                return p.getValueAsString();
+            if (Strings.isEmpty(usingField)) {
+                Collection<Field> fields = Reflects.getAllDeclaredFields(enumClass, false);
+                Field field = Pipeline.of(fields)
+                        .findFirst(new Predicate<Field>() {
+                            @Override
+                            public boolean test(Field field) {
+                                return Reflects.hasAnnotation(field, JsonValue.class);
                             }
-                            if (Character.class == fieldType) {
-                                return p.getTextCharacters()[0];
+                        });
+                if (field != null) {
+                    usingField = field.getName();
+                }
+            }
 
+            if (Strings.isNotEmpty(usingField)) {
+                try {
+                    Field field = enumClass.getDeclaredField(usingField);
+                    final Class fieldType = field.getType();
+                    return (T) Enums.ofField(enumClass, usingField, new Supplier0<Object>() {
+                        @Override
+                        public Object get() {
+                            try {
+                                if (String.class == fieldType && jtoken == JsonToken.VALUE_STRING) {
+                                    return p.getValueAsString();
+                                }
+                                if (Character.class == fieldType) {
+                                    return p.getTextCharacters()[0];
+
+                                }
+                                if (Boolean.class == fieldType) {
+                                    return p.getBooleanValue();
+                                }
+                                if (Number.class == fieldType) {
+                                    return p.getNumberValue();
+                                }
+                            } catch (Throwable ex) {
+                                logger.error(ex.getMessage(), ex);
                             }
-                            if (Boolean.class == fieldType) {
-                                return p.getBooleanValue();
-                            }
-                            if (Number.class == fieldType) {
-                                return p.getNumberValue();
-                            }
-                        } catch (Throwable ex) {
-                            logger.error(ex.getMessage(), ex);
+                            return null;
                         }
-                        return null;
-                    }
-                });
-            } catch (Throwable ex) {
-                logger.error(ex.getMessage(), ex);
+                    });
+                } catch (Throwable ex) {
+                    logger.error(ex.getMessage(), ex);
+                }
             }
         }
 
+        // name
         if (jtoken == JsonToken.VALUE_STRING) {
             String string = p.getValueAsString();
             // name
