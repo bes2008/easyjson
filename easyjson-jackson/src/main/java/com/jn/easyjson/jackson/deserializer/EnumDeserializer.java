@@ -107,25 +107,27 @@ public class EnumDeserializer<T extends Enum> extends JsonDeserializer<T> implem
                 return (T) Enums.ofToString(enumClass, string);
             }
             // name
-            T t = (T)Enums.ofName(enumClass, string);
+            T t = (T) Enums.ofName(enumClass, string);
             if (t == null) {
-                t = (T)Enums.ofField(enumClass, "name", string);
+                t = (T) Enums.ofField(enumClass, "name", string);
             }
-            if (t == null) {
-                t = (T)Enums.ofToString(enumClass, string);
+            if (t != null) {
+                return t;
             }
-            if (t == null) {
-                Collection<Field> fields = Reflects.getAllDeclaredFields(enumClass, false);
-                Field field = Pipeline.of(fields)
-                        .findFirst(new Predicate<Field>() {
-                            @Override
-                            public boolean test(Field field) {
-                                return Reflects.hasAnnotation(field, JsonValue.class);
-                            }
-                        });
-                if (field != null) {
-                    usingField = field.getName();
-                }
+            t = (T) Enums.ofToString(enumClass, string);
+            if (t != null) {
+                return t;
+            }
+            Collection<Field> fields = Reflects.getAllDeclaredFields(enumClass, false);
+            Field field = Pipeline.of(fields)
+                    .findFirst(new Predicate<Field>() {
+                        @Override
+                        public boolean test(Field field) {
+                            return Reflects.hasAnnotation(field, JsonValue.class);
+                        }
+                    });
+            if (field != null) {
+                usingField = field.getName();
             }
         }
 
