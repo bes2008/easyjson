@@ -11,9 +11,9 @@ import com.fasterxml.jackson.databind.deser.impl.ObjectIdValueProperty;
 import com.jn.easyjson.jackson.Jacksons;
 import com.jn.easyjson.jackson.deserializer.CustomizedBeanDeserializer;
 import com.jn.langx.util.jar.JarVersionMismatchedException;
+import com.jn.langx.util.logging.Loggers;
 import com.jn.langx.util.reflect.Reflects;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -26,7 +26,7 @@ import java.util.Map;
  * @since 3.2.2
  */
 public class EasyJsonBeanDeserializerBuilder extends BeanDeserializerBuilder {
-    private static final Logger logger = LoggerFactory.getLogger(EasyJsonBeanDeserializerBuilder.class);
+    private static final Logger logger = Loggers.getLogger(EasyJsonBeanDeserializerBuilder.class);
     /**
      * @since 3.2.3
      */

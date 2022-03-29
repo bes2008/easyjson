@@ -27,9 +27,9 @@ import com.jn.langx.util.collection.Pipeline;
 import com.jn.langx.util.enums.Enums;
 import com.jn.langx.util.function.Predicate;
 import com.jn.langx.util.function.Supplier0;
+import com.jn.langx.util.logging.Loggers;
 import com.jn.langx.util.reflect.Reflects;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -38,7 +38,7 @@ import java.util.Collection;
 import static com.jn.easyjson.jackson.JacksonConstants.*;
 
 public class EnumDeserializer<T extends Enum> extends JsonDeserializer<T> implements ContextualDeserializer {
-    private static final Logger logger = LoggerFactory.getLogger(EnumDeserializer.class);
+    private static final Logger logger = Loggers.getLogger(EnumDeserializer.class);
     private Class<T> clazz;
 
     @Override

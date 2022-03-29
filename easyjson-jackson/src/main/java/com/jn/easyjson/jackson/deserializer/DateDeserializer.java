@@ -24,10 +24,10 @@ import com.jn.easyjson.jackson.JacksonConstants;
 import com.jn.easyjson.jackson.Jacksons;
 import com.jn.langx.util.Dates;
 import com.jn.langx.util.Strings;
+import com.jn.langx.util.logging.Loggers;
 import com.jn.langx.util.reflect.Modifiers;
 import com.jn.langx.util.reflect.Reflects;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;
@@ -41,7 +41,7 @@ import java.util.TimeZone;
 import static com.jn.easyjson.jackson.JacksonConstants.ENABLE_CUSTOM_CONFIGURATION;
 
 public class DateDeserializer extends JsonDeserializer {
-    private static Logger logger = LoggerFactory.getLogger(DateDeserializer.class);
+    private static Logger logger = Loggers.getLogger(DateDeserializer.class);
     private Class type;
 
     public DateDeserializer(Class type) {
