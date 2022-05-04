@@ -18,12 +18,12 @@ import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-public class JsonTokenReader implements JsonListener {
+public class Antlr4JsonListenerImpl implements JsonListener {
     private Stack<JsonTreeNode> contextNodeStack;
-    public JsonTokenReader() {
+    public Antlr4JsonListenerImpl() {
         this(new SimpleStack<JsonTreeNode>());
     }
-    public JsonTokenReader(Stack<JsonTreeNode> stack) {
+    public Antlr4JsonListenerImpl(Stack<JsonTreeNode> stack) {
         this.contextNodeStack = stack;
     }
 
