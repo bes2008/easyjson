@@ -21,6 +21,11 @@ fragment ESCAPE_CHAR: '\\' ["\\/bfnrt];
 fragment SAFE_CODE_POINT: ~["\\\u0000-\u001F];
 STRING: STRING_FLAG (ESCAPE_CHAR | UNICODE | SAFE_CODE_POINT)* STRING_FLAG;
 
+// 注释 要跳过
+fragment SINGLE_COMMENT: '//' (~('\r'|'\n'))* ;
+fragment MULTIPLINE_COMMENT: '/*' .*? '*/';
+COMMENT: (SINGLE_COMMENT | MULTIPLINE_COMMENT) -> skip;
+
 // 空
 NULL: 'null';
 
