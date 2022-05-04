@@ -26,6 +26,7 @@
         <module>gson-to-easyjson</module>
         <module>jettison-to-easyjson</module>
         <module>easyjson-javaxjson</module>
+        <module>easyjson-antlr4json</module>
     </modules>
     <name>${groupId}:${artifactId}:${version}</name>
 
