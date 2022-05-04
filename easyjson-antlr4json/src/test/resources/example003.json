@@ -1,0 +1,20 @@
+// Taken and modified from https://en.wikipedia.org/wiki/JSON
+{ // Added comments
+  "firstName": "John",
+  "lastName": "Smith",
+  "age": 25,
+  "address": {
+    "streetAddress": "21 2nd Street",
+    "postalCode": "10021-3100"
+  },
+  "phoneNumbers": /* several numbers!*/ [
+    {
+      "type": "home", // Home sweet home
+      "number": "212 555-1234"
+    },
+    {
+      "type": "mobile",
+      "number": "123 456-7890"
+    } /* seeems to work! */
+  ]
+}
