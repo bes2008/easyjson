@@ -20,9 +20,11 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 
 public class Antlr4JsonListenerImpl implements JsonListener {
     private Stack<JsonTreeNode> contextNodeStack;
+
     public Antlr4JsonListenerImpl() {
         this(new SimpleStack<JsonTreeNode>());
     }
+
     public Antlr4JsonListenerImpl(Stack<JsonTreeNode> stack) {
         this.contextNodeStack = stack;
     }
@@ -146,9 +148,11 @@ public class Antlr4JsonListenerImpl implements JsonListener {
                     treeNode = new JsonPrimitiveNode(b);
                     break;
                 case JsonParser.STRING:
+                    str = str.substring(1, str.length()-1);
                     treeNode = new JsonPrimitiveNode(str);
                     break;
                 case JsonParser.WS:
+                case JsonParser.COMMENT:
                 case JsonParser.OBJ_START:
                 case JsonParser.OBJ_END:
                 case JsonParser.PAIR_SEPAR:
