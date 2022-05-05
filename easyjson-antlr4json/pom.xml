@@ -75,52 +75,6 @@
         </resources>
 
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-clean-plugin</artifactId>
-                <version>2.5</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>clean</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.outputDirectory}</outputDirectory>
-                            <testOutputDirectory>${project.build.testOutputDirectory}</testOutputDirectory>
-                            <directory>${project.build}/src/generated</directory>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.antlr</groupId>
-                <artifactId>antlr4-maven-plugin</artifactId>
-                <version>${antlr4.version}</version>
-
-                <configuration>
-                    <encoding>UTF-8</encoding>
-                    <sourceDirectory>${project.basedir}/src/main/resources/grammar</sourceDirectory>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>generate-sources: json</id>
-                        <goals>
-                            <goal>antlr4</goal>
-                        </goals>
-                        <phase>generate-sources</phase>
-                        <configuration>
-                            <outputDirectory>${project.basedir}/src/generated/java/com/jn/easyjson/antlr4json/generated</outputDirectory>
-                            <includes>
-                                <include>Json.g4</include>
-                            </includes>
-                            <arguments>
-                                <argument>-package</argument>
-                                <argument>com.jn.easyjson.antlr4json.generated</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -134,4 +88,60 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>gen</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-clean-plugin</artifactId>
+                        <version>2.5</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>clean</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${project.build.outputDirectory}</outputDirectory>
+                                    <testOutputDirectory>${project.build.testOutputDirectory}</testOutputDirectory>
+                                    <directory>${project.build}/src/generated</directory>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.antlr</groupId>
+                        <artifactId>antlr4-maven-plugin</artifactId>
+                        <version>${antlr4.version}</version>
+
+                        <configuration>
+                            <encoding>UTF-8</encoding>
+                            <sourceDirectory>${project.basedir}/src/main/resources/grammar</sourceDirectory>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>generate-sources: json</id>
+                                <goals>
+                                    <goal>antlr4</goal>
+                                </goals>
+                                <phase>generate-sources</phase>
+                                <configuration>
+                                    <outputDirectory>${project.basedir}/src/generated/java/com/jn/easyjson/antlr4json/generated</outputDirectory>
+                                    <includes>
+                                        <include>Json.g4</include>
+                                    </includes>
+                                    <arguments>
+                                        <argument>-package</argument>
+                                        <argument>com.jn.easyjson.antlr4json.generated</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
