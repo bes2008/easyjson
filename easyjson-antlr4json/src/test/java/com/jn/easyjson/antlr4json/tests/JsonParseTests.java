@@ -18,9 +18,23 @@ public class JsonParseTests {
 
     @Test
     public void parseExample001() {
+        parseExample("example001");
+    }
+
+    @Test
+    public void parseExample002() {
+        parseExample("example002");
+    }
+
+    @Test
+    public void parseExample003() {
+        parseExample("example003");
+    }
+
+    private void parseExample(String exampleName){
         InputStream inputStream = null;
         try {
-            Resource resource = Resources.loadClassPathResource("/example001.json");
+            Resource resource = Resources.loadClassPathResource("/"+exampleName+".json");
             inputStream = resource.getInputStream();
             JsonTreeNode node = Antlr4Jsons.parse(inputStream);
             System.out.println(node);
