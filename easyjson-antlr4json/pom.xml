@@ -23,12 +23,6 @@
                 <artifactId>antlr4-runtime</artifactId>
                 <version>${antlr4.version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.antlr</groupId>
-                <artifactId>antlr4-maven-plugin</artifactId>
-                <version>${antlr4.version}</version>
-            </dependency>
-
         </dependencies>
     </dependencyManagement>
 
