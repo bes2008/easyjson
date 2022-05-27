@@ -18,6 +18,7 @@ import com.jn.langx.annotation.NonNull;
 import com.jn.langx.configuration.ConfigurationLoader;
 import com.jn.langx.util.Emptys;
 import com.jn.langx.util.Strings;
+import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.reflect.Reflects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ClassLoaderCodecConfigurationLoader<T extends CodecConfiguration> implements ConfigurationLoader<T> {
@@ -103,6 +105,11 @@ public class ClassLoaderCodecConfigurationLoader<T extends CodecConfiguration> i
             cl = getClass().getClassLoader();
         }
         return cl;
+    }
+
+    @Override
+    public Map<String, T> loadAll() {
+        return Collects.emptyHashMap();
     }
 
     @Override
