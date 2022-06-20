@@ -16,7 +16,9 @@ package com.jn.easyjson.tests.examples;
 
 import com.jn.easyjson.core.JSON;
 import com.jn.easyjson.core.JSONBuilder;
+import com.jn.easyjson.core.JsonTreeNode;
 import com.jn.easyjson.core.exclusion.IgnoreAnnotationExclusion;
+import com.jn.easyjson.core.node.JsonNodeNavigator;
 import com.jn.easyjson.fastjson.FastJsonJSONBuilder;
 import com.jn.easyjson.gson.GsonJSONBuilder;
 import com.jn.easyjson.jackson.JacksonJSONBuilder;
@@ -61,14 +63,18 @@ public class EasyJsonTestsUsingPagingRequest extends BaseTests {
             String jsonLibraryName = entry.getKey();
             System.out.println("=====================EasyJson test [" + jsonLibraryName + "] start =============================");
             JSONBuilder jsonBuilder = entry.getValue();
-            JSON gson = jsonBuilder.serializeNulls(false).serializeNumberAsString(true).serializeEnumUsingIndex(true).addDeserializationExclusion(new IgnoreAnnotationExclusion()).build();
+            JSON json = jsonBuilder.serializeNulls(false).serializeNumberAsString(true).prettyFormat(true).serializeEnumUsingIndex(true).addDeserializationExclusion(new IgnoreAnnotationExclusion()).build();
 
             // test simple object
-            String str1 = gson.toJson(pagingRequest);
+            String str1 = json.toJson(pagingRequest);
             System.out.println(str1);
-            Person p1 = gson.fromJson(str1, Person.class);
+            Person p1 = json.fromJson(str1, Person.class);
             System.out.println(p1.equals(pagingRequest));
-            System.out.println(gson.toJson(p1));
+            System.out.println(json.toJson(p1));
+
+            // navigator
+            JsonTreeNode treeNode = json.fromJson(str1);
+            String jsonTreeNode = JsonNodeNavigator.getTreeNodeAsString(treeNode,"result/items/0/contact/msn");
 
             System.out.println("=====================EasyJson test [" + jsonLibraryName + "] end =============================");
         }
