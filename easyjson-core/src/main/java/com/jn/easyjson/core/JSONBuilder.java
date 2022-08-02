@@ -87,6 +87,8 @@ public abstract class JSONBuilder implements Cloneable {
 
     private JsonCustomizer jsonHandlerCustomizer;
 
+    private boolean enableDecodeHexOrUnicode = false;
+
     /**
      * 全局配置项, 这里面其实是每个类每个字段的默认配置项
      */
@@ -317,6 +319,15 @@ public abstract class JSONBuilder implements Cloneable {
         return serializeBooleanUsing1_0;
     }
 
+    public JSONBuilder enableDecodeHexOrUnicode(boolean decodeHexOrUnicode){
+        this.enableDecodeHexOrUnicode = decodeHexOrUnicode;
+        return this;
+    }
+
+    public boolean enableDecodeHexOrUnicode(){
+        return this.enableDecodeHexOrUnicode;
+    }
+
     public JSONBuilder enableIgnoreAnnotation() {
         IgnoreAnnotationExclusion ignoreAnnotationExclusion = new IgnoreAnnotationExclusion();
         exclusionConfiguration.appendExclusion(ignoreAnnotationExclusion, true, true);
@@ -438,5 +449,6 @@ public abstract class JSONBuilder implements Cloneable {
         builder.serializeBytesAsBase64String(this.serializeBytesAsBase64String);
         builder.jsonHandlerCustomizer(this.jsonHandlerCustomizer);
         builder.beanPropertyNamingPolicy(this.beanPropertyNamingPolicy);
+        builder.enableDecodeHexOrUnicode(this.enableDecodeHexOrUnicode);
     }
 }

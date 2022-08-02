@@ -92,7 +92,6 @@ public class JSON {
      * @return an object of type T from the string. Returns {@code null} if {@code json} is {@code null}.
      * @throws JsonException if json is not a valid representation for an object of type
      */
-    @SuppressWarnings("unchecked")
     public <T> T fromJson(String json, Type typeOfT) throws JsonException {
         if (json == null) {
             return null;

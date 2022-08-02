@@ -24,9 +24,12 @@ import com.jn.easyjson.core.JsonHandlerAdapter;
 import com.jn.easyjson.core.JsonTreeNode;
 import com.jn.easyjson.jackson.node.JacksonJsonMapper;
 import com.jn.langx.util.collection.multivalue.MultiValueMap;
+import com.jn.langx.util.io.IOs;
+import com.jn.langx.util.io.unicode.Utf8s;
 import com.jn.langx.util.reflect.Reflects;
 import com.jn.langx.util.reflect.type.Types;
 
+import java.io.IOException;
 import java.io.Reader;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -38,6 +41,9 @@ public class JacksonAdapter extends JsonHandlerAdapter<ObjectMapper> {
     @Override
     public <T> T deserialize(String json, Type typeOfT) throws JsonException {
         try {
+            if (getJsonBuilder().enableDecodeHexOrUnicode()) {
+                json = Utf8s.decodeChars(json);
+            }
             return getDelegate().readValue(json, toJavaType(typeOfT));
         } catch (Throwable ex) {
             throw new JsonException(ex);
@@ -47,8 +53,9 @@ public class JacksonAdapter extends JsonHandlerAdapter<ObjectMapper> {
     @Override
     public <T> T deserialize(Reader reader, Type typeOfT) throws JsonException {
         try {
-            return getDelegate().readValue(reader, toJavaType(typeOfT));
-        } catch (Throwable ex) {
+            String json = IOs.readAsString(reader);
+            return deserialize(json, typeOfT);
+        }catch (IOException ex){
             throw new JsonException(ex);
         }
     }
@@ -87,6 +94,9 @@ public class JacksonAdapter extends JsonHandlerAdapter<ObjectMapper> {
     @Override
     public JsonTreeNode deserialize(String json) throws JsonException {
         try {
+            if (getJsonBuilder().enableDecodeHexOrUnicode()) {
+                json = Utf8s.decodeChars(json);
+            }
             JsonNode jsonNode = getDelegate().readTree(json);
             return JacksonJsonMapper.toJsonTreeNode(jsonNode);
         } catch (Throwable ex) {

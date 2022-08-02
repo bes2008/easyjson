@@ -27,4 +27,6 @@ public interface JsonHandler {
 
     String serialize(Object src, Type typeOfT) throws JsonException;
 
+    JSONBuilder getJsonBuilder();
+    void setJsonBuilder(JSONBuilder jsonBuilder);
 }

@@ -147,6 +147,7 @@ public class GsonJSONBuilder extends JSONBuilder {
         JSON json = new JSON();
         GsonAdapter gsonAdapter = new GsonAdapter();
         gsonAdapter.setDelegate(gson);
+        gsonAdapter.setJsonBuilder(this);
         json.setJsonHandler(gsonAdapter);
         applyCustomizer(json);
         return json;

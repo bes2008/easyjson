@@ -21,12 +21,14 @@ import com.jn.easyjson.core.JsonException;
 import com.jn.easyjson.core.JsonHandlerAdapter;
 import com.jn.easyjson.core.JsonTreeNode;
 import com.jn.easyjson.gson.node.GsonJsonMapper;
+import com.jn.langx.util.io.IOs;
+import com.jn.langx.util.io.unicode.Utf8s;
 
+import java.io.IOException;
 import java.io.Reader;
 import java.lang.reflect.Type;
 
 public class GsonAdapter extends JsonHandlerAdapter<Gson> {
-
 
     @Override
     public String serialize(Object src, Type typeOfT) throws JsonException {
@@ -39,16 +41,27 @@ public class GsonAdapter extends JsonHandlerAdapter<Gson> {
 
     @Override
     public <T> T deserialize(String json, Type typeOfT) throws JsonException {
+        if (getJsonBuilder().enableDecodeHexOrUnicode()) {
+            json = Utf8s.decodeChars(json);
+        }
         return getDelegate().fromJson(json, typeOfT);
     }
 
     @Override
     public <T> T deserialize(Reader reader, Type typeOfT) throws JsonException {
-        return getDelegate().fromJson(reader, typeOfT);
+        try {
+            String json = IOs.readAsString(reader);
+            return deserialize(json, typeOfT);
+        }catch (IOException ex){
+            throw new JsonException(ex);
+        }
     }
 
     @Override
     public JsonTreeNode deserialize(String json) throws JsonException {
+        if (getJsonBuilder().enableDecodeHexOrUnicode()) {
+            json = Utf8s.decodeChars(json);
+        }
         JsonElement node = new JsonParser().parse(json);
         return GsonJsonMapper.toJsonTreeNode(node);
     }

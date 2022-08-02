@@ -225,6 +225,7 @@ public class JacksonJSONBuilder extends JSONBuilder {
         jsonHandler.setDelegate(mapper);
         JSON json = new JSON();
         json.setJsonHandler(jsonHandler);
+        jsonHandler.setJsonBuilder(this);
         applyCustomizer(json);
         return json;
     }

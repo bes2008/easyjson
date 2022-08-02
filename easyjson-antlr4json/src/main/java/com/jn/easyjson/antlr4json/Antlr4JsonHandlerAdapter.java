@@ -3,6 +3,7 @@ package com.jn.easyjson.antlr4json;
 import com.jn.easyjson.core.JsonException;
 import com.jn.easyjson.core.JsonHandlerAdapter;
 import com.jn.easyjson.core.JsonTreeNode;
+import com.jn.langx.util.io.unicode.Utf8s;
 
 import java.io.Reader;
 import java.lang.reflect.Type;
@@ -10,6 +11,9 @@ import java.lang.reflect.Type;
 public class Antlr4JsonHandlerAdapter extends JsonHandlerAdapter {
     @Override
     public JsonTreeNode deserialize(String json) throws JsonException {
+        if (getJsonBuilder().enableDecodeHexOrUnicode()) {
+            json = Utf8s.decodeChars(json);
+        }
         return Antlr4Jsons.parse(json);
     }
 

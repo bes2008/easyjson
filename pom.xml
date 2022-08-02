@@ -70,7 +70,7 @@
         </license>
     </licenses>
     <properties>
-        <langx.version>4.6.10</langx.version>
+        <langx.version>4.6.13</langx.version>
         <slf4j.version>1.7.0</slf4j.version>
     </properties>
 
