@@ -1,5 +1,9 @@
 package com.jn.easyjson.core.util;
 
+import com.jn.easyjson.core.JSON;
+import com.jn.easyjson.core.JSONBuilderProvider;
+import com.jn.easyjson.core.JsonTreeNode;
+import com.jn.easyjson.core.node.JsonTreeNodes;
 import com.jn.langx.util.Objs;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.collection.Collects;
@@ -14,6 +18,8 @@ import java.util.List;
 import java.util.Map;
 
 public class JSONs {
+    private static JSON json = JSONBuilderProvider.simplest();
+
     /**
      * 不保证一定定判断正确
      *
@@ -54,10 +60,11 @@ public class JSONs {
         return false;
     }
 
-    private static final List<String> MAP_ENTRY_DEFAULT_SETTERS_GETTERS = Collects.immutableArrayList("setKey","getKey","setValue","getValue");
-    public static boolean hasOtherPropertiesForMapEntry(Class<? extends Map.Entry> clazz){
+    private static final List<String> MAP_ENTRY_DEFAULT_SETTERS_GETTERS = Collects.immutableArrayList("setKey", "getKey", "setValue", "getValue");
+
+    public static boolean hasOtherPropertiesForMapEntry(Class<? extends Map.Entry> clazz) {
         Collection<Method> methods = Reflects.findGetterOrSetter(clazz, false);
-        List<String> otherProperties= Pipeline.of(methods)
+        List<String> otherProperties = Pipeline.of(methods)
                 .map(new Function<Method, String>() {
                     @Override
                     public String apply(Method method) {
@@ -72,6 +79,21 @@ public class JSONs {
                 })
                 .asList();
         return Objs.isNotEmpty(otherProperties);
+    }
+
+    /**
+     * @since 3.2.20
+     */
+    public static Map toMap(String jsonString) {
+        return JSONs.<Map>toJavaObject(jsonString);
+    }
+
+    /**
+     * @since 3.2.20
+     */
+    public static <T> T toJavaObject(String jsonString) {
+        JsonTreeNode treeNode = json.fromJson(jsonString);
+        return (T) JsonTreeNodes.toJavaObject(treeNode);
     }
 
 }

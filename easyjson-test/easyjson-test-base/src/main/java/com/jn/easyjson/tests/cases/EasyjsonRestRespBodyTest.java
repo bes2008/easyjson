@@ -2,6 +2,7 @@ package com.jn.easyjson.tests.cases;
 
 import com.jn.easyjson.core.JSON;
 import com.jn.easyjson.core.factory.JsonFactorys;
+import com.jn.easyjson.core.util.JSONs;
 import com.jn.langx.http.rest.RestRespBody;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.net.http.HttpMethod;
@@ -28,6 +29,9 @@ public class EasyjsonRestRespBodyTest extends AbstractBaseTest{
         String body = json.toJson(respBody);
         RestRespBody bd= json.fromJson(body,RestRespBody.class);
         System.out.println(bd);
+
+        Map map = JSONs.toMap(body);
+        System.out.println(map);
     }
 
 }
