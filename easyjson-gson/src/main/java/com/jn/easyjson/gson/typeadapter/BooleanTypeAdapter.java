@@ -27,6 +27,9 @@ import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * 支持 序列化 为 true, on, 1
+ */
 public class BooleanTypeAdapter extends EasyjsonAbstractTypeAdapter<Boolean> implements JsonSerializer<Boolean>, JsonDeserializer<Boolean> {
     private static final List<String> evalTrues = Arrays.asList(new String[]{"true", "on", "1"});
     private boolean using1_0 = false;
@@ -120,6 +123,7 @@ public class BooleanTypeAdapter extends EasyjsonAbstractTypeAdapter<Boolean> imp
     public Boolean read(JsonReader in) throws IOException {
         JsonToken jsonToken = in.peek();
         if (jsonToken == JsonToken.NULL) {
+            in.nextNull();
             return null;
         }
         if (invalidValueTokens.contains(jsonToken)) {

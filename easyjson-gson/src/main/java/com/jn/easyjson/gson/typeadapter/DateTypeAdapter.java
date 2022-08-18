@@ -139,6 +139,7 @@ public class DateTypeAdapter extends EasyjsonAbstractTypeAdapter<Date> implement
     private Date readDate(JsonReader in) throws IOException {
         JsonToken jsonToken = in.peek();
         if (jsonToken == JsonToken.NULL) {
+            in.nextNull();
             return null;
         }
         if (invalidValueTokens.contains(jsonToken)) {

@@ -6,12 +6,12 @@ import com.google.gson.annotations.SerializedName;
 import com.google.gson.internal.ConstructorConstructor;
 import com.google.gson.internal.Excluder;
 import com.google.gson.internal.ObjectConstructor;
-import com.google.gson.internal.reflect.ReflectionAccessor;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 import com.jn.langx.util.collection.Collects;
+import com.jn.langx.util.reflect.Reflects;
 import com.jn.langx.util.reflect.type.Primitives;
 import com.jn.langx.util.reflect.type.Types;
 
@@ -25,7 +25,6 @@ public class EasyjsonReflectiveTypeAdapterFactory implements TypeAdapterFactory 
     private final FieldNamingStrategy fieldNamingPolicy;
     private final Excluder excluder;
     private final EasyjsonAdapterAnnotationTypeAdapterFactory jsonAdapterFactory;
-    private final ReflectionAccessor accessor = ReflectionAccessor.getInstance();
 
     public EasyjsonReflectiveTypeAdapterFactory(ConstructorConstructor constructorConstructor,
                                                 FieldNamingStrategy fieldNamingPolicy, Excluder excluder,
@@ -145,7 +144,7 @@ public class EasyjsonReflectiveTypeAdapterFactory implements TypeAdapterFactory 
                 if (!serialize && !deserialize) {
                     continue;
                 }
-                accessor.makeAccessible(field);
+                Reflects.makeAccessible(field);
                 Type fieldType = Types.resolve(type.getType(), raw, field.getGenericType());
                 List<String> fieldNames = getFieldNames(field);
                 BoundField previous = null;

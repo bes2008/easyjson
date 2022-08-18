@@ -167,6 +167,7 @@ public class NumberTypeAdapter extends EasyjsonAbstractTypeAdapter<Number> imple
     public Number read(JsonReader in) throws IOException {
         JsonToken jsonToken = in.peek();
         if (jsonToken == JsonToken.NULL) {
+            in.nextNull();
             return null;
         }
 

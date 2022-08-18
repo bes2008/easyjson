@@ -12,6 +12,9 @@ import com.jn.langx.util.io.Charsets;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * 支持序列化为 base64 string
+ */
 public class BytesTypeAdapter extends EasyjsonAbstractTypeAdapter{
 
     /**
@@ -47,6 +50,10 @@ public class BytesTypeAdapter extends EasyjsonAbstractTypeAdapter{
     @Override
     public Object read(JsonReader in) throws IOException {
         JsonToken jsonToken = in.peek();
+        if(jsonToken==JsonToken.NULL){
+            in.nextNull();
+            return null;
+        }
         if (jsonToken != JsonToken.STRING) {
             return null;
         }

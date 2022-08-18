@@ -238,6 +238,7 @@ public class EnumTypeAdapter extends EasyjsonAbstractTypeAdapter<Enum> implement
     public Enum read(JsonReader in) throws IOException {
         JsonToken jsonToken = in.peek();
         if (jsonToken == JsonToken.NULL) {
+            in.nextNull();
             return null;
         }
 

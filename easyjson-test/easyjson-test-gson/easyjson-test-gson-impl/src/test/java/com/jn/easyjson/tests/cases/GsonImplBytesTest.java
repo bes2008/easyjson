@@ -27,6 +27,6 @@ public class GsonImplBytesTest {
 
         Type t = Types.getParameterizedType(RestRespBody.class, Types.getListParameterizedType(Lic.class));
         RestRespBody r = json.fromJson(message, t);
-        System.out.println(r);
+        System.out.println(json.toJson(r));
     }
 }

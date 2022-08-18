@@ -164,13 +164,16 @@ public class GsonJSONBuilder extends JSONBuilder {
                 factoriesField.setAccessible(true);
                 List<TypeAdapterFactory> factories = new ArrayList<TypeAdapterFactory>((List<TypeAdapterFactory>) factoriesField.get(gson));
                 // 替换 ObjectTypeAdapter
-                int index = factories.indexOf(com.google.gson.internal.bind.ObjectTypeAdapter.FACTORY);
+                int index = -1;
+                /*
+                index = factories.indexOf(com.google.gson.internal.bind.ObjectTypeAdapter.FACTORY);
                 if (index >= 0) {
                     // replace
                     factories.remove(index);
                     factories.add(index, ObjectTypeAdapter.FACTORY);
                 }
 
+                 */
                 //
                 if (jsonAdapterFactoryField != null && constructorConstructorField != null) {
                     ConstructorConstructor constructorConstructor = Reflects.getFieldValue(constructorConstructorField, gson, true, false);

@@ -33,9 +33,9 @@ import java.util.Map;
  * Adapts types whose static type is only 'Object'. Uses getClass() on
  * serialization and a primitive/Map/List on deserialization.
  */
+/*
 public final class ObjectTypeAdapter extends TypeAdapter<Object> {
     public static final TypeAdapterFactory FACTORY = new TypeAdapterFactory() {
-        @SuppressWarnings("unchecked")
         @Override
         public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
             if (type.getRawType() == Object.class) {
@@ -112,7 +112,6 @@ public final class ObjectTypeAdapter extends TypeAdapter<Object> {
         }
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void write(JsonWriter out, Object value) throws IOException {
         if (value == null) {
@@ -138,3 +137,4 @@ public final class ObjectTypeAdapter extends TypeAdapter<Object> {
                 '}';
     }
 }
+*/
