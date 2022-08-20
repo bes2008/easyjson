@@ -3,6 +3,9 @@ package com.jn.easyjson.core.util;
 import com.jn.easyjson.core.JSON;
 import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.easyjson.core.JsonTreeNode;
+import com.jn.easyjson.core.node.JsonArrayNode;
+import com.jn.easyjson.core.node.JsonNodeNavigator;
+import com.jn.easyjson.core.node.JsonObjectNode;
 import com.jn.easyjson.core.node.JsonTreeNodes;
 import com.jn.langx.util.Objs;
 import com.jn.langx.util.Strings;
@@ -19,6 +22,7 @@ import java.util.Map;
 
 public class JSONs {
     private static JSON json = JSONBuilderProvider.simplest();
+    public static JsonNodeNavigator JSON_NODE_NAVIGATOR = new JsonNodeNavigator();
 
     /**
      * 不保证一定定判断正确
@@ -95,5 +99,27 @@ public class JSONs {
         JsonTreeNode treeNode = json.fromJson(jsonString);
         return (T) JsonTreeNodes.toJavaObject(treeNode);
     }
+
+    /**
+     * @since 3.2.22
+     */
+    public static JsonObjectNode parseObject(String jsonString){
+        return (JsonObjectNode) parse(jsonString);
+    }
+
+    /**
+     * @since 3.2.22
+     */
+    public static JsonArrayNode parseArray(String jsonString){
+        return (JsonArrayNode) parse(jsonString);
+    }
+
+    /**
+     * @since 3.2.22
+     */
+    public static JsonTreeNode parse(String jsonString){
+        return json.fromJson(jsonString);
+    }
+
 
 }
