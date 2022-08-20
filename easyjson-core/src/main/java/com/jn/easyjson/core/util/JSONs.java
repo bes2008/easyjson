@@ -16,6 +16,7 @@ import com.jn.langx.util.function.Predicate;
 import com.jn.langx.util.reflect.Reflects;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -103,6 +104,22 @@ public class JSONs {
     /**
      * @since 3.2.22
      */
+    public static <T> T parse(String jsonString, Type t){
+        return json.fromJson(jsonString, t);
+    }
+
+    /**
+     * @since 3.2.22
+     */
+    public static JsonTreeNode parse(String jsonString){
+        return json.fromJson(jsonString);
+    }
+
+
+
+    /**
+     * @since 3.2.22
+     */
     public static JsonObjectNode parseObject(String jsonString){
         return (JsonObjectNode) parse(jsonString);
     }
@@ -113,13 +130,5 @@ public class JSONs {
     public static JsonArrayNode parseArray(String jsonString){
         return (JsonArrayNode) parse(jsonString);
     }
-
-    /**
-     * @since 3.2.22
-     */
-    public static JsonTreeNode parse(String jsonString){
-        return json.fromJson(jsonString);
-    }
-
 
 }
