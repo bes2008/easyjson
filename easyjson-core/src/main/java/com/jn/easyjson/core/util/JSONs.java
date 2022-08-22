@@ -131,4 +131,11 @@ public class JSONs {
         return (JsonArrayNode) parse(jsonString);
     }
 
+    /**
+     * @since 3.2.23
+     */
+    public static String toJson(Object obj){
+        return json.toJson(obj);
+    }
+
 }
