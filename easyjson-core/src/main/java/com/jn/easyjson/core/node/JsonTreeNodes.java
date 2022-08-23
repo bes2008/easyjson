@@ -25,7 +25,7 @@ import com.jn.langx.util.reflect.type.Primitives;
 
 import java.util.*;
 
-public class JsonTreeNodes {
+public class JsonTreeNodes extends JsonNodeNavigator{
     public static JsonTreeNode toJsonTreeNode(Object object) {
         return toJsonTreeNode(object, null);
     }

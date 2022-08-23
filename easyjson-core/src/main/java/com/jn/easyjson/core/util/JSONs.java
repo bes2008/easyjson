@@ -21,7 +21,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-public class JSONs {
+public class JSONs extends JsonTreeNodes{
     private static JSON json = JSONBuilderProvider.simplest();
     public static JsonNodeNavigator JSON_NODE_NAVIGATOR = new JsonNodeNavigator();
 
