@@ -2,6 +2,7 @@ package com.jn.easyjson.core.node;
 
 import com.jn.easyjson.core.JsonTreeNode;
 import com.jn.langx.navigation.Navigator;
+import com.jn.langx.navigation.Navigators;
 import com.jn.langx.navigation.object.ObjectNavigator;
 import com.jn.langx.util.Numbers;
 import com.jn.langx.util.Objs;
@@ -93,6 +94,52 @@ public class JsonNodeNavigator implements Navigator<JsonTreeNode> {
         }
     }
 
+    @Override
+    public <E> Class<E> getType(JsonTreeNode context, String expression) {
+        JsonTreeNode node = get(context, expression);
+
+        Class c = null;
+
+        if (node != null) {
+            c = node.getClass();
+        } else {
+            String parentExpr = getParentPath(expression);
+            if (Strings.isNotEmpty(parentExpr)) {
+                JsonTreeNode parent = get(context, parentExpr);
+                if (parent != null) {
+                    if (parent.getClass() == JsonNullNode.class || parent.getClass() == JsonPrimitiveNode.class) {
+                        return null;
+                    }
+                    String leaf = getLeaf(expression);
+
+                    if (parent instanceof JsonObjectNode) {
+                        JsonObjectNode objectNode = (JsonObjectNode) node;
+                        node = objectNode.getProperty(leaf);
+                    } else if (parent instanceof JsonArrayNode) {
+                        JsonArrayNode arrayNode = (JsonArrayNode) node;
+                        int index = Numbers.createInteger(leaf);
+                        node = arrayNode.get(index);
+                    }
+
+                    if (node != null) {
+                        c = node.getClass();
+                    }
+                }
+            }
+        }
+        return c;
+    }
+
+    @Override
+    public String getParentPath(String s) {
+        return Navigators.getParentPath(s, separator);
+    }
+
+    @Override
+    public String getLeaf(String s) {
+        return Navigators.getLeaf(s, separator);
+    }
+
     public static <E extends JsonTreeNode> E getTreeNode(JsonTreeNode tree, String path) {
         return getTreeNode(null, tree, path);
     }
@@ -173,11 +220,11 @@ public class JsonNodeNavigator implements Navigator<JsonTreeNode> {
         return null;
     }
 
-    public static void setTreeNode(JsonTreeNode tree, String path, Object value){
+    public static void setTreeNode(JsonTreeNode tree, String path, Object value) {
         setTreeNode(null, tree, path, value);
     }
 
-    public static void setTreeNode(String separator, JsonTreeNode tree, String path, Object value){
+    public static void setTreeNode(String separator, JsonTreeNode tree, String path, Object value) {
         new JsonNodeNavigator(separator).set(tree, path, value);
     }
 }
