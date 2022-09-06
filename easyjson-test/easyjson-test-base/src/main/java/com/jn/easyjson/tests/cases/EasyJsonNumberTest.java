@@ -123,4 +123,5 @@ public abstract class EasyJsonNumberTest extends AbstractBaseTest {
         Asserts.assertDeepEquals(actual, expected);
     }
 
+
 }

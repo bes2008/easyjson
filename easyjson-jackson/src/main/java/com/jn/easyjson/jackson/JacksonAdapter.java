@@ -95,7 +95,7 @@ public class JacksonAdapter extends JsonHandlerAdapter<ObjectMapper> {
     public JsonTreeNode deserialize(String json) throws JsonException {
         try {
             if (getJsonBuilder().enableDecodeHex()) {
-                json = Utf8s.decodeChars(json);
+                json = Utf8s.convertHexToUnicode(json);
             }
             JsonNode jsonNode = getDelegate().readTree(json);
             return JacksonJsonMapper.toJsonTreeNode(jsonNode);
