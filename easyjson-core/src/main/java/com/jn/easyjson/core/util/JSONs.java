@@ -21,8 +21,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-public class JSONs extends JsonTreeNodes{
-    private static JSON json = JSONBuilderProvider.create().enableDecodeHex(true).build();
+public class JSONs extends JsonTreeNodes {
+    private static JSON json = JSONBuilderProvider.create()
+            .enableDecodeHex(true)
+            .enableUnescapeQuote(true)
+            .build();
+
     public static JsonNodeNavigator JSON_NODE_NAVIGATOR = new JsonNodeNavigator();
 
     /**
@@ -104,37 +108,36 @@ public class JSONs extends JsonTreeNodes{
     /**
      * @since 3.2.22
      */
-    public static <T> T parse(String jsonString, Type t){
+    public static <T> T parse(String jsonString, Type t) {
         return json.fromJson(jsonString, t);
     }
 
     /**
      * @since 3.2.22
      */
-    public static JsonTreeNode parse(String jsonString){
+    public static JsonTreeNode parse(String jsonString) {
         return json.fromJson(jsonString);
     }
-
 
 
     /**
      * @since 3.2.22
      */
-    public static JsonObjectNode parseObject(String jsonString){
+    public static JsonObjectNode parseObject(String jsonString) {
         return (JsonObjectNode) parse(jsonString);
     }
 
     /**
      * @since 3.2.22
      */
-    public static JsonArrayNode parseArray(String jsonString){
+    public static JsonArrayNode parseArray(String jsonString) {
         return (JsonArrayNode) parse(jsonString);
     }
 
     /**
      * @since 3.2.23
      */
-    public static String toJson(Object obj){
+    public static String toJson(Object obj) {
         return json.toJson(obj);
     }
 

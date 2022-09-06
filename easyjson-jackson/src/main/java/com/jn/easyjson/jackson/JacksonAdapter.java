@@ -23,6 +23,7 @@ import com.jn.easyjson.core.JsonException;
 import com.jn.easyjson.core.JsonHandlerAdapter;
 import com.jn.easyjson.core.JsonTreeNode;
 import com.jn.easyjson.jackson.node.JacksonJsonMapper;
+import com.jn.langx.util.Strings;
 import com.jn.langx.util.collection.multivalue.MultiValueMap;
 import com.jn.langx.util.io.IOs;
 import com.jn.langx.util.io.unicode.Utf8s;
@@ -43,6 +44,10 @@ public class JacksonAdapter extends JsonHandlerAdapter<ObjectMapper> {
         try {
             if (getJsonBuilder().enableDecodeHex()) {
                 json = Utf8s.convertHexToUnicode(json);
+            }
+            if(getJsonBuilder().enableUnescapeQuote()){
+                json = Strings.replace(json, "\\\"", "\"");
+                json = Strings.replace(json, "\\\\\"", "\\\"");
             }
             return getDelegate().readValue(json, toJavaType(typeOfT));
         } catch (Throwable ex) {
@@ -96,6 +101,10 @@ public class JacksonAdapter extends JsonHandlerAdapter<ObjectMapper> {
         try {
             if (getJsonBuilder().enableDecodeHex()) {
                 json = Utf8s.convertHexToUnicode(json);
+            }
+            if(getJsonBuilder().enableUnescapeQuote()){
+                json = Strings.replace(json, "\\\"", "\"");
+                json = Strings.replace(json, "\\\\\"", "\\\"");
             }
             JsonNode jsonNode = getDelegate().readTree(json);
             return JacksonJsonMapper.toJsonTreeNode(jsonNode);

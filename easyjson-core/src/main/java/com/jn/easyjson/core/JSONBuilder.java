@@ -87,7 +87,15 @@ public abstract class JSONBuilder implements Cloneable {
 
     private JsonCustomizer jsonHandlerCustomizer;
 
+    /**
+     * 对 \xFF 的处理
+     */
     private boolean enableDecodeHex = false;
+
+    /**
+     * 对 \" 的处理
+     */
+    private boolean enableUnescapeQuote = false;
 
     /**
      * 全局配置项, 这里面其实是每个类每个字段的默认配置项
@@ -319,13 +327,22 @@ public abstract class JSONBuilder implements Cloneable {
         return serializeBooleanUsing1_0;
     }
 
-    public JSONBuilder enableDecodeHex(boolean decodeHex){
+    public JSONBuilder enableDecodeHex(boolean decodeHex) {
         this.enableDecodeHex = decodeHex;
         return this;
     }
 
-    public boolean enableDecodeHex(){
+    public boolean enableDecodeHex() {
         return this.enableDecodeHex;
+    }
+
+    public boolean enableUnescapeQuote() {
+        return enableUnescapeQuote;
+    }
+
+    public JSONBuilder enableUnescapeQuote(boolean enableUnescapeQuote) {
+        this.enableUnescapeQuote = enableUnescapeQuote;
+        return this;
     }
 
     public JSONBuilder enableIgnoreAnnotation() {
@@ -450,5 +467,6 @@ public abstract class JSONBuilder implements Cloneable {
         builder.jsonHandlerCustomizer(this.jsonHandlerCustomizer);
         builder.beanPropertyNamingPolicy(this.beanPropertyNamingPolicy);
         builder.enableDecodeHex(this.enableDecodeHex);
+        builder.enableUnescapeQuote(this.enableUnescapeQuote);
     }
 }

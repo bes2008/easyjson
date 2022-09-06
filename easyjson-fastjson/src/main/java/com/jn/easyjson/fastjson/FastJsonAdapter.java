@@ -14,15 +14,17 @@
 
 package com.jn.easyjson.fastjson;
 
-import com.alibaba.fastjson.JSONReader;
 import com.alibaba.fastjson.parser.DefaultJSONParser;
-import com.alibaba.fastjson.parser.JSONReaderScanner;
 import com.alibaba.fastjson.serializer.JSONSerializer;
 import com.jn.easyjson.core.JsonException;
 import com.jn.easyjson.core.JsonHandlerAdapter;
 import com.jn.easyjson.core.JsonTreeNode;
 import com.jn.easyjson.core.tree.JsonTreeDeserializer;
+import com.jn.langx.util.Strings;
+import com.jn.langx.util.io.IOs;
+import com.jn.langx.util.io.unicode.Utf8s;
 
+import java.io.IOException;
 import java.io.Reader;
 import java.lang.reflect.Type;
 
@@ -30,6 +32,13 @@ public class FastJsonAdapter extends JsonHandlerAdapter<FastJson> {
 
     @Override
     public <T> T deserialize(String json, Type typeOfT) throws JsonException {
+        if (getJsonBuilder().enableDecodeHex()) {
+            json = Utf8s.convertHexToUnicode(json);
+        }
+        if (getJsonBuilder().enableUnescapeQuote()) {
+            json = Strings.replace(json, "\\\"", "\"");
+            json = Strings.replace(json, "\\\\\"", "\\\"");
+        }
         DefaultJSONParser parser = getDelegate().getDeserializerBuilder().build(json);
         T value = parser.parseObject(typeOfT);
         parser.handleResovleTask(value);
@@ -39,9 +48,12 @@ public class FastJsonAdapter extends JsonHandlerAdapter<FastJson> {
 
     @Override
     public <T> T deserialize(Reader reader, Type typeOfT) throws JsonException {
-        JSONReaderScanner jsonReaderScanner = new JSONReaderScanner(reader, getDelegate().getDeserializerBuilder().getFeatures());
-        JSONReader jsonReader = new JSONReader(jsonReaderScanner);
-        return jsonReader.readObject(typeOfT);
+        try {
+            String json = IOs.readAsString(reader);
+            return deserialize(json, typeOfT);
+        } catch (IOException ex) {
+            throw new JsonException(ex.getMessage(), ex);
+        }
     }
 
     @Override
