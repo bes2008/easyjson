@@ -336,14 +336,6 @@ public abstract class JSONBuilder implements Cloneable {
         return this.enableDecodeHex;
     }
 
-    public boolean enableUnescapeQuote() {
-        return enableUnescapeQuote;
-    }
-
-    public JSONBuilder enableUnescapeQuote(boolean enableUnescapeQuote) {
-        this.enableUnescapeQuote = enableUnescapeQuote;
-        return this;
-    }
 
     public JSONBuilder enableIgnoreAnnotation() {
         IgnoreAnnotationExclusion ignoreAnnotationExclusion = new IgnoreAnnotationExclusion();
@@ -467,6 +459,5 @@ public abstract class JSONBuilder implements Cloneable {
         builder.jsonHandlerCustomizer(this.jsonHandlerCustomizer);
         builder.beanPropertyNamingPolicy(this.beanPropertyNamingPolicy);
         builder.enableDecodeHex(this.enableDecodeHex);
-        builder.enableUnescapeQuote(this.enableUnescapeQuote);
     }
 }

@@ -35,10 +35,6 @@ public class FastJsonAdapter extends JsonHandlerAdapter<FastJson> {
         if (getJsonBuilder().enableDecodeHex()) {
             json = Utf8s.convertHexToUnicode(json);
         }
-        if (getJsonBuilder().enableUnescapeQuote()) {
-            json = Strings.replace(json, "\\\"", "\"");
-            json = Strings.replace(json, "\\\\\"", "\\\"");
-        }
         DefaultJSONParser parser = getDelegate().getDeserializerBuilder().build(json);
         T value = parser.parseObject(typeOfT);
         parser.handleResovleTask(value);

@@ -1,6 +1,7 @@
 package com.jn.easyjson.tests.cases;
 
 import com.jn.easyjson.core.util.JSONs;
+import com.jn.langx.util.Strings;
 import org.testng.annotations.Test;
 
 import java.util.Map;
@@ -19,8 +20,11 @@ public class EasyjsonHexUnicodeTest extends AbstractBaseTest {
         System.out.println(map1);
 
         String jsonString3 = "{\\\"hello\\\":\\\"wor\\\\u005Cld\\\"}";
+        jsonString3 = Strings.replace(jsonString3, "\\\"","\"");
+        jsonString3 = Strings.replace(jsonString3, "\\\\\"","\\\"");
         Map map3 = JSONs.parse(jsonString3, Map.class);
         System.out.println(map3);
+
     }
 
 

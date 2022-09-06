@@ -24,7 +24,6 @@ import java.util.Map;
 public class JSONs extends JsonTreeNodes {
     private static JSON json = JSONBuilderProvider.create()
             .enableDecodeHex(true)
-            .enableUnescapeQuote(true)
             .build();
 
     public static JsonNodeNavigator JSON_NODE_NAVIGATOR = new JsonNodeNavigator();

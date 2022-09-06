@@ -21,7 +21,6 @@ import com.jn.easyjson.core.JsonException;
 import com.jn.easyjson.core.JsonHandlerAdapter;
 import com.jn.easyjson.core.JsonTreeNode;
 import com.jn.easyjson.gson.node.GsonJsonMapper;
-import com.jn.langx.util.Strings;
 import com.jn.langx.util.io.IOs;
 import com.jn.langx.util.io.unicode.Utf8s;
 
@@ -45,10 +44,6 @@ public class GsonAdapter extends JsonHandlerAdapter<Gson> {
         if (getJsonBuilder().enableDecodeHex()) {
             json = Utf8s.convertHexToUnicode(json);
         }
-        if(getJsonBuilder().enableUnescapeQuote()){
-            json = Strings.replace(json, "\\\"", "\"");
-            json = Strings.replace(json, "\\\\\"", "\\\"");
-        }
         return getDelegate().fromJson(json, typeOfT);
     }
 
@@ -57,7 +52,7 @@ public class GsonAdapter extends JsonHandlerAdapter<Gson> {
         try {
             String json = IOs.readAsString(reader);
             return deserialize(json, typeOfT);
-        }catch (IOException ex){
+        } catch (IOException ex) {
             throw new JsonException(ex);
         }
     }
@@ -66,10 +61,6 @@ public class GsonAdapter extends JsonHandlerAdapter<Gson> {
     public JsonTreeNode deserialize(String json) throws JsonException {
         if (getJsonBuilder().enableDecodeHex()) {
             json = Utf8s.convertHexToUnicode(json);
-        }
-        if(getJsonBuilder().enableUnescapeQuote()){
-            json = Strings.replace(json, "\\\"", "\"");
-            json = Strings.replace(json, "\\\\\"", "\\\"");
         }
         JsonElement node = new JsonParser().parse(json);
         return GsonJsonMapper.toJsonTreeNode(node);

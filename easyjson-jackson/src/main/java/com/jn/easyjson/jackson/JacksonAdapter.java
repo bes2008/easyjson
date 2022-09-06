@@ -45,10 +45,6 @@ public class JacksonAdapter extends JsonHandlerAdapter<ObjectMapper> {
             if (getJsonBuilder().enableDecodeHex()) {
                 json = Utf8s.convertHexToUnicode(json);
             }
-            if(getJsonBuilder().enableUnescapeQuote()){
-                json = Strings.replace(json, "\\\"", "\"");
-                json = Strings.replace(json, "\\\\\"", "\\\"");
-            }
             return getDelegate().readValue(json, toJavaType(typeOfT));
         } catch (Throwable ex) {
             throw new JsonException(ex);
@@ -60,7 +56,7 @@ public class JacksonAdapter extends JsonHandlerAdapter<ObjectMapper> {
         try {
             String json = IOs.readAsString(reader);
             return deserialize(json, typeOfT);
-        }catch (IOException ex){
+        } catch (IOException ex) {
             throw new JsonException(ex);
         }
     }
@@ -85,10 +81,10 @@ public class JacksonAdapter extends JsonHandlerAdapter<ObjectMapper> {
             for (int i = 0; i < parameterTypes.length; i++) {
                 parameterClasses[i] = toJavaType(parameterTypes[i]);
             }
-            if(parametrized.isInterface() && Reflects.isSubClassOrEquals(MultiValueMap.class, parametrized)){
+            if (parametrized.isInterface() && Reflects.isSubClassOrEquals(MultiValueMap.class, parametrized)) {
                 if (Jacksons.getCurrentVersion().compareTo(Jacksons.VERSION_2_9_0) < 0) {
                     CollectionType collectionType = getDelegate().getTypeFactory().constructCollectionType(Collection.class, parameterClasses[1]);
-                    return getDelegate().getTypeFactory().constructMapType((Class<Map<?,?>>)parametrized, parameterClasses[0], collectionType);
+                    return getDelegate().getTypeFactory().constructMapType((Class<Map<?, ?>>) parametrized, parameterClasses[0], collectionType);
                 }
             }
             return getDelegate().getTypeFactory().constructParametricType(parametrized, parameterClasses);
@@ -101,10 +97,6 @@ public class JacksonAdapter extends JsonHandlerAdapter<ObjectMapper> {
         try {
             if (getJsonBuilder().enableDecodeHex()) {
                 json = Utf8s.convertHexToUnicode(json);
-            }
-            if(getJsonBuilder().enableUnescapeQuote()){
-                json = Strings.replace(json, "\\\"", "\"");
-                json = Strings.replace(json, "\\\\\"", "\\\"");
             }
             JsonNode jsonNode = getDelegate().readTree(json);
             return JacksonJsonMapper.toJsonTreeNode(jsonNode);
