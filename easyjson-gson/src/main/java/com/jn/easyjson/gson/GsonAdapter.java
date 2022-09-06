@@ -41,7 +41,7 @@ public class GsonAdapter extends JsonHandlerAdapter<Gson> {
 
     @Override
     public <T> T deserialize(String json, Type typeOfT) throws JsonException {
-        if (getJsonBuilder().enableDecodeHexOrUnicode()) {
+        if (getJsonBuilder().enableDecodeHex()) {
             json = Utf8s.decodeChars(json);
         }
         return getDelegate().fromJson(json, typeOfT);
@@ -59,7 +59,7 @@ public class GsonAdapter extends JsonHandlerAdapter<Gson> {
 
     @Override
     public JsonTreeNode deserialize(String json) throws JsonException {
-        if (getJsonBuilder().enableDecodeHexOrUnicode()) {
+        if (getJsonBuilder().enableDecodeHex()) {
             json = Utf8s.decodeChars(json);
         }
         JsonElement node = new JsonParser().parse(json);

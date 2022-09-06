@@ -41,8 +41,8 @@ public class JacksonAdapter extends JsonHandlerAdapter<ObjectMapper> {
     @Override
     public <T> T deserialize(String json, Type typeOfT) throws JsonException {
         try {
-            if (getJsonBuilder().enableDecodeHexOrUnicode()) {
-                json = Utf8s.decodeChars(json);
+            if (getJsonBuilder().enableDecodeHex()) {
+                json = Utf8s.convertHexToUnicode(json);
             }
             return getDelegate().readValue(json, toJavaType(typeOfT));
         } catch (Throwable ex) {
@@ -94,7 +94,7 @@ public class JacksonAdapter extends JsonHandlerAdapter<ObjectMapper> {
     @Override
     public JsonTreeNode deserialize(String json) throws JsonException {
         try {
-            if (getJsonBuilder().enableDecodeHexOrUnicode()) {
+            if (getJsonBuilder().enableDecodeHex()) {
                 json = Utf8s.decodeChars(json);
             }
             JsonNode jsonNode = getDelegate().readTree(json);

@@ -11,7 +11,7 @@ import java.lang.reflect.Type;
 public class Antlr4JsonHandlerAdapter extends JsonHandlerAdapter {
     @Override
     public JsonTreeNode deserialize(String json) throws JsonException {
-        if (getJsonBuilder().enableDecodeHexOrUnicode()) {
+        if (getJsonBuilder().enableDecodeHex()) {
             json = Utf8s.decodeChars(json);
         }
         return Antlr4Jsons.parse(json);
