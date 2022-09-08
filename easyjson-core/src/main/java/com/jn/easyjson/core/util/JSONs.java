@@ -7,14 +7,20 @@ import com.jn.easyjson.core.node.JsonArrayNode;
 import com.jn.easyjson.core.node.JsonNodeNavigator;
 import com.jn.easyjson.core.node.JsonObjectNode;
 import com.jn.easyjson.core.node.JsonTreeNodes;
+import com.jn.easyjson.core.tree.JsonParseException;
 import com.jn.langx.util.Objs;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.Pipeline;
 import com.jn.langx.util.function.Function;
 import com.jn.langx.util.function.Predicate;
+import com.jn.langx.util.io.IOs;
 import com.jn.langx.util.reflect.Reflects;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.Collection;
@@ -112,12 +118,49 @@ public class JSONs extends JsonTreeNodes {
     }
 
     /**
+     * @since 3.2.26
+     */
+    public static <T> T parse(InputStream jsonString, Type t) {
+        return json.fromJson(new InputStreamReader(jsonString), t);
+    }
+
+    /**
+     * @since 3.2.26
+     */
+    public static <T> T parse(Reader jsonString, Type t) {
+        return json.fromJson(jsonString, t);
+    }
+
+    /**
      * @since 3.2.22
      */
     public static JsonTreeNode parse(String jsonString) {
         return json.fromJson(jsonString);
     }
 
+    /**
+     * @since 3.2.26
+     */
+    public static JsonTreeNode parse(Reader reader){
+        try {
+            String jsonString = IOs.readAsString(reader);
+            return json.fromJson(jsonString);
+        }catch (IOException e){
+            throw new JsonParseException(e);
+        }
+    }
+
+    /**
+     * @since 3.2.26
+     */
+    public static JsonTreeNode parse(InputStream inputStream){
+        try {
+            String jsonString = IOs.readAsString(inputStream);
+            return json.fromJson(jsonString);
+        }catch (IOException e){
+            throw new JsonParseException(e);
+        }
+    }
 
     /**
      * @since 3.2.22
@@ -127,12 +170,32 @@ public class JSONs extends JsonTreeNodes {
     }
 
     /**
+     * @since 3.2.26
+     */
+    public static JsonObjectNode parseObject(InputStream inputStream) {
+        return (JsonObjectNode) parse(inputStream);
+    }
+
+    /**
+     * @since 3.2.26
+     */
+    public static JsonObjectNode parseObject(Reader inputStream) {
+        return (JsonObjectNode) parse(inputStream);
+    }
+
+    /**
      * @since 3.2.22
      */
     public static JsonArrayNode parseArray(String jsonString) {
         return (JsonArrayNode) parse(jsonString);
     }
 
+    public static JsonArrayNode parseArray(InputStream inputStream) {
+        return (JsonArrayNode) parse(inputStream);
+    }
+    public static JsonArrayNode parseArray(Reader inputStream) {
+        return (JsonArrayNode) parse(inputStream);
+    }
     /**
      * @since 3.2.23
      */
