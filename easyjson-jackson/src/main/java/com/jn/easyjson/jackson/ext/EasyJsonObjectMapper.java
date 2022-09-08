@@ -27,7 +27,11 @@ public class EasyJsonObjectMapper extends ObjectMapper {
     private JacksonJSONBuilder jsonBuilder;
 
     public EasyJsonObjectMapper() {
-        super();
+        // super();
+        /**
+         * 为处理数组中的 , 后面没有值的情况加的
+         */
+        super(new EasyjsonJsonFactory());
         setDefaultDeserializationContext(new DefaultDeserializationContext.Impl(new EasyJsonBeanDeserializerFactory(new DeserializerFactoryConfig(), this)));
         setSerializerFactory(new EasyJsonBeanSerializerFactory(null, this));
     }
