@@ -190,9 +190,16 @@ public class JSONs extends JsonTreeNodes {
         return (JsonArrayNode) parse(jsonString);
     }
 
+    /**
+     * @since 3.2.26
+     */
     public static JsonArrayNode parseArray(InputStream inputStream) {
         return (JsonArrayNode) parse(inputStream);
     }
+
+    /**
+     * @since 3.2.26
+     */
     public static JsonArrayNode parseArray(Reader inputStream) {
         return (JsonArrayNode) parse(inputStream);
     }
