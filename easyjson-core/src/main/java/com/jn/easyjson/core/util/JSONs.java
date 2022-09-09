@@ -103,6 +103,13 @@ public class JSONs extends JsonTreeNodes {
     }
 
     /**
+     * @since 3.2.26
+     */
+    public static List toList(String jsonString) {
+        return JSONs.<List>toJavaObject(jsonString);
+    }
+
+    /**
      * @since 3.2.20
      */
     public static <T> T toJavaObject(String jsonString) {
@@ -203,6 +210,7 @@ public class JSONs extends JsonTreeNodes {
     public static JsonArrayNode parseArray(Reader inputStream) {
         return (JsonArrayNode) parse(inputStream);
     }
+
     /**
      * @since 3.2.23
      */
