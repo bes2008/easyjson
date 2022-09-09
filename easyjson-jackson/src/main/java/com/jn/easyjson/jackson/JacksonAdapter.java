@@ -26,8 +26,10 @@ import com.jn.easyjson.jackson.node.JacksonJsonMapper;
 import com.jn.langx.util.collection.multivalue.MultiValueMap;
 import com.jn.langx.util.io.IOs;
 import com.jn.langx.util.io.unicode.Utf8s;
+import com.jn.langx.util.logging.Loggers;
 import com.jn.langx.util.reflect.Reflects;
 import com.jn.langx.util.reflect.type.Types;
+import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -37,7 +39,7 @@ import java.util.Collection;
 import java.util.Map;
 
 public class JacksonAdapter extends JsonHandlerAdapter<ObjectMapper> {
-
+    private static final Logger logger = Loggers.getLogger(JacksonAdapter.class);
     @Override
     public <T> T deserialize(String json, Type typeOfT) throws JsonException {
         try {
@@ -52,10 +54,12 @@ public class JacksonAdapter extends JsonHandlerAdapter<ObjectMapper> {
 
     @Override
     public <T> T deserialize(Reader reader, Type typeOfT) throws JsonException {
+        String json = null;
         try {
-            String json = IOs.readAsString(reader);
+            json = IOs.readAsString(reader);
             return deserialize(json, typeOfT);
         } catch (IOException ex) {
+            logger.error("invalid json string: {}",json);
             throw new JsonException(ex);
         }
     }

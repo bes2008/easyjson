@@ -8,8 +8,12 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Date;
 
+import com.jn.easyjson.core.util.JSONs;
 import com.jn.easyjson.tests.entity.enums.CommonEnumExample;
 import com.jn.easyjson.tests.entity.enums.SimpleEnumExample;
+import com.jn.easyjson.tests.entity.user.UserEntityWrapper;
+import com.jn.langx.util.io.Charsets;
+import com.jn.langx.util.io.IOs;
 import org.testng.annotations.Test;
 import com.gitee.qdbp.tools.files.PathTools;
 import com.jn.easyjson.core.JSON;
@@ -75,6 +79,22 @@ public abstract class EasyJsonBaseTest extends AbstractBaseTest {
             UserEntity actual = json.fromJson(reader, UserEntity.class);
             UserEntity expected = getUserEntityObject();
             Asserts.assertDeepEquals(actual, expected);
+        }
+    }
+
+    @Test(priority = 10004)
+    public void parsePanjiLog(){
+        URL url = PathTools.findClassResource(EasyJsonBaseTest.class, "json/PanjiOperationLog.json");
+        InputStream input = null;
+        try {
+            input = url.openStream();
+            Reader reader = new InputStreamReader(input, Charsets.UTF_8);
+            Object v = JSONs.parse(reader);
+            System.out.println(v);
+        } catch (IOException ex) {
+
+        } finally {
+            IOs.close(input);
         }
     }
 }
