@@ -10,7 +10,6 @@ import com.jn.langx.util.collection.PrimitiveArrays;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class JsonFactorys {
     private JsonFactorys() {
