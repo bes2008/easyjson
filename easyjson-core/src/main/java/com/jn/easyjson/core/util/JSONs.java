@@ -31,6 +31,10 @@ public class JSONs extends JsonTreeNodes {
     private static JSON json = JSONBuilderProvider.create()
             .enableDecodeHex(true)
             .build();
+    private static JSON prettyJson = JSONBuilderProvider.create()
+            .prettyFormat(true)
+            .enableDecodeHex(true)
+            .build();
 
     public static JsonNodeNavigator JSON_NODE_NAVIGATOR = new JsonNodeNavigator();
 
@@ -148,11 +152,11 @@ public class JSONs extends JsonTreeNodes {
     /**
      * @since 3.2.26
      */
-    public static JsonTreeNode parse(Reader reader){
+    public static JsonTreeNode parse(Reader reader) {
         try {
             String jsonString = IOs.readAsString(reader);
             return json.fromJson(jsonString);
-        }catch (IOException e){
+        } catch (IOException e) {
             throw new JsonParseException(e);
         }
     }
@@ -160,11 +164,11 @@ public class JSONs extends JsonTreeNodes {
     /**
      * @since 3.2.26
      */
-    public static JsonTreeNode parse(InputStream inputStream){
+    public static JsonTreeNode parse(InputStream inputStream) {
         try {
             String jsonString = IOs.readAsString(inputStream);
             return json.fromJson(jsonString);
-        }catch (IOException e){
+        } catch (IOException e) {
             throw new JsonParseException(e);
         }
     }
@@ -216,6 +220,13 @@ public class JSONs extends JsonTreeNodes {
      */
     public static String toJson(Object obj) {
         return json.toJson(obj);
+    }
+
+    /**
+     * @since 3.2.27
+     */
+    public static String toJson(Object obj, boolean pretty) {
+        return prettyJson.toJson(obj);
     }
 
 }

@@ -15,15 +15,15 @@
 package com.jn.easyjson.core;
 
 import com.jn.easyjson.core.node.JsonNullNode;
+import com.jn.langx.util.logging.Loggers;
 import com.jn.langx.util.reflect.type.Primitives;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.Reader;
 import java.lang.reflect.Type;
 
 public class JSON {
-    private static final Logger logger = LoggerFactory.getLogger(JSON.class);
+    private static final Logger logger = Loggers.getLogger(JSON.class);
     private JsonHandler jsonHandler;
 
     /**
