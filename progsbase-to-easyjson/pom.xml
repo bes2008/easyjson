@@ -3,9 +3,9 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>com.github.fangjinuo.easyjson</groupId>
+        <groupId>io.github.bes2008.solution.easyjson</groupId>
         <artifactId>easyjson</artifactId>
-        <version>3.2.26</version>
+        <version>4.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -17,12 +17,12 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.github.fangjinuo.easyjson</groupId>
+            <groupId>io.github.bes2008.solution.easyjson</groupId>
             <artifactId>easyjson-core</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>com.github.fangjinuo.easyjson</groupId>
+            <groupId>io.github.bes2008.solution.easyjson</groupId>
             <artifactId>easyjson-examples</artifactId>
             <exclusions>
                 <exclusion>
@@ -30,7 +30,7 @@
                     <artifactId>JSON</artifactId>
                 </exclusion>
                 <exclusion>
-                    <groupId>com.github.fangjinuo.easyjson</groupId>
+                    <groupId>io.github.bes2008.solution.easyjson</groupId>
                     <artifactId>easyjson-gson</artifactId>
                 </exclusion>
             </exclusions>
@@ -38,7 +38,7 @@
             <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>com.github.fangjinuo.easyjson</groupId>
+            <groupId>io.github.bes2008.solution.easyjson</groupId>
             <artifactId>easyjson-jackson</artifactId>
             <scope>test</scope>
         </dependency>

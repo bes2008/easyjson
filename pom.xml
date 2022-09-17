@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.github.fangjinuo.easyjson</groupId>
+    <groupId>io.github.bes2008.solution.easyjson</groupId>
     <artifactId>easyjson</artifactId>
-    <version>3.2.26</version>
+    <version>4.0.0</version>
     <modules>
         <module>easyjson-core</module>
         <module>easyjson-gson</module>
@@ -37,13 +37,11 @@
         A JSON Facade: Supports adapter any json library to gson, jackson, fastjson etc.
         Provides a unified JSON access API, you can adapter any JSON library to Gson, Jackson, FastJson with easyjson.
     </description>
-    <url>https://github.com/fangjinuo/easyjson</url>
+    <url>https://github.com/bes2008/easyjson</url>
     <developers>
         <developer>
-            <id>jinuo.fang</id>
-            <name>jinuo.fang</name>
-            <email>fs1194361820@163.com</email>
-            <url>http://www.cnblogs.com/f1194361820</url>
+            <id>bes2008</id>
+            <name>bes2008</name>
         </developer>
     </developers>
     <distributionManagement>
@@ -58,47 +56,47 @@
     </distributionManagement>
     <scm>
         <tag>${project.version}</tag>
-        <url>https://github.com/fangjinuo/easyjson.git</url>
-        <connection>https://github.com/fangjinuo/easyjson.git</connection>
-        <developerConnection>https://github.com/fangjinuo/easyjson.git</developerConnection>
+        <url>https://github.com/bes2008/easyjson.git</url>
+        <connection>https://github.com/bes2008/easyjson.git</connection>
+        <developerConnection>https://github.com/bes2008/easyjson.git</developerConnection>
     </scm>
     <licenses>
         <license>
             <name>Apache 2.0</name>
-            <url>https://github.com/fangjinuo/easyjson/blob/master/LICENSE</url>
+            <url>https://github.com/bes2008/easyjson/blob/master/LICENSE</url>
             <distribution>manual</distribution>
         </license>
     </licenses>
     <properties>
-        <langx.version>4.8.1</langx.version>
+        <langx.version>5.0.0</langx.version>
         <slf4j.version>1.7.0</slf4j.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>com.github.fangjinuo.easyjson</groupId>
+                <groupId>io.github.bes2008.solution.easyjson</groupId>
                 <artifactId>easyjson-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.github.fangjinuo.easyjson</groupId>
+                <groupId>io.github.bes2008.solution.easyjson</groupId>
                 <artifactId>easyjson-gson</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.github.fangjinuo.easyjson</groupId>
+                <groupId>io.github.bes2008.solution.easyjson</groupId>
                 <artifactId>easyjson-fastjson</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.github.fangjinuo.easyjson</groupId>
+                <groupId>io.github.bes2008.solution.easyjson</groupId>
                 <artifactId>easyjson-jackson</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.github.fangjinuo.easyjson</groupId>
+                <groupId>io.github.bes2008.solution.easyjson</groupId>
                 <artifactId>easyjson-examples</artifactId>
                 <version>${project.version}</version>
                 <scope>test</scope>
@@ -109,7 +107,7 @@
                 <version>${slf4j.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.github.fangjinuo.langx</groupId>
+                <groupId>io.github.bes2008.solution.langx</groupId>
                 <artifactId>langx-java</artifactId>
                 <version>${langx.version}</version>
             </dependency>
@@ -158,7 +156,7 @@
         </dependency>
 
         <dependency>
-            <groupId>com.github.fangjinuo.langx</groupId>
+            <groupId>io.github.bes2008.solution.langx</groupId>
             <artifactId>langx-java</artifactId>
         </dependency>
     </dependencies>
@@ -310,7 +308,7 @@
                         <extensions>true</extensions>
                         <configuration>
                             <serverId>sonatype_oss</serverId>
-                            <nexusUrl>https://oss.sonatype.org</nexusUrl>
+                            <nexusUrl>https://s01.oss.sonatype.org</nexusUrl>
                             <autoReleaseAfterClose>true</autoReleaseAfterClose>
                             <sslAllowAll>true</sslAllowAll>
                             <stagingProgressPauseDurationSeconds>20</stagingProgressPauseDurationSeconds>

@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.github.fangjinuo.easyjson</groupId>
+        <groupId>io.github.bes2008.solution.easyjson</groupId>
         <artifactId>easyjson-test-jsonlib</artifactId>
-        <version>3.2.26</version>
+        <version>4.0.0</version>
     </parent>
 
     <artifactId>easyjson-test-jsonlib-base</artifactId>
@@ -17,11 +17,11 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.github.fangjinuo.easyjson</groupId>
+            <groupId>io.github.bes2008.solution.easyjson</groupId>
             <artifactId>easyjson-core</artifactId>
         </dependency>
 		<dependency>
-			<groupId>com.github.fangjinuo.easyjson</groupId>
+			<groupId>io.github.bes2008.solution.easyjson</groupId>
 			<artifactId>jsonlib-to-easyjson</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
@@ -29,7 +29,7 @@
 		</dependency>
 
         <dependency>
-            <groupId>com.github.fangjinuo.easyjson</groupId>
+            <groupId>io.github.bes2008.solution.easyjson</groupId>
             <artifactId>easyjson-test-base</artifactId>
 			<version>${project.version}</version>
         </dependency>

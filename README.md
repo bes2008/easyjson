@@ -15,7 +15,7 @@
 ## [Github地址](https://github.com/fangjinuo/easyjson)
 ## [Gitee地址](https://gitee.com/fangjinuo/easyjson)
 
-[![maven](https://img.shields.io/badge/maven-3.2.26-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.easyjson%20AND%20v:3.2.26)
+[![maven](https://img.shields.io/badge/maven-3.2.26-green.svg)](https://search.maven.org/search?q=g:io.github.bes2008.solutioneasyjson%20AND%20v:3.2.26)
 
 
 
@@ -74,7 +74,7 @@ Provides a unified JSON access API, you can adapter any JSON library to Gson, Ja
            <td>
                 <pre>
 &lt;dependency>
-    &lt;groupId>com.github.fangjinuo.easyjson&lt;/groupId>
+    &lt;groupId>io.github.bes2008.solutioneasyjson&lt;/groupId>
     &lt;artifactId>easyjson-core&lt;/artifactId>
     &lt;version>${version}/version>
 &lt;/dependency>
@@ -83,21 +83,21 @@ Provides a unified JSON access API, you can adapter any JSON library to Gson, Ja
             <td>
                 <pre>
 &lt;dependency>
-    &lt;groupId>com.github.fangjinuo.easyjson&lt;/groupId>
+    &lt;groupId>io.github.bes2008.solutioneasyjson&lt;/groupId>
     &lt;artifactId>easyjson-gson&lt;/artifactId>
     &lt;version>${version}</version>
 &lt;/dependency>
                 </pre>     
                 <pre>
 &lt;dependency>
-    &lt;groupId>com.github.fangjinuo.easyjson&lt;/groupId>
+    &lt;groupId>io.github.bes2008.solutioneasyjson&lt;/groupId>
     &lt;artifactId>easyjson-jackson&lt;/artifactId>
     &lt;version>${version}/version>
 &lt;/dependency>
                 </pre>     
                 <pre>
 &lt;dependency>
-    &lt;groupId>com.github.fangjinuo.easyjson&lt;/groupId>
+    &lt;groupId>io.github.bes2008.solutioneasyjson&lt;/groupId>
     &lt;artifactId>easyjson-fastjson&lt;/artifactId>
     &lt;version>${version}/version>
 &lt;/dependency>
@@ -132,7 +132,7 @@ Provides a unified JSON access API, you can adapter any JSON library to Gson, Ja
             <td>
                 <pre>
 &lt;dependency>
-    &lt;groupId>com.github.fangjinuo.easyjson&lt;/groupId>
+    &lt;groupId>io.github.bes2008.solutioneasyjson&lt;/groupId>
     &lt;artifactId>android-to-easyjson&lt;/artifactId>
     &lt;version>${version}&lt;/version>
 &lt;/dependency>
@@ -154,7 +154,7 @@ Provides a unified JSON access API, you can adapter any JSON library to Gson, Ja
             <td>
                 <pre>
 &lt;dependency>
-    &lt;groupId>com.github.fangjinuo.easyjson&lt;/groupId>
+    &lt;groupId>io.github.bes2008.solutioneasyjson&lt;/groupId>
     &lt;artifactId>fastjson-to-easyjson&lt;/artifactId>
     &lt;version>${version}&lt;/version>
 &lt;/dependency>
@@ -176,7 +176,7 @@ Provides a unified JSON access API, you can adapter any JSON library to Gson, Ja
             <td>
                 <pre>
 &lt;dependency>
-    &lt;groupId>com.github.fangjinuo.easyjson&lt;/groupId>
+    &lt;groupId>io.github.bes2008.solutioneasyjson&lt;/groupId>
     &lt;artifactId>jsonlib-to-easyjson&lt;/artifactId>
     &lt;version>${version}&lt;/version>
 &lt;/dependency>
@@ -198,7 +198,7 @@ Provides a unified JSON access API, you can adapter any JSON library to Gson, Ja
             <td>
                 <pre>
 &lt;dependency>
-    &lt;groupId>com.github.fangjinuo.easyjson&lt;/groupId>
+    &lt;groupId>io.github.bes2008.solutioneasyjson&lt;/groupId>
     &lt;artifactId>jsonsmart-to-easyjson&lt;/artifactId>
     &lt;version>${version}&lt;/version>
 &lt;/dependency>
@@ -220,7 +220,7 @@ Provides a unified JSON access API, you can adapter any JSON library to Gson, Ja
             <td>
                 <pre>
 &lt;dependency>
-    &lt;groupId>com.github.fangjinuo.easyjson&lt;/groupId>
+    &lt;groupId>io.github.bes2008.solutioneasyjson&lt;/groupId>
     &lt;artifactId>minimaljson-to-easyjson&lt;/artifactId>
     &lt;version>${version}&lt;/version>
 &lt;/dependency>
@@ -242,7 +242,7 @@ Provides a unified JSON access API, you can adapter any JSON library to Gson, Ja
             <td>
                 <pre>
 &lt;dependency>
-    &lt;groupId>com.github.fangjinuo.easyjson&lt;/groupId>
+    &lt;groupId>io.github.bes2008.solutioneasyjson&lt;/groupId>
     &lt;artifactId>orgjson-to-easyjson&lt;/artifactId>
     &lt;version>${version}&lt;/version>
 &lt;/dependency>
@@ -264,7 +264,7 @@ Provides a unified JSON access API, you can adapter any JSON library to Gson, Ja
             <td>
                 <pre>
 &lt;dependency>
-    &lt;groupId>com.github.fangjinuo.easyjson&lt;/groupId>
+    &lt;groupId>io.github.bes2008.solutioneasyjson&lt;/groupId>
     &lt;artifactId>progsbase-to-easyjson&lt;/artifactId>
     &lt;version>${version}&lt;/version>
 &lt;/dependency>
@@ -286,7 +286,7 @@ Provides a unified JSON access API, you can adapter any JSON library to Gson, Ja
             <td>
                 <pre>
 &lt;dependency>
-    &lt;groupId>com.github.fangjinuo.easyjson&lt;/groupId>
+    &lt;groupId>io.github.bes2008.solutioneasyjson&lt;/groupId>
     &lt;artifactId>simplejson-to-easyjson&lt;/artifactId>
     &lt;version>${version}&lt;/version>
 &lt;/dependency>
@@ -305,7 +305,7 @@ Provides a unified JSON access API, you can adapter any JSON library to Gson, Ja
             <td>0.5.7-RC1</td>
             <td><pre>
         &lt;dependency>
-            &lt;groupId>com.github.fangjinuo.easyjson&lt;/groupId>
+            &lt;groupId>io.github.bes2008.solutioneasyjson&lt;/groupId>
             &lt;artifactId>boonjson-to-easyjson&lt;/artifactId>
             &lt;version>${version}&lt;/version>
         &lt;/dependency>
@@ -323,7 +323,7 @@ Provides a unified JSON access API, you can adapter any JSON library to Gson, Ja
             <td>1.8.6+</td>
             <td><pre>
         &lt;dependency>
-            &lt;groupId>com.github.fangjinuo.easyjson&lt;/groupId>
+            &lt;groupId>io.github.bes2008.solutioneasyjson&lt;/groupId>
             &lt;artifactId>moshi-to-easyjson&lt;/artifactId>
             &lt;version>${version}&lt;/version>
         &lt;/dependency>
