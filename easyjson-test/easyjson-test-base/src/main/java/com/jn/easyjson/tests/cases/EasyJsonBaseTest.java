@@ -11,7 +11,6 @@ import java.util.Date;
 import com.jn.easyjson.core.util.JSONs;
 import com.jn.easyjson.tests.entity.enums.CommonEnumExample;
 import com.jn.easyjson.tests.entity.enums.SimpleEnumExample;
-import com.jn.easyjson.tests.entity.user.UserEntityWrapper;
 import com.jn.langx.util.io.Charsets;
 import com.jn.langx.util.io.IOs;
 import org.testng.annotations.Test;
