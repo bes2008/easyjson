@@ -19,13 +19,14 @@ import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.easyjson.core.JsonException;
 import com.jn.easyjson.core.JsonTreeNode;
 import com.jn.easyjson.core.util.JSONs;
+import com.jn.langx.util.Objs;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.function.Consumer2;
 import com.jn.langx.util.reflect.type.Primitives;
 
 import java.util.*;
 
-public class JsonTreeNodes extends JsonNodeNavigator{
+public class JsonTreeNodes extends JsonNodeNavigator {
     public static JsonTreeNode toJsonTreeNode(Object object) {
         return toJsonTreeNode(object, null);
     }
@@ -96,10 +97,15 @@ public class JsonTreeNodes extends JsonNodeNavigator{
         }
         try {
             if (JSONs.isJsonString(jsonString) || JSONs.isJsonArrayOrObject(jsonString)) {
-                return json.fromJson(jsonString);
-            } else {
-                return new JsonPrimitiveNode(jsonString);
+                JsonTreeNode jsonTreeNode = json.fromJson(jsonString);
+                if (jsonTreeNode != null) {
+                    String str = jsonTreeNode.toString();
+                    if(Objs.equals(jsonString, str)){
+                        return jsonTreeNode;
+                    }
+                }
             }
+            return new JsonPrimitiveNode(jsonString);
         } catch (JsonException ex) {
             return new JsonPrimitiveNode(jsonString);
         }
