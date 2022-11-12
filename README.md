@@ -15,7 +15,7 @@
 ## [Github地址](https://github.com/fangjinuo/easyjson)
 ## [Gitee地址](https://gitee.com/fangjinuo/easyjson)
 
-[![maven](https://img.shields.io/badge/maven-4.0.0-green.svg)](https://search.maven.org/search?q=g:io.github.bes2008.solutioneasyjson%20AND%20v:4.0.0)
+[![maven](https://img.shields.io/badge/maven-4.0.1-green.svg)](https://search.maven.org/search?q=g:io.github.bes2008.solutioneasyjson%20AND%20v:4.0.1)
 
 
 
