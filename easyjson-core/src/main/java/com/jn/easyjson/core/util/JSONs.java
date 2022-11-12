@@ -102,15 +102,28 @@ public class JSONs extends JsonTreeNodes {
     /**
      * @since 3.2.20
      */
-    public static Map toMap(String jsonString) {
+    public static Map<String,Object> toMap(String jsonString) {
         return JSONs.<Map>toJavaObject(jsonString);
     }
 
+    /**
+     * @since 4.0.1
+     */
+    public static Map<String,Object> toMap(JsonObjectNode objectNode){
+        return (Map)JSONs.toJavaObject(objectNode);
+    }
     /**
      * @since 3.2.26
      */
     public static List toList(String jsonString) {
         return JSONs.<List>toJavaObject(jsonString);
+    }
+
+    /**
+     * @since 4.0.1
+     */
+    public static List toList(JsonArrayNode arrayNode){
+        return (List)JSONs.toJavaObject(arrayNode);
     }
 
     /**
