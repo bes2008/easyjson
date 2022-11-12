@@ -311,7 +311,7 @@ public abstract class JsonTreeNode {
      * Returns a String representation of this node.
      */
     @Override
-    public String toString() {
+    public final String toString() {
         return JSONs.toJson(this);
     }
 }
