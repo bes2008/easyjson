@@ -159,6 +159,21 @@ public class JsonPrimitiveNode extends JsonTreeNode {
         return value instanceof String;
     }
 
+    @Override
+    public boolean isStringNode() {
+        return isString();
+    }
+
+    @Override
+    public boolean isBooleanNode() {
+        return isBoolean();
+    }
+
+    @Override
+    public boolean isNumberNode() {
+        return isNumber();
+    }
+
     /**
      * convenience method to get this element as a String.
      *

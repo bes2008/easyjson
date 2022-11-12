@@ -70,6 +70,25 @@ public abstract class JsonTreeNode {
     }
 
     /**
+     * @since 4.0.2
+     */
+    public boolean isStringNode(){
+        return false;
+    }
+    /**
+     * @since 4.0.2
+     */
+    public boolean isBooleanNode(){
+        return false;
+    }
+    /**
+     * @since 4.0.2
+     */
+    public boolean isNumberNode(){
+        return false;
+    }
+
+    /**
      * convenience method to get this element as a {@link JsonObjectNode}. If the element is of some
      * other type, a {@link IllegalStateException} will result. Hence it is best to use this method
      * after ensuring that this element is of the desired type by calling {@link #isJsonObjectNode()}
