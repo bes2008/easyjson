@@ -100,7 +100,7 @@ public class JsonTreeNodes extends JsonNodeNavigator {
                 JsonTreeNode jsonTreeNode = json.fromJson(jsonString);
                 if (jsonTreeNode != null) {
                     String str = jsonTreeNode.toString();
-                    if(Objs.equals(jsonString, str)){
+                    if (Objs.equals(jsonString, str)) {
                         return jsonTreeNode;
                     }
                 }
@@ -130,13 +130,13 @@ public class JsonTreeNodes extends JsonNodeNavigator {
                 }
             }
             JsonPrimitiveNode primitiveNode = node.getAsJsonPrimitiveNode();
-            if (primitiveNode.isNumber()) {
+            if (primitiveNode.isNumberNode()) {
                 return node.getAsNumber();
             }
-            if (primitiveNode.isString()) {
+            if (primitiveNode.isStringNode()) {
                 return node.getAsString();
             }
-            if (primitiveNode.isBoolean()) {
+            if (primitiveNode.isBooleanNode()) {
                 return node.getAsBoolean();
             }
             return primitiveNode.getValue();

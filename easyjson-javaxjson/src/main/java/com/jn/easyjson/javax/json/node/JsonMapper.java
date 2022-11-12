@@ -78,10 +78,10 @@ public class JsonMapper {
 
             @Override
             public JsonValue mappingPrimitive(JsonPrimitiveNode node) {
-                if (node.isBoolean()) {
+                if (node.isBooleanNode()) {
                     boolean value = node.getAsBoolean();
                     return value ? JsonValue.TRUE : JsonValue.FALSE;
-                } else if (node.isNumber()) {
+                } else if (node.isNumberNode()) {
                     if (node.isByte() || node.isShort() || node.isInteger()) {
                         return Json.createValue(node.getAsInt());
                     }

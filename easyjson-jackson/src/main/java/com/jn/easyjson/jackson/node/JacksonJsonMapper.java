@@ -32,7 +32,7 @@ public class JacksonJsonMapper {
         @Override
         public ValueNode mappingPrimitive(JsonPrimitiveNode node) {
             JsonPrimitiveNode jsonPrimitiveNode = node.getAsJsonPrimitiveNode();
-            if (jsonPrimitiveNode.isNumber()) {
+            if (jsonPrimitiveNode.isNumberNode()) {
                 if (jsonPrimitiveNode.isDouble()) {
                     return jsonNodeFactory.numberNode(jsonPrimitiveNode.getAsDouble());
                 }
@@ -58,7 +58,7 @@ public class JacksonJsonMapper {
                     return jsonNodeFactory.numberNode(jsonPrimitiveNode.getAsBigDecimal());
                 }
             }
-            if (jsonPrimitiveNode.isBoolean()) {
+            if (jsonPrimitiveNode.isBooleanNode()) {
                 return jsonNodeFactory.booleanNode(jsonPrimitiveNode.getAsBoolean());
             }
             if (jsonPrimitiveNode.isChar()) {

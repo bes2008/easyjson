@@ -30,13 +30,13 @@ public class JsonMapper {
 
             @Override
             public JsonValue mappingPrimitive(JsonPrimitiveNode primitiveNode) {
-                if (primitiveNode.isBoolean()) {
+                if (primitiveNode.isBooleanNode()) {
                     return primitiveNode.getAsBoolean() ? Json.TRUE : Json.FALSE;
                 }
-                if (primitiveNode.isString()) {
+                if (primitiveNode.isStringNode()) {
                     return new JsonString(primitiveNode.getAsString());
                 }
-                if (primitiveNode.isNumber()) {
+                if (primitiveNode.isNumberNode()) {
                     return new JsonNumber(primitiveNode.getAsString());
                 }
                 return Json.NULL;

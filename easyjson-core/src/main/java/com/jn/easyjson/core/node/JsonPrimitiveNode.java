@@ -102,7 +102,7 @@ public class JsonPrimitiveNode extends JsonTreeNode {
      *
      * @return true if this primitive contains a boolean value, false otherwise.
      */
-    public boolean isBoolean() {
+    private boolean isBoolean() {
         return value instanceof Boolean;
     }
 
@@ -135,7 +135,7 @@ public class JsonPrimitiveNode extends JsonTreeNode {
      *
      * @return true if this primitive contains a Number, false otherwise.
      */
-    public boolean isNumber() {
+    private boolean isNumber() {
         return value instanceof Number;
     }
 
@@ -155,7 +155,7 @@ public class JsonPrimitiveNode extends JsonTreeNode {
      *
      * @return true if this primitive contains a String value, false otherwise.
      */
-    public boolean isString() {
+    private boolean isString() {
         return value instanceof String;
     }
 

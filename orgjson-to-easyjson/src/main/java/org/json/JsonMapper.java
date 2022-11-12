@@ -89,13 +89,13 @@ public class JsonMapper {
 
             @Override
             public Object mappingPrimitive(JsonPrimitiveNode node) {
-                if (node.isBoolean()) {
+                if (node.isBooleanNode()) {
                     return node.getAsBoolean();
                 }
-                if (node.isString()) {
+                if (node.isStringNode()) {
                     return node.getAsString();
                 }
-                if (node.isNumber()) {
+                if (node.isNumberNode()) {
                     return node.getAsNumber();
                 }
                 return node.getValue();

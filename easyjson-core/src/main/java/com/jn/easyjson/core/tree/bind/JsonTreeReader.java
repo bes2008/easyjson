@@ -135,11 +135,11 @@ public final class JsonTreeReader extends JsonReader {
             return JsonToken.BEGIN_ARRAY;
         } else if (o instanceof JsonPrimitiveNode) {
             JsonPrimitiveNode primitive = (JsonPrimitiveNode) o;
-            if (primitive.isString()) {
+            if (primitive.isStringNode()) {
                 return JsonToken.STRING;
-            } else if (primitive.isBoolean()) {
+            } else if (primitive.isBooleanNode()) {
                 return JsonToken.BOOLEAN;
-            } else if (primitive.isNumber()) {
+            } else if (primitive.isNumberNode()) {
                 return JsonToken.NUMBER;
             } else {
                 throw new AssertionError();

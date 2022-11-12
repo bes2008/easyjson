@@ -26,10 +26,10 @@ public class GsonJsonMapper {
         @Override
         public JsonPrimitive mappingPrimitive(JsonPrimitiveNode node) {
             JsonPrimitiveNode jsonPrimitive = node.getAsJsonPrimitiveNode();
-            if (jsonPrimitive.isNumber()) {
+            if (jsonPrimitive.isNumberNode()) {
                 return new JsonPrimitive(jsonPrimitive.getAsNumber());
             }
-            if (jsonPrimitive.isBoolean()) {
+            if (jsonPrimitive.isBooleanNode()) {
                 return new JsonPrimitive(jsonPrimitive.getAsBoolean());
             }
             return new JsonPrimitive(jsonPrimitive.getAsString());

@@ -80,9 +80,9 @@ public final class TypeAdapters {
                 out.nullValue();
             } else if (value.isJsonPrimitiveNode()) {
                 JsonPrimitiveNode primitive = value.getAsJsonPrimitiveNode();
-                if (primitive.isNumber()) {
+                if (primitive.isNumberNode()) {
                     out.value(primitive.getAsNumber());
-                } else if (primitive.isBoolean()) {
+                } else if (primitive.isBooleanNode()) {
                     out.value(primitive.getAsBoolean());
                 } else {
                     out.value(primitive.getAsString());
