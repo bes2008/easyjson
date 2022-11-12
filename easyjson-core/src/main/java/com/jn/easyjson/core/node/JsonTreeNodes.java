@@ -111,45 +111,6 @@ public class JsonTreeNodes extends JsonNodeNavigator {
         }
     }
 
-    /*
-    public static <T> T toJavaObject(JsonTreeNode node, Class<T> clazz) {
-        if (node == null || JsonNullNode.INSTANCE == node) {
-            return null;
-        }
-        if (node.isJsonPrimitiveNode()) {
-            JsonPrimitiveNode primitiveNode = node.getAsJsonPrimitiveNode();
-            if (primitiveNode.isNumber()) {
-                return (T) node.getAsNumber();
-            }
-            if (primitiveNode.isString()) {
-                return (T) node.getAsString();
-            }
-            if (primitiveNode.isBoolean()) {
-                Boolean bv = node.getAsBoolean();
-                return (T) bv;
-            }
-            return (T) primitiveNode.getValue();
-        }
-        if (node.isJsonArrayNode()) {
-            JsonArrayNode arrayNode = node.getAsJsonArrayNode();
-            List<Object> array = new ArrayList<Object>();
-            for (int i = 0; i < arrayNode.size(); i++) {
-                array.add(toJavaObject(arrayNode.get(i)));
-            }
-            return array;
-        }
-        if (node.isJsonObjectNode()) {
-            JsonObjectNode objectNode = node.getAsJsonObjectNode();
-            Iterator<Map.Entry<String, JsonTreeNode>> iter = objectNode.propertySet().iterator();
-            Map<String, Object> map = new HashMap<String, Object>();
-            while (iter.hasNext()) {
-                Map.Entry<String, JsonTreeNode> entry = iter.next();
-                map.put(entry.getKey(), toJavaObject(entry.getValue()));
-            }
-            return map;
-        }
-    }
-    */
     public static Object toJavaObject(JsonTreeNode node) {
         return toXxxJson(node, null);
     }
