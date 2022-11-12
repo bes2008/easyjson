@@ -101,8 +101,10 @@ public class JsonPrimitiveNode extends JsonTreeNode {
      * Check whether this primitive contains a boolean value.
      *
      * @return true if this primitive contains a boolean value, false otherwise.
+     * @deprecated 使用isBooleanNode 替代
      */
-    private boolean isBoolean() {
+    @Deprecated
+    public boolean isBoolean() {
         return value instanceof Boolean;
     }
 
@@ -134,8 +136,10 @@ public class JsonPrimitiveNode extends JsonTreeNode {
      * Check whether this primitive contains a Number.
      *
      * @return true if this primitive contains a Number, false otherwise.
+     * @deprecated 使用isNumberNode 替代
      */
-    private boolean isNumber() {
+    @Deprecated
+    public boolean isNumber() {
         return value instanceof Number;
     }
 
@@ -154,8 +158,10 @@ public class JsonPrimitiveNode extends JsonTreeNode {
      * Check whether this primitive contains a String value.
      *
      * @return true if this primitive contains a String value, false otherwise.
+     * @deprecated 使用isStringNode 替代
      */
-    private boolean isString() {
+    @Deprecated
+    public boolean isString() {
         return value instanceof String;
     }
 
