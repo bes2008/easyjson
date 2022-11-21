@@ -30,6 +30,7 @@ import java.util.Map;
 public class JSONs extends JsonTreeNodes {
     private static JSON json = JSONBuilderProvider.create()
             .enableDecodeHex(true)
+            .enableUnescapeEscapeCharacter(true)
             .build();
     private static JSON prettyJson = JSONBuilderProvider.create()
             .prettyFormat(true)

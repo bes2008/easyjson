@@ -22,6 +22,8 @@ import com.jn.easyjson.core.util.JSONs;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Iterator;
+import java.util.Map;
 
 public abstract class JsonTreeNode {
     /**
@@ -331,6 +333,55 @@ public abstract class JsonTreeNode {
      */
     @Override
     public final String toString() {
+        /*
+        if (isJsonNullNode()) {
+            return null;
+        }
+        if (isJsonPrimitiveNode()) {
+            JsonPrimitiveNode primitiveNode = getAsJsonPrimitiveNode();
+            if (primitiveNode.isNumber()) {
+                return this.getAsNumber()+"";
+            }
+            if (primitiveNode.isString()) {
+                return "\""+this.getAsString()+"\"";
+            }
+            if (primitiveNode.isBoolean()) {
+                return this.getAsBoolean()+"";
+            }
+            return primitiveNode.getAsString();
+        }
+        if (isJsonArrayNode()) {
+            JsonArrayNode arrayNode = getAsJsonArrayNode();
+            StringBuilder b = new StringBuilder();
+            b.append("[");
+            Iterator<JsonTreeNode> iter = arrayNode.iterator();
+            while (iter.hasNext()) {
+                JsonTreeNode element = iter.next();
+                b.append(element.toString());
+                if (iter.hasNext()) {
+                    b.append(", ");
+                }
+            }
+            b.append("]");
+            return b.toString();
+        }
+        if (isJsonObjectNode()) {
+            JsonObjectNode jsonObjectNode = getAsJsonObjectNode();
+            StringBuilder b = new StringBuilder();
+            b.append("{");
+            Iterator<Map.Entry<String, JsonTreeNode>> iter = jsonObjectNode.propertySet().iterator();
+            while (iter.hasNext()) {
+                Map.Entry<String, JsonTreeNode> property = iter.next();
+                b.append("\"").append(property.getKey()).append("\": "); // key
+                b.append(property.getValue().toString());
+                if (iter.hasNext()) {
+                    b.append(", ");
+                }
+            }
+            b.append("}");
+            return b.toString();
+        }
+         */
         return JSONs.toJson(this);
     }
 }
