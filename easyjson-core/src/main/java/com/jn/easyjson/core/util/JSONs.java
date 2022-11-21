@@ -35,7 +35,7 @@ public class JSONs extends JsonTreeNodes {
     private static JSON prettyJson = JSONBuilderProvider.create()
             .prettyFormat(true)
             .enableDecodeHex(true)
-            .enableUnescapeEscapeCharacter(true)
+            .enableUnescapeEscapeCharacter(false)
             .build();
 
     public static JsonNodeNavigator JSON_NODE_NAVIGATOR = new JsonNodeNavigator();
