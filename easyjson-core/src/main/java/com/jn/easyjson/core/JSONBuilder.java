@@ -93,9 +93,9 @@ public abstract class JSONBuilder implements Cloneable {
     private boolean enableDecodeHex = false;
 
     /**
-     * 对 \" 的处理
+     * 对 \ 的处理
      */
-    private boolean enableUnescapeQuote = false;
+    private boolean enableUnescapeEscapeCharacter = false;
 
     /**
      * 全局配置项, 这里面其实是每个类每个字段的默认配置项
@@ -334,6 +334,15 @@ public abstract class JSONBuilder implements Cloneable {
 
     public boolean enableDecodeHex() {
         return this.enableDecodeHex;
+    }
+
+    public JSONBuilder enableUnescapeEscapeCharacter(boolean enable) {
+        this.enableUnescapeEscapeCharacter = enable;
+        return this;
+    }
+
+    public boolean enableUnescapeEscapeCharacter() {
+        return this.enableUnescapeEscapeCharacter;
     }
 
 

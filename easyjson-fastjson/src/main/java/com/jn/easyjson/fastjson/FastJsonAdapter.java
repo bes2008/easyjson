@@ -20,6 +20,7 @@ import com.jn.easyjson.core.JsonException;
 import com.jn.easyjson.core.JsonHandlerAdapter;
 import com.jn.easyjson.core.JsonTreeNode;
 import com.jn.easyjson.core.tree.JsonTreeDeserializer;
+import com.jn.langx.text.translate.StringEscapes;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.io.IOs;
 import com.jn.langx.util.io.unicode.Utf8s;
@@ -34,6 +35,9 @@ public class FastJsonAdapter extends JsonHandlerAdapter<FastJson> {
     public <T> T deserialize(String json, Type typeOfT) throws JsonException {
         if (getJsonBuilder().enableDecodeHex()) {
             json = Utf8s.convertHexToUnicode(json);
+        }
+        if(getJsonBuilder().enableUnescapeEscapeCharacter()){
+            json = StringEscapes.unescapeJson(json);
         }
         DefaultJSONParser parser = getDelegate().getDeserializerBuilder().build(json);
         T value = parser.parseObject(typeOfT);

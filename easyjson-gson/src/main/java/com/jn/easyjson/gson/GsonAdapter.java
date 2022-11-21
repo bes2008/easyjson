@@ -21,6 +21,7 @@ import com.jn.easyjson.core.JsonException;
 import com.jn.easyjson.core.JsonHandlerAdapter;
 import com.jn.easyjson.core.JsonTreeNode;
 import com.jn.easyjson.gson.node.GsonJsonMapper;
+import com.jn.langx.text.translate.StringEscapes;
 import com.jn.langx.util.io.IOs;
 import com.jn.langx.util.io.unicode.Utf8s;
 
@@ -44,6 +45,9 @@ public class GsonAdapter extends JsonHandlerAdapter<Gson> {
         if (getJsonBuilder().enableDecodeHex()) {
             json = Utf8s.convertHexToUnicode(json);
         }
+        if(getJsonBuilder().enableUnescapeEscapeCharacter()){
+            json = StringEscapes.unescapeJson(json);
+        }
         return getDelegate().fromJson(json, typeOfT);
     }
 
@@ -61,6 +65,9 @@ public class GsonAdapter extends JsonHandlerAdapter<Gson> {
     public JsonTreeNode deserialize(String json) throws JsonException {
         if (getJsonBuilder().enableDecodeHex()) {
             json = Utf8s.convertHexToUnicode(json);
+        }
+        if(getJsonBuilder().enableUnescapeEscapeCharacter()){
+            json = StringEscapes.unescapeJson(json);
         }
         JsonElement node = new JsonParser().parse(json);
         return GsonJsonMapper.toJsonTreeNode(node);

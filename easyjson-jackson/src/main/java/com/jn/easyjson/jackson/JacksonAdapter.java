@@ -23,6 +23,7 @@ import com.jn.easyjson.core.JsonException;
 import com.jn.easyjson.core.JsonHandlerAdapter;
 import com.jn.easyjson.core.JsonTreeNode;
 import com.jn.easyjson.jackson.node.JacksonJsonMapper;
+import com.jn.langx.text.translate.StringEscapes;
 import com.jn.langx.util.collection.multivalue.MultiValueMap;
 import com.jn.langx.util.io.IOs;
 import com.jn.langx.util.io.unicode.Utf8s;
@@ -45,6 +46,9 @@ public class JacksonAdapter extends JsonHandlerAdapter<ObjectMapper> {
         try {
             if (getJsonBuilder().enableDecodeHex()) {
                 json = Utf8s.convertHexToUnicode(json);
+            }
+            if(getJsonBuilder().enableUnescapeEscapeCharacter()){
+                json = StringEscapes.unescapeJson(json);
             }
             return getDelegate().readValue(json, toJavaType(typeOfT));
         } catch (Throwable ex) {
@@ -100,6 +104,9 @@ public class JacksonAdapter extends JsonHandlerAdapter<ObjectMapper> {
         try {
             if (getJsonBuilder().enableDecodeHex()) {
                 json = Utf8s.convertHexToUnicode(json);
+            }
+            if(getJsonBuilder().enableUnescapeEscapeCharacter()){
+                json = StringEscapes.unescapeJson(json);
             }
             JsonNode jsonNode = getDelegate().readTree(json);
             return JacksonJsonMapper.toJsonTreeNode(jsonNode);
