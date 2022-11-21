@@ -3,6 +3,7 @@ package com.jn.easyjson.antlr4json;
 import com.jn.easyjson.antlr4json.generated.JsonLexer;
 import com.jn.easyjson.antlr4json.generated.JsonParser;
 import com.jn.easyjson.core.JsonTreeNode;
+import com.jn.easyjson.core.tree.JsonParseException;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -15,8 +16,12 @@ import java.io.Reader;
 public class Antlr4Jsons {
 
     public static JsonTreeNode parse(String json) {
-        ANTLRInputStream in = new ANTLRInputStream(json);
-        return parse(in);
+        try {
+            ANTLRInputStream in = new ANTLRInputStream(json);
+            return parse(in);
+        }catch (Throwable e){
+            throw new JsonParseException(e);
+        }
     }
 
     public static JsonTreeNode parse(InputStream inputStream) throws IOException {

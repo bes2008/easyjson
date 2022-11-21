@@ -14,6 +14,7 @@
 
 package com.jn.easyjson.fastjson;
 
+import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.parser.DefaultJSONParser;
 import com.alibaba.fastjson.serializer.JSONSerializer;
 import com.jn.easyjson.core.JsonException;
@@ -21,7 +22,6 @@ import com.jn.easyjson.core.JsonHandlerAdapter;
 import com.jn.easyjson.core.JsonTreeNode;
 import com.jn.easyjson.core.tree.JsonTreeDeserializer;
 import com.jn.langx.text.translate.StringEscapes;
-import com.jn.langx.util.Strings;
 import com.jn.langx.util.io.IOs;
 import com.jn.langx.util.io.unicode.Utf8s;
 
@@ -36,9 +36,19 @@ public class FastJsonAdapter extends JsonHandlerAdapter<FastJson> {
         if (getJsonBuilder().enableDecodeHex()) {
             json = Utf8s.convertHexToUnicode(json);
         }
-        if(getJsonBuilder().enableUnescapeEscapeCharacter()){
-            json = StringEscapes.unescapeJson(json);
+        try {
+            return parse(json, typeOfT);
+        } catch (JSONException ex) {
+            if (getJsonBuilder().enableUnescapeEscapeCharacter()) {
+                json = StringEscapes.unescapeJson(json);
+                return parse(json, typeOfT);
+            } else {
+                throw ex;
+            }
         }
+    }
+
+    private <T> T parse(String json, Type typeOfT) throws JSONException {
         DefaultJSONParser parser = getDelegate().getDeserializerBuilder().build(json);
         T value = parser.parseObject(typeOfT);
         parser.handleResovleTask(value);

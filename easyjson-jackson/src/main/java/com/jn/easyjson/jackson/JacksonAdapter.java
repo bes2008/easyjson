@@ -14,6 +14,7 @@
 
 package com.jn.easyjson.jackson;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -41,16 +42,23 @@ import java.util.Map;
 
 public class JacksonAdapter extends JsonHandlerAdapter<ObjectMapper> {
     private static final Logger logger = Loggers.getLogger(JacksonAdapter.class);
+
     @Override
     public <T> T deserialize(String json, Type typeOfT) throws JsonException {
         try {
             if (getJsonBuilder().enableDecodeHex()) {
                 json = Utf8s.convertHexToUnicode(json);
             }
-            if(getJsonBuilder().enableUnescapeEscapeCharacter()){
-                json = StringEscapes.unescapeJson(json);
+
+            try {
+                return getDelegate().readValue(json, toJavaType(typeOfT));
+            } catch (JsonParseException e) {
+                if (getJsonBuilder().enableUnescapeEscapeCharacter()) {
+                    json = StringEscapes.unescapeJson(json);
+                    return getDelegate().readValue(json, toJavaType(typeOfT));
+                }
+                throw e;
             }
-            return getDelegate().readValue(json, toJavaType(typeOfT));
         } catch (Throwable ex) {
             throw new JsonException(ex);
         }
@@ -63,7 +71,29 @@ public class JacksonAdapter extends JsonHandlerAdapter<ObjectMapper> {
             json = IOs.readAsString(reader);
             return deserialize(json, typeOfT);
         } catch (IOException ex) {
-            logger.error("invalid json string: {}",json);
+            logger.error("invalid json string: {}", json);
+            throw new JsonException(ex);
+        }
+    }
+
+    @Override
+    public JsonTreeNode deserialize(String json) throws JsonException {
+        try {
+            if (getJsonBuilder().enableDecodeHex()) {
+                json = Utf8s.convertHexToUnicode(json);
+            }
+            try {
+                JsonNode jsonNode = getDelegate().readTree(json);
+                return JacksonJsonMapper.toJsonTreeNode(jsonNode);
+            } catch (JsonProcessingException e) {
+                if (getJsonBuilder().enableUnescapeEscapeCharacter()) {
+                    json = StringEscapes.unescapeJson(json);
+                    JsonNode jsonNode = getDelegate().readTree(json);
+                    return JacksonJsonMapper.toJsonTreeNode(jsonNode);
+                }
+                throw e;
+            }
+        } catch (Throwable ex) {
             throw new JsonException(ex);
         }
     }
@@ -99,21 +129,6 @@ public class JacksonAdapter extends JsonHandlerAdapter<ObjectMapper> {
         return Jacksons.toJavaType(typeOfT);
     }
 
-    @Override
-    public JsonTreeNode deserialize(String json) throws JsonException {
-        try {
-            if (getJsonBuilder().enableDecodeHex()) {
-                json = Utf8s.convertHexToUnicode(json);
-            }
-            if(getJsonBuilder().enableUnescapeEscapeCharacter()){
-                json = StringEscapes.unescapeJson(json);
-            }
-            JsonNode jsonNode = getDelegate().readTree(json);
-            return JacksonJsonMapper.toJsonTreeNode(jsonNode);
-        } catch (Throwable ex) {
-            throw new JsonException(ex);
-        }
-    }
 
     @Override
     public String serialize(Object src, Type typeOfT) throws JsonException {

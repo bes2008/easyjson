@@ -45,10 +45,16 @@ public class GsonAdapter extends JsonHandlerAdapter<Gson> {
         if (getJsonBuilder().enableDecodeHex()) {
             json = Utf8s.convertHexToUnicode(json);
         }
-        if(getJsonBuilder().enableUnescapeEscapeCharacter()){
-            json = StringEscapes.unescapeJson(json);
+
+        try {
+            return getDelegate().fromJson(json, typeOfT);
+        } catch (JsonException e) {
+            if (getJsonBuilder().enableUnescapeEscapeCharacter()) {
+                json = StringEscapes.unescapeJson(json);
+                return getDelegate().fromJson(json, typeOfT);
+            }
+            throw e;
         }
-        return getDelegate().fromJson(json, typeOfT);
     }
 
     @Override
@@ -66,7 +72,7 @@ public class GsonAdapter extends JsonHandlerAdapter<Gson> {
         if (getJsonBuilder().enableDecodeHex()) {
             json = Utf8s.convertHexToUnicode(json);
         }
-        if(getJsonBuilder().enableUnescapeEscapeCharacter()){
+        if (getJsonBuilder().enableUnescapeEscapeCharacter()) {
             json = StringEscapes.unescapeJson(json);
         }
         JsonElement node = new JsonParser().parse(json);

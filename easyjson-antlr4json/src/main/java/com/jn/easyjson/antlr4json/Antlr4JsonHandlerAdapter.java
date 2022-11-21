@@ -15,10 +15,19 @@ public class Antlr4JsonHandlerAdapter extends JsonHandlerAdapter {
         if (getJsonBuilder().enableDecodeHex()) {
             json = Utf8s.decodeChars(json);
         }
-        if(getJsonBuilder().enableUnescapeEscapeCharacter()){
+        if (getJsonBuilder().enableUnescapeEscapeCharacter()) {
             json = StringEscapes.unescapeJson(json);
         }
-        return Antlr4Jsons.parse(json);
+        try {
+            return Antlr4Jsons.parse(json);
+        } catch (JsonException e) {
+            if (getJsonBuilder().enableUnescapeEscapeCharacter()) {
+                json = StringEscapes.unescapeJson(json);
+                return Antlr4Jsons.parse(json);
+            } else {
+                throw e;
+            }
+        }
     }
 
     @Override
