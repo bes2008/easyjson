@@ -241,7 +241,7 @@ public class JSONs extends JsonTreeNodes {
      * @since 3.2.27
      */
     public static String toJson(Object obj, boolean pretty) {
-        return prettyJson.toJson(obj);
+        return pretty ? prettyJson.toJson(obj) : toJson(obj);
     }
 
 }
