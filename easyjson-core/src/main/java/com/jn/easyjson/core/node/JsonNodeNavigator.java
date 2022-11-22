@@ -17,16 +17,21 @@ import java.util.List;
 
 public class JsonNodeNavigator implements Navigator<JsonTreeNode> {
     private static final Logger logger = Loggers.getLogger(ObjectNavigator.class);
-    private String separator;
+    private String prefix;
+    private String suffix;
 
     public JsonNodeNavigator() {
         this("/");
     }
 
     public JsonNodeNavigator(String separator) {
-        this.separator = Strings.isEmpty(separator) ? "/" : separator;
+        this(null, separator);
     }
 
+    public JsonNodeNavigator(String prefix, String suffix) {
+        this.prefix = prefix;
+        this.suffix = Strings.isEmpty(suffix) ? "/" : suffix;
+    }
 
     @Override
     public JsonTreeNode get(JsonTreeNode context, String pathExpression) {
@@ -34,7 +39,7 @@ public class JsonNodeNavigator implements Navigator<JsonTreeNode> {
             return null;
         }
 
-        String[] segments = Strings.split(pathExpression, separator);
+        String[] segments = Navigators.getPathSegments(pathExpression, this.prefix, this.suffix);
         return navigate(context, Collects.asList(segments));
     }
 
@@ -56,7 +61,7 @@ public class JsonNodeNavigator implements Navigator<JsonTreeNode> {
                     int index = Numbers.createInteger(property);
                     node = arrayNode.get(index);
                 } else {
-                    logger.warn("the node which at the path {} is not a object node or array node", Strings.join(this.separator, segments.subList(0, i + 1)));
+                    logger.warn("the node which at the path {} is not a object node or array node", Strings.iterateJoin("", this.prefix, this.suffix, segments.subList(0, i + 1)));
                     node = null;
                     break;
                 }
@@ -69,7 +74,7 @@ public class JsonNodeNavigator implements Navigator<JsonTreeNode> {
 
     @Override
     public <E> void set(JsonTreeNode context, String expression, E value) {
-        String[] segments = Strings.split(expression, separator);
+        String[] segments = Navigators.getPathSegments(expression, this.prefix, this.suffix);
         if (Objs.isEmpty(segments)) {
             return;
         }
@@ -87,7 +92,7 @@ public class JsonNodeNavigator implements Navigator<JsonTreeNode> {
                 int index = Numbers.createInteger(property);
                 arrayNode.set(index, JsonTreeNodes.toJsonTreeNode(value));
             } else {
-                logger.warn("the node which at the path {} is not a object node or array node", Strings.join(this.separator, parentExprSegments));
+                logger.warn("the node which at the path {} is not a object node or array node", Strings.iterateJoin("", this.prefix, this.suffix, parentExprSegments));
             }
         } catch (Throwable ex) {
             throw Throwables.wrapAsRuntimeException(ex);
@@ -132,12 +137,12 @@ public class JsonNodeNavigator implements Navigator<JsonTreeNode> {
 
     @Override
     public String getParentPath(String s) {
-        return Navigators.getParentPath(s, separator);
+        return Navigators.getParentPath(s, this.prefix, this.suffix);
     }
 
     @Override
     public String getLeaf(String s) {
-        return Navigators.getLeaf(s, separator);
+        return Navigators.getLeaf(s, this.prefix, this.suffix);
     }
 
     public static <E extends JsonTreeNode> E getTreeNode(JsonTreeNode tree, String path) {
