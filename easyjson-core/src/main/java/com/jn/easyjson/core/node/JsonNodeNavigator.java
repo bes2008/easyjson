@@ -150,7 +150,11 @@ public class JsonNodeNavigator implements Navigator<JsonTreeNode> {
     }
 
     public static <E extends JsonTreeNode> E getTreeNode(String separator, JsonTreeNode tree, String path) {
-        return (E) new JsonNodeNavigator(separator).get(tree, path);
+        return getTreeNode(null, separator, tree, path);
+    }
+
+    public static <E extends JsonTreeNode> E getTreeNode(String prefix, String suffix, JsonTreeNode tree, String path) {
+        return (E) new JsonNodeNavigator(prefix, suffix).get(tree, path);
     }
 
     public static Integer getTreeNodeAsInteger(JsonTreeNode tree, String path) {
@@ -158,7 +162,11 @@ public class JsonNodeNavigator implements Navigator<JsonTreeNode> {
     }
 
     public static Integer getTreeNodeAsInteger(String separator, JsonTreeNode tree, String path) {
-        JsonTreeNode treeNode = new JsonNodeNavigator(separator).get(tree, path);
+        return getTreeNodeAsInteger(null, separator, tree, path);
+    }
+
+    public static Integer getTreeNodeAsInteger(String prefix, String suffix, JsonTreeNode tree, String path) {
+        JsonTreeNode treeNode = new JsonNodeNavigator(prefix, suffix).get(tree, path);
         if (treeNode != null) {
             return treeNode.getAsInt();
         }
@@ -170,19 +178,29 @@ public class JsonNodeNavigator implements Navigator<JsonTreeNode> {
     }
 
     public static Long getTreeNodeAsLong(String separator, JsonTreeNode tree, String path) {
-        JsonTreeNode treeNode = new JsonNodeNavigator(separator).get(tree, path);
+        return getTreeNodeAsLong(null, separator, tree, path);
+    }
+
+    public static Long getTreeNodeAsLong(String prefix, String suffix, JsonTreeNode tree, String path) {
+        JsonTreeNode treeNode = new JsonNodeNavigator(prefix, suffix).get(tree, path);
         if (treeNode != null) {
             return treeNode.getAsLong();
         }
         return null;
     }
 
+
     public static Float getTreeNodeAsFloat(JsonTreeNode tree, String path) {
         return getTreeNodeAsFloat(null, tree, path);
     }
 
     public static Float getTreeNodeAsFloat(String separator, JsonTreeNode tree, String path) {
-        JsonTreeNode treeNode = new JsonNodeNavigator(separator).get(tree, path);
+        return getTreeNodeAsFloat(null, separator, tree, path);
+    }
+
+
+    public static Float getTreeNodeAsFloat(String prefix, String suffix, JsonTreeNode tree, String path) {
+        JsonTreeNode treeNode = new JsonNodeNavigator(prefix, suffix).get(tree, path);
         if (treeNode != null) {
             return treeNode.getAsFloat();
         }
@@ -194,7 +212,11 @@ public class JsonNodeNavigator implements Navigator<JsonTreeNode> {
     }
 
     public static Double getTreeNodeAsDouble(String separator, JsonTreeNode tree, String path) {
-        JsonTreeNode treeNode = new JsonNodeNavigator(separator).get(tree, path);
+        return getTreeNodeAsDouble(null, separator, tree, path);
+    }
+
+    public static Double getTreeNodeAsDouble(String prefix, String suffix, JsonTreeNode tree, String path) {
+        JsonTreeNode treeNode = new JsonNodeNavigator(prefix, suffix).get(tree, path);
         if (treeNode != null) {
             return treeNode.getAsDouble();
         }
@@ -206,7 +228,11 @@ public class JsonNodeNavigator implements Navigator<JsonTreeNode> {
     }
 
     public static String getTreeNodeAsString(String separator, JsonTreeNode tree, String path) {
-        JsonTreeNode treeNode = new JsonNodeNavigator(separator).get(tree, path);
+        return getTreeNodeAsString(null, separator, tree, path);
+    }
+
+    public static String getTreeNodeAsString(String prefix, String suffix, JsonTreeNode tree, String path) {
+        JsonTreeNode treeNode = new JsonNodeNavigator(prefix, suffix).get(tree, path);
         if (treeNode != null) {
             return treeNode.getAsString();
         }
@@ -218,7 +244,12 @@ public class JsonNodeNavigator implements Navigator<JsonTreeNode> {
     }
 
     public static Boolean getTreeNodeAsBoolean(String separator, JsonTreeNode tree, String path) {
-        JsonTreeNode treeNode = new JsonNodeNavigator(separator).get(tree, path);
+        return getTreeNodeAsBoolean(null, separator, tree, path);
+    }
+
+
+    public static Boolean getTreeNodeAsBoolean(String prefix, String suffix, JsonTreeNode tree, String path) {
+        JsonTreeNode treeNode = new JsonNodeNavigator(prefix, suffix).get(tree, path);
         if (treeNode != null) {
             return treeNode.getAsBoolean();
         }
@@ -231,5 +262,9 @@ public class JsonNodeNavigator implements Navigator<JsonTreeNode> {
 
     public static void setTreeNode(String separator, JsonTreeNode tree, String path, Object value) {
         new JsonNodeNavigator(separator).set(tree, path, value);
+    }
+
+    public static void setTreeNode(String prefix, String suffix, JsonTreeNode tree, String path, Object value) {
+        new JsonNodeNavigator(prefix, suffix).set(tree, path, value);
     }
 }
