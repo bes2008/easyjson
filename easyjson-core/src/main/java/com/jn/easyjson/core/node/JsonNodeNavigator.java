@@ -3,7 +3,6 @@ package com.jn.easyjson.core.node;
 import com.jn.easyjson.core.JsonTreeNode;
 import com.jn.langx.navigation.Navigator;
 import com.jn.langx.navigation.Navigators;
-import com.jn.langx.navigation.object.ObjectNavigator;
 import com.jn.langx.util.Numbers;
 import com.jn.langx.util.Objs;
 import com.jn.langx.util.Strings;
@@ -16,7 +15,7 @@ import org.slf4j.Logger;
 import java.util.List;
 
 public class JsonNodeNavigator implements Navigator<JsonTreeNode> {
-    private static final Logger logger = Loggers.getLogger(ObjectNavigator.class);
+    private static final Logger logger = Loggers.getLogger(JsonNodeNavigator.class);
     private String prefix;
     private String suffix;
 
