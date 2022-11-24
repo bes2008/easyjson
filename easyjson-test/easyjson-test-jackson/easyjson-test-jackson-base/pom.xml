@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>easyjson-test-jackson-base</artifactId>
-    <name>${groupId}:${artifactId}:${version}</name>
+    <name>${project.groupId}:${project.artifactId}:${project.version}</name>
 	<packaging>jar</packaging>
 	<description>存放使用jackson的API的所有测试用例, 只提供给其他工程引用, 不能直接运行</description>
 

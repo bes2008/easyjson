@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>easyjson-test-jsonlib-to-fastjson</artifactId>
-    <name>${groupId}:${artifactId}:${version}</name>
+    <name>${project.groupId}:${project.artifactId}:${project.version}</name>
 	<packaging>jar</packaging>
 	<description>
 		使用easyjson或jsonlib的API, 以fastjson作为实现框架的测试场景

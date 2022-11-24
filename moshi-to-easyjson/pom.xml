@@ -15,7 +15,7 @@
     </properties>
 
     <artifactId>moshi-to-easyjson</artifactId>
-    <name>${groupId}:${artifactId}:${version}</name>
+    <name>${project.groupId}:${project.artifactId}:${project.version}</name>
     <dependencies>
         <dependency>
             <groupId>io.github.bes2008.solution.easyjson</groupId>

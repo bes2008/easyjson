@@ -28,7 +28,7 @@
         <module>easyjson-javaxjson</module>
         <module>easyjson-antlr4json</module>
     </modules>
-    <name>${groupId}:${artifactId}:${version}</name>
+    <name>${project.groupId}:${project.artifactId}:${project.version}</name>
 
 
     <packaging>pom</packaging>

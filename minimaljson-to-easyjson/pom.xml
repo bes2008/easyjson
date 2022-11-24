@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>minimaljson-to-easyjson</artifactId>
-    <name>${groupId}:${artifactId}:${version}</name>
+    <name>${project.groupId}:${project.artifactId}:${project.version}</name>
     <description>
         Adapter Eclipse JSON library com.eclipsesource.minimal-json:minimal-json:jar to easyjson
     </description>
