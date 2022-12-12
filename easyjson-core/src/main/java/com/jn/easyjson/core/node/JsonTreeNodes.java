@@ -14,8 +14,6 @@
 
 package com.jn.easyjson.core.node;
 
-import com.jn.easyjson.core.JSON;
-import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.easyjson.core.JsonException;
 import com.jn.easyjson.core.JsonTreeNode;
 import com.jn.easyjson.core.util.JSONs;
@@ -88,16 +86,15 @@ public class JsonTreeNodes extends JsonNodeNavigator {
             return new JsonPrimitiveNode(((Enum) object).name());
         }
 
-        JSON json = JSONBuilderProvider.create().build();
         String jsonString = null;
         if (object instanceof String) {
             jsonString = (String) object;
         } else {
-            jsonString = json.toJson(object);
+            jsonString = JSONs.toJson(object);
         }
         try {
             if (JSONs.isJsonString(jsonString) || JSONs.isJsonArrayOrObject(jsonString)) {
-                JsonTreeNode jsonTreeNode = json.fromJson(jsonString);
+                JsonTreeNode jsonTreeNode = JSONs.parse(jsonString);
                 if (jsonTreeNode != null) {
                     String str = jsonTreeNode.toString();
                     if (Objs.equals(jsonString, str)) {

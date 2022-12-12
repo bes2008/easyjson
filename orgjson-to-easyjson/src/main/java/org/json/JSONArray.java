@@ -27,6 +27,7 @@ package org.json;
 import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.easyjson.core.JsonTreeNode;
 import com.jn.easyjson.core.node.JsonTreeNodes;
+import com.jn.easyjson.core.util.JSONs;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -1318,7 +1319,7 @@ public class JSONArray implements Iterable<Object> {
      */
     public Writer write(Writer writer, int indentFactor, int indent)
             throws JSONException {
-        String jsonstring = JSONBuilderProvider.create().prettyFormat(indent > 0).build().toJson(JsonMapper.toJsonTreeNode(this));
+        String jsonstring = JSONs.toJson(JsonMapper.toJsonTreeNode(this),indent > 0);
         try {
             writer.write(jsonstring);
         } catch (IOException e) {

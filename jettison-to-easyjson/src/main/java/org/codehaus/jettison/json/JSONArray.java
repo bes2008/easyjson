@@ -15,9 +15,8 @@ limitations under the License.
 */
 package org.codehaus.jettison.json;
 
-import com.jn.easyjson.core.JSON;
-import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.easyjson.core.JsonTreeNode;
+import com.jn.easyjson.core.util.JSONs;
 import org.codehaus.jettison.json.easyjson.JettisonJsonMapper;
 
 import java.io.IOException;
@@ -936,9 +935,8 @@ public class JSONArray implements Serializable {
      */
     public Writer write(Writer writer) throws JSONException {
         try {
-            JSON jsoner = JSONBuilderProvider.create().serializeNulls(true).build();
             JsonTreeNode jsonTreeNode = JettisonJsonMapper.toJsonTreeNode(this);
-            String str = jsoner.toJson(jsonTreeNode);
+            String str = JSONs.toJson(jsonTreeNode);
             writer.write(str);
             return writer;
         } catch (IOException e) {

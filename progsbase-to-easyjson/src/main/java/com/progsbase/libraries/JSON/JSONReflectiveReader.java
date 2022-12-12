@@ -2,7 +2,7 @@ package com.progsbase.libraries.JSON;
 
 import JSON.StringElementMaps.StringElementMap;
 import JSON.structures.Element;
-import com.jn.easyjson.core.JSONBuilderProvider;
+import com.jn.easyjson.core.util.JSONs;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -46,10 +46,10 @@ public class JSONReflectiveReader {
 
     public static <T> T readJSON(String json, Class<T> clazz, Type genericType) throws JSONException {
         if (genericType != null) {
-            T t = JSONBuilderProvider.create().build().fromJson(json, genericType);
+            T t = JSONs.parse(json, genericType);
             return t;
         } else if (clazz != null) {
-            T t = JSONBuilderProvider.create().build().fromJson(json, clazz);
+            T t = JSONs.parse(json, clazz);
             return t;
         }
         throw new JSONException("Clazz not specified");

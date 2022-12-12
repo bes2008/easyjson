@@ -15,14 +15,13 @@
 package com.jn.easyjson.core.node;
 
 import com.jn.easyjson.core.JsonTreeNode;
-import com.jn.langx.util.collection.LinkedTreeMap;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
 public class JsonObjectNode extends JsonTreeNode {
-    private final LinkedTreeMap<String, JsonTreeNode> members =
-            new LinkedTreeMap<String, JsonTreeNode>();
+    private final Map<String, JsonTreeNode> members = new LinkedHashMap<String, JsonTreeNode>();
 
     /**
      * Creates a deep copy of this element and all its children

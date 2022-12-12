@@ -3,6 +3,7 @@ package org.json;
 import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.easyjson.core.JsonTreeNode;
 import com.jn.easyjson.core.node.JsonTreeNodes;
+import com.jn.easyjson.core.util.JSONs;
 import com.jn.langx.util.reflect.type.Primitives;
 
 import java.io.Closeable;
@@ -2243,7 +2244,7 @@ public class JSONObject {
      */
     public Writer write(Writer writer, int indentFactor, int indent)
             throws JSONException {
-        String jsonstring = JSONBuilderProvider.create().prettyFormat(indent > 0).build().toJson(this.map);
+        String jsonstring = JSONs.toJson(this.map, indent>0);
         try {
             writer.write(jsonstring);
         } catch (IOException e) {

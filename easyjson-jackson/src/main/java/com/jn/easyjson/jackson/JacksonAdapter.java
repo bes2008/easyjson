@@ -25,6 +25,7 @@ import com.jn.easyjson.core.JsonHandlerAdapter;
 import com.jn.easyjson.core.JsonTreeNode;
 import com.jn.easyjson.jackson.node.JacksonJsonMapper;
 import com.jn.langx.text.translate.StringEscapes;
+import com.jn.langx.util.Objs;
 import com.jn.langx.util.collection.multivalue.MultiValueMap;
 import com.jn.langx.util.io.IOs;
 import com.jn.langx.util.io.unicode.Utf8s;
@@ -46,13 +47,12 @@ public class JacksonAdapter extends JsonHandlerAdapter<ObjectMapper> {
     @Override
     public <T> T deserialize(String json, Type typeOfT) throws JsonException {
         try {
-            if (getJsonBuilder().enableDecodeHex()) {
-                json = Utf8s.convertHexToUnicode(json);
-            }
-
             try {
                 return getDelegate().readValue(json, toJavaType(typeOfT));
             } catch (JsonParseException e) {
+                if (getJsonBuilder().enableDecodeHex()) {
+                    json = Utf8s.convertHexToUnicode(json);
+                }
                 if (getJsonBuilder().enableUnescapeEscapeCharacter()) {
                     json = StringEscapes.unescapeJson(json);
                     return getDelegate().readValue(json, toJavaType(typeOfT));
@@ -79,16 +79,26 @@ public class JacksonAdapter extends JsonHandlerAdapter<ObjectMapper> {
     @Override
     public JsonTreeNode deserialize(String json) throws JsonException {
         try {
-            if (getJsonBuilder().enableDecodeHex()) {
-                json = Utf8s.convertHexToUnicode(json);
-            }
             try {
                 JsonNode jsonNode = getDelegate().readTree(json);
                 return JacksonJsonMapper.toJsonTreeNode(jsonNode);
             } catch (JsonProcessingException e) {
+                boolean changed = false;
+                boolean rejudge = false;
+                String json2 = json;
+                if (getJsonBuilder().enableDecodeHex()) {
+                    json2 = Utf8s.convertHexToUnicode(json2);
+                    rejudge = true;
+                }
                 if (getJsonBuilder().enableUnescapeEscapeCharacter()) {
-                    json = StringEscapes.unescapeJson(json);
-                    JsonNode jsonNode = getDelegate().readTree(json);
+                    json2 = StringEscapes.unescapeJson(json2);
+                    rejudge = true;
+                }
+                if (rejudge) {
+                    changed = !Objs.equals(json, json2);
+                }
+                if (changed) {
+                    JsonNode jsonNode = getDelegate().readTree(json2);
                     return JacksonJsonMapper.toJsonTreeNode(jsonNode);
                 }
                 throw e;

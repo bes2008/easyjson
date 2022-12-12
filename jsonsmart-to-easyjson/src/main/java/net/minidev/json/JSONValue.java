@@ -19,6 +19,7 @@ import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.easyjson.core.JsonTreeNode;
 import com.jn.easyjson.core.node.JsonArrayNode;
 import com.jn.easyjson.core.node.JsonObjectNode;
+import com.jn.easyjson.core.util.JSONs;
 import net.minidev.json.parser.ParseException;
 import net.minidev.json.reader.JsonWriterI;
 import net.minidev.json.writer.JsonReaderI;
@@ -99,7 +100,7 @@ public class JSONValue {
         if (str == null || str.trim().isEmpty()) {
             return null;
         }
-        JsonTreeNode treeNode = JSONBuilderProvider.create().build().fromJson(str);
+        JsonTreeNode treeNode = JSONs.parse(str);
         return JsonMapper.fromJsonTreeNode(treeNode);
     }
 
@@ -107,7 +108,7 @@ public class JSONValue {
         if (str == null || str.trim().isEmpty()) {
             return null;
         }
-        return JSONBuilderProvider.create().build().fromJson(str, mapTo);
+        return JSONs.parse(str, mapTo);
     }
 
     private static <T> T parseForUpdate(String string, T toUpdate) {

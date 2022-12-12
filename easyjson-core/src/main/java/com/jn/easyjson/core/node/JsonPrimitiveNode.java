@@ -17,14 +17,12 @@ package com.jn.easyjson.core.node;
 import com.jn.easyjson.core.JsonTreeNode;
 import com.jn.easyjson.core.util.LazilyParsedNumber;
 import com.jn.langx.util.Preconditions;
+import com.jn.langx.util.reflect.type.Primitives;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
 public class JsonPrimitiveNode extends JsonTreeNode {
-    private static final Class<?>[] PRIMITIVE_TYPES = {int.class, long.class, short.class,
-            float.class, double.class, byte.class, boolean.class, char.class, Integer.class, Long.class,
-            Short.class, Float.class, Double.class, Byte.class, Boolean.class, Character.class};
 
     private Object value;
 
@@ -364,10 +362,8 @@ public class JsonPrimitiveNode extends JsonTreeNode {
         }
 
         Class<?> classOfPrimitive = target.getClass();
-        for (Class<?> standardPrimitive : PRIMITIVE_TYPES) {
-            if (standardPrimitive.isAssignableFrom(classOfPrimitive)) {
-                return true;
-            }
+        if (Primitives.isPrimitiveOrPrimitiveWrapperType(classOfPrimitive)) {
+            return true;
         }
         return false;
     }

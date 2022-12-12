@@ -2,9 +2,9 @@ package com.progsbase.libraries.JSON;
 
 
 import JSON.structures.Element;
-import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.easyjson.core.JsonTreeNode;
 import com.jn.easyjson.core.node.*;
+import com.jn.easyjson.core.util.JSONs;
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.function.Predicate;
@@ -39,7 +39,7 @@ public class JSONObjectWriter {
         char[] value;
 
         JsonTreeNode e = toJsonTreeNode(object);
-        return JSONBuilderProvider.create().build().toJson(e);
+        return JSONs.toJson(e);
     }
 
     private static final List<Class> supportedTypes = Collects.<Class>newArrayList(

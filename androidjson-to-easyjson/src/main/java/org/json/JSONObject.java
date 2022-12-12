@@ -17,6 +17,7 @@
 package org.json;
 
 import com.jn.easyjson.core.JSONBuilderProvider;
+import com.jn.easyjson.core.util.JSONs;
 
 import java.util.*;
 
@@ -667,7 +668,7 @@ public class JSONObject {
     }
 
     void writeTo(JSONStringer stringer) throws JSONException {
-        stringer.value(JSONBuilderProvider.create().build().toJson(this.nameValuePairs));
+        stringer.value(JSONs.toJson(this.nameValuePairs));
     }
 
     /**

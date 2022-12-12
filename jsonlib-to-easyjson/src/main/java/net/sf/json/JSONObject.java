@@ -19,6 +19,7 @@ import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.easyjson.core.JsonTreeNode;
 import com.jn.easyjson.core.node.JsonNullNode;
 import com.jn.easyjson.core.node.JsonTreeNodes;
+import com.jn.easyjson.core.util.JSONs;
 import com.jn.langx.util.reflect.type.Primitives;
 import net.sf.json.easyjson.JsonMapper;
 import net.sf.json.processors.JsonVerifier;
@@ -1201,7 +1202,7 @@ public final class JSONObject extends AbstractJSON implements JSON, Map, Compara
      */
     @Override
     public String toString(int indentFactor) {
-        return JSONBuilderProvider.create().prettyFormat(indentFactor > 0).build().toJson(JsonMapper.toJsonTreeNode(this));
+        return JSONs.toJson(JsonMapper.toJsonTreeNode(this),indentFactor > 0);
     }
 
     /**
@@ -1219,7 +1220,7 @@ public final class JSONObject extends AbstractJSON implements JSON, Map, Compara
      */
     @Override
     public String toString(int indentFactor, int indent) {
-        return JSONBuilderProvider.create().prettyFormat(indentFactor > 0 || indent > 0).build().toJson(JsonMapper.toJsonTreeNode(this));
+        return JSONs.toJson(JsonMapper.toJsonTreeNode(this),indentFactor > 0 || indent > 0);
     }
 
     @Override

@@ -17,6 +17,7 @@
 package org.json;
 
 import com.jn.easyjson.core.JSONBuilderProvider;
+import com.jn.easyjson.core.util.JSONs;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -605,7 +606,7 @@ public class JSONArray {
     }
 
     void writeTo(JSONStringer stringer) throws JSONException {
-        stringer.value(JSONBuilderProvider.create().build().toJson(this.values));
+        stringer.value(JSONs.toJson(this.values));
     }
 
     @Override

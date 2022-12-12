@@ -16,6 +16,7 @@ package net.sf.json;
 
 
 import com.jn.easyjson.core.JSONBuilderProvider;
+import com.jn.easyjson.core.util.JSONs;
 import com.jn.langx.util.reflect.type.Primitives;
 import net.sf.json.easyjson.JsonMapper;
 import net.sf.json.util.JSONUtils;
@@ -1419,7 +1420,7 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      */
     @Override
     public String toString(int indentFactor) {
-        return JSONBuilderProvider.create().prettyFormat(indentFactor > 0).build().toJson(JsonMapper.toJsonTreeNode(this));
+        return JSONs.toJson(JsonMapper.toJsonTreeNode(this),indentFactor > 0);
     }
 
     /**
@@ -1435,7 +1436,7 @@ public final class JSONArray extends AbstractJSON implements JSON, List, Compara
      */
     @Override
     public String toString(int indentFactor, int indent) {
-        return JSONBuilderProvider.create().prettyFormat(indentFactor > 0 || indent > 0).build().toJson(JsonMapper.toJsonTreeNode(this));
+        return JSONs.toJson(JsonMapper.toJsonTreeNode(this),indentFactor > 0 || indent > 0);
     }
 
     /**

@@ -33,12 +33,12 @@ public class FastJsonAdapter extends JsonHandlerAdapter<FastJson> {
 
     @Override
     public <T> T deserialize(String json, Type typeOfT) throws JsonException {
-        if (getJsonBuilder().enableDecodeHex()) {
-            json = Utf8s.convertHexToUnicode(json);
-        }
         try {
             return parse(json, typeOfT);
         } catch (JSONException ex) {
+            if (getJsonBuilder().enableDecodeHex()) {
+                json = Utf8s.convertHexToUnicode(json);
+            }
             if (getJsonBuilder().enableUnescapeEscapeCharacter()) {
                 json = StringEscapes.unescapeJson(json);
                 return parse(json, typeOfT);

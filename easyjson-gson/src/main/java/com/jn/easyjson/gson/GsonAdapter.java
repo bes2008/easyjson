@@ -42,13 +42,12 @@ public class GsonAdapter extends JsonHandlerAdapter<Gson> {
 
     @Override
     public <T> T deserialize(String json, Type typeOfT) throws JsonException {
-        if (getJsonBuilder().enableDecodeHex()) {
-            json = Utf8s.convertHexToUnicode(json);
-        }
-
         try {
             return getDelegate().fromJson(json, typeOfT);
         } catch (JsonException e) {
+            if (getJsonBuilder().enableDecodeHex()) {
+                json = Utf8s.convertHexToUnicode(json);
+            }
             if (getJsonBuilder().enableUnescapeEscapeCharacter()) {
                 json = StringEscapes.unescapeJson(json);
                 return getDelegate().fromJson(json, typeOfT);

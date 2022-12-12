@@ -5,6 +5,7 @@ import JSON.StringElementMaps.StringElementMap;
 import JSON.structures.Element;
 import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.easyjson.core.node.JsonTreeNodes;
+import com.jn.easyjson.core.util.JSONs;
 import references.references.StringArrayReference;
 import references.references.StringReference;
 
@@ -26,7 +27,7 @@ import static JSON.StringElementMaps.StringElementMaps.GetStringElementMapNumber
  */
 public class JSONObjectReader {
     public static Object readJSON(String json) {
-        return JsonTreeNodes.toJavaObject(JSONBuilderProvider.create().build().fromJson(json));
+        return JsonTreeNodes.toJavaObject(JSONs.parse(json));
     }
 
     public static Object readJSONExceptionOnFailure(String json) throws JSONException {
