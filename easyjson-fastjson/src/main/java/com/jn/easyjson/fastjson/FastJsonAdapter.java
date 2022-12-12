@@ -22,6 +22,7 @@ import com.jn.easyjson.core.JsonHandlerAdapter;
 import com.jn.easyjson.core.JsonTreeNode;
 import com.jn.easyjson.core.tree.JsonTreeDeserializer;
 import com.jn.langx.text.translate.StringEscapes;
+import com.jn.langx.util.Objs;
 import com.jn.langx.util.io.IOs;
 import com.jn.langx.util.io.unicode.Utf8s;
 
@@ -36,15 +37,24 @@ public class FastJsonAdapter extends JsonHandlerAdapter<FastJson> {
         try {
             return parse(json, typeOfT);
         } catch (JSONException ex) {
+            boolean changed = false;
+            boolean rejudge = false;
+            String json2 = json;
             if (getJsonBuilder().enableDecodeHex()) {
-                json = Utf8s.convertHexToUnicode(json);
+                json2 = Utf8s.convertHexToUnicode(json2);
+                rejudge = true;
             }
             if (getJsonBuilder().enableUnescapeEscapeCharacter()) {
-                json = StringEscapes.unescapeJson(json);
-                return parse(json, typeOfT);
-            } else {
-                throw ex;
+                json2 = StringEscapes.unescapeJson(json2);
+                rejudge = true;
             }
+            if (rejudge) {
+                changed = !Objs.equals(json, json2);
+            }
+            if (changed) {
+                return parse(json, typeOfT);
+            }
+            throw ex;
         }
     }
 
