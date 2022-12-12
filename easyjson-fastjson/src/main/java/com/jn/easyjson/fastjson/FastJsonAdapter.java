@@ -52,7 +52,7 @@ public class FastJsonAdapter extends JsonHandlerAdapter<FastJson> {
                 changed = !Objs.equals(json, json2);
             }
             if (changed) {
-                return parse(json, typeOfT);
+                return parse(json2, typeOfT);
             }
             throw ex;
         }

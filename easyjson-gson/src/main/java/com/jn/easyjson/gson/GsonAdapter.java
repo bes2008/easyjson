@@ -61,7 +61,7 @@ public class GsonAdapter extends JsonHandlerAdapter<Gson> {
                 changed = !Objs.equals(json, json2);
             }
             if (changed) {
-                return getDelegate().fromJson(json, typeOfT);
+                return getDelegate().fromJson(json2, typeOfT);
             }
             throw e;
         }
@@ -98,7 +98,7 @@ public class GsonAdapter extends JsonHandlerAdapter<Gson> {
                 changed = !Objs.equals(json, json2);
             }
             if (changed) {
-                JsonElement node = new JsonParser().parse(json);
+                JsonElement node = new JsonParser().parse(json2);
                 return GsonJsonMapper.toJsonTreeNode(node);
             }
             throw JsonException.wrapAsJsonException(e);

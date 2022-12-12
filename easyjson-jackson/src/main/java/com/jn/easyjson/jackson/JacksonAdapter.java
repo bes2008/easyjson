@@ -50,12 +50,22 @@ public class JacksonAdapter extends JsonHandlerAdapter<ObjectMapper> {
             try {
                 return getDelegate().readValue(json, toJavaType(typeOfT));
             } catch (JsonParseException e) {
+                boolean changed = false;
+                boolean rejudge = false;
+                String json2 = json;
                 if (getJsonBuilder().enableDecodeHex()) {
-                    json = Utf8s.convertHexToUnicode(json);
+                    json2 = Utf8s.convertHexToUnicode(json2);
+                    rejudge = true;
                 }
                 if (getJsonBuilder().enableUnescapeEscapeCharacter()) {
-                    json = StringEscapes.unescapeJson(json);
-                    return getDelegate().readValue(json, toJavaType(typeOfT));
+                    json2 = StringEscapes.unescapeJson(json2);
+                    rejudge = true;
+                }
+                if (rejudge) {
+                    changed = !Objs.equals(json, json2);
+                }
+                if (changed) {
+                    return getDelegate().readValue(json2, toJavaType(typeOfT));
                 }
                 throw e;
             }
