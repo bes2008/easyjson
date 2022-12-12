@@ -22,6 +22,7 @@ import com.jn.easyjson.core.JsonHandlerAdapter;
 import com.jn.easyjson.core.JsonTreeNode;
 import com.jn.easyjson.gson.node.GsonJsonMapper;
 import com.jn.langx.text.translate.StringEscapes;
+import com.jn.langx.util.Objs;
 import com.jn.langx.util.io.IOs;
 import com.jn.langx.util.io.unicode.Utf8s;
 
@@ -45,11 +46,21 @@ public class GsonAdapter extends JsonHandlerAdapter<Gson> {
         try {
             return getDelegate().fromJson(json, typeOfT);
         } catch (JsonException e) {
+            boolean changed = false;
+            boolean rejudge = false;
+            String json2 = json;
             if (getJsonBuilder().enableDecodeHex()) {
-                json = Utf8s.convertHexToUnicode(json);
+                json2 = Utf8s.convertHexToUnicode(json2);
+                rejudge = true;
             }
             if (getJsonBuilder().enableUnescapeEscapeCharacter()) {
-                json = StringEscapes.unescapeJson(json);
+                json2 = StringEscapes.unescapeJson(json2);
+                rejudge = true;
+            }
+            if (rejudge) {
+                changed = !Objs.equals(json, json2);
+            }
+            if (changed) {
                 return getDelegate().fromJson(json, typeOfT);
             }
             throw e;
@@ -68,14 +79,31 @@ public class GsonAdapter extends JsonHandlerAdapter<Gson> {
 
     @Override
     public JsonTreeNode deserialize(String json) throws JsonException {
-        if (getJsonBuilder().enableDecodeHex()) {
-            json = Utf8s.convertHexToUnicode(json);
+        try {
+            JsonElement node = new JsonParser().parse(json);
+            return GsonJsonMapper.toJsonTreeNode(node);
+        } catch (Throwable e) {
+            boolean changed = false;
+            boolean rejudge = false;
+            String json2 = json;
+            if (getJsonBuilder().enableDecodeHex()) {
+                json2 = Utf8s.convertHexToUnicode(json2);
+                rejudge = true;
+            }
+            if (getJsonBuilder().enableUnescapeEscapeCharacter()) {
+                json2 = StringEscapes.unescapeJson(json2);
+                rejudge = true;
+            }
+            if (rejudge) {
+                changed = !Objs.equals(json, json2);
+            }
+            if (changed) {
+                JsonElement node = new JsonParser().parse(json);
+                return GsonJsonMapper.toJsonTreeNode(node);
+            }
+            throw JsonException.wrapAsJsonException(e);
         }
-        if (getJsonBuilder().enableUnescapeEscapeCharacter()) {
-            json = StringEscapes.unescapeJson(json);
-        }
-        JsonElement node = new JsonParser().parse(json);
-        return GsonJsonMapper.toJsonTreeNode(node);
+
     }
 
     @Deprecated
