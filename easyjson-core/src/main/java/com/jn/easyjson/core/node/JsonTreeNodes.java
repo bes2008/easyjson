@@ -19,6 +19,8 @@ import com.jn.easyjson.core.JsonTreeNode;
 import com.jn.easyjson.core.util.JSONs;
 import com.jn.langx.util.Objs;
 import com.jn.langx.util.collection.Collects;
+import com.jn.langx.util.collection.Lists;
+import com.jn.langx.util.collection.Maps;
 import com.jn.langx.util.function.Consumer2;
 import com.jn.langx.util.reflect.type.Primitives;
 
@@ -146,7 +148,7 @@ public class JsonTreeNodes extends JsonNodeNavigator {
                 }
             }
             JsonArrayNode arrayNode = node.getAsJsonArrayNode();
-            List<Object> array = new ArrayList<Object>();
+            List<Object> array = Lists.<Object>newArrayList();
             for (int i = 0; i < arrayNode.size(); i++) {
                 array.add(toJavaObject(arrayNode.get(i)));
             }
@@ -161,7 +163,7 @@ public class JsonTreeNodes extends JsonNodeNavigator {
             }
             JsonObjectNode objectNode = node.getAsJsonObjectNode();
             Iterator<Map.Entry<String, JsonTreeNode>> iter = objectNode.propertySet().iterator();
-            Map<String, Object> map = new LinkedHashMap<String, Object>();
+            Map<String, Object> map = Maps.<String, Object>newLinkedHashMap();
             while (iter.hasNext()) {
                 Map.Entry<String, JsonTreeNode> entry = iter.next();
                 map.put(entry.getKey(), toJavaObject(entry.getValue()));
