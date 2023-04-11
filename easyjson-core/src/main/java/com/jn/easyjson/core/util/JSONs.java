@@ -32,11 +32,6 @@ public class JSONs extends JsonTreeNodes {
             .enableDecodeHex(true)
             .enableUnescapeEscapeCharacter(true)
             .build();
-    private static JSON prettyJson = JSONBuilderProvider.create()
-            .prettyFormat(true)
-            .enableDecodeHex(true)
-            .enableUnescapeEscapeCharacter(true)
-            .build();
 
     public static JsonNodeNavigator JSON_NODE_NAVIGATOR = new JsonNodeNavigator();
 
@@ -238,10 +233,20 @@ public class JSONs extends JsonTreeNodes {
     }
 
     /**
+     * @since 4.0.4
+     */
+    public static String toJson(Object obj, boolean pretty, boolean serialNulls){
+        if (serialNulls || pretty){
+            return JSONBuilderProvider.create().prettyFormat(pretty).serializeNulls(serialNulls).build().toJson(obj);
+        }else{
+            return toJson(obj);
+        }
+    }
+    /**
      * @since 3.2.27
      */
     public static String toJson(Object obj, boolean pretty) {
-        return pretty ? prettyJson.toJson(obj) : toJson(obj);
+        return toJson(obj, pretty, false);
     }
 
 }

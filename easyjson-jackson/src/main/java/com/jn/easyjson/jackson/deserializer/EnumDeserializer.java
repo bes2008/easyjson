@@ -39,7 +39,7 @@ import static com.jn.easyjson.jackson.JacksonConstants.*;
 
 public class EnumDeserializer<T extends Enum> extends JsonDeserializer<T> implements ContextualDeserializer {
     private static final Logger logger = Loggers.getLogger(EnumDeserializer.class);
-    private Class<T> clazz;
+    private Class<T> clazz; // 对应的 enum class
 
     @Override
     public Class<T> handledType() {

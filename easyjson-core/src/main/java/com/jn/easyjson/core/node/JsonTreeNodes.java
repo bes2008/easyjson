@@ -161,7 +161,7 @@ public class JsonTreeNodes extends JsonNodeNavigator {
             }
             JsonObjectNode objectNode = node.getAsJsonObjectNode();
             Iterator<Map.Entry<String, JsonTreeNode>> iter = objectNode.propertySet().iterator();
-            Map<String, Object> map = new HashMap<String, Object>();
+            Map<String, Object> map = new LinkedHashMap<String, Object>();
             while (iter.hasNext()) {
                 Map.Entry<String, JsonTreeNode> entry = iter.next();
                 map.put(entry.getKey(), toJavaObject(entry.getValue()));
