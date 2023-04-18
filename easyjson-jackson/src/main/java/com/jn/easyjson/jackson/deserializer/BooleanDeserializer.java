@@ -17,10 +17,8 @@ package com.jn.easyjson.jackson.deserializer;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.JsonToken;
-import com.fasterxml.jackson.databind.BeanProperty;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.jn.easyjson.jackson.Jacksons;
 
 import java.io.IOException;
@@ -29,7 +27,7 @@ import java.util.List;
 
 import static com.jn.easyjson.jackson.JacksonConstants.SERIALIZE_BOOLEAN_USING_1_0_ATTR_KEY;
 
-public class BooleanDeserializer extends JsonDeserializer<Boolean> implements ContextualDeserializer {
+public class BooleanDeserializer extends JsonDeserializer<Boolean> {
 
     private static final List<String> evalTrues = Arrays.asList(new String[]{"true", "on", "1"});
 
@@ -50,8 +48,5 @@ public class BooleanDeserializer extends JsonDeserializer<Boolean> implements Co
         return false;
     }
 
-    @Override
-    public JsonDeserializer<?> createContextual(DeserializationContext context, BeanProperty beanProperty, Class<?> type) throws JsonMappingException {
-        return null;
-    }
+
 }
