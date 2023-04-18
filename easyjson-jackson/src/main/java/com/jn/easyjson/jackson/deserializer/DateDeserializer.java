@@ -112,7 +112,7 @@ public class DateDeserializer extends JsonDeserializer implements com.fasterxml.
                     pattern = propertyCodecConfiguration.getDatePattern();
 
                     if (df == null && Strings.isNotBlank(pattern)) {
-                        df = Dates.getSimpleDateFormat(pattern);
+                        df = Dates.getSimpleDateFormat(pattern, customTz, locale);
                     }
                 }
             }
@@ -123,7 +123,7 @@ public class DateDeserializer extends JsonDeserializer implements com.fasterxml.
 
 
             if (df == null && Strings.isNotBlank(pattern)) {
-                df = Dates.getSimpleDateFormat(pattern);
+                df = Dates.getSimpleDateFormat(pattern, customTz, locale);
             }
             if (df == null && this.customTz != null && locale != null) {
                 df = ctx.getConfig().getDateFormat();
@@ -173,8 +173,7 @@ public class DateDeserializer extends JsonDeserializer implements com.fasterxml.
     }
 
     @Override
-    public JsonDeserializer<?> createContextual(DeserializationContext ctxt, BeanProperty property)
-            throws JsonMappingException {
+    public JsonDeserializer<?> createContextual(DeserializationContext ctxt, BeanProperty property) throws JsonMappingException {
         JsonFormat.Value format = ctxt.getAnnotationIntrospector().findFormat((Annotated) property.getMember());
         if (format != null) {
             TimeZone tz = format.getTimeZone();
