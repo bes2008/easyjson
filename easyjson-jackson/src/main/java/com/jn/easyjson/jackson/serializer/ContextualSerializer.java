@@ -16,6 +16,9 @@ package com.jn.easyjson.jackson.serializer;
 
 import com.fasterxml.jackson.databind.*;
 
+/**
+ * 用于对 创建 的 Serializer 进行上下文初始化
+ */
 public interface ContextualSerializer {
     JsonSerializer<?> createContextual(SerializerProvider prov, BeanProperty property, JavaType type)
             throws JsonMappingException;

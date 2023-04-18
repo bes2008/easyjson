@@ -152,8 +152,14 @@ public class Jacksons {
             String propertyName = writeContext.getCurrentName();
             EasyJsonObjectMapper objectMapper = (EasyJsonObjectMapper) objectCodec;
             JacksonJSONBuilder jsonBuilder = objectMapper.getJsonBuilder();
-            DialectIdentify proxyDialectIdentify = jsonBuilder.proxyDialectIdentify();
-            return PropertyCodecConfiguration.getPropertyCodecConfiguration(proxyDialectIdentify, container, propertyName);
+            PropertyCodecConfiguration propertyCodecConfiguration = null;
+            DialectIdentify realDialectIdentify = jsonBuilder.dialectIdentify();
+            propertyCodecConfiguration = PropertyCodecConfiguration.getPropertyCodecConfiguration(realDialectIdentify, container, propertyName);
+            if (propertyCodecConfiguration == null) {
+                DialectIdentify proxyDialectIdentify = jsonBuilder.proxyDialectIdentify();
+                propertyCodecConfiguration = PropertyCodecConfiguration.getPropertyCodecConfiguration(proxyDialectIdentify, container, propertyName);
+            }
+            return propertyCodecConfiguration;
         }
         return null;
     }
@@ -207,16 +213,15 @@ public class Jacksons {
     }
 
     /**
-     * @since 3.2.5 invoke member#setAccessiable(true)
-     *
-     * copy from jackson
-     * jackson 版本小于 2.7时，是没有这个方法的
-     *
      * @param member
      * @param force
+     * @since 3.2.5 invoke member#setAccessiable(true)
+     * <p>
+     * copy from jackson
+     * jackson 版本小于 2.7时，是没有这个方法的
      */
     public static void checkAndFixAccess(Member member, boolean force) {
-        AccessibleObject ao = (AccessibleObject)member;
+        AccessibleObject ao = (AccessibleObject) member;
 
         try {
             if (force || !Modifier.isPublic(member.getModifiers()) || !Modifier.isPublic(member.getDeclaringClass().getModifiers())) {
@@ -231,7 +236,7 @@ public class Jacksons {
 
     }
 
-    public static final Version VERSION_2_6_0 = new Version(2,6,0,null);
-    public static final Version VERSION_2_9_0 = new Version(2,9,0,null);
-    public static final Version VERSION_2_10_0 = new Version(2,10,0,null);
+    public static final Version VERSION_2_6_0 = new Version(2, 6, 0, null);
+    public static final Version VERSION_2_9_0 = new Version(2, 9, 0, null);
+    public static final Version VERSION_2_10_0 = new Version(2, 10, 0, null);
 }

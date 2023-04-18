@@ -267,6 +267,7 @@ public final class Gson {
     JSONBuilder jsonBuilder = JSONBuilderProvider.adapter(GsonEasyJsons.JSON_IDENTIFY_STRING);
     if (jsonBuilder != null) {
       jsonBuilder.serializeNulls(this.serializeNulls);
+      jsonBuilder.enableCustomConfiguration(true);
       jsonBuilder.prettyFormat(this.prettyPrinting);
       jsonBuilder.lenient(this.lenient);
       jsonBuilder.serializeDateUsingPattern(this.datePattern);

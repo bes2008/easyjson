@@ -99,16 +99,17 @@ public class JSONs extends JsonTreeNodes {
     /**
      * @since 3.2.20
      */
-    public static Map<String,Object> toMap(String jsonString) {
+    public static Map<String, Object> toMap(String jsonString) {
         return JSONs.<Map>toJavaObject(jsonString);
     }
 
     /**
      * @since 4.0.1
      */
-    public static Map<String,Object> toMap(JsonObjectNode objectNode){
-        return (Map)JSONs.toJavaObject(objectNode);
+    public static Map<String, Object> toMap(JsonObjectNode objectNode) {
+        return (Map) JSONs.toJavaObject(objectNode);
     }
+
     /**
      * @since 3.2.26
      */
@@ -119,8 +120,8 @@ public class JSONs extends JsonTreeNodes {
     /**
      * @since 4.0.1
      */
-    public static List toList(JsonArrayNode arrayNode){
-        return (List)JSONs.toJavaObject(arrayNode);
+    public static List toList(JsonArrayNode arrayNode) {
+        return (List) JSONs.toJavaObject(arrayNode);
     }
 
     /**
@@ -129,6 +130,13 @@ public class JSONs extends JsonTreeNodes {
     public static <T> T toJavaObject(String jsonString) {
         JsonTreeNode treeNode = json.fromJson(jsonString);
         return (T) JsonTreeNodes.toJavaObject(treeNode);
+    }
+
+    /**
+     * @since 4.0.5
+     */
+    public static <T> T toJavaBean(JsonObjectNode jsonObjectNode, Class<T> beanClass) {
+        return parse(toJson(jsonObjectNode), beanClass);
     }
 
     /**
@@ -235,13 +243,14 @@ public class JSONs extends JsonTreeNodes {
     /**
      * @since 4.0.4
      */
-    public static String toJson(Object obj, boolean pretty, boolean serialNulls){
-        if (serialNulls || pretty){
+    public static String toJson(Object obj, boolean pretty, boolean serialNulls) {
+        if (serialNulls || pretty) {
             return JSONBuilderProvider.create().prettyFormat(pretty).serializeNulls(serialNulls).build().toJson(obj);
-        }else{
+        } else {
             return toJson(obj);
         }
     }
+
     /**
      * @since 3.2.27
      */

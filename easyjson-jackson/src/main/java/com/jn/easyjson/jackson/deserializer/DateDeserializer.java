@@ -14,11 +14,16 @@
 
 package com.jn.easyjson.jackson.deserializer;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.JsonToken;
+import com.fasterxml.jackson.databind.BeanProperty;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.introspect.Annotated;
+import com.fasterxml.jackson.databind.util.StdDateFormat;
 import com.jn.easyjson.core.codec.dialect.PropertyCodecConfiguration;
 import com.jn.easyjson.jackson.JacksonConstants;
 import com.jn.easyjson.jackson.Jacksons;
@@ -34,15 +39,20 @@ import java.lang.reflect.Constructor;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 import static com.jn.easyjson.jackson.JacksonConstants.ENABLE_CUSTOM_CONFIGURATION;
 
-public class DateDeserializer extends JsonDeserializer {
+public class DateDeserializer extends JsonDeserializer implements com.fasterxml.jackson.databind.deser.ContextualDeserializer {
     private static Logger logger = Loggers.getLogger(DateDeserializer.class);
     private Class type;
+    private DateFormat customFormat;
+    private TimeZone customTz;
+    private Locale locale;
 
     public DateDeserializer(Class type) {
         this.type = type;
@@ -91,29 +101,44 @@ public class DateDeserializer extends JsonDeserializer {
             return null;
         }
 
-        DateFormat df = null;
-        String pattern = null;
-        if (Jacksons.getBooleanAttr(ctx, ENABLE_CUSTOM_CONFIGURATION)) {
-            PropertyCodecConfiguration propertyCodecConfiguration = Jacksons.getPropertyCodecConfiguration(p);
-            if (propertyCodecConfiguration != null) {
-                df = propertyCodecConfiguration.getDateFormat();
-                pattern = propertyCodecConfiguration.getDatePattern();
+        if (curr == JsonToken.VALUE_STRING) {
 
-                if (df == null && Strings.isNotBlank(pattern)) {
-                    df = Dates.getSimpleDateFormat(pattern);
+            DateFormat df = this.customFormat;
+            String pattern = null;
+            if (df == null && Jacksons.getBooleanAttr(ctx, ENABLE_CUSTOM_CONFIGURATION)) {
+                PropertyCodecConfiguration propertyCodecConfiguration = Jacksons.getPropertyCodecConfiguration(p);
+                if (propertyCodecConfiguration != null) {
+                    df = propertyCodecConfiguration.getDateFormat();
+                    pattern = propertyCodecConfiguration.getDatePattern();
+
+                    if (df == null && Strings.isNotBlank(pattern)) {
+                        df = Dates.getSimpleDateFormat(pattern);
+                    }
                 }
             }
-        }
-        if (df == null) {
-            df = Jacksons.getDateFormatAttr(ctx, JacksonConstants.SERIALIZE_DATE_USING_DATE_FORMAT_ATTR_KEY);
-        }
-        boolean usingToString = Jacksons.getBooleanAttr(ctx, JacksonConstants.SERIALIZE_DATE_USING_TO_STRING_ATTR_KEY);
+            if (df == null) {
+                df = Jacksons.getDateFormatAttr(ctx, JacksonConstants.SERIALIZE_DATE_USING_DATE_FORMAT_ATTR_KEY);
+            }
+            boolean usingToString = Jacksons.getBooleanAttr(ctx, JacksonConstants.SERIALIZE_DATE_USING_TO_STRING_ATTR_KEY);
 
 
-        if (curr == JsonToken.VALUE_STRING) {
             if (df == null && Strings.isNotBlank(pattern)) {
                 df = Dates.getSimpleDateFormat(pattern);
             }
+            if (df == null && this.customTz != null && locale != null) {
+                df = ctx.getConfig().getDateFormat();
+                // one shortcut: with our custom format, can simplify handling a bit
+                if (df.getClass() == StdDateFormat.class) {
+                    StdDateFormat std = (StdDateFormat) df;
+                    std = std.withTimeZone(customTz);
+                    std = std.withLocale(locale);
+                    df = std;
+                } else {
+                    df = (DateFormat) df.clone();
+                    df.setTimeZone(customTz);
+                }
+            }
+
             if (df != null) {
                 try {
                     return df.parse(p.getValueAsString());
@@ -139,5 +164,37 @@ public class DateDeserializer extends JsonDeserializer {
     @Override
     public Class<?> handledType() {
         return type;
+    }
+
+    public DateDeserializer withDateFormat(DateFormat df, String formatStr) {
+        this.customFormat = df;
+
+        return this;
+    }
+
+    @Override
+    public JsonDeserializer<?> createContextual(DeserializationContext ctxt, BeanProperty property)
+            throws JsonMappingException {
+        JsonFormat.Value format = ctxt.getAnnotationIntrospector().findFormat((Annotated) property.getMember());
+        if (format != null) {
+            TimeZone tz = format.getTimeZone();
+            // First: fully custom pattern?
+            if (format.hasPattern()) {
+                String pattern = format.getPattern();
+                final Locale loc = format.hasLocale() ? format.getLocale() : ctxt.getLocale();
+                if (tz == null) {
+                    tz = ctxt.getTimeZone();
+                }
+                SimpleDateFormat df = Dates.getSimpleDateFormat(pattern, tz, loc);
+                return withDateFormat(df, pattern);
+            }
+            // But if not, can still override timezone
+            if (tz != null) {
+                this.customTz = tz;
+                this.locale = format.hasLocale() ? format.getLocale() : ctxt.getLocale();
+            }
+        }
+
+        return this;
     }
 }
