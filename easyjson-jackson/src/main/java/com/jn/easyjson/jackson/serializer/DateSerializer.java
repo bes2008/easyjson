@@ -128,7 +128,7 @@ public class DateSerializer extends JsonSerializer implements com.fasterxml.jack
                     String pattern = format.getPattern();
                     final Locale loc = format.hasLocale() ? format.getLocale() : prov.getLocale();
                     if (tz == null) {
-                        tz = prov.getTimeZone();
+                        tz = TimeZone.getDefault();
                     }
                     SimpleDateFormat df = Dates.getSimpleDateFormat(pattern, tz, loc);
                     return withFormat(false, df);

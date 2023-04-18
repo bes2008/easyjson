@@ -174,26 +174,29 @@ public class DateDeserializer extends JsonDeserializer implements com.fasterxml.
 
     @Override
     public JsonDeserializer<?> createContextual(DeserializationContext ctxt, BeanProperty property) throws JsonMappingException {
-        JsonFormat.Value format = ctxt.getAnnotationIntrospector().findFormat((Annotated) property.getMember());
-        if (format != null) {
-            TimeZone tz = format.getTimeZone();
-            // First: fully custom pattern?
-            if (format.hasPattern()) {
-                String pattern = format.getPattern();
-                final Locale loc = format.hasLocale() ? format.getLocale() : ctxt.getLocale();
-                if (tz == null) {
-                    tz = ctxt.getTimeZone();
+        if(property!=null) {
+            JsonFormat.Value format = ctxt.getAnnotationIntrospector().findFormat((Annotated) property.getMember());
+            if (format != null) {
+                TimeZone tz = format.getTimeZone();
+                // First: fully custom pattern?
+                if (format.hasPattern()) {
+                    String pattern = format.getPattern();
+                    final Locale loc = format.hasLocale() ? format.getLocale() : ctxt.getLocale();
+                    if (tz == null) {
+                        tz = TimeZone.getDefault();
+                    }
+                    SimpleDateFormat df = Dates.getSimpleDateFormat(pattern, tz, loc);
+                    return withDateFormat(df, pattern);
                 }
-                SimpleDateFormat df = Dates.getSimpleDateFormat(pattern, tz, loc);
-                return withDateFormat(df, pattern);
+                // But if not, can still override timezone
+                if (tz != null) {
+                    this.customTz = tz;
+                    this.locale = format.hasLocale() ? format.getLocale() : ctxt.getLocale();
+                }
             }
-            // But if not, can still override timezone
-            if (tz != null) {
-                this.customTz = tz;
-                this.locale = format.hasLocale() ? format.getLocale() : ctxt.getLocale();
-            }
-        }
 
+            return this;
+        }
         return this;
     }
 }

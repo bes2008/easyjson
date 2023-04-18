@@ -22,7 +22,10 @@ public class JacksonFormatTest {
         System.out.println(json2);
         Xyz xyz1 = JSONs.parse(json1, Xyz.class);
         Xyz xyz2 = new ObjectMapper().readValue(json2, Xyz.class);
-        System.out.println(xyz1.getCreateTime().getTime());
+
         System.out.println(xyz2.getCreateTime().getTime());
+        System.out.println(xyz1.getCreateTime().getTime());
+
+        System.out.println(xyz2.getCreateTime().getTime()-xyz1.getCreateTime().getTime());
     }
 }
