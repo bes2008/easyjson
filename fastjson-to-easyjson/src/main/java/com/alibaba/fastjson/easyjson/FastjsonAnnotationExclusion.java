@@ -59,9 +59,6 @@ public final class FastjsonAnnotationExclusion implements Exclusion {
 
     private boolean skipProperty(Class beanClass, String propertyName, boolean serializePhrase) {
         CodecConfigurationRepository configurationRepository = CodecConfigurationRepositoryService.getInstance().getCodecConfigurationRepository(FastEasyJsons.FASTJSON);
-        if(configurationRepository==null){
-            return false;
-        }
         PropertyCodecConfiguration propertyCodeConfiguration = configurationRepository.getPropertyCodeConfiguration(beanClass, propertyName);
         if (propertyCodeConfiguration == null) {
             ClassCodecConfiguration classCodecConfiguration = configurationRepository.getClassCodecConfiguration(beanClass);
