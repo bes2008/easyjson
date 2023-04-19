@@ -33,6 +33,7 @@ import java.lang.reflect.Method;
  */
 public final class FastjsonAnnotationExclusion implements Exclusion {
     public static final FastjsonAnnotationExclusion INSTANCE = new FastjsonAnnotationExclusion();
+
     @Override
     public boolean shouldSkipMethod(MethodAttributes m, boolean serializePhrase) {
         return skipProperty(m.get(), serializePhrase);
@@ -52,6 +53,11 @@ public final class FastjsonAnnotationExclusion implements Exclusion {
         if (member instanceof Field || member instanceof Method) {
             Class beanClass = member.getDeclaringClass();
             String name = Reflects.extractFieldName(member);
+            /*
+            if (name == null && member.getName().length() > 2 && Strings.startsWith(member.getName(), "is")) {
+                name = member.getName();
+            }
+             */
             return skipProperty(beanClass, name, serializePhrase);
         }
         return true;
@@ -62,11 +68,11 @@ public final class FastjsonAnnotationExclusion implements Exclusion {
         PropertyCodecConfiguration propertyCodeConfiguration = configurationRepository.getPropertyCodeConfiguration(beanClass, propertyName);
         if (propertyCodeConfiguration == null) {
             ClassCodecConfiguration classCodecConfiguration = configurationRepository.getClassCodecConfiguration(beanClass);
-            if(classCodecConfiguration!=null){
-                if(Emptys.isNotEmpty(classCodecConfiguration.getIncludedPropertyNames())){
+            if (classCodecConfiguration != null) {
+                if (Emptys.isNotEmpty(classCodecConfiguration.getIncludedPropertyNames())) {
                     return !classCodecConfiguration.getIncludedPropertyNames().contains(propertyName);
                 }
-                if(Emptys.isNotEmpty(classCodecConfiguration.getExcludedPropertyNames())){
+                if (Emptys.isNotEmpty(classCodecConfiguration.getExcludedPropertyNames())) {
                     return classCodecConfiguration.getExcludedPropertyNames().contains(propertyName);
                 }
             }

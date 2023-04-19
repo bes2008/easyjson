@@ -141,13 +141,16 @@ public class ClassLoaderCodecConfigurationLoader<T extends CodecConfiguration> i
             }
 
 
-            // 找出 field, getter, sett
+            // 找出 field, getter, setter
             Field field = Reflects.getAnyField(clazz, id.getPropertyName());
             String getter = Reflects.getGetter(id.getPropertyName());
             Method getterMethod = Reflects.getPublicMethod(clazz, getter);
             if (getterMethod == null) {
                 getter = Reflects.getIsGetter(id.getPropertyName());
                 getterMethod = Reflects.getPublicMethod(clazz, getter);
+                if (field == null) {
+                    field = Reflects.getAnyField(clazz, getter);
+                }
             }
             Class propertyType = null;
             if (field != null) {
@@ -155,6 +158,10 @@ public class ClassLoaderCodecConfigurationLoader<T extends CodecConfiguration> i
             }
             String setter = Reflects.getSetter(id.getPropertyName());
             Method setterMethod = propertyType == null ? Reflects.getPublicMethod(clazz, setter) : Reflects.getPublicMethod(clazz, setter, propertyType);
+            if (setterMethod == null && (propertyType == Boolean.class || propertyType == boolean.class)) {
+                setter = Reflects.getIsSetter(id.getPropertyName());
+                setterMethod = Reflects.getPublicMethod(clazz, setter, propertyType);
+            }
             if (field == null && setterMethod == null && getterMethod == null) {
                 // 此时说明该字段不是真实存在的，可能是个别名
                 if (propertyFinder != null) {
@@ -195,15 +202,14 @@ public class ClassLoaderCodecConfigurationLoader<T extends CodecConfiguration> i
             }
             // getXxx
             PropertyCodecConfiguration getterConfiguration = null;
-            if (getterConfiguration == null) {
-                if (getterMethod != null) {
-                    getterConfiguration = beanPropertyCodecConfigurationParser.parse(getterMethod);
-                    if (getterConfiguration != null) {
-                        propertyCodecConfigurationMerger.merge(codecConfiguration, getterConfiguration);
-                        useMerged = true;
-                    }
+            if (getterMethod != null) {
+                getterConfiguration = beanPropertyCodecConfigurationParser.parse(getterMethod);
+                if (getterConfiguration != null) {
+                    propertyCodecConfigurationMerger.merge(codecConfiguration, getterConfiguration);
+                    useMerged = true;
                 }
             }
+
             // isXxx
             if (getterConfiguration == null) {
                 if (getterMethod != null) {
@@ -216,13 +222,11 @@ public class ClassLoaderCodecConfigurationLoader<T extends CodecConfiguration> i
             }
             // setXxx
             PropertyCodecConfiguration setterConfiguration = null;
-            if (setterConfiguration == null) {
-                if (setterMethod != null) {
-                    setterConfiguration = beanPropertyCodecConfigurationParser.parse(setterMethod);
-                    if (setterConfiguration != null) {
-                        propertyCodecConfigurationMerger.merge(codecConfiguration, setterConfiguration);
-                        useMerged = true;
-                    }
+            if (setterMethod != null) {
+                setterConfiguration = beanPropertyCodecConfigurationParser.parse(setterMethod);
+                if (setterConfiguration != null) {
+                    propertyCodecConfigurationMerger.merge(codecConfiguration, setterConfiguration);
+                    useMerged = true;
                 }
             }
             if (useMerged) {

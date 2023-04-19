@@ -171,21 +171,36 @@ public class JacksonJSONBuilder extends JSONBuilder {
         objectMapper.setDescrializationConfig(deserializationConfig);
     }
 
+    private void configAnnotationIntrospector(EasyJsonObjectMapper objectMapper){
+        // serializer config
+        EasyJsonJacksonAnnotationIntrospector annotationIntrospector = new EasyJsonJacksonAnnotationIntrospector();
+
+        SerializationConfig config = objectMapper.getSerializationConfig();
+        Method withInsertedAnnotationIntrospector = Reflects.getAnyMethod(SerializationConfig.class, "withInsertedAnnotationIntrospector", AnnotationIntrospector.class);
+        if (withInsertedAnnotationIntrospector != null) {
+            config = Reflects.invoke(withInsertedAnnotationIntrospector, config, new Object[]{annotationIntrospector}, true, true);
+            objectMapper.setConfig(config);
+        }
+
+        // deserializer config
+        DeserializationConfig deserializationConfig = objectMapper.getDeserializationConfig();
+        Method deserializationConfigWithInsertedAnnotationIntrospector = Reflects.getAnyMethod(DeserializationConfig.class, "withInsertedAnnotationIntrospector", AnnotationIntrospector.class);
+        if (deserializationConfigWithInsertedAnnotationIntrospector != null) {
+            deserializationConfig = Reflects.invoke(deserializationConfigWithInsertedAnnotationIntrospector, deserializationConfig, new Object[]{annotationIntrospector}, true, true);
+            objectMapper.setConfig(deserializationConfig);
+        }
+    }
+
     private void configNulls(EasyJsonObjectMapper objectMapper) {
         if (serializeNulls()) {
             objectMapper.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, true);
 
             SerializationConfig config = objectMapper.getSerializationConfig();
-            Method withAppendedAnnotationIntrospector = Reflects.getAnyMethod(SerializationConfig.class, "withAppendedAnnotationIntrospector", AnnotationIntrospector.class);
-            if (withAppendedAnnotationIntrospector != null) {
-                config = Reflects.invoke(withAppendedAnnotationIntrospector, config, new Object[]{new EasyJsonJacksonAnnotationIntrospector()}, true, true);
-            }
             config = config.withAttribute(JacksonConstants.SERIALIZE_NULLS_ATTR_KEY, true);
             objectMapper.setConfig(config);
         } else {
             objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         }
-
     }
 
 
@@ -199,6 +214,7 @@ public class JacksonJSONBuilder extends JSONBuilder {
         // 配置全局属性
         mapper.setSerializationConfig(mapper.getSerializationConfig().withAttribute(JacksonConstants.ENABLE_CUSTOM_CONFIGURATION, this.isEnableCustomConfiguration()));
         mapper.setDescrializationConfig(mapper.getDeserializationConfig().withAttribute(JacksonConstants.ENABLE_CUSTOM_CONFIGURATION, this.isEnableCustomConfiguration()));
+        configAnnotationIntrospector(mapper);
         configNulls(mapper);
         configBoolean(mapper);
         configNumber(mapper);
