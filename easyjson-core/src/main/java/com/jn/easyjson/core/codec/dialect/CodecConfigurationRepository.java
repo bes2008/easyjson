@@ -16,6 +16,7 @@ package com.jn.easyjson.core.codec.dialect;
 
 import com.jn.langx.configuration.AbstractConfigurationRepository;
 import com.jn.langx.configuration.ConfigurationWriter;
+import com.jn.langx.util.Emptys;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.ConcurrentReferenceHashMap;
@@ -61,18 +62,31 @@ public abstract class CodecConfigurationRepository<T extends CodecConfiguration>
     }
 
     public ClassCodecConfiguration getClassCodecConfiguration(Class clazz) {
+        if (clazz == null) {
+            return null;
+        }
         ClassLoaderCodecConfigurationRepository<T> repository = findRepository(clazz);
+        if(repository==null){
+            return null;
+        }
         return (ClassCodecConfiguration) repository.getById(Reflects.getFQNClassName(clazz));
     }
 
     public PropertyCodecConfiguration getPropertyCodeConfiguration(Class clazz, String propertyName) {
-        Preconditions.checkNotNull(clazz);
-        Preconditions.checkNotNull(propertyName);
+        if (Emptys.isAnyEmpty(clazz, propertyName)) {
+            return null;
+        }
         ClassLoaderCodecConfigurationRepository<T> repository = findRepository(clazz);
+        if(repository==null){
+            return null;
+        }
         return (PropertyCodecConfiguration) repository.getById(new BeanPropertyIdGenerator().withBeanClass(clazz).withPropertyName(propertyName).get());
     }
 
     private ClassLoaderCodecConfigurationRepository<T> findRepository(AnnotatedElement annotatedElement) {
+        if (annotatedElement == null) {
+            return null;
+        }
         Class clazz = null;
         if (annotatedElement instanceof Class) {
             clazz = ((Class) annotatedElement);
