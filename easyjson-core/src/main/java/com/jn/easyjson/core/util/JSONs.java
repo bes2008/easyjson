@@ -29,6 +29,7 @@ import java.util.Map;
 
 public class JSONs extends JsonTreeNodes {
     private static JSON json = JSONBuilderProvider.create()
+            .enableIgnoreAnnotation()
             .enableDecodeHex(true)
             .enableUnescapeEscapeCharacter(true)
             .build();
