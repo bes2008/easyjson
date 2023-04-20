@@ -64,6 +64,9 @@ public class FastJsonJSONBuilder extends JSONBuilder {
 
     @Override
     public JSON build() {
+
+        applyJSONBuilderCustomizers();
+
         FastJsonSerializerBuilder serializerBuilder = buildSerializer();
         FastJsonParserBuilder deserializerBuilder = buildDeserializer();
         JsonTreeSerializerBuilder jsonTreeSerializerBuilder = buildJsonTreeWriter();

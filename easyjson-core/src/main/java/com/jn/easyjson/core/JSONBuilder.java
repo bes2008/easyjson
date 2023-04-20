@@ -21,11 +21,17 @@ import com.jn.easyjson.core.exclusion.Exclusion;
 import com.jn.easyjson.core.exclusion.ExclusionConfiguration;
 import com.jn.easyjson.core.exclusion.IgnoreAnnotationExclusion;
 import com.jn.langx.util.Dates;
+import com.jn.langx.util.Objs;
 import com.jn.langx.util.Strings;
+import com.jn.langx.util.collection.Lists;
+import com.jn.langx.util.collection.Pipeline;
+import com.jn.langx.util.collection.Sets;
+import com.jn.langx.util.comparator.OrderedComparator;
+import com.jn.langx.util.function.Consumer;
+import com.jn.langx.util.spi.CommonServiceProvider;
 
 import java.text.DateFormat;
-import java.util.Locale;
-import java.util.TimeZone;
+import java.util.*;
 
 /**
  * 代表单次 JSON 转换请求的 JSON 构建器。
@@ -87,6 +93,10 @@ public abstract class JSONBuilder implements Cloneable {
 
     private JsonCustomizer jsonHandlerCustomizer;
 
+    private static List<JSONBuilderCustomizer> globalJsonBuilderCustomizers = Lists.newArrayList();
+
+    protected Set<JSONBuilderCustomizer> customizers = new TreeSet<JSONBuilderCustomizer>(new OrderedComparator<JSONBuilderCustomizer>());
+
     /**
      * 对 \xFF 的处理
      */
@@ -102,12 +112,24 @@ public abstract class JSONBuilder implements Cloneable {
      */
     private static final CodecConfigurationRepositoryService codecConfigurationRepository = CodecConfigurationRepositoryService.getInstance();
 
+    static {
+        Pipeline.<JSONBuilderCustomizer>of(new CommonServiceProvider<JSONBuilderCustomizer>().get(JSONBuilderCustomizer.class)).forEach(new Consumer<JSONBuilderCustomizer>() {
+            @Override
+            public void accept(JSONBuilderCustomizer customizer) {
+                globalJsonBuilderCustomizers.add(customizer);
+            }
+        });
+    }
+
     public JSONBuilder() {
-        exclusionConfiguration = new ExclusionConfiguration();
+        this(new ExclusionConfiguration());
     }
 
     public JSONBuilder(ExclusionConfiguration exclusionConfiguration) {
         this.exclusionConfiguration = exclusionConfiguration;
+        if (Objs.isNotEmpty(globalJsonBuilderCustomizers)) {
+            this.customizers.addAll(globalJsonBuilderCustomizers);
+        }
     }
 
     public static JSONBuilder clone(JSONBuilder builder) {
@@ -186,6 +208,11 @@ public abstract class JSONBuilder implements Cloneable {
 
     public boolean serializeEnumUsingIndex() {
         return serializeEnumUsingValue;
+    }
+
+
+    public void addJsonBuilderCustomizer(JSONBuilderCustomizer customizer) {
+        this.customizers.add(customizer);
     }
 
     /**
@@ -443,6 +470,18 @@ public abstract class JSONBuilder implements Cloneable {
         }
     }
 
+    protected void applyJSONBuilderCustomizers(){
+        if(Objs.isNotEmpty(customizers)){
+            Pipeline.of(customizers)
+                    .forEach(new Consumer<JSONBuilderCustomizer>() {
+                        @Override
+                        public void accept(JSONBuilderCustomizer customizer) {
+                            customizer.customize(JSONBuilder.this);
+                        }
+                    });
+        }
+    }
+
     public abstract JSON build();
 
     protected <E extends JSONBuilder> void copyTo(E builder) {
@@ -468,5 +507,6 @@ public abstract class JSONBuilder implements Cloneable {
         builder.jsonHandlerCustomizer(this.jsonHandlerCustomizer);
         builder.beanPropertyNamingPolicy(this.beanPropertyNamingPolicy);
         builder.enableDecodeHex(this.enableDecodeHex);
+        builder.customizers.addAll(this.customizers);
     }
 }

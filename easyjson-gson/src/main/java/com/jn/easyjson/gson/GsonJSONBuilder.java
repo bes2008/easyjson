@@ -83,6 +83,9 @@ public class GsonJSONBuilder extends JSONBuilder {
     @Override
     public JSON build() {
         GsonBuilder gsonBuilder = new GsonBuilder();
+
+        applyJSONBuilderCustomizers();
+
         // Null
         if (serializeNulls()) {
             gsonBuilder.serializeNulls();

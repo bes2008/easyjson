@@ -207,6 +207,9 @@ public class JacksonJSONBuilder extends JSONBuilder {
     @Override
     public JSON build() {
         makesureEasyJsonBaseModuleRegisted();
+
+        applyJSONBuilderCustomizers();
+
         EasyJsonObjectMapper mapper = new EasyJsonObjectMapper();
         mapper.setJsonBuilder(this);
         mapper.registerModule(module);
