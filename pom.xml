@@ -6,7 +6,7 @@
 
     <groupId>io.github.bes2008.solution.easyjson</groupId>
     <artifactId>easyjson</artifactId>
-    <version>4.0.7</version>
+    <version>4.0.8</version>
     <modules>
         <module>easyjson-core</module>
         <module>easyjson-gson</module>
