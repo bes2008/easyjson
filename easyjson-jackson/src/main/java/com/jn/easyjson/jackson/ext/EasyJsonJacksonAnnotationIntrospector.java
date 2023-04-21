@@ -57,7 +57,7 @@ public class EasyJsonJacksonAnnotationIntrospector extends JacksonAnnotationIntr
 
 
     @Override
-    public AnnotatedMethod resolveSetterConflict(MapperConfig<?> config, AnnotatedMethod setter1, AnnotatedMethod setter2) {
+    public AnnotatedMethod resolveSetterConflict(MapperConfig<?> config, final AnnotatedMethod setter1, final AnnotatedMethod setter2) {
         final Class<?> cls1 = setter1.getRawParameterType(0);
         final Class<?> cls2 = setter2.getRawParameterType(0);
 
@@ -71,7 +71,7 @@ public class EasyJsonJacksonAnnotationIntrospector extends JacksonAnnotationIntr
                     .firstMap(new Function2<Integer, JacksonSetterConflictSelector, Class>() {
                         @Override
                         public Class apply(Integer index, JacksonSetterConflictSelector selector) {
-                            return selector.select(cls1, cls2);
+                            return selector.select(setter1.getDeclaringClass(), cls1, cls2);
                         }
                     });
             if (exceptedClass != null) {

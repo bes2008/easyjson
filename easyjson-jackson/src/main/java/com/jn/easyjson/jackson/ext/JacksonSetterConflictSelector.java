@@ -5,5 +5,5 @@ import com.jn.langx.annotation.Nullable;
 
 public interface JacksonSetterConflictSelector extends Named {
     @Nullable
-    public Class select(Class class1, Class class2);
+    public Class select(Class beanClass, Class parameterOfSetter1, Class parameterOfSetter2);
 }
