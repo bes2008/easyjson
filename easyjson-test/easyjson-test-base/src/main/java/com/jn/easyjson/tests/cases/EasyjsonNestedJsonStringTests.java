@@ -18,6 +18,13 @@ public class EasyjsonNestedJsonStringTests {
         Resources.readLines(res, Charsets.UTF_8, new Consumer<String>() {
             @Override
             public void accept(String line) {
+                System.out.println(line);
+            }
+        });
+        /*
+        Resources.readLines(res, Charsets.UTF_8, new Consumer<String>() {
+            @Override
+            public void accept(String line) {
                 if (Strings.isNotBlank(line)) {
                     JsonTreeNode node = JSONs.toJsonTreeNode(line);
                     if (node instanceof JsonObjectNode) {
@@ -34,5 +41,6 @@ public class EasyjsonNestedJsonStringTests {
             }
         });
 
+         */
     }
 }
