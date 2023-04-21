@@ -19,6 +19,8 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.parser.DefaultJSONParser;
+import com.alibaba.fastjson.parser.JSONLexer;
+import com.alibaba.fastjson.parser.JSONToken;
 import com.alibaba.fastjson.parser.ParserConfig;
 import com.alibaba.fastjson.serializer.JSONSerializer;
 import com.jn.easyjson.core.JsonException;
@@ -85,7 +87,7 @@ public class FastJsonAdapter extends JsonHandlerAdapter<FastJson> {
     public JsonTreeNode deserialize(String json) throws JsonException {
         JSON jsonNode = null;
         if (JSONs.isJsonArray(json)) {
-            jsonNode = JSONArray.parseArray(json);
+            jsonNode = parseArray(json);
         } else if (JSONs.isJsonObject(json)) {
             jsonNode = (JSONObject) parseObject(json, ParserConfig.getGlobalInstance(), JSON.DEFAULT_PARSER_FEATURE);
         }
@@ -102,9 +104,38 @@ public class FastJsonAdapter extends JsonHandlerAdapter<FastJson> {
 
         parser.handleResovleTask(value);
 
+        // 不使用 parser.close()
         parser.getLexer().close();
 
         return value;
+    }
+
+    private static JSONArray parseArray(String text) {
+        if (text == null) {
+            return null;
+        }
+
+        DefaultJSONParser parser = new DefaultJSONParser(text, ParserConfig.getGlobalInstance());
+
+        JSONArray array;
+
+        JSONLexer lexer = parser.lexer;
+        if (lexer.token() == JSONToken.NULL) {
+            lexer.nextToken();
+            array = null;
+        } else if (lexer.token() == JSONToken.EOF) {
+            array = null;
+        } else {
+            array = new JSONArray();
+            parser.parseArray(array);
+
+            parser.handleResovleTask(array);
+        }
+
+        // 不使用 parser.close()
+        parser.getLexer().close();
+
+        return array;
     }
 
     @Override

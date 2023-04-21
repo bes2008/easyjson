@@ -14,16 +14,21 @@ import org.testng.annotations.Test;
 public class EasyjsonNestedJsonStringTests {
     @Test
     public void test001() {
-        Resource res = Resources.loadClassPathResource("00DE8E3E-95E3-4885-A760-A269A6836AE2.txt", EasyjsonNestedJsonStringTests.class );
+        Resource res = Resources.loadClassPathResource("00DE8E3E-95E3-4885-A760-A269A6836AE2.txt", EasyjsonNestedJsonStringTests.class);
         Resources.readLines(res, Charsets.UTF_8, new Consumer<String>() {
             @Override
             public void accept(String line) {
-                if(Strings.isNotBlank(line)){
+                if (Strings.isNotBlank(line)) {
                     JsonTreeNode node = JSONs.toJsonTreeNode(line);
-                    if(node instanceof JsonObjectNode) {
-                        System.out.println(((JsonObjectNode)node).getProperty("message").toString());
-                        String json = node.toString();
-                        System.out.println(JSONs.parse(json));
+                    if (node instanceof JsonObjectNode) {
+                        JsonTreeNode message = ((JsonObjectNode) node).getProperty("message");
+                        if (message.isJsonPrimitiveNode()) {
+                            String msg = message.getAsString();
+                            System.out.println(msg);
+                            JsonTreeNode messageNode = JSONs.parse(msg);
+                            System.out.println(messageNode.isJsonObjectNode());
+                            System.out.println(messageNode);
+                        }
                     }
                 }
             }
