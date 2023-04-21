@@ -7,7 +7,7 @@
     <parent>
         <groupId>io.github.bes2008.solution.easyjson</groupId>
         <artifactId>easyjson-test</artifactId>
-        <version>4.0.8</version>
+        <version>4.0.9</version>
     </parent>
 
     <artifactId>easyjson-test-base</artifactId>
