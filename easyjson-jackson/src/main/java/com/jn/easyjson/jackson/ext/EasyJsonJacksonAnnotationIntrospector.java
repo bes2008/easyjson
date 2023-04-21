@@ -17,6 +17,8 @@ import com.jn.langx.util.function.Supplier;
 import com.jn.langx.util.reflect.Reflects;
 import com.jn.langx.util.spi.CommonServiceProvider;
 
+import java.lang.reflect.Method;
+
 public class EasyJsonJacksonAnnotationIntrospector extends JacksonAnnotationIntrospector {
     private static GenericRegistry<JacksonSetterConflictSelector> setterConflictSelectorGenericRegistry = new GenericRegistry<JacksonSetterConflictSelector>();
 
@@ -67,15 +69,15 @@ public class EasyJsonJacksonAnnotationIntrospector extends JacksonAnnotationIntr
                 return setter1;
             }
 
-            Class exceptedClass = Pipeline.of(setterConflictSelectorGenericRegistry.instances())
-                    .firstMap(new Function2<Integer, JacksonSetterConflictSelector, Class>() {
+            Method expectedSetter = Pipeline.of(setterConflictSelectorGenericRegistry.instances())
+                    .firstMap(new Function2<Integer, JacksonSetterConflictSelector, Method>() {
                         @Override
-                        public Class apply(Integer index, JacksonSetterConflictSelector selector) {
-                            return selector.select(setter1.getDeclaringClass(), cls1, cls2);
+                        public Method apply(Integer index, JacksonSetterConflictSelector selector) {
+                            return selector.select(setter1.getMember(), setter2.getMember());
                         }
                     });
-            if (exceptedClass != null) {
-                return exceptedClass == cls1 ? setter1 : setter2;
+            if (expectedSetter != null) {
+                return expectedSetter == setter1.getMember() ? setter1 : setter2;
             }
 
             if (cls1.isPrimitive()) {
