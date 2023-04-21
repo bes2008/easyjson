@@ -14,13 +14,18 @@
 
 package com.jn.easyjson.fastjson;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.parser.DefaultJSONParser;
+import com.alibaba.fastjson.parser.ParserConfig;
 import com.alibaba.fastjson.serializer.JSONSerializer;
 import com.jn.easyjson.core.JsonException;
 import com.jn.easyjson.core.JsonHandlerAdapter;
 import com.jn.easyjson.core.JsonTreeNode;
-import com.jn.easyjson.core.tree.JsonTreeDeserializer;
+import com.jn.easyjson.core.util.JSONs;
+import com.jn.easyjson.fastjson.node.FastjsonMapper;
 import com.jn.langx.text.translate.StringEscapes;
 import com.jn.langx.util.Objs;
 import com.jn.langx.util.io.IOs;
@@ -78,7 +83,28 @@ public class FastJsonAdapter extends JsonHandlerAdapter<FastJson> {
 
     @Override
     public JsonTreeNode deserialize(String json) throws JsonException {
-        return new JsonTreeDeserializer().parse(json);
+        JSON jsonNode = null;
+        if (JSONs.isJsonArray(json)) {
+            jsonNode = JSONArray.parseArray(json);
+        } else if (JSONs.isJsonObject(json)) {
+            jsonNode = (JSONObject) parseObject(json, ParserConfig.getGlobalInstance(), JSON.DEFAULT_PARSER_FEATURE);
+        }
+        return FastjsonMapper.toJsonTreeNode(jsonNode);
+    }
+
+    private static Object parseObject(String text, ParserConfig config, int features) {
+        if (text == null) {
+            return null;
+        }
+
+        DefaultJSONParser parser = new DefaultJSONParser(text, config, features);
+        Object value = parser.parse();
+
+        parser.handleResovleTask(value);
+
+        parser.getLexer().close();
+
+        return value;
     }
 
     @Override

@@ -98,10 +98,7 @@ public class JsonTreeNodes extends JsonNodeNavigator {
             if (JSONs.isJsonString(jsonString) || JSONs.isJsonArrayOrObject(jsonString)) {
                 JsonTreeNode jsonTreeNode = JSONs.parse(jsonString);
                 if (jsonTreeNode != null) {
-                    String str = jsonTreeNode.toString();
-                    if (Objs.equals(jsonString, str)) {
-                        return jsonTreeNode;
-                    }
+                    return jsonTreeNode;
                 }
             }
             return new JsonPrimitiveNode(jsonString);
