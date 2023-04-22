@@ -15,13 +15,7 @@ public class EasyjsonNestedJsonStringTests {
     @Test
     public void test001() {
         Resource res = Resources.loadClassPathResource("00DE8E3E-95E3-4885-A760-A269A6836AE2.txt", EasyjsonNestedJsonStringTests.class);
-        Resources.readLines(res, Charsets.UTF_8, new Consumer<String>() {
-            @Override
-            public void accept(String line) {
-                System.out.println(line);
-            }
-        });
-        /*
+
         Resources.readLines(res, Charsets.UTF_8, new Consumer<String>() {
             @Override
             public void accept(String line) {
@@ -37,10 +31,12 @@ public class EasyjsonNestedJsonStringTests {
                             System.out.println(messageNode);
                         }
                     }
+
+                    System.out.println("*************************");
                 }
             }
         });
 
-         */
+
     }
 }
