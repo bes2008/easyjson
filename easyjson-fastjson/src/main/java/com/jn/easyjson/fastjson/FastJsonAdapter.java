@@ -26,6 +26,8 @@ import com.alibaba.fastjson.serializer.JSONSerializer;
 import com.jn.easyjson.core.JsonException;
 import com.jn.easyjson.core.JsonHandlerAdapter;
 import com.jn.easyjson.core.JsonTreeNode;
+import com.jn.easyjson.core.node.JsonNullNode;
+import com.jn.easyjson.core.node.JsonPrimitiveNode;
 import com.jn.easyjson.core.util.JSONs;
 import com.jn.easyjson.fastjson.node.FastjsonMapper;
 import com.jn.langx.text.translate.StringEscapes;
@@ -83,15 +85,56 @@ public class FastJsonAdapter extends JsonHandlerAdapter<FastJson> {
         }
     }
 
+
     @Override
     public JsonTreeNode deserialize(String json) throws JsonException {
-        JSON jsonNode = null;
-        if (JSONs.isJsonArray(json)) {
-            jsonNode = parseArray(json);
-        } else if (JSONs.isJsonObject(json)) {
-            jsonNode = (JSONObject) parseObject(json, ParserConfig.getGlobalInstance(), JSON.DEFAULT_PARSER_FEATURE);
+        JsonTreeNode jsonNode = null;
+        try {
+            jsonNode = parseAsJsonTreeNode(json);
+        } catch (JSONException ex) {
+            boolean changed = false;
+            boolean rejudge = false;
+            String json2 = json;
+            if (getJsonBuilder().enableDecodeHex()) {
+                json2 = Utf8s.convertHexToUnicode(json2);
+                rejudge = true;
+            }
+            if (getJsonBuilder().enableUnescapeEscapeCharacter()) {
+                json2 = StringEscapes.unescapeJson(json2);
+                rejudge = true;
+            }
+            if (rejudge) {
+                changed = !Objs.equals(json, json2);
+            }
+            if (changed) {
+                jsonNode =parseAsJsonTreeNode(json);
+                return jsonNode;
+            }
+            throw ex;
         }
         return FastjsonMapper.toJsonTreeNode(jsonNode);
+    }
+
+
+    private JsonTreeNode parseAsJsonTreeNode(String json){
+        JSON jsonNode = null;
+        if (JSONs.isJsonArray(json)) {
+            // jsonNode = parseArray(json);
+            jsonNode = JSONArray.parseArray(json);
+        } else if (JSONs.isJsonObject(json)) {
+            // jsonNode = (JSONObject) parseObject(json, ParserConfig.getGlobalInstance(), JSON.DEFAULT_PARSER_FEATURE);
+            jsonNode = JSONObject.parseObject(json);
+        }
+        if(jsonNode!=null) {
+            return FastjsonMapper.toJsonTreeNode(jsonNode);
+        }
+        else{
+            if(json==null){
+                return JsonNullNode.INSTANCE;
+            }else{
+                return new JsonPrimitiveNode(json);
+            }
+        }
     }
 
     private static Object parseObject(String text, ParserConfig config, int features) {
