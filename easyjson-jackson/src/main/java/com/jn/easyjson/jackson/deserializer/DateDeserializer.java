@@ -141,7 +141,11 @@ public class DateDeserializer extends JsonDeserializer implements com.fasterxml.
 
             if (df != null) {
                 try {
-                    return df.parse(p.getValueAsString());
+                    if (df instanceof SimpleDateFormat) {
+                        return ((SimpleDateFormat) df.clone()).parse(p.getText());
+                    } else {
+                        return df.parse(p.getValueAsString());
+                    }
                 } catch (ParseException e) {
                     logger.error(e.getMessage(), e);
                     return null;
@@ -174,7 +178,7 @@ public class DateDeserializer extends JsonDeserializer implements com.fasterxml.
 
     @Override
     public JsonDeserializer<?> createContextual(DeserializationContext ctxt, BeanProperty property) throws JsonMappingException {
-        if(property!=null) {
+        if (property != null) {
             JsonFormat.Value format = ctxt.getAnnotationIntrospector().findFormat((Annotated) property.getMember());
             if (format != null) {
                 TimeZone tz = format.getTimeZone();
