@@ -333,7 +333,7 @@ public abstract class JsonTreeNode {
      */
     @Override
     public final String toString() {
-
+        /*
         if (isJsonNullNode()) {
             return null;
         }
@@ -381,7 +381,7 @@ public abstract class JsonTreeNode {
             b.append("}");
             return b.toString();
         }
-
+        */
         return JSONs.toJson(this);
     }
 }
