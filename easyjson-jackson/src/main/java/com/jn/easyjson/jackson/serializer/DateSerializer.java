@@ -101,7 +101,6 @@ public class DateSerializer extends JsonSerializer implements com.fasterxml.jack
             }else{
                 gen.writeString(df.format(value));
             }
-            gen.writeString(df.format(value));
             return;
         }
         if (usingToString) {

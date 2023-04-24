@@ -7,7 +7,7 @@
     <parent>
         <groupId>io.github.bes2008.solution.easyjson</groupId>
         <artifactId>easyjson-test-jackson</artifactId>
-        <version>4.1.0</version>
+        <version>4.1.1</version>
     </parent>
 
     <artifactId>easyjson-test-jackson-impl</artifactId>
@@ -16,6 +16,11 @@
 	<description>
 		使用easyjson或jackson的API, 以jackson自身作为实现框架的测试场景
 	</description>
+
+    <properties>
+        <jmh.version>1.23</jmh.version>
+    </properties>
+
 
     <dependencies>
         <dependency>
@@ -32,6 +37,15 @@
 			<version>${project.version}</version>
         </dependency>
 
-
+        <dependency>
+            <groupId>org.openjdk.jmh</groupId>
+            <artifactId>jmh-core</artifactId>
+            <version>${jmh.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjdk.jmh</groupId>
+            <artifactId>jmh-generator-annprocess</artifactId>
+            <version>${jmh.version}</version>
+        </dependency>
     </dependencies>
 </project>
