@@ -27,6 +27,7 @@
         <module>jettison-to-easyjson</module>
         <module>easyjson-javaxjson</module>
         <module>easyjson-antlr4json</module>
+        <module>easyjson-supports-jsonpath</module>
     </modules>
     <name>${project.groupId}:${project.artifactId}:${project.version}</name>
 
