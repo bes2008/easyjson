@@ -45,6 +45,7 @@
                 <includes>
                     <include>**/*.json</include>
                     <include>**/*.txt</include>
+                    <include>**/*.log</include>
                 </includes>
             </resource>
         </resources>
@@ -54,6 +55,7 @@
                 <includes>
                     <include>**/*.json</include>
                     <include>**/*.txt</include>
+                    <include>**/*.log</include>
                 </includes>
             </testResource>
         </testResources>
