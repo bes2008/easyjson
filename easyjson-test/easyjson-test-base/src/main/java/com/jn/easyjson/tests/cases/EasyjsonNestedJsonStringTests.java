@@ -42,7 +42,7 @@ public class EasyjsonNestedJsonStringTests {
                 if (Strings.isNotBlank(line) && counter.get() < 200) {
                     if (counter.get() == 0) {
                         byte[] bytes = line.getBytes();
-                        BOM bom = BOM.findBom(bytes);
+                        BOM bom = Strings.findBom(line);
                         if (bom != null) {
                             byte[] newBytes = new byte[bytes.length - bom.getBytes().length];
                             System.arraycopy(bytes, bom.getBytes().length, newBytes, 0, newBytes.length);
