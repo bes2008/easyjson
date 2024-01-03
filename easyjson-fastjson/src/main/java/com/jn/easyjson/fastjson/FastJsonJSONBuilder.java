@@ -46,7 +46,7 @@ public class FastJsonJSONBuilder extends JSONBuilder {
         FASTJSON.setId("fastjson");
         try {
             Class clazz = Class.forName("com.alibaba.fastjson.JSON");
-            FASTJSON.setLibUrl(Reflects.getCodeLocation(clazz).toString());
+            FASTJSON.setLibUrl(Reflects.getCodeLocationString(clazz));
         } catch (Throwable ex) {
             // ignore it
         }

@@ -137,7 +137,7 @@ public class Jacksons {
 
     static {
         JACKSON.setId("jackson");
-        JACKSON.setLibUrl(Reflects.getCodeLocation(ObjectMapper.class).toString());
+        JACKSON.setLibUrl(Reflects.getCodeLocationString(ObjectMapper.class));
     }
 
     public static PropertyCodecConfiguration getPropertyCodecConfiguration(JsonGenerator gen) {
