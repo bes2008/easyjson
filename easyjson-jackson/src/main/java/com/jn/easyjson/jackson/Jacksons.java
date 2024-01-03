@@ -137,7 +137,11 @@ public class Jacksons {
 
     static {
         JACKSON.setId("jackson");
-        JACKSON.setLibUrl(Reflects.getCodeLocationString(ObjectMapper.class));
+        try {
+            JACKSON.setLibUrl(Reflects.getCodeLocationString(ObjectMapper.class));
+        } catch (Throwable ex) {
+            // ignore it
+        }
     }
 
     public static PropertyCodecConfiguration getPropertyCodecConfiguration(JsonGenerator gen) {

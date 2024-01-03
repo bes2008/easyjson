@@ -59,7 +59,11 @@ public class GsonJSONBuilder extends JSONBuilder {
 
     static {
         GSON.setId("gson");
-        GSON.setLibUrl(Reflects.getCodeLocationString(Gson.class));
+        try {
+            GSON.setLibUrl(Reflects.getCodeLocationString(Gson.class));
+        } catch (Throwable ex) {
+            // ignore it
+        }
     }
 
     public void setDisableHtmlEscaping(boolean disableHtmlEscaping) {
