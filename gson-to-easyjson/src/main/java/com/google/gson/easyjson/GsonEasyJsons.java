@@ -9,7 +9,7 @@ public class GsonEasyJsons {
     public static final DialectIdentify GSON;
 
     static {
-        GSON = new DialectIdentify(JSON_IDENTIFY_STRING, Reflects.getCodeLocation(GsonEasyJsons.class).toString());
+        GSON = new DialectIdentify(JSON_IDENTIFY_STRING, Reflects.getCodeLocationString(GsonEasyJsons.class));
     }
 
 }

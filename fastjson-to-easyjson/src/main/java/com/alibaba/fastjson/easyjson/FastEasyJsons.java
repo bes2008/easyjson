@@ -29,7 +29,7 @@ public class FastEasyJsons {
     public static final DialectIdentify FASTJSON;
 
     static {
-        FASTJSON = new DialectIdentify(JSON_IDENTIFY_STRING, Reflects.getCodeLocation(FastEasyJsons.class).toString());
+        FASTJSON = new DialectIdentify(JSON_IDENTIFY_STRING, Reflects.getCodeLocationString(FastEasyJsons.class));
     }
 
     private FastEasyJsons() {

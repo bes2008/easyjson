@@ -138,6 +138,7 @@ public class JSONBuilderProvider {
                 if (dependencyClass != null) {
                     // 避免该依赖类是从 xxxx-to-easyjson 的bridge中发现的
                     URL codeLocation = Reflects.getCodeLocation(dependencyClass);
+                    
                     if (codeLocation != null ) {
                         if(!codeLocation.toString().contains("-to-easyjson")) {
                             dependencyClassFound = true;
@@ -148,6 +149,14 @@ public class JSONBuilderProvider {
                             }
                         }else{
                             logger.warn("Won't register json builder {}, because of the {}-to-easyjson.jar found", Reflects.getFQNClassName(jsonBuilderClass), jsonLibraryName);
+                        }
+                    }else{
+                        // 为 url code location 为 null时，有可能是类能加载到，但使用  ProtectionDomain.getCodeSource()方法时，返回为null
+                        dependencyClassFound = true;
+                        logger.info("Register a json builder {} for {}", jsonBuilderClass.getCanonicalName(), jsonLibraryName);
+                        registry.put(jsonLibraryName, jsonBuilderClass);
+                        if (defaultJsonBuilderClass == null) {
+                            defaultJsonBuilderClass = jsonBuilderClass;
                         }
                     }
                 }
