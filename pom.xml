@@ -6,16 +6,21 @@
 
     <groupId>io.github.bes2008.solution.easyjson</groupId>
     <artifactId>easyjson</artifactId>
-    <version>4.1.5</version>
+    <version>4.1.6</version>
     <modules>
         <module>easyjson-core</module>
+
         <module>easyjson-gson</module>
         <module>easyjson-jackson</module>
         <module>easyjson-fastjson</module>
+        <module>easyjson-antlr4json</module>
+
+        <module>easyjson-supports-jsonpath</module>
+
+
         <module>fastjson-to-easyjson</module>
         <module>progsbase-to-easyjson</module>
         <module>jsonlib-to-easyjson</module>
-        <module>easyjson-test</module>
         <module>jsonsmart-to-easyjson</module>
         <module>orgjson-to-easyjson</module>
         <module>simplejson-to-easyjson</module>
@@ -25,9 +30,9 @@
         <module>boonjson-to-easyjson</module>
         <module>gson-to-easyjson</module>
         <module>jettison-to-easyjson</module>
-        <module>easyjson-javaxjson</module>
-        <module>easyjson-antlr4json</module>
-        <module>easyjson-supports-jsonpath</module>
+
+
+        <module>easyjson-test</module>
     </modules>
     <name>${project.groupId}:${project.artifactId}:${project.version}</name>
 
@@ -69,7 +74,7 @@
         </license>
     </licenses>
     <properties>
-        <langx.version>5.3.6</langx.version>
+        <langx.version>5.4.0</langx.version>
         <slf4j.version>1.7.0</slf4j.version>
     </properties>
 
